@@ -17,6 +17,7 @@ public class ItemManager {
         List<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GRAY + "Click to access your plots");
         meta.setLore(lore);
+
         meta.setDisplayName(ChatColor.AQUA + "◇" + ChatColor.GREEN + " My Plots " + ChatColor.AQUA + "◇");
         myPlots.setItemMeta(meta);
 

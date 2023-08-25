@@ -2,8 +2,10 @@ package hypersquare.hypersquare;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,11 +32,16 @@ public class ItemManager {
     }
 
     public static void addItem(String itemId, ItemStack item) {
+        item.getItemMeta().getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId"), PersistentDataType.STRING, itemId);
         items.put(itemId, item);
     }
 
     public static ItemStack getItem(String itemId) {
         return items.get(itemId);
+    }
+
+    public static String getItemID(ItemStack item) {
+        return item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId"), PersistentDataType.STRING);
     }
 
 }

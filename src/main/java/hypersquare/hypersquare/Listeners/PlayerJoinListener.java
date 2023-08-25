@@ -1,21 +1,20 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.Listeners;
 
-import org.bukkit.Bukkit;
+import hypersquare.hypersquare.ItemManager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class Join implements Listener {
+public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         spawn(player);
     }
     public void spawn(Player player){
-        Bukkit.broadcastMessage("SPAWN!!");
         player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().addItem(ItemManager.myPlots());
+        player.getInventory().addItem(ItemManager.getItem("myPlots"));
     }
 }

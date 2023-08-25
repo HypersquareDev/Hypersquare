@@ -1,12 +1,17 @@
 package hypersquare.hypersquare;
 
+import hypersquare.hypersquare.Listeners.PlayerJoinListener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Hypersquare extends JavaPlugin {
 
+    public static ItemManager itemManager = new ItemManager();
+
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new Join(), this);
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new PlayerJoinListener(), this);
 
     }
 

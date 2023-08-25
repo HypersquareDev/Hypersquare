@@ -1,12 +1,12 @@
-package hypercubed.hypercubed;
+package hypersquare.hypersquare;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Hypercubed extends JavaPlugin {
+public final class Hypersquare extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new join(), this);
+        getServer().getPluginManager().registerEvents(new Join(), this);
 
     }
 

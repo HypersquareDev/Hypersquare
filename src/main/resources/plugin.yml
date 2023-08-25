@@ -1,0 +1,4 @@
+name: Hypercubed
+version: '${project.version}'
+main: hypercubed.hypercubed.Hypercubed
+api-version: 1.20

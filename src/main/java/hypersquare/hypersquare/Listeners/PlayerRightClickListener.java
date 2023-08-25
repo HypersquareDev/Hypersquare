@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.Listeners;
 
 import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.Menus.MyPlotsMenu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -12,9 +13,7 @@ public class PlayerRightClickListener implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
             switch (ItemManager.getItemID(event.getItem())) {
                 case ("myPlots"):{
-
-
-
+                    new MyPlotsMenu(event.getPlayer()).open();
                     break;
                 }
             }

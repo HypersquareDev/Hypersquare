@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemManager {
+    static NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId");
 
     public static void registerItems() {
         ItemStack myPlots = new ItemStack(Material.ENCHANTED_BOOK, 1);
@@ -32,7 +33,7 @@ public class ItemManager {
     }
 
     public static void addItem(String itemId, ItemStack item) {
-        item.getItemMeta().getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId"), PersistentDataType.STRING, itemId);
+        item.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.STRING, itemId);
         items.put(itemId, item);
     }
 
@@ -41,7 +42,10 @@ public class ItemManager {
     }
 
     public static String getItemID(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId"), PersistentDataType.STRING);
+        if (item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
+            return item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId"), PersistentDataType.STRING);
+        }
+        return null;
     }
 
 }

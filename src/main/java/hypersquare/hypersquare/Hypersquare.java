@@ -12,7 +12,7 @@ public final class Hypersquare extends JavaPlugin {
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
-
+        ItemManager.registerItems();
     }
 
     @Override

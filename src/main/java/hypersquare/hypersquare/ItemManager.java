@@ -6,14 +6,18 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class ItemManager {
-    static NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "itemId");
+    static NamespacedKey key; // Declare the key without initializing it here
 
+    public static void initializeKey(JavaPlugin plugin) {
+        key = new NamespacedKey(plugin, "itemId"); // Initialize the key using the passed plugin instance
+    }
     public static void registerItems() {
         ItemStack myPlots = new ItemStack(Material.ENCHANTED_BOOK, 1);
         ItemMeta meta = myPlots.getItemMeta();
@@ -29,6 +33,7 @@ public class ItemManager {
     private static HashMap<String, ItemStack> items;
 
     public ItemManager() {
+
         items = new HashMap<>();
     }
 

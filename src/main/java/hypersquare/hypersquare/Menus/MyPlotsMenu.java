@@ -1,27 +1,51 @@
 package hypersquare.hypersquare.Menus;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import hypersquare.hypersquare.Hypersquare;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class MyPlotsMenu extends Gui {
     public MyPlotsMenu(Player player) {
-        super(player, "myPlots", "My Plots", 4);
+        super(player, "myPlots", "My Plots", 2);
     }
 
     @Override
     public void onOpen(InventoryOpenEvent event) {
         // Icons are just ItemStacks specifically for GUIs
-        Icon testIcon = new Icon(Material.STONE);
-        addItem(0, testIcon);
+        Icon createPlot = new Icon(Material.GREEN_STAINED_GLASS);
+        createPlot.setName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create New Plot");
+        addItem(17, createPlot);
 
-        testIcon.onClick(e -> {
+        createPlot.onClick(e -> {
             e.setCancelled(true);
-            player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 0.75f);
-            // I think the second parameter is pitch? Someone test this and confirm, if not switch the two parameters
+            MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+            // Clone the "world" world
+            String newWorldName = "dev_" + Hypersquare.lastUsedWorldNumber;
+            boolean success = multiverseCore.getMVWorldManager().cloneWorld("world", newWorldName);
+
+            if (success) {
+                getLogger().info("Cloned world successfully!");
+
+                // Teleport the player to the new world
+                Player player = Bukkit.getPlayer(event.getPlayer().getName()); // Replace with actual player name
+                if (player != null) {
+                    World newWorld = Bukkit.getWorld(newWorldName);
+                    Location teleportLocation = new Location(newWorld, 0, -60, 0);
+                    player.teleport(teleportLocation);
+                }
+
+                // Increment and save the world number
+                Hypersquare.lastUsedWorldNumber++;
+            } else {
+                getLogger().warning("Failed to clone world.");
+            }
         });
     }
 }

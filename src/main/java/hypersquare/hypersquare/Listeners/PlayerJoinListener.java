@@ -14,7 +14,8 @@ public class PlayerJoinListener implements Listener {
         spawn(player);
     }
     public void spawn(Player player){
+        player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().addItem(ItemManager.getItem("myPlots"));
+        player.getInventory().setItem(0,ItemManager.getItem("myPlots"));
     }
 }

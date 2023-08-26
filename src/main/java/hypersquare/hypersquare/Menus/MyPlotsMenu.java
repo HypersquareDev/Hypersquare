@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.Menus;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import hypersquare.hypersquare.Hypersquare;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -8,7 +9,13 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.getServer;
 
 public class MyPlotsMenu extends Gui {
     public MyPlotsMenu(Player player) {
@@ -24,30 +31,7 @@ public class MyPlotsMenu extends Gui {
 
         createPlot.onClick(e -> {
             e.setCancelled(true);
-            MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 
-            // Clone the "world" world
-            String newWorldName = "dev_" + Hypersquare.lastUsedWorldNumber;
-            boolean success = multiverseCore.getMVWorldManager().cloneWorld("dev", newWorldName);
-
-            if (success) {
-                getLogger().info("Cloned world successfully!");
-
-                // Teleport the player to the new world
-                Player player = Bukkit.getPlayer(event.getPlayer().getName()); // Replace with actual player name
-                if (player != null) {
-                    World newWorld = Bukkit.getWorld(newWorldName);
-                    Location teleportLocation = new Location(newWorld, 0, -60, 0);
-                    player.teleport(teleportLocation);
-                }
-
-                // Increment and save the world number
-                Hypersquare.lastUsedWorldNumber++;
-                newWorldName = "play_" + Hypersquare.lastUsedWorldNumber;
-                multiverseCore.getMVWorldManager().cloneWorld("play", newWorldName);
-            } else {
-                getLogger().warning("Failed to clone world.");
-            }
 
         });
     }

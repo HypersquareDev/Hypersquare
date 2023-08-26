@@ -11,7 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Hypersquare extends JavaPlugin {
-    public static int lastUsedWorldNumber = 0;
+    public static int lastUsedWorldNumber;
 
     public static ItemManager itemManager = new ItemManager();
     @Override

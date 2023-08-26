@@ -65,9 +65,20 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+    </repositories>
+    <!-- InfernalSuite RELEASE -->
+    <repositories>
         <repository>
-            <id>OnARandomBox</id>
-            <url>https://repo.onarandombox.com/content/groups/public/</url>
+            <id>is-releases</id>
+            <url>https://repo.infernalsuite.com/repository/maven-releases/</url>
+        </repository>
+    </repositories>
+
+    <!-- InfernalSuite SNAPSHOT -->
+    <repositories>
+        <repository>
+            <id>is-snapshots</id>
+            <url>https://repo.infernalsuite.com/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -75,7 +86,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -84,11 +95,12 @@
             <version>4.1.13</version>
         </dependency>
         <dependency>
-            <groupId>com.onarandombox.multiversecore</groupId>
-            <artifactId>Multiverse-Core</artifactId>
-            <version>4.3.1</version>
+            <groupId>com.infernalsuite.aswm</groupId>
+            <artifactId>api</artifactId>
+            <version>52</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
 

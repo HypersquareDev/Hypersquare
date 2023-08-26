@@ -1,17 +1,20 @@
 package hypersquare.hypersquare;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
+import hypersquare.hypersquare.Commands.Join;
 import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Listeners.PlayerRightClickListener;
 import mc.obliviate.inventory.InventoryAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
+    private CommandManager commandManager;
 
     public static ItemManager itemManager = new ItemManager();
     @Override
@@ -20,11 +23,11 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new PlayerRightClickListener(), this);
         new InventoryAPI(this).init();
-        MultiverseCore core = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
         ItemManager.initializeKey(this);
         ItemManager.registerItems();
         loadLastUsedWorldNumber();
-
+        commandManager = new CommandManager(this);
+        commandManager.registerCommand("join", new Join());
 
     }
 
@@ -48,4 +51,6 @@ public final class Hypersquare extends JavaPlugin {
         config.set("lastUsedWorldNumber", lastUsedWorldNumber);
         saveConfig();
     }
+
+
 }

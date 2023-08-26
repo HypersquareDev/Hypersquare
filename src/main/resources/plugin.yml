@@ -2,3 +2,7 @@ name: Hypercubed
 version: '${project.version}'
 main: hypersquare.hypersquare.Hypersquare
 api-version: 1.20
+commands:
+  join:
+    description: Join a plot
+    usage: /<command> plotID

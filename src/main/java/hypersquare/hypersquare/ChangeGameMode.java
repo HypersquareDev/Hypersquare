@@ -14,6 +14,7 @@ public class ChangeGameMode {
     public static void playMode(Player player, int plotID){
         String worldName = "hs." + plotID +".build";
         Plot.loadPlot(plotID,"build", player);
+
         Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
         player.teleport(loc);
 

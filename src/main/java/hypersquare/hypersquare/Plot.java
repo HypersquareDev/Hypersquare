@@ -7,6 +7,7 @@ import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
 
@@ -78,15 +79,21 @@ public class Plot {
         SlimeLoader file = plugin.getLoader("file");
         SlimePropertyMap properties = new SlimePropertyMap();
         properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
+        SlimeWorld test = plugin.getWorld(worldName);
+        if (!plugin.getLoadedWorlds().contains(test)){
+            player.sendMessage("the world didnt exist");
+            try {
+                SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
 
-        try{
-            SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
-            plugin.loadWorld(world);
+                plugin.loadWorld(world);
 
-        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){
-            if (err instanceof UnknownWorldException){
-
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldLockedException err) {
+                if (err instanceof UnknownWorldException) {
+                    player.sendMessage(ChatColor.RED + "This plot does not exist.");
+                }
             }
+
         }
     }
 }

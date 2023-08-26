@@ -1,8 +1,17 @@
 package hypersquare.hypersquare;
 
+import com.infernalsuite.aswm.api.SlimePlugin;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
+import com.infernalsuite.aswm.api.loaders.SlimeLoader;
+import com.infernalsuite.aswm.api.world.SlimeWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
+
+import java.io.IOException;
+import java.util.List;
 
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
@@ -15,8 +24,8 @@ public class ChangeGameMode {
         String worldName = "hs." + plotID +".build";
         Plot.loadPlot(plotID,"build", player);
 
-        Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
-        player.teleport(loc);
 
     }
+
+
 }

@@ -9,7 +9,9 @@ import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -21,6 +23,9 @@ public class Plot {
         SlimeLoader file = plugin.getLoader("file");
         SlimePropertyMap properties = new SlimePropertyMap();
         properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
+        properties.setValue(SlimeProperties.SPAWN_X, 25);
+        properties.setValue(SlimeProperties.SPAWN_Y, -55);
+        properties.setValue(SlimeProperties.SPAWN_Z, 4);
         SlimeWorld world = null;
         SlimeWorld cloned = null;
         try{
@@ -46,12 +51,16 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        Bukkit.getWorld(worldName).setSpawnLocation(25,-55,4);
     }
     public static void createBuild(int plotID, SlimePlugin plugin){
         String worldName = "hs." + plotID +".build";
         SlimeLoader file = plugin.getLoader("file");
         SlimePropertyMap properties = new SlimePropertyMap();
-        properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
+        properties.setValue(SlimeProperties.SPAWN_X, 0);
+        properties.setValue(SlimeProperties.SPAWN_Y, 64);
+        properties.setValue(SlimeProperties.SPAWN_Z, 0);
+
         SlimeWorld cloned = null;
 
         try{
@@ -65,11 +74,12 @@ public class Plot {
 
         if  (Bukkit.getServer().getWorlds().contains(worldName)) {
             Bukkit.getWorld(worldName).setTime(1000);
-            Bukkit.getWorld(worldName).setSpawnLocation(0,-55,0);
+            Bukkit.getWorld(worldName).setSpawnLocation(0,64,0);
             Bukkit.getWorld(worldName).setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
             Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
             Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
+
         } else {
         }
     }
@@ -84,7 +94,6 @@ public class Plot {
             player.sendMessage("the world didnt exist");
             try {
                 SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
-
                 plugin.loadWorld(world);
 
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
@@ -93,7 +102,21 @@ public class Plot {
                     player.sendMessage(ChatColor.RED + "This plot does not exist.");
                 }
             }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (plugin.getLoadedWorlds().contains(test)) {
+                        this.cancel();
+                    }
 
+                }
+            }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
+            Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
+            player.teleport(loc);
+
+        } else {
+            Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
+            player.teleport(loc);
         }
     }
 }

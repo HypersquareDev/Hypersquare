@@ -43,6 +43,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <resources>
             <resource>
@@ -50,6 +51,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
     </build>
 
     <repositories>
@@ -98,10 +100,13 @@
             <version>1.20-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.28</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-
-
 
 
 </project>

@@ -28,7 +28,7 @@ public class MyPlotsMenu extends Gui {
 
             // Clone the "world" world
             String newWorldName = "dev_" + Hypersquare.lastUsedWorldNumber;
-            boolean success = multiverseCore.getMVWorldManager().cloneWorld("world", newWorldName);
+            boolean success = multiverseCore.getMVWorldManager().cloneWorld("dev", newWorldName);
 
             if (success) {
                 getLogger().info("Cloned world successfully!");
@@ -43,9 +43,12 @@ public class MyPlotsMenu extends Gui {
 
                 // Increment and save the world number
                 Hypersquare.lastUsedWorldNumber++;
+                newWorldName = "play_" + Hypersquare.lastUsedWorldNumber;
+                multiverseCore.getMVWorldManager().cloneWorld("play", newWorldName);
             } else {
                 getLogger().warning("Failed to clone world.");
             }
+
         });
     }
 }

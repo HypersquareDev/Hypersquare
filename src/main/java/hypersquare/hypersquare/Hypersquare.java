@@ -1,6 +1,8 @@
 package hypersquare.hypersquare;
 
+import hypersquare.hypersquare.Commands.Dev;
 import hypersquare.hypersquare.Commands.Join;
+import hypersquare.hypersquare.Commands.Locate;
 import hypersquare.hypersquare.Listeners.PlayerDeathListener;
 import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Listeners.PlayerRightClickListener;
@@ -33,6 +35,8 @@ public final class Hypersquare extends JavaPlugin {
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
         commandManager.registerCommand("join", new Join());
+        commandManager.registerCommand("dev", new Dev());
+        commandManager.registerCommand("locate", new Locate());
 
     }
 

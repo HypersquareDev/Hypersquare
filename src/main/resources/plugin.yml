@@ -6,3 +6,10 @@ commands:
   join:
     description: Join a plot
     usage: /<command> plotID
+  dev:
+    description: Go to dev on your current plot
+    usage: /<command>
+  locate:
+    description: Find another player
+    usage: /<command> player
+    aliases: find

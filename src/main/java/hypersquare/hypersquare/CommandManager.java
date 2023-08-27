@@ -20,6 +20,7 @@ public class CommandManager implements CommandExecutor {
     public void registerCommand(String label, CommandExecutor executor) {
         commands.put(label, executor);
         plugin.getCommand(label).setExecutor(this);
+
     }
 
     @Override

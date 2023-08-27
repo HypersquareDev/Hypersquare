@@ -127,4 +127,12 @@ public class Plot {
             player.teleport(loc);
         }
     }
+    public static void loadRules(int plotID, String mode){
+        String worldName = "hs." + plotID +"." + mode;
+        Bukkit.getWorld(worldName).setTime(1000);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
+    }
 }

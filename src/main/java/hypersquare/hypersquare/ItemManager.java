@@ -1,5 +1,6 @@
 package hypersquare.hypersquare;
 
+import hypersquare.dev.Codeblock;
 import net.kyori.adventure.Adventure;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,18 +33,18 @@ public class ItemManager {
 
         addItem("myPlots", myPlots);
 
-        ItemStack playerEvent = new ItemStack(Material.DIAMOND_BLOCK, 1);
-        meta = myPlots.getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(ChatColor.GRAY + "Used to execute code when something");
-        lore.add(ChatColor.GRAY + "is done by (or happens to) a player.");
-
-        lore.add("<!italic><aqua>» </aqua></!italic><!italic><gray>Detect when a player dies");
-        meta.setLore(lore);
-
-        meta.setDisplayName(ChatColor.AQUA + "◇" + ChatColor.GREEN + " My Plots " + ChatColor.AQUA + "◇");
-        playerEvent.setItemMeta(meta);
-        addItem("playerEvent",playerEvent);
+//        ItemStack playerEvent = new ItemStack(Material.DIAMOND_BLOCK, 1);
+//        meta = myPlots.getItemMeta();
+//        lore = new ArrayList<String>();
+//        lore.add(ChatColor.GRAY + "Used to execute code when something");
+//        lore.add(ChatColor.GRAY + "is done by (or happens to) a player.");
+//
+//        lore.add("<!italic><aqua>» </aqua></!italic><!italic><gray>Detect when a player dies");
+//        meta.setLore(lore);
+//
+//        meta.setDisplayName(ChatColor.AQUA + "◇" + ChatColor.GREEN + " My Plots " + ChatColor.AQUA + "◇");
+//        playerEvent.setItemMeta(meta);
+//        addItem("playerEvent",playerEvent);
     }
     private static HashMap<String, ItemStack> items;
 
@@ -68,5 +69,11 @@ public class ItemManager {
         return null;
     }
 
+    public static ItemStack setItemTags(ItemStack item, String tagName, String value) {
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), tagName), PersistentDataType.STRING, value);
+        item.setItemMeta(meta);
+        return item;
+    }
 }
 

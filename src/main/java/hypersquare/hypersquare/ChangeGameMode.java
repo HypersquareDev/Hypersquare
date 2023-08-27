@@ -1,19 +1,10 @@
 package hypersquare.hypersquare;
 
-import com.infernalsuite.aswm.api.SlimePlugin;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
-import com.infernalsuite.aswm.api.loaders.SlimeLoader;
-import com.infernalsuite.aswm.api.world.SlimeWorld;
+import hypersquare.dev.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
-
-import java.io.IOException;
-import java.util.List;
 
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID){

@@ -1,7 +1,5 @@
 package hypersquare.hypersquare.Commands;
 
-import hypersquare.hypersquare.ChangeGameMode;
-import hypersquare.hypersquare.Plot;
 import hypersquare.hypersquare.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,9 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.annotation.Target;
-
-public class Locate implements CommandExecutor {
+public class LocateCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
@@ -21,7 +17,7 @@ public class Locate implements CommandExecutor {
             Player target = Bukkit.getPlayer(args[0]);
             int plotID = Utilities.getPlotID(target.getWorld());
             String type = Utilities.getPlotType(target.getWorld());
-            if (type == "build")
+            if (type.equals("build"))
                 type = "playing";
             else
                 type = "coding";

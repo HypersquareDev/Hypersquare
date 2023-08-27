@@ -13,3 +13,7 @@ commands:
     description: Find another player
     usage: /<command> player
     aliases: find
+  spawn:
+    description: Teleports to spawn
+    usage: /<command>
+    aliases: s

@@ -43,11 +43,8 @@ public class MyPlotsMenu extends Gui {
 
         createPlot.onClick(e -> {
             e.setCancelled(true);
-            int plotID = Hypersquare.lastUsedWorldNumber;
-            Plot.createDev(plotID,plugin);
-            Plot.createBuild(plotID,plugin);
-            ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
-            Hypersquare.lastUsedWorldNumber++;
+            new CreatePlotsMenu((Player) event.getPlayer()).open();
+
         });
     }
 }

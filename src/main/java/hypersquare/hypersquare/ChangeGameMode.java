@@ -10,8 +10,7 @@ public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
         String worldName = "hs." + plotID +".dev";
         Plot.loadPlot(plotID,"dev", player);
-        Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".dev"), 0,-55,0);
-        player.teleport(loc);
+        player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
         Bukkit.getWorld(worldName).setTime(1000);
         LoadItems.devItems(player);
         player.setGameMode(GameMode.CREATIVE);
@@ -19,6 +18,12 @@ public class ChangeGameMode {
     public static void playMode(Player player, int plotID){
         String worldName = "hs." + plotID +".build";
         Plot.loadPlot(plotID,"build", player);
+    }
+    public static void spawn(Player player){
+        player.getInventory().clear();
+        player.setGameMode(GameMode.ADVENTURE);
+        player.getInventory().setItem(0,ItemManager.getItem("myPlots"));
+        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }
 
 

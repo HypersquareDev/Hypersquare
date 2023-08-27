@@ -1,6 +1,8 @@
 package hypersquare.hypersquare.Listeners;
 
+import hypersquare.hypersquare.ChangeGameMode;
 import hypersquare.hypersquare.ItemManager;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -15,11 +17,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        spawn(player);
+        ChangeGameMode.spawn(player);
     }
-    public void spawn(Player player){
-        player.getInventory().clear();
-        player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().setItem(0,ItemManager.getItem("myPlots"));
-    }
+
 }

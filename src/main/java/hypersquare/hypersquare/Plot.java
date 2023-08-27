@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -19,16 +20,14 @@ public class Plot {
 
     public static void createDev(int plotID, SlimePlugin plugin){
         String worldName = "hs." + plotID +".dev";
-        SlimeLoader file = plugin.getLoader("file");
+        SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
-        properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
-        properties.setValue(SlimeProperties.SPAWN_X, 25);
-        properties.setValue(SlimeProperties.SPAWN_Y, -55);
-        properties.setValue(SlimeProperties.SPAWN_Z, 4);
+
         SlimeWorld world = null;
         SlimeWorld cloned = null;
         try{
              world = plugin.loadWorld(file, "dev_template", false, properties);
+             properties = world.getPropertyMap();
 
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){
             System.out.println(err.getMessage());
@@ -52,19 +51,19 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
         Bukkit.getWorld(worldName).setSpawnLocation(25,-55,4);
+
     }
     public static void createBuild(int plotID, SlimePlugin plugin){
         String worldName = "hs." + plotID +".build";
-        SlimeLoader file = plugin.getLoader("file");
+        SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
-        properties.setValue(SlimeProperties.SPAWN_X, 0);
-        properties.setValue(SlimeProperties.SPAWN_Y, 64);
-        properties.setValue(SlimeProperties.SPAWN_Z, 0);
+
 
         SlimeWorld cloned = null;
 
         try{
             SlimeWorld world = plugin.loadWorld(file, "play_template", false, properties);
+            properties = world.getPropertyMap();
             cloned = world.clone(worldName, file);
             cloned = plugin.loadWorld(file, worldName, false, properties);
             plugin.loadWorld(cloned);
@@ -89,9 +88,8 @@ public class Plot {
     public static void loadPlot(int plotID, String mode, Player player){
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         String worldName = "hs." + plotID +"." + mode;
-        SlimeLoader file = plugin.getLoader("file");
+        SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
-        properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
         SlimeWorld test = plugin.getWorld(worldName);
         if (!plugin.getLoadedWorlds().contains(test)){
             try {
@@ -119,12 +117,10 @@ public class Plot {
 
                 }
             }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
-            Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
-            player.teleport(loc);
+            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
 
         } else {
-            Location loc = new Location(Bukkit.getWorld("hs." + plotID + ".build"), 0,64,0);
-            player.teleport(loc);
+            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
         }
     }
     public static void loadRules(int plotID, String mode){

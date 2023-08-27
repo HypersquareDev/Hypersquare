@@ -23,9 +23,9 @@ public class LocateCommand implements CommandExecutor {
                 type = "coding";
             player.sendMessage(net.md_5.bungee.api.ChatColor.of("#xAAD4AA") + "                                       ");
             if (target == player)
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&fYou"+"#xAAD4AA" + " are currently &f" + type + "&x#AAD4AA on:\n"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&fYou"+ net.md_5.bungee.api.ChatColor.of("#AAD4AA") + " are currently &f" + type + "" + net.md_5.bungee.api.ChatColor.of("#AAD4AA") + " on:\n"));
             else
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',target.getName() + "&fYou&x#AAD4AA is currently &f"+ type + "&x#AAD4AA on:\n"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',target.getName() + "&fYou" + net.md_5.bungee.api.ChatColor.of("#AAD4AA") + "#AAD4AA is currently &f"+ type + "&x#AAD4AA on:\n"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&x#AAD4AA"+ plotID +"&8]&x#AAD4AA\n"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&x#AAD4AA&m                                       &x#AAD4AA\n"));
 

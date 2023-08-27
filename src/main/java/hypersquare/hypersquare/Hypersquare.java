@@ -3,6 +3,7 @@ package hypersquare.hypersquare;
 import hypersquare.hypersquare.Commands.DevCommand;
 import hypersquare.hypersquare.Commands.JoinCommand;
 import hypersquare.hypersquare.Commands.LocateCommand;
+import hypersquare.hypersquare.Commands.SpawnCommand;
 import hypersquare.hypersquare.Listeners.PlayerDeathListener;
 import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Listeners.PlayerRightClickListener;
@@ -37,6 +38,7 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("join", new JoinCommand());
         commandManager.registerCommand("dev", new DevCommand());
         commandManager.registerCommand("locate", new LocateCommand());
+        commandManager.registerCommand("spawn", new SpawnCommand());
 
     }
 

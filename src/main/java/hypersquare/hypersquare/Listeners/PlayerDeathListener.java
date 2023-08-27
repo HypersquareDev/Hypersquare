@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event){
-        Bukkit.broadcastMessage("HELLLOOOOO");
         Player player = event.getEntity();
         Hypersquare.lastDeathLoc.put(player, player.getWorld());
         Bukkit.getLogger().info(Hypersquare.lastDeathLoc.toString());

@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class Plot {
 
@@ -33,18 +32,19 @@ public class Plot {
 
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){
             System.out.println(err.getMessage());
+            return;
         }
         try {
             cloned = world.clone(worldName, file);
         } catch (WorldAlreadyExistsException | IOException err){
-            System.out.println(err.getMessage());
+
         }
         try{
             cloned = plugin.loadWorld(file, worldName, false, properties);
             plugin.loadWorld(cloned);
 
-        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){
-            System.out.println(err.getMessage());
+        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException  err){
+            return;
         }
 
         Bukkit.getWorld(worldName).setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
@@ -69,7 +69,10 @@ public class Plot {
             cloned = plugin.loadWorld(file, worldName, false, properties);
             plugin.loadWorld(cloned);
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException | WorldAlreadyExistsException err){
-            throw new RuntimeException(err);
+            if (err instanceof WorldAlreadyExistsException){
+                Hypersquare.lastUsedWorldNumber++;
+                return;
+            }
         }
 
         if  (Bukkit.getServer().getWorlds().contains(worldName)) {
@@ -91,15 +94,20 @@ public class Plot {
         properties.setValue(SlimeProperties.DIFFICULTY, "peaceful");
         SlimeWorld test = plugin.getWorld(worldName);
         if (!plugin.getLoadedWorlds().contains(test)){
-            player.sendMessage("the world didnt exist");
             try {
                 SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
                 plugin.loadWorld(world);
+
 
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                      WorldLockedException err) {
                 if (err instanceof UnknownWorldException) {
                     player.sendMessage(ChatColor.RED + "This plot does not exist.");
+                    return;
+                }
+                if (err instanceof CorruptedWorldException){
+                    player.sendMessage(ChatColor.RED + "This world is corrupted");
+                    return;
                 }
             }
             new BukkitRunnable() {

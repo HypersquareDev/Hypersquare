@@ -1,12 +1,17 @@
 package hypersquare.hypersquare;
 
+import net.kyori.adventure.Adventure;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +34,19 @@ public class ItemManager {
         myPlots.setItemMeta(meta);
 
         addItem("myPlots", myPlots);
+
+        ItemStack playerEvent = new ItemStack(Material.DIAMOND_BLOCK, 1);
+        meta = myPlots.getItemMeta();
+        lore = new ArrayList<String>();
+        lore.add(ChatColor.GRAY + "Used to execute code when something");
+        lore.add(ChatColor.GRAY + "is done by (or happens to) a player.");
+
+        lore.add("<!italic><aqua>» </aqua></!italic><!italic><gray>Detect when a player dies");
+        meta.setLore(lore);
+
+        meta.setDisplayName(ChatColor.AQUA + "◇" + ChatColor.GREEN + " My Plots " + ChatColor.AQUA + "◇");
+        playerEvent.setItemMeta(meta);
+        addItem("playerEvent",playerEvent);
     }
     private static HashMap<String, ItemStack> items;
 

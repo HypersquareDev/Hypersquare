@@ -1,7 +1,6 @@
 package hypersquare.hypersquare;
 
-import hypersquare.dev.Codeblock;
-import net.kyori.adventure.Adventure;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -9,12 +8,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@UtilityClass
 public class ItemManager {
     static NamespacedKey key; // Declare the key without initializing it here
 
@@ -47,11 +46,6 @@ public class ItemManager {
 //        addItem("playerEvent",playerEvent);
     }
     private static HashMap<String, ItemStack> items;
-
-    public ItemManager() {
-
-        items = new HashMap<>();
-    }
 
     public static void addItem(String itemId, ItemStack item) {
         item.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.STRING, itemId);

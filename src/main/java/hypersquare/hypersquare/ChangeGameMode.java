@@ -1,9 +1,8 @@
 package hypersquare.hypersquare;
 
-import hypersquare.dev.LoadItems;
+import hypersquare.hypersquare.dev.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class ChangeGameMode {
@@ -12,7 +11,7 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID,"dev", player);
         player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
         Bukkit.getWorld(worldName).setTime(1000);
-        LoadItems.devItems(player);
+        LoadItems.devInventory(player);
         player.setGameMode(GameMode.CREATIVE);
         Hypersquare.mode.put(player,"coding");
 

@@ -15,7 +15,7 @@ commands:
   spawn:
     description: Teleports to spawn
     usage: /<command>
-    aliases: s
+    aliases: [s]
   build:
     description: Go to build on your current plot
     usage: /<command>

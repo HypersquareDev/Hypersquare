@@ -48,6 +48,7 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("dev", new DevCommand());
         commandManager.registerCommand("locate", new LocateCommand());
         commandManager.registerCommand("spawn", new SpawnCommand());
+        commandManager.registerCommand("s", new SpawnCommand());
         commandManager.registerCommand("build", new BuildCommand());
         commandManager.registerCommand("play", new PlayCommand());
         commandManager.registerCommand("fs", new FlightSpeedCommand());

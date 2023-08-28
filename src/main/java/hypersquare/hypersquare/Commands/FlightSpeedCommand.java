@@ -14,7 +14,7 @@ public class FlightSpeedCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.setFlySpeed(Integer.parseInt(args[0]));
+            player.setFlySpeed((float) Integer.parseInt(args[0])/1000);
 
         } else {
             sender.sendMessage("This command can only be used by players.");

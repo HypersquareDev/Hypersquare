@@ -1,9 +1,6 @@
 package hypersquare.hypersquare;
 
-import hypersquare.hypersquare.Commands.DevCommand;
-import hypersquare.hypersquare.Commands.JoinCommand;
-import hypersquare.hypersquare.Commands.LocateCommand;
-import hypersquare.hypersquare.Commands.SpawnCommand;
+import hypersquare.hypersquare.Commands.*;
 import hypersquare.hypersquare.Listeners.PlayerDeathListener;
 import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Listeners.PlayerRightClickListener;
@@ -21,6 +18,7 @@ public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
+    public static HashMap<Player,String> mode = new HashMap<>();
 
     public static ItemManager itemManager = new ItemManager();
     @Override
@@ -35,16 +33,24 @@ public final class Hypersquare extends JavaPlugin {
         ItemManager.registerItems();
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
-        commandManager.registerCommand("join", new JoinCommand());
-        commandManager.registerCommand("dev", new DevCommand());
-        commandManager.registerCommand("locate", new LocateCommand());
-        commandManager.registerCommand("spawn", new SpawnCommand());
+        registerCommands(commandManager);
 
     }
 
     @Override
     public void onDisable() {
         saveLastUsedWorldNumber();
+    }
+
+    public static void registerCommands(CommandManager commandManager){
+
+        commandManager.registerCommand("join", new JoinCommand());
+        commandManager.registerCommand("dev", new DevCommand());
+        commandManager.registerCommand("locate", new LocateCommand());
+        commandManager.registerCommand("spawn", new SpawnCommand());
+        commandManager.registerCommand("build", new BuildCommand());
+        commandManager.registerCommand("play", new PlayCommand());
+        commandManager.registerCommand("fs", new FlightSpeedCommand());
     }
 
 

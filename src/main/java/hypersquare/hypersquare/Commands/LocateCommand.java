@@ -1,8 +1,9 @@
 package hypersquare.hypersquare.Commands;
 
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.Utilities;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,18 +17,28 @@ public class LocateCommand implements CommandExecutor {
             Player player = (Player) sender;
             Player target = Bukkit.getPlayer(args[0]);
             int plotID = Utilities.getPlotID(target.getWorld());
-            String type = Utilities.getPlotType(target.getWorld());
-            if (type.equals("build"))
-                type = "playing";
-            else
-                type = "coding";
-            player.sendMessage(net.md_5.bungee.api.ChatColor.of("#xAAD4AA") + "                                       ");
-            if (target == player)
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&fYou"+ net.md_5.bungee.api.ChatColor.of("#AAD4AA") + " are currently &f" + type + "" + net.md_5.bungee.api.ChatColor.of("#AAD4AA") + " on:\n"));
-            else
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',target.getName() + "&fYou" + net.md_5.bungee.api.ChatColor.of("#AAD4AA") + "#AAD4AA is currently &f"+ type + "&x#AAD4AA on:\n"));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&x#AAD4AA"+ plotID +"&8]&x#AAD4AA\n"));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&x#AAD4AA&m                                       &x#AAD4AA\n"));
+            String targetName = target.getName() + "is";
+            if (target == player){
+                targetName = "You are";
+            }
+            String mode = Hypersquare.mode.get(player);
+            ChatColor color = ChatColor.of("#AAD4AA");
+            ChatColor color2 = ChatColor.of("#2AD4D4");
+            String startmessage = color + "&m                                       " + color;
+            String message1 = color + targetName + " currently &f" + mode + color + " on:";
+            String message2 = color2 + "→ " + color + "Insert plot name here XD &8[" + color + plotID + "&8]";
+            String message3 = color2 + "→ " + color + "Owner: &fInsert owner here";
+            String message4 = color2 + "→ " + color + "Server: &fNode 100000";
+
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',startmessage));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',message1));
+            player.sendMessage("");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',message2));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',message3));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',message4));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',startmessage));
+
+
 
         } else {
             sender.sendMessage("This command can only be used by players.");

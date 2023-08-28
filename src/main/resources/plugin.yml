@@ -12,8 +12,16 @@ commands:
   locate:
     description: Find another player
     usage: /<command> player
-    aliases: find
   spawn:
     description: Teleports to spawn
     usage: /<command>
     aliases: s
+  build:
+    description: Go to build on your current plot
+    usage: /<command>
+  play:
+    description: Go to play on your current plot
+    usage: /<command>
+  fs:
+    description: set your flightspeed
+    usage: /<command> speed

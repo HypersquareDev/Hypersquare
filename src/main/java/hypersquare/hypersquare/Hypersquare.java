@@ -1,10 +1,8 @@
 package hypersquare.hypersquare;
 
 import hypersquare.hypersquare.Commands.*;
-import hypersquare.hypersquare.Listeners.PlayerDeathListener;
-import hypersquare.hypersquare.Listeners.PlayerJoinListener;
-import hypersquare.hypersquare.Listeners.PlayerRightClickListener;
-import hypersquare.hypersquare.Listeners.PlayerRespawnListener;
+import hypersquare.hypersquare.Listeners.*;
+import hypersquare.hypersquare.dev.CodeItems;
 import lombok.Getter;
 import mc.obliviate.inventory.InventoryAPI;
 import org.bukkit.World;
@@ -21,6 +19,8 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
     public static HashMap<Player,String> mode = new HashMap<>();
 
+    ItemManager itemManager = new ItemManager();
+
     @Override
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
@@ -28,12 +28,15 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRightClickListener(), this);
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
+        pm.registerEvents(new PlayerPlaceBlockListener(), this);
         new InventoryAPI(this).init();
         ItemManager.initializeKey(this);
         ItemManager.registerItems();
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
         registerCommands(commandManager);
+
+        CodeItems.register();
 
     }
 

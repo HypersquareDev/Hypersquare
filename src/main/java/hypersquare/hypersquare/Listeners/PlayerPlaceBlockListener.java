@@ -11,8 +11,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class PlayerPlaceBlockListener implements Listener {
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        if (Hypersquare.mode.get(event.getPlayer()).equals("dev")) {
+        if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             event.setCancelled(true);
+            event.getPlayer().sendMessage(ItemManager.getItemID(event.getItemInHand()));
             if (ItemManager.getItemID(event.getItemInHand()).startsWith("dev.")) {
                 event.getBlock().getLocation().add(0, 0, 1).getBlock().setType(Material.OAK_WALL_SIGN);
             }

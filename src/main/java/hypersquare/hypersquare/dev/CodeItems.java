@@ -11,7 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 public class CodeItems {
-    public void register() {
+    public static void register() {
         ItemStack playerEvent = new ItemBuilder(Material.DIAMOND_BLOCK)
                 .name(ChatColor.AQUA + "Player Event")
                 .lore(ChatColor.GRAY + "Used to execute code when something")

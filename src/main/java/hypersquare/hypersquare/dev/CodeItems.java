@@ -256,7 +256,22 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
-        ItemManager.addItem("dev.select_object", selectObject);
+        ItemManager.addItem("dev.select_obj", selectObject);
+
+        ItemStack repeat = new ItemBuilder(Material.PRISMARINE)
+                .name(ChatColor.GREEN + "Repeat")
+                .lore(ChatColor.GRAY + "Used to repeat the code inside it.")
+                .lore("")
+                .lore(ChatColor.WHITE + "Example:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Repeat code forever")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Repeat code a certain number")
+                .lore(ChatColor.GRAY + "of times")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Repeat code until a certain")
+                .lore(ChatColor.GRAY + "condition is met")
+                .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "true")
+                .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
+                .make();
+        ItemManager.addItem("dev.repeat", repeat);
 
         ItemStack notElse = new ItemBuilder(Material.END_STONE)
             .name(ChatColor.DARK_AQUA + "Else")

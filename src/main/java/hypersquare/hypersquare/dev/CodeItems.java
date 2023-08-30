@@ -196,7 +196,7 @@ public class CodeItems {
             .make();
         ItemManager.addItem("dev.if_variable", ifVariable);
 
-        ItemStack gameAction = new ItemBuilder(Material.NETHER_BRICKS)
+        ItemStack gameAction = new ItemBuilder(Material.NETHERRACK)
             .name(ChatColor.RED + "Game Action")
             .lore(ChatColor.GRAY + "Used to do something related to")
             .lore(ChatColor.GRAY + "the plot and everyone playing it.")

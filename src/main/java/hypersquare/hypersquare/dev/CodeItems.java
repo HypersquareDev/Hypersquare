@@ -143,7 +143,7 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
-        ItemManager.addItem("dev.function", function);
+        ItemManager.addItem("dev.func", function);
 
         ItemStack process = new ItemBuilder(Material.EMERALD_BLOCK)
             .name(ChatColor.GREEN + "Process")
@@ -176,7 +176,7 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
-        ItemManager.addItem("dev.set_variable", setVariable);
+        ItemManager.addItem("dev.set_var", setVariable);
 
         ItemStack ifVariable = new ItemBuilder(Material.OBSIDIAN)
             .name(ChatColor.GOLD + "If Variable")
@@ -194,7 +194,7 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
-        ItemManager.addItem("dev.if_variable", ifVariable);
+        ItemManager.addItem("dev.if_var", ifVariable);
 
         ItemStack gameAction = new ItemBuilder(Material.NETHERRACK)
             .name(ChatColor.RED + "Game Action")

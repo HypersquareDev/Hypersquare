@@ -69,18 +69,20 @@ public class CodeBlockManagement {
     public static void moveCodeLine(Location location, int amount){
 
         Location loc1 = location.clone().add(-1,0,0);
-        Location loc2 = location.clone().add(1,1,320);
+        Location loc2 = location.clone().add(0,1,320);
         ArrayList clipboard = new ArrayList<ArrayList>();
         for (Double x = loc1.getX(); x <= loc2.getX(); x++) {
-            System.out.println(x);
             for (Double y = loc1.getY(); y <= loc2.getY(); y++) {
-                System.out.println(y);
                 for (Double z = loc1.getZ(); z <= loc2.getZ(); z++) {
                     Location currentLoc = new Location(location.getWorld(), x.intValue(), y.intValue(), z.intValue());
                     ArrayList blocks = new ArrayList();
                     blocks.add(currentLoc.clone().add(0,0,amount));
                     blocks.add(currentLoc.getBlock().getType());
                     blocks.add(currentLoc.getBlock().getBlockData());
+                    if (currentLoc.getBlock().getState() instanceof Sign) {
+                        Sign sign = (Sign) currentLoc.getBlock().getState();
+                        blocks.add(sign.getSide(Side.FRONT).getLines());
+                    }
                     clipboard.add(blocks);
                     currentLoc.getBlock().setType(Material.AIR);
                 }
@@ -91,29 +93,27 @@ public class CodeBlockManagement {
             Location location1 = (Location) list1.get(0);
             location1.getBlock().setType((Material) list1.get(1));
             location1.getBlock().setBlockData((BlockData) list1.get(2));
+            if (list1.size() == 4){
+                Sign sign = (Sign) location1.getBlock().getState();
+                sign.setEditable(true);
+
+                sign.update();
+                int i = 0;
+                for (String text : (String[]) list1.get(3)){
+                    sign.getSide(Side.FRONT).setLine(i,text);
+                    i++;
+                }
+                sign.update();
+            }
+
         }
-        System.out.println("finished");
 
     }
 
 
 
-    public static void cloneBlock(Location from, Location to, boolean shouldDelete) {
-        World world = from.getWorld();
-        Block fromBlock = from.getBlock();
-        BlockData fromBlockData = fromBlock.getBlockData();
 
-        // Clone the block at the 'to' location with the same block data
-        Block toBlock = to.getBlock();
-        toBlock.setBlockData(fromBlockData, false);
 
-        // Transfer NBT data if applicable
-        // Note: NBT data handling requires more complex logic and libraries.
-
-        if (shouldDelete) {
-            fromBlock.setType(Material.AIR); // Set the original block to air
-        }
-    }
 
     public static String getCodeBlockFromItem(ItemStack itemStack){
 

@@ -36,7 +36,6 @@ public class PlayerPlaceBlockListener implements Listener {
                         int move = 0;
                         Location location = event.getBlock().getLocation();
                         Location loc = location;
-                        event.getPlayer().sendMessage(location + "");
                         for (JsonElement blockElement : blocksArray) {
                             JsonObject blockObject = blockElement.getAsJsonObject();
                             if (blockObject.has("direct")){
@@ -48,7 +47,6 @@ public class PlayerPlaceBlockListener implements Listener {
                                 move++;
                             }
                             if (blockObject.has("block")) {
-                                event.getPlayer().sendMessage(move + "");
                                 String id = blockObject.get("block").getAsString();
                                 ItemStack item = ItemManager.getItem("dev." + id);
                                 if (!item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"brackets"),PersistentDataType.STRING).equals("true")) {
@@ -63,7 +61,6 @@ public class PlayerPlaceBlockListener implements Listener {
                                     move+=2;
 
                                 } else {
-                                    event.getPlayer().sendMessage("if_player" + move);
                                     CodeBlockManagement.placeCodeBlock(loc.add(0, 0, move), id, "none",blockObject.get("action").getAsString());
                                     loc = event.getBlock().getLocation();;
                                     move++;
@@ -71,26 +68,26 @@ public class PlayerPlaceBlockListener implements Listener {
 
 
                             }
-                            event.getPlayer().sendMessage(move + " " + loc + "");
                         }
                     }
                 }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class),1);
 
 
 
-                event.getPlayer().sendMessage(Utilities.decode(data));
             }
-            event.getPlayer().sendMessage(ItemManager.getItemID(event.getItemInHand()));
             if (ItemManager.getItemID(event.getItemInHand()).startsWith("dev.")) {
                 Location location = event.getBlock().getLocation();
 
-                if (event.getBlockAgainst().getType() == Material.STONE){
+                if (event.getBlockAgainst().getType() == Material.STONE || event.getBlockAgainst().getType() == Material.PISTON){
                     CodeBlockManagement.moveCodeLine(event.getBlockAgainst().getLocation().add(0,0,1), 2);
                     Vector against = event.getBlockAgainst().getLocation().toVector();
                     Vector original = event.getBlock().getLocation().toVector();
                     Vector difference = against.subtract(original);
                     location.add(difference);
                     location.add(0,0,1);
+                } else {
+                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().add(0,0,1), 2);
+
                 }
 
 

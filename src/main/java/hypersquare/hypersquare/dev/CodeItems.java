@@ -68,7 +68,7 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "false")
             .make();
-        ItemManager.addItem("dev.call_function", callFunction);
+        ItemManager.addItem("dev.call_func", callFunction);
 
         ItemStack startProcess = new ItemBuilder(Material.EMERALD_ORE)
             .name(ChatColor.DARK_GREEN + "Start Process")

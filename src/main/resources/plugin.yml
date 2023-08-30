@@ -25,3 +25,4 @@ commands:
   fs:
     description: set your flightspeed
     usage: /<command> speed
+depend: [NBTAPI]

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,7 +52,9 @@ public class ItemManager {
     }
 
     public static void addItem(String itemId, ItemStack item) {
-        item.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.STRING, itemId);
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, itemId);
+        item.setItemMeta(meta);
         items.put(itemId, item);
     }
 

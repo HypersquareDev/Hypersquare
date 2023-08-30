@@ -68,7 +68,7 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "false")
             .make();
-        ItemManager.addItem("dev.call_function", callFunction);
+        ItemManager.addItem("dev.call_func", callFunction);
 
         ItemStack startProcess = new ItemBuilder(Material.EMERALD_ORE)
             .name(ChatColor.DARK_GREEN + "Start Process")
@@ -280,7 +280,7 @@ public class CodeItems {
             .lore(ChatColor.GRAY + "was not met. Else must be placed directly")
             .lore(ChatColor.GRAY + "after any If block's closing bracket.")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "true")
-            .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
+            .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "false")
             .make();
         ItemManager.addItem("dev.else", notElse);
 

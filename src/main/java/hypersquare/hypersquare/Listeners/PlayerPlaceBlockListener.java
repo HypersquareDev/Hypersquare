@@ -4,10 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.ItemManager;
-import hypersquare.hypersquare.LoadCodeTemplate;
-import hypersquare.hypersquare.Utilities;
+import hypersquare.hypersquare.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,6 +18,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.Locale;
 
@@ -45,21 +43,28 @@ public class PlayerPlaceBlockListener implements Listener {
                                 String bracket = blockObject.get("direct").getAsString();
                                 if (bracket.equals("close"))
                                     move++;
-                                placeCodeBlock(loc.add(0,0,move),"bracket",bracket,blockObject.get("action").getAsString());
+                                CodeBlockManagement.placeCodeBlock(loc.add(0,0,move),"bracket",bracket,"");
                                 loc = event.getBlock().getLocation();
                                 move++;
                             }
                             if (blockObject.has("block")) {
                                 event.getPlayer().sendMessage(move + "");
                                 String id = blockObject.get("block").getAsString();
-                                if (!id.equals("if_player")) {
-                                    placeCodeBlock(loc.add(0, 0, move), id, "stone",blockObject.get("action").getAsString());
+                                ItemStack item = ItemManager.getItem("dev." + id);
+                                if (!item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"brackets"),PersistentDataType.STRING).equals("true")) {
+
+                                    JsonElement action = blockObject.get("data");
+                                    if (action == null)
+                                        action = blockObject.get("action");
+
+
+                                    CodeBlockManagement.placeCodeBlock(loc.add(0, 0, move), id, "stone",action.getAsString());
                                     loc = event.getBlock().getLocation();;
                                     move+=2;
 
                                 } else {
                                     event.getPlayer().sendMessage("if_player" + move);
-                                    placeCodeBlock(loc.add(0, 0, move), id, "none",blockObject.get("action").getAsString());
+                                    CodeBlockManagement.placeCodeBlock(loc.add(0, 0, move), id, "none",blockObject.get("action").getAsString());
                                     loc = event.getBlock().getLocation();;
                                     move++;
                                 }
@@ -77,35 +82,61 @@ public class PlayerPlaceBlockListener implements Listener {
             }
             event.getPlayer().sendMessage(ItemManager.getItemID(event.getItemInHand()));
             if (ItemManager.getItemID(event.getItemInHand()).startsWith("dev.")) {
+                Location location = event.getBlock().getLocation();
+
+                if (event.getBlockAgainst().getType() == Material.STONE){
+                    CodeBlockManagement.moveCodeLine(event.getBlockAgainst().getLocation().add(0,0,1), 2);
+                    Vector against = event.getBlockAgainst().getLocation().toVector();
+                    Vector original = event.getBlock().getLocation().toVector();
+                    Vector difference = against.subtract(original);
+                    location.add(difference);
+                    location.add(0,0,1);
+                }
+
+
+                Location signLocation = location.clone().add(-1,0,0);
+
                 String signText = ChatColor.stripColor(event.getItemInHand().getItemMeta().getDisplayName().toUpperCase());
-                event.getBlock().getLocation().add(-1, 0, 0).getBlock().setType(Material.OAK_WALL_SIGN);
-                BlockData blockData = event.getBlock().getLocation().add(-1, 0, 0).getBlock().getBlockData();
+                signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
+                BlockData blockData = signLocation.getBlock().getBlockData();
                 ((Directional) blockData).setFacing(BlockFace.WEST);
-                Sign sign = (Sign) event.getBlock().getLocation().add(-1, 0, 0).getBlock().getState();
+                Sign sign = (Sign) signLocation.getBlock().getState();
                 sign.setEditable(true);
                 sign.getSide(Side.FRONT).setLine(0, signText);
                 sign.update();
-                event.getBlock().getLocation().add(-1, 0, 0).getBlock().setBlockData(blockData);
+                signLocation.getBlock().setBlockData(blockData);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        event.getBlock().getLocation().getBlock().setType(event.getItemInHand().getType());
+                        Location codeblockLocation = location.clone();
+                        codeblockLocation.getBlock().setType(event.getItemInHand().getType());
+                        Location stoneLocation = location.clone().add(0,0,1);
                         if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), PersistentDataType.STRING).equals("true")) {
-                            event.getBlock().getLocation().add(0, 0, 1).getBlock().setType(Material.PISTON);
-                            BlockData pistonData = event.getBlock().getLocation().add(0, 0, 1).getBlock().getBlockData();
+
+                            //Open Bracket
+                            Location openBracketLocation = location.clone().add(0,0,1);
+                            openBracketLocation.getBlock().setType(Material.PISTON);
+                            BlockData pistonData = openBracketLocation.getBlock().getBlockData();
                             ((Directional) pistonData).setFacing(BlockFace.SOUTH);
-                            event.getBlock().getLocation().add(0, 0, 1).getBlock().setBlockData(pistonData);
-                            event.getBlock().getLocation().add(0, 0, 3).getBlock().setType(Material.PISTON);
-                            pistonData = event.getBlock().getLocation().add(0, 0, 3).getBlock().getBlockData();
+                            openBracketLocation.getBlock().setBlockData(pistonData);
+
+                            //Close bracket
+                            Location closeBracketLocation = location.clone().add(0,0,3);
+                            closeBracketLocation.getBlock().setType(Material.PISTON);
+                            pistonData = closeBracketLocation.getBlock().getBlockData();
                             ((Directional) pistonData).setFacing(BlockFace.NORTH);
-                            event.getBlock().getLocation().add(0, 0, 3).getBlock().setBlockData(pistonData);
+                            closeBracketLocation.getBlock().setBlockData(pistonData);
+
                         } else
-                            event.getBlock().getLocation().add(0, 0, 1).getBlock().setType(Material.STONE);
+                            //Stone Bracket
+
+                            stoneLocation.getBlock().setType(Material.STONE);
                         if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), PersistentDataType.STRING).equals("true")) {
-                            event.getBlock().getLocation().add(0, 1, 0).getBlock().setType(Material.CHEST);
-                            BlockData blockData = event.getBlock().getLocation().add(0, 1, 0).getBlock().getBlockData();
+                            Location chestLocation = location.add(0,1,0);
+                            chestLocation.getBlock().setType(Material.CHEST);
+                            BlockData blockData = chestLocation.getBlock().getBlockData();
                             ((Directional) blockData).setFacing(BlockFace.WEST);
-                            event.getBlock().getLocation().add(0, 1, 0).getBlock().setBlockData(blockData);
+                            chestLocation.getBlock().setBlockData(blockData);
 
                         }
 
@@ -117,55 +148,4 @@ public class PlayerPlaceBlockListener implements Listener {
         }
     }
 
-    public static void placeCodeBlock(Location location, String codeblock, String bracket, String action) {
-        Location loc = location.getBlock().getLocation();
-        if (!codeblock.equals("bracket")){
-
-            ItemStack item = ItemManager.getItem("dev." + codeblock);
-
-            //Sign
-            Location signLocation = location.getBlock().getLocation();
-            location.getBlock().setType(ItemManager.getItem("dev." + codeblock).getType());
-            String signText = ChatColor.stripColor(item.getItemMeta().getDisplayName().toUpperCase());
-            signLocation.add(-1, 0, 0).getBlock().setType(Material.OAK_WALL_SIGN);
-            BlockData signData = signLocation.getBlock().getBlockData();
-            ((Directional) signData).setFacing(BlockFace.WEST);
-            Sign sign = (Sign) signLocation.getBlock().getState();
-            sign.setEditable(true);
-            sign.getSide(Side.FRONT).setLine(0, signText);
-            sign.getSide(Side.FRONT).setLine(1, action);
-            sign.update();
-            signLocation.getBlock().setBlockData(signData);
-
-            if (item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), PersistentDataType.STRING).equals("true")) {
-                loc.add(0, 1, 0).getBlock().setType(Material.CHEST);
-                BlockData blockData = loc.getBlock().getBlockData();
-                ((Directional) blockData).setFacing(BlockFace.WEST);
-                loc.getBlock().setBlockData(blockData);
-
-            }
-        }
-            if (bracket.equals("open")) {
-                //Open Bracket
-                location.add(0, 0, 0).getBlock().setType(Material.PISTON);
-                BlockData pistonData = location.getBlock().getBlockData();
-                ((Directional) pistonData).setFacing(BlockFace.SOUTH);
-                location.getBlock().setBlockData(pistonData);
-            }
-
-            if (bracket.equals("close")) {
-                //Close Bracket
-                location.add(0, 0, 0).getBlock().setType(Material.PISTON);
-                BlockData pistonData = location.getBlock().getBlockData();
-                ((Directional) pistonData).setFacing(BlockFace.NORTH);
-                location.getBlock().setBlockData(pistonData);
-            }
-
-            if (bracket.equals("none")) {
-            }
-
-            if (bracket.equals("stone")){
-                location.add(0, 0, 1).getBlock().setType(Material.STONE);
-            }
-    }
 }

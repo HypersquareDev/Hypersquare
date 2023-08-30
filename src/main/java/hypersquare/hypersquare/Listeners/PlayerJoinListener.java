@@ -21,7 +21,6 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
         ChangeGameMode.spawn(player);
-        player.sendMessage(JSON.toJSON(Utilities.decode("H4sIAAAAAAAA/6WNQQqDQAxF75K1J5irFJFp/C2D42SIoSAyd29EV4KL0lX4n5f/Nnpm4Wmh8NgojRSOTN15A+GDYp6jvp1yyDDveN+8Y0tSHKLW3byn11BzXKE/TGjkCbtzTAo2r6SieLa1wlMRne+Nh244h/+xcpYFV23fvkgWfqk0AQAA")).toString());
     }
 
 }

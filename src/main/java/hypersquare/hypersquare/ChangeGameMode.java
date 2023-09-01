@@ -9,7 +9,6 @@ public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
         String worldName = "hs." + plotID +".dev";
         Plot.loadPlot(plotID,"dev", player);
-        player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
         Bukkit.getWorld(worldName).setTime(1000);
         LoadItems.devInventory(player);
         player.setGameMode(GameMode.CREATIVE);
@@ -17,7 +16,7 @@ public class ChangeGameMode {
 
     }
     public static void playMode(Player player, int plotID){
-        String worldName = "hs." + plotID +".build";
+        String worldName = "hs." + plotID +".dev";
         Plot.loadPlot(plotID,"build", player);
         player.closeInventory();
         player.getInventory().clear();
@@ -28,8 +27,7 @@ public class ChangeGameMode {
 
     public static void buildMode(Player player){
         int plotID = Utilities.getPlotID(player.getWorld());
-        String worldName = "hs." + plotID +".build";
-        player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+        String worldName = "hs." + plotID +".dev";
         player.closeInventory();
         player.getInventory().clear();
         player.setGameMode(GameMode.CREATIVE);

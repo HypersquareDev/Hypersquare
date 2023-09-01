@@ -27,6 +27,18 @@
                     <target>9</target>
                 </configuration>
             </plugin>
+
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.3.1</version>
+                        <configuration>
+                            <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
+                        </configuration>
+                    </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -72,6 +84,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
 
     </build>
 

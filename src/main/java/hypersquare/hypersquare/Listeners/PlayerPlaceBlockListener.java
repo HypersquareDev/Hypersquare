@@ -86,7 +86,7 @@ public class PlayerPlaceBlockListener implements Listener {
                     location.add(difference);
                     location.add(0,0,1);
                 } else {
-                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().add(0,0,1), 2);
+                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().add(0,0,0), 1);
 
                 }
 

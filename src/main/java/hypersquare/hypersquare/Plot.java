@@ -15,10 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class Plot {
 
-    public static void createDev(int plotID, SlimePlugin plugin){
+    public static void createDev(int plotID, SlimePlugin plugin,String ownerUUID){
         String worldName = "hs." + plotID +".dev";
         SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
@@ -51,6 +52,7 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
         Bukkit.getWorld(worldName).setSpawnLocation(25,-55,4);
+        Database.addPlot(plotID,ownerUUID,"map",Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,"Basic");
 
     }
     public static void createBuild(int plotID, SlimePlugin plugin){
@@ -117,10 +119,10 @@ public class Plot {
 
                 }
             }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
-            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
 
         } else {
-            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
         }
     }
     public static void loadRules(int plotID, String mode){

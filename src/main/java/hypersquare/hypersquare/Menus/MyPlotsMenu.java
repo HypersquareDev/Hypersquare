@@ -9,6 +9,7 @@ import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.ChangeGameMode;
+import hypersquare.hypersquare.Database;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.Plot;
 import mc.obliviate.inventory.Gui;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static org.bukkit.Bukkit.getLogger;
@@ -38,8 +41,25 @@ public class MyPlotsMenu extends Gui {
         Icon createPlot = new Icon(Material.GREEN_STAINED_GLASS);
         createPlot.setName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create New Plot");
         addItem(17, createPlot);
-        SlimeLoader file = plugin.getLoader("file");
-
+        int i = 0;
+        for (Object list : Database.getPlot(player.getUniqueId().toString())){
+            if (list != null) {
+                List list1 = (List) list;
+                Icon plot = new Icon(Material.matchMaterial((String) list1.get(4)));
+                plot.setName(ChatColor.GREEN + (String) list1.get(5));
+                List lore = new ArrayList();
+                lore.add(ChatColor.DARK_GRAY + "" + list1.get(9) + " Plot");
+                lore.add("");
+                lore.add(ChatColor.GRAY + "Tags: " + ChatColor.DARK_GRAY + list1.get(7));
+                lore.add(ChatColor.GRAY + "Votes: " + ChatColor.YELLOW + list1.get(8) + ChatColor.DARK_GRAY + " (last 2 weeks)");
+                lore.add("");
+                lore.add(ChatColor.DARK_GRAY + "ID: " + list1.get(0));
+                lore.add(ChatColor.BLUE + "↓ " + list1.get(6));
+                plot.setLore(lore);
+                addItem(i, plot);
+                i++;
+            }
+        }
 
         createPlot.onClick(e -> {
             e.setCancelled(true);

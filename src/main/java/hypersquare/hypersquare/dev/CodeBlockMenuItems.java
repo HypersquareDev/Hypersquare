@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.ItemManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -210,5 +211,412 @@ public class CodeBlockMenuItems {
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.click_events.Player_Tame_Mob_Event", Player_Tame_Mob_Event);
+
+    }
+
+    public static void PlayerEvent_MovementEvents(){
+        ItemStack Player_Walk_Event = new ItemBuilder(Material.GRASS_BLOCK)
+                .name("Player Walk Event")
+                .lore(ChatColor.GRAY + "Executes code while")
+                .lore(ChatColor.GRAY + "a player is walking.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),0)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Walk_Event", Player_Walk_Event);
+        ItemStack Player_Jump_Event = new ItemBuilder(Material.RABBIT_FOOT)
+                .name("Player Jump Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player jumps.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),1)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Jump_Event", Player_Jump_Event);
+        ItemStack Player_Sneak_Event = new ItemBuilder(Material.CHAINMAIL_LEGGINGS)
+                .name(ChatColor.BLUE + "Player Sneak Event")
+                .lore(ChatColor.GRAY + "Executes code when")
+                .lore(ChatColor.GRAY + "a player sneaks.")
+                .lore("")
+                .lore(ChatColor.BLUE + "Additional Info:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Cancelling this event will")
+                .lore(ChatColor.GRAY + "not update what the sneaking")
+                .lore(ChatColor.GRAY + "player sees!")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),2)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Sneak_Event", Player_Sneak_Event);
+        ItemStack Player_Unsneak_Event = new ItemBuilder(Material.IRON_LEGGINGS)
+                .name(ChatColor.BLUE + "Player Unsneak Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player stops sneaking.")
+                .lore("")
+                .lore(ChatColor.BLUE + "Additional Info:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Cancelling this event will")
+                .lore(ChatColor.GRAY + "not update what the sneaking")
+                .lore(ChatColor.GRAY + "player sees!")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),3)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Unsneak_Event", Player_Unsneak_Event);
+        ItemStack Player_Start_Sprint_Event = new ItemBuilder(Material.GOLDEN_BOOTS)
+                .name("Player Start Sprint Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player starts sprinting.")
+                .lore("")
+                .lore(ChatColor.BLUE + "Additional Info:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Cancelling this event will")
+                .lore(ChatColor.GRAY + "only result in the sprint")
+                .lore(ChatColor.GRAY + "particles being hidden.")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Client side particles are")
+                .lore(ChatColor.GRAY + "not hidden!")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),4)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Start_Sprint_Event", Player_Start_Sprint_Event);
+        ItemStack Player_Stop_Sprint_Event = new ItemBuilder(Material.IRON_BOOTS)
+                .name("Player Stop Sprinting Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player stops sprinting.")
+                .lore("")
+                .lore(ChatColor.BLUE + "Additional Info:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Cancelling this event will")
+                .lore(ChatColor.GRAY + "only result in the sprint")
+                .lore(ChatColor.GRAY + "particles being shown.")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Client side particles are")
+                .lore(ChatColor.GRAY + "not shown!")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),5)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Stop_Sprint_Event", Player_Stop_Sprint_Event);
+        ItemStack Player_Start_Flight_Event = new ItemBuilder(Material.ELYTRA)
+                .name("Player Start Flight Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player starts flying.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),6)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Start_Flight_Event", Player_Start_Flight_Event);
+        ItemStack Player_Stop_Flight_Event = new ItemBuilder(Material.ELYTRA)
+                .name("Player Stop Flight Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player stops flying.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),7)
+                .hideFlags()
+                .setUnbreakable(true)
+                .damage(431)
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Stop_Flight_Event", Player_Stop_Flight_Event);
+        ItemStack Player_Riptide_Event = new ItemBuilder(Material.TRIDENT)
+                .name("Player Riptide Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "throws a riptide trident.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),8)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Riptide_Event", Player_Riptide_Event);
+        ItemStack Player_Dismount_Event = new ItemBuilder(Material.DARK_OAK_BOAT)
+                .name(ChatColor.DARK_AQUA + "Player Dismount Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player dismounts a vehicle")
+                .lore(ChatColor.GRAY + "or other entity.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),9)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Dismount_Event", Player_Dismount_Event);
+        ItemStack Player_Horse_Jump_Event = new ItemBuilder(Material.GOLDEN_HORSE_ARMOR)
+                .name("Player Horse Jump Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "causes a horse to jump.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),10)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Horse_Jump_Event", Player_Horse_Jump_Event);
+        ItemStack Player_Vehicle_Jump_Event = new ItemBuilder(Material.FURNACE_MINECART)
+                .name("Player Vehicle Jump Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player presses the jump key")
+                .lore(ChatColor.GRAY + "while riding a vehicle")
+                .lore(ChatColor.GRAY + "or other entity.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),11)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.movement_events.Player_Vehicle_Jump_Event", Player_Vehicle_Jump_Event);
+
+    }
+
+    public static void PlayerEvent_ItemEvents(){
+        ItemStack Player_Click_Menu_Slot_Event = new ItemBuilder(Material.CRAFTING_TABLE)
+                .name(ChatColor.AQUA + "Player Click Menu Slot Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "clicks a slot in an inventory")
+                .lore(ChatColor.GRAY + "menu.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancelled automatically")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),0)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Click_Menu_Slot_Event", Player_Click_Menu_Slot_Event);
+        ItemStack Player_Click_Inventory_Slot_Event = new ItemBuilder(Material.LIGHT_GRAY_SHULKER_BOX)
+                .name(ChatColor.AQUA + "Player Click Inventory Slot Event")
+                .lore(ChatColor.GRAY + "Executes code when a player clicks")
+                .lore(ChatColor.GRAY + "a slot inside their inventory.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),1)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Click_Inventory_Slot_Event", Player_Click_Inventory_Slot_Event);
+        ItemStack Player_Pick_Up_Item_Event = new ItemBuilder(Material.GLOWSTONE_DUST)
+                .name(ChatColor.YELLOW + "Player Pick Up Item Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player picks up an item.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),2)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Pick_Up_Item_Event", Player_Pick_Up_Item_Event);
+        ItemStack Player_Drop_Item_Event = new ItemBuilder(Material.SUGAR)
+                .name(ChatColor.YELLOW + "Player Drop Item Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player drops an item.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),3)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Drop_Item_Event", Player_Drop_Item_Event);
+        ItemStack Player_Consume_Item_Event = new ItemBuilder(Material.COOKED_CHICKEN)
+                .name(ChatColor.YELLOW + "Player Consume Item Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "eats or drinks an item.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),4)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Consume_Item_Event", Player_Consume_Item_Event);
+        ItemStack Player_Break_Item_Event = new ItemBuilder(Material.STONE_PICKAXE)
+                .name(ChatColor.YELLOW + "Player Break Item Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player breaks an item.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),5)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Break_Item_Event", Player_Break_Item_Event);
+        ItemStack Player_Close_Inventory_Event = new ItemBuilder(Material.STRUCTURE_VOID)
+                .name(ChatColor.GOLD + "Player Close Inventory Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player closes an inventory.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),6)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Close_Inventory_Event", Player_Close_Inventory_Event);
+        ItemStack Player_Fish_Event = new ItemBuilder(Material.FISHING_ROD)
+                .name(ChatColor.GOLD + "Player Fish Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "fishes an entity,")
+                .lore(ChatColor.GRAY + "player, or nothing.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),7)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.item_events.Player_Fish_Event", Player_Fish_Event);
+
+    }
+
+    public static void PlayerEvent_DamageEvents(){
+        ItemStack Player_Take_Damage_Event = new ItemBuilder(Material.DEAD_BUSH)
+                .name(ChatColor.RED + "Player Take Damage Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player takes damage.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),0)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Take_Damage_Event", Player_Take_Damage_Event);
+        ItemStack Player_Damage_Player_Event = new ItemBuilder(Material.IRON_SWORD)
+                .name(ChatColor.RED + "Player Damage Player Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "damages another player.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),1)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Damage_Player_Event", Player_Damage_Player_Event);
+        ItemStack Player_Damage_Entity_Event = new ItemBuilder(Material.STONE_SWORD)
+                .name(ChatColor.RED + "Player Damage Entity Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player damages an entity.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),2)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Damage_Entity_Event", Player_Damage_Entity_Event);
+        ItemStack Entity_Damage_Player_Event = new ItemBuilder(Material.WOODEN_SWORD)
+                .name(ChatColor.RED + "Entity Damage Player Event")
+                .lore(ChatColor.GRAY + "Executes code when an")
+                .lore(ChatColor.GRAY + "entity damages a player.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),3)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Entity_Damage_Player_Event", Entity_Damage_Player_Event);
+        ItemStack Player_Heal_Event = new ItemBuilder(Material.SPLASH_POTION)
+                .name("Player Heal Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "regains health from any")
+                .lore(ChatColor.GRAY + "source.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),4)
+                .hideFlags()
+                .setPotionColor(Color.fromRGB(255, 0 ,0))
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Heal_Event", Player_Heal_Event);
+        ItemStack Player_Shoot_Bow_Event = new ItemBuilder(Material.BOW)
+                .name(ChatColor.BLUE + "Player Shoot Bow Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "fires an arrow with a bow.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),5)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Shoot_Bow_Event", Player_Shoot_Bow_Event);
+        ItemStack Player_Shoot_Projectile_Event = new ItemBuilder(Material.SNOWBALL)
+                .name(ChatColor.BLUE + "Player Shoot Projectile Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "throws a projectile such")
+                .lore(ChatColor.GRAY + "as snowballs or eggs.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),6)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Shoot_Projectile_Event", Player_Shoot_Projectile_Event);
+        ItemStack Player_Projectile_Hit_Event = new ItemBuilder(Material.SPECTRAL_ARROW)
+                .name(ChatColor.DARK_AQUA + "Player Projectile Hit Event")
+                .lore(ChatColor.GRAY + "Executes code when a projectile")
+                .lore(ChatColor.GRAY + "launched by a player hits a block,")
+                .lore(ChatColor.GRAY + "an entity, or another player.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),7)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Projectile_Hit_Event", Player_Projectile_Hit_Event);
+        ItemStack Player_Projectile_Damage_Player_Event = new ItemBuilder(Material.ARROW)
+                .name(ChatColor.RED + "Projectile Damage Player Event")
+                .lore(ChatColor.GRAY + "Executes code when a projectile")
+                .lore(ChatColor.GRAY + "damages a player.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),8)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.damage_events.Player_Projectile_Damage_Player_Event", Player_Projectile_Damage_Player_Event);
+        ItemStack Potion_Cloud_Imbue_Player_Event = new ItemBuilder(Material.ARROW)
+                .name(ChatColor.DARK_AQUA + "Potion Cloud Imbue Player Event")
+                .lore(ChatColor.GRAY + "Executes code when an area of")
+                .lore(ChatColor.GRAY + "effect cloud applies its potion")
+                .lore(ChatColor.GRAY + "effect(s) to a player.")
+                .lore("")
+                .lore(ChatColor.BLUE + "Additional Info:")
+                .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Area of effect clouds that do")
+                .lore(ChatColor.GRAY + "not apply any potion effects")
+                .lore(ChatColor.GRAY + "will not trigger this event.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),9)
+                .hideFlags()
+                .setPotionColor(Color.fromRGB(255, 255, 0))
+                .make();
+        ItemManager.addItem("player_event.damage_events.Potion_Cloud_Imbue_Player_Event", Potion_Cloud_Imbue_Player_Event);
+
+    }
+
+    public static void PlayerEvent_DeathEvents(){
+        ItemStack Player_Death_Event = new ItemBuilder(Material.REDSTONE_WIRE)
+                .name(ChatColor.DARK_RED + "Player Death Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "dies, not as a result of another")
+                .lore(ChatColor.GRAY + "player or entity.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),0)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Player_Death_Event", Player_Death_Event);
+        ItemStack Player_Kill_Player_Event = new ItemBuilder(Material.SKELETON_SKULL)
+                .name(ChatColor.DARK_RED + "Player Kill Player Event")
+                .lore(ChatColor.GRAY + "Executes code when a player")
+                .lore(ChatColor.GRAY + "kills another player.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),1)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Player_Kill_Player_Event", Player_Kill_Player_Event);
+        ItemStack Player_Resurrect_Event = new ItemBuilder(Material.TOTEM_OF_UNDYING)
+                .name(ChatColor.DARK_AQUA + "Player Resurrect Event")
+                .lore(ChatColor.GRAY + "Executes code when")
+                .lore(ChatColor.GRAY + "a player resurrects with")
+                .lore(ChatColor.GRAY + "a totem of undying.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),2)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Player_Resurrect_Event", Player_Resurrect_Event);
+        ItemStack Player_Kill_Mob_Event = new ItemBuilder(Material.SKELETON_SPAWN_EGG)
+                .name(ChatColor.DARK_RED + "Player Kill Mob Event")
+                .lore(ChatColor.GRAY + "Executes code when")
+                .lore(ChatColor.GRAY + "a player kills a mob.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),3)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Player_Kill_Mob_Event", Player_Kill_Mob_Event);
+        ItemStack Mob_Kill_Player_Event = new ItemBuilder(Material.BONE)
+                .name(ChatColor.DARK_RED + "Mob Kill Player Event")
+                .lore(ChatColor.GRAY + "Executes code when")
+                .lore(ChatColor.GRAY + "a mob kills a player.")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),4)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Mob_Kill_Player_Event", Mob_Kill_Player_Event);
+        ItemStack Player_Respawn_Event = new ItemBuilder(Material.BONE)
+                .name(ChatColor.DARK_AQUA + "Player Respawn Event")
+                .lore(ChatColor.GRAY + "Executes code when")
+                .lore(ChatColor.GRAY + "a player respawns.")
+                .setCustomIntTag(new NamespacedKey(plugin,"slot"),5)
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.death_events.Player_Respawn_Event", Player_Respawn_Event);
+
     }
 }

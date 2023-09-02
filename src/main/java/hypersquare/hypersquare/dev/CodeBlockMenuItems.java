@@ -210,6 +210,5 @@ public class CodeBlockMenuItems {
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.click_events.Player_Tame_Mob_Event", Player_Tame_Mob_Event);
-
     }
 }

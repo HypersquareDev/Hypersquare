@@ -82,14 +82,22 @@ public class PlayerPlaceBlockListener implements Listener {
                 Location location = event.getBlock().getLocation();
 
                 if (event.getBlockAgainst().getType() == Material.STONE || event.getBlockAgainst().getType() == Material.PISTON){
-                    CodeBlockManagement.moveCodeLine(event.getBlockAgainst().getLocation().add(0,0,1), 2);
+                    int size = 2;
+                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING).equals("true")) {
+                            size = 4;
+                        }
+                        CodeBlockManagement.moveCodeLine(event.getBlockAgainst().getLocation().add(0,0,1), size);
                     Vector against = event.getBlockAgainst().getLocation().toVector();
                     Vector original = event.getBlock().getLocation().toVector();
                     Vector difference = against.subtract(original);
                     location.add(difference);
                     location.add(0,0,1);
                 } else {
-                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().add(0,0,0), 1);
+                    int size = 1;
+                    if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING).equals("true")) {
+                        size = 4;
+                    }
+                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().add(0,0,0), size-1);
 
                 }
 

@@ -71,23 +71,25 @@ public class CodeBlockManagement {
     }
 
     public static Location findCorrespBracket(Location location){
-        location.add(0,0,1);
-        if (location.getBlock().getType() == Material.PISTON){
             int i = 0;
             while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
                 Bukkit.broadcastMessage(String.valueOf(location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR));
+                location.add(0,0,1);
                 if (location.getBlock().getType() == Material.PISTON) {
                     Piston piston = (Piston) location.getBlock().getBlockData();
                     if (piston.getFacing() == BlockFace.SOUTH)
-                        i++;
-                    if (piston.getFacing() == BlockFace.NORTH)
                         i--;
+                    if (piston.getFacing() == BlockFace.NORTH)
+                        i++;
+                    Bukkit.broadcastMessage(i + "");
+                }
                     if (i == 0){
+                        Bukkit.broadcastMessage("KAWABONGA!");
                         return location;
                     }
-                }
+
             }
-        }
+
         return null;
 
     }

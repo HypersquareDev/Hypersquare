@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -223,6 +224,18 @@ public class ItemBuilder {
 
     public ItemBuilder hideFlags(){
         meta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        return this;
+    }
+
+    public ItemBuilder damage(int damage){
+        if (make() instanceof Damageable){
+            ((Damageable) make()).setDamage(damage);
+        }
+        return this;
+    }
+
+    public ItemBuilder setUnbreakable(boolean unbreakable){
+        meta().setUnbreakable(unbreakable);
         return this;
     }
 

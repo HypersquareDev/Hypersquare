@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 
@@ -23,6 +24,7 @@ public class PlayerBreakBlockListener implements Listener {
     public void onPlayerBreakBlock(BlockBreakEvent event) {
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             event.setCancelled(true);
+            int size = 2;
             Location blockLoc = event.getBlock().getLocation();
             Location signLoc = blockLoc.clone().add(-1,0,0);
             Location chestLoc = blockLoc.clone().add(0,1,0);
@@ -33,9 +35,13 @@ public class PlayerBreakBlockListener implements Listener {
 
             if (stoneLoc.getBlock().getType() == Material.PISTON){
                 CodeBlockManagement.findCorrespBracket(blockLoc).getBlock().setType(Material.AIR);
+                size = 4;
             }
             stoneLoc.getBlock().setType(Material.AIR);
             chestLoc.getBlock().setType(Material.AIR);
+
+            CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0,0,2), size*-1);
+
         }
     }
 

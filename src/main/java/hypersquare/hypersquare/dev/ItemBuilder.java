@@ -5,10 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.material.MaterialData;
 import org.bukkit.Color;
 import org.bukkit.persistence.PersistentDataType;
@@ -234,10 +231,13 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setUnbreakable(boolean unbreakable){
-        meta().setUnbreakable(unbreakable);
+    public ItemBuilder setPotionColor(Color color){
+        if (meta() instanceof PotionMeta)
+            ((PotionMeta) meta()).setColor(color);
         return this;
     }
+
+
 
     /**
      * Clears all {@link Enchantment}s from the current {@link ItemStack} then adds the defined array of Enchantments to the ItemStack.

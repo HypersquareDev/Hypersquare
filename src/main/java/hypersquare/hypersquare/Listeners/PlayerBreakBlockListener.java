@@ -32,16 +32,18 @@ public class PlayerBreakBlockListener implements Listener {
 
             signLoc.getBlock().setType(Material.AIR);
             blockLoc.getBlock().setType(Material.AIR);
+            boolean hadBrackets = false;
 
             if (stoneLoc.getBlock().getType() == Material.PISTON){
                 CodeBlockManagement.findCorrespBracket(blockLoc).getBlock().setType(Material.AIR);
-                size = 4;
+                size = (int) CodeBlockManagement.findCorrespBracket(blockLoc).distance(blockLoc);
+                event.getPlayer().sendMessage(CodeBlockManagement.findCorrespBracket(blockLoc).distance(blockLoc) + "");
+                hadBrackets = true;
             }
             stoneLoc.getBlock().setType(Material.AIR);
             chestLoc.getBlock().setType(Material.AIR);
 
-            CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0,0,2), size*-1);
-
+            CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0,0,1), size*-1);
         }
     }
 

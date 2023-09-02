@@ -224,6 +224,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setUnbreakable(boolean unbreakable){
+        meta().setUnbreakable(unbreakable);
+        return this;
+    }
+
     public ItemBuilder damage(int damage){
         if (make() instanceof Damageable){
             ((Damageable) make()).setDamage(damage);

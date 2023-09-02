@@ -5,6 +5,7 @@ import hypersquare.hypersquare.Listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import lombok.Getter;
 import mc.obliviate.inventory.InventoryAPI;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -12,12 +13,16 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
+    public static HashMap<Player, List> plotData = new HashMap<>();
+
     public static HashMap<Player,String> mode = new HashMap<>();
+    public static HashMap<Location,Location> bracketLoc = new HashMap<>();
 
     ItemManager itemManager = new ItemManager();
 
@@ -29,6 +34,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new PlayerPlaceBlockListener(), this);
+        pm.registerEvents(new PlayerBreakBlockListener(),this);
         new InventoryAPI(this).init();
         ItemManager.initializeKey(this);
         ItemManager.registerItems();

@@ -1,7 +1,9 @@
 package hypersquare.hypersquare;
 
 import com.alibaba.fastjson.JSON;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.ByteArrayInputStream;
@@ -52,6 +54,50 @@ public class Utilities {
             // Handle the exception appropriately.
             return null; // Or any other error handling mechanism you prefer.
         }
+    }
+    public static Location deserializeLocation(String l, World world) {
+        l = l.replace("Location{", "").replace("}", "");
+
+        String[] keyValuePairs = l.split(",");
+        String worldName = "";
+        double x = 0.0, y = 0.0, z = 0.0, pitch = 0.0, yaw = 0.0;
+
+        for (String pair : keyValuePairs) {
+            String[] parts = pair.split("=");
+            if (parts.length == 2) {
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                Bukkit.broadcastMessage(key);
+                switch (key) {
+                    case "world":
+                        worldName = value;
+                        break;
+                    case "x":
+                        x = Double.parseDouble(value);
+                        break;
+                    case "y":
+                        y = Double.parseDouble(value);
+                        break;
+                    case "z":
+                        z = Double.parseDouble(value);
+                        break;
+                    case "pitch":
+                        pitch = Double.parseDouble(value);
+                        break;
+                    case "yaw":
+                        yaw = Double.parseDouble(value);
+                        break;
+                    default:
+                        // Handle unknown keys or errors if needed
+                        break;
+                }
+            }
+        }
+
+        // Use the extracted values to create a Location object
+        return new Location(world, x, y, z, (float) yaw, (float) pitch);
+
+
     }
 
 }

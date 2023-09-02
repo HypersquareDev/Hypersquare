@@ -36,7 +36,6 @@ public class Database {
 
             pstmt.executeUpdate();
 
-            System.out.println("New plot added successfully.");
 
         } catch (SQLException se) {
             se.printStackTrace();

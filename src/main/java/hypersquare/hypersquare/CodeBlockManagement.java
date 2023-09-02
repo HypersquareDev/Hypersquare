@@ -3,15 +3,19 @@ package hypersquare.hypersquare;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.sign.Side;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static hypersquare.hypersquare.Utilities.deserializeLocation;
 
 public class CodeBlockManagement {
     public static void placeCodeBlock(Location location, String codeblock, String bracket, String action) {
@@ -65,6 +69,43 @@ public class CodeBlockManagement {
             location.add(0, 0, 1).getBlock().setType(Material.STONE);
         }
     }
+
+    public static Location findCorrespBracket(Location location){
+        location.add(0,0,1);
+        if (location.getBlock().getType() == Material.PISTON){
+            int i = 0;
+            while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
+                Bukkit.broadcastMessage(String.valueOf(location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR));
+                if (location.getBlock().getType() == Material.PISTON) {
+                    Piston piston = (Piston) location.getBlock().getBlockData();
+                    if (piston.getFacing() == BlockFace.SOUTH)
+                        i++;
+                    if (piston.getFacing() == BlockFace.NORTH)
+                        i--;
+                    if (i == 0){
+                        return location;
+                    }
+                }
+            }
+        }
+        return null;
+
+    }
+
+    public static Location findCodelineStartLoc(Location location){
+        while (location.clone().add(0,0,-1).getBlock().getType() != Material.AIR || location.clone().add(0,0,-2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
+            if (location.getBlock().getType() == Material.DIAMOND_BLOCK ||location.getBlock().getType() ==  Material.LAPIS_BLOCK ||location.getBlock().getType() ==  Material.EMERALD_BLOCK ||location.getBlock().getType() ==  Material.GOLD_BLOCK){
+                return location;
+
+            }
+            location.add(0,0,-1);
+            Bukkit.broadcastMessage(String.valueOf(location.getBlock().getType()));
+        }
+        return null;
+    }
+
+
+
 
     public static void moveCodeLine(Location location, int amount){
 

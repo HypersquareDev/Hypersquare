@@ -17,7 +17,7 @@ public class DevCommand implements CommandExecutor {
             Player player = (Player) sender;
             int plotID = Utilities.getPlotID(player.getWorld());
             ChangeGameMode.devMode(player,plotID);
-            Plot.loadRules(plotID,"dev");
+            Plot.loadRules(plotID);
 
         } else {
             sender.sendMessage("This command can only be used by players.");

@@ -11,6 +11,7 @@ import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.ChangeGameMode;
 import hypersquare.hypersquare.Database;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Plot;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -32,6 +33,7 @@ import static org.bukkit.Bukkit.getServer;
 public class MyPlotsMenu extends Gui {
     public static Logger logger = getLogger();
     SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+
     public MyPlotsMenu(Player player) {
         super(player, "myPlots", "My Plots", 2);
     }
@@ -42,10 +44,11 @@ public class MyPlotsMenu extends Gui {
         createPlot.setName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create New Plot");
         addItem(17, createPlot);
         int i = 0;
-        for (Object list : Database.getPlot(player.getUniqueId().toString())){
+        Icon plot = null;
+        for (Object list : Hypersquare.plotData.get(player)){
             if (list != null) {
                 List list1 = (List) list;
-                Icon plot = new Icon(Material.matchMaterial((String) list1.get(4)));
+                plot = new Icon(Material.matchMaterial((String) list1.get(4)));
                 plot.setName(ChatColor.GREEN + (String) list1.get(5));
                 List lore = new ArrayList();
                 lore.add(ChatColor.DARK_GRAY + "" + list1.get(9) + " Plot");
@@ -54,10 +57,16 @@ public class MyPlotsMenu extends Gui {
                 lore.add(ChatColor.GRAY + "Votes: " + ChatColor.YELLOW + list1.get(8) + ChatColor.DARK_GRAY + " (last 2 weeks)");
                 lore.add("");
                 lore.add(ChatColor.DARK_GRAY + "ID: " + list1.get(0));
-                lore.add(ChatColor.BLUE + "↓ " + list1.get(6));
+                lore.add(ChatColor.BLUE + "↓ Node " + list1.get(6));
                 plot.setLore(lore);
                 addItem(i, plot);
                 i++;
+                Icon finalPlot = plot;
+                plot.onClick(e -> {
+                    ChangeModeMenu.initItems(finalPlot, (Integer) list1.get(0));
+                    new ChangeModeMenu((Player) event.getPlayer()).open();
+                });
+
             }
         }
 
@@ -66,5 +75,7 @@ public class MyPlotsMenu extends Gui {
             new CreatePlotsMenu((Player) event.getPlayer()).open();
 
         });
+
+
     }
 }

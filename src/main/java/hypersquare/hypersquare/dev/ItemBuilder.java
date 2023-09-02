@@ -155,6 +155,10 @@ public class ItemBuilder {
         meta().getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
         return this;
     }
+    public ItemBuilder setCustomIntTag(NamespacedKey key, int value) {
+        meta().getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
+        return this;
+    }
 
     /**
      * Changes the durability of the current {@link ItemStack}

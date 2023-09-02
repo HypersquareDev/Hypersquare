@@ -3,21 +3,23 @@ package hypersquare.hypersquare;
 import hypersquare.hypersquare.dev.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
-        String worldName = "hs." + plotID +".dev";
-        Plot.loadPlot(plotID,"dev", player);
+        String worldName = "hs." + plotID;
+        Plot.loadPlot(plotID, player);
         Bukkit.getWorld(worldName).setTime(1000);
         LoadItems.devInventory(player);
         player.setGameMode(GameMode.CREATIVE);
         Hypersquare.mode.put(player,"coding");
+        player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
 
     }
     public static void playMode(Player player, int plotID){
-        String worldName = "hs." + plotID +".dev";
-        Plot.loadPlot(plotID,"build", player);
+        String worldName = "hs." + plotID;
+        Plot.loadPlot(plotID, player);
         player.closeInventory();
         player.getInventory().clear();
         player.setGameMode(GameMode.SURVIVAL);
@@ -25,9 +27,9 @@ public class ChangeGameMode {
 
     }
 
-    public static void buildMode(Player player){
-        int plotID = Utilities.getPlotID(player.getWorld());
-        String worldName = "hs." + plotID +".dev";
+    public static void buildMode(Player player, int plotID){
+        Plot.loadPlot(plotID, player);
+        String worldName = "hs." + plotID;
         player.closeInventory();
         player.getInventory().clear();
         player.setGameMode(GameMode.CREATIVE);

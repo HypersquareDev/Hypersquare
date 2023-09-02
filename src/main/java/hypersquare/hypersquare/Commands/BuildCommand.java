@@ -2,6 +2,7 @@ package hypersquare.hypersquare.Commands;
 
 import hypersquare.hypersquare.ChangeGameMode;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +14,7 @@ public class BuildCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ChangeGameMode.buildMode(player);
+            ChangeGameMode.buildMode(player, Utilities.getPlotID(player.getWorld()));
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

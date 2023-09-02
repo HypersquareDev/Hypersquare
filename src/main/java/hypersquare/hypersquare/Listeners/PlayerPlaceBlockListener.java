@@ -8,6 +8,7 @@ import hypersquare.hypersquare.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -17,12 +18,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Locale;
 
 public class PlayerPlaceBlockListener implements Listener {
+    Plugin plugin = Hypersquare.getPlugin(Hypersquare.class);
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
@@ -49,7 +52,7 @@ public class PlayerPlaceBlockListener implements Listener {
                             if (blockObject.has("block")) {
                                 String id = blockObject.get("block").getAsString();
                                 ItemStack item = ItemManager.getItem("dev." + id);
-                                if (!item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"brackets"),PersistentDataType.STRING).equals("true")) {
+                                if (!item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin,"brackets"),PersistentDataType.STRING).equals("true")) {
 
                                     JsonElement action = blockObject.get("data");
                                     if (action == null)
@@ -70,7 +73,7 @@ public class PlayerPlaceBlockListener implements Listener {
                             }
                         }
                     }
-                }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class),1);
+                }.runTaskLater(plugin,1);
 
 
 
@@ -107,38 +110,41 @@ public class PlayerPlaceBlockListener implements Listener {
                     public void run() {
                         Location codeblockLocation = location.clone();
                         codeblockLocation.getBlock().setType(event.getItemInHand().getType());
-                        Location stoneLocation = location.clone().add(0,0,1);
-                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), PersistentDataType.STRING).equals("true")) {
+
+                        Location stoneLocation = location.clone().add(0, 0, 1);
+                        Location closeBracketLocation = location.clone().add(0, 0, 3);
+                        Location chestLocation = location.add(0, 1, 0);
+                        Location openBracketLocation = location.clone().add(0, -1, 1);
+
+
+                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING).equals("true")) {
 
                             //Open Bracket
-                            Location openBracketLocation = location.clone().add(0,0,1);
                             openBracketLocation.getBlock().setType(Material.PISTON);
                             BlockData pistonData = openBracketLocation.getBlock().getBlockData();
                             ((Directional) pistonData).setFacing(BlockFace.SOUTH);
                             openBracketLocation.getBlock().setBlockData(pistonData);
 
                             //Close bracket
-                            Location closeBracketLocation = location.clone().add(0,0,3);
                             closeBracketLocation.getBlock().setType(Material.PISTON);
                             pistonData = closeBracketLocation.getBlock().getBlockData();
                             ((Directional) pistonData).setFacing(BlockFace.NORTH);
                             closeBracketLocation.getBlock().setBlockData(pistonData);
 
+
                         } else
                             //Stone Bracket
 
                             stoneLocation.getBlock().setType(Material.STONE);
-                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), PersistentDataType.STRING).equals("true")) {
-                            Location chestLocation = location.add(0,1,0);
+                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "chest"), PersistentDataType.STRING).equals("true")) {
                             chestLocation.getBlock().setType(Material.CHEST);
                             BlockData blockData = chestLocation.getBlock().getBlockData();
                             ((Directional) blockData).setFacing(BlockFace.WEST);
                             chestLocation.getBlock().setBlockData(blockData);
-
                         }
-
                     }
-                }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class), 1);
+                }.runTaskLater(plugin, 1);
+
 
             }
 

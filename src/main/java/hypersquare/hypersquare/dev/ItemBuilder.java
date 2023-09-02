@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -217,6 +218,11 @@ public class ItemBuilder {
      */
     public ItemBuilder enchantment(final Enchantment enchantment){
         make().addUnsafeEnchantment(enchantment, 1);
+        return this;
+    }
+
+    public ItemBuilder hideFlags(){
+        meta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
         return this;
     }
 

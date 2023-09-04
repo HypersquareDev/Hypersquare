@@ -4,13 +4,11 @@ import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.exceptions.*;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -19,7 +17,7 @@ import java.util.UUID;
 
 public class Plot {
 
-    public static void createDev(int plotID, SlimePlugin plugin,String ownerUUID){
+    public static void createPlot(int plotID, SlimePlugin plugin, String ownerUUID){
         String worldName = "hs." + plotID;
         SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
@@ -27,7 +25,7 @@ public class Plot {
         SlimeWorld world = null;
         SlimeWorld cloned = null;
         try{
-             world = plugin.loadWorld(file, "plot_template", false, properties);
+             world = plugin.loadWorld(file, "plot_template_basic", false, properties);
              properties = world.getPropertyMap();
 
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){

@@ -1,8 +1,11 @@
 package hypersquare.hypersquare;
 
+import org.bukkit.Bukkit;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Database {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -232,6 +235,141 @@ public class Database {
 
         return ownsPlot;
     }
+
+    public static String getPlotName(int plotID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        String name = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT name FROM Plots WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, plotID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                name = rs.getString("name");
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return name;
+    }
+
+
+    public static int getPlotNode(int plotID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int node = -1;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT node FROM Plots WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, plotID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                node = rs.getInt("node");
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return node;
+    }
+
+    public static String getPlotOwner(int plotID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        String owner = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT Owner FROM Plots WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, plotID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                owner = rs.getString("Owner");
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return Bukkit.getPlayer(UUID.fromString(owner)).getName();
+    }
+
+
 
 
 }

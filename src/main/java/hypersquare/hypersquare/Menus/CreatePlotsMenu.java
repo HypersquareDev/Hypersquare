@@ -5,7 +5,6 @@ import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import hypersquare.hypersquare.ChangeGameMode;
 import hypersquare.hypersquare.Database;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.Listeners.PlayerJoinListener;
 import hypersquare.hypersquare.Plot;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -39,7 +38,7 @@ public class CreatePlotsMenu extends Gui{
             basic.onClick(e -> {
                 e.setCancelled(true);
                 int plotID = Hypersquare.lastUsedWorldNumber;
-                Plot.createDev(plotID,plugin,player.getUniqueId().toString());
+                Plot.createPlot(plotID,plugin,player.getUniqueId().toString());
                 ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                 Hypersquare.lastUsedWorldNumber++;
                 Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));

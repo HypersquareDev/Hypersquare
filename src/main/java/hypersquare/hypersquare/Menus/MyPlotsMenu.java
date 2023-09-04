@@ -8,11 +8,8 @@ import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
-import hypersquare.hypersquare.ChangeGameMode;
-import hypersquare.hypersquare.Database;
-import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.*;
 import hypersquare.hypersquare.Listeners.PlayerJoinListener;
-import hypersquare.hypersquare.Plot;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
 import org.bukkit.*;
@@ -59,7 +56,7 @@ public class MyPlotsMenu extends Gui {
             if (list != null) {
                 List list1 = (List) list;
                 plot = new Icon(Material.matchMaterial((String) list1.get(4)));
-                plot.setName(ChatColor.GREEN + (String) list1.get(5));
+                plot.setName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor((String) list1.get(5))));
                 List lore = new ArrayList();
                 lore.add(ChatColor.DARK_GRAY + "" + list1.get(9) + " Plot");
                 lore.add("");

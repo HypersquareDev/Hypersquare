@@ -1,16 +1,20 @@
 package hypersquare.hypersquare;
 
 import com.alibaba.fastjson.JSON;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -98,6 +102,31 @@ public class Utilities {
         return new Location(world, x, y, z, (float) yaw, (float) pitch);
 
 
+    }
+
+    public static void sendMultiMessage(Player recipient, String[] messages)
+    {
+        for (String message : messages)
+        {
+            message = convertToChatColor(message);
+            recipient.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        }
+    }
+
+    public static String convertToChatColor(String input) {
+        Pattern pattern = Pattern.compile("#[0-9A-Fa-f]{6}");
+        Matcher matcher = pattern.matcher(input);
+        StringBuilder formattedString = new StringBuilder();
+        int prevEnd = 0;
+        while (matcher.find()) {
+            String colorCode = matcher.group();
+            String chatColor = ChatColor.of(colorCode).toString();
+            formattedString.append(input.substring(prevEnd, matcher.start()));
+            formattedString.append(chatColor);
+            prevEnd = matcher.end();
+        }
+        formattedString.append(input.substring(prevEnd));
+        return formattedString.toString();
     }
 
 }

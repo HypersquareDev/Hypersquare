@@ -36,12 +36,20 @@ public class ChangeGameMode {
         Hypersquare.mode.put(player,"building");
 
     }
+    public static void editSpawn(Player player){
+        player.setGameMode(GameMode.CREATIVE);
+        Hypersquare.mode.put(player,"editing spawn");
+
+    }
     public static void spawn(Player player){
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0,ItemManager.getItem("myPlots"));
         player.teleport(Bukkit.getWorld("world").getSpawnLocation());
         Hypersquare.mode.put(player,"at spawn");
+        player.setHealth(20);
+        player.setFoodLevel(20);
+
 
     }
 

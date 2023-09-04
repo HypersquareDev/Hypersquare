@@ -21,10 +21,7 @@ public class PlayerRightClickListener implements Listener {
             if (event.getItem().getItemMeta().equals(ItemManager.getItem("myPlots").getItemMeta())){
                 new MyPlotsMenu(event.getPlayer()).open();
             }
-            if (event.getClickedBlock().getType() == Material.LEVER){
-                 TNTPrimed tnt = (TNTPrimed) event.getClickedBlock().getWorld().spawnEntity(event.getClickedBlock().getLocation(), EntityType.PRIMED_TNT);
-                 tnt.setFuseTicks(1);
-            }
+
 
         }
     }

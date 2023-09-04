@@ -191,7 +191,7 @@ public class CodeItems {
             .lore(ChatColor.GRAY + "a certain string")
             .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Check if a variable is equal")
             .lore(ChatColor.GRAY + "to something")
-            .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "false")
+            .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "brackets"), "true")
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
         ItemManager.addItem("dev.if_var", ifVariable);
@@ -283,6 +283,13 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "true")
             .make();
         ItemManager.addItem("dev.else", notElse);
+
+        ItemStack glitch = new ItemBuilder(Material.STICK)
+                .name(ChatColor.RED + "Glitch Stick")
+                .lore(ChatColor.GRAY + "If a codeblock wont break,")
+                .lore(ChatColor.GRAY + "break it with this.")
+                .make();
+        ItemManager.addItem("dev.glitch", glitch);
 
 
     }

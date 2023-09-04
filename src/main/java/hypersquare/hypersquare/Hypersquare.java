@@ -1,6 +1,7 @@
 package hypersquare.hypersquare;
 
 import hypersquare.hypersquare.Commands.*;
+import hypersquare.hypersquare.Commands.Plot;
 import hypersquare.hypersquare.Listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new PlayerPlaceBlockListener(), this);
         pm.registerEvents(new PlayerBreakBlockListener(),this);
+        pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         new InventoryAPI(this).init();
         ItemManager.initializeKey(this);
         ItemManager.registerItems();
@@ -56,11 +58,15 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("join", new JoinCommand());
         commandManager.registerCommand("dev", new DevCommand());
         commandManager.registerCommand("locate", new LocateCommand());
+        commandManager.registerCommand("find", new LocateCommand());
         commandManager.registerCommand("spawn", new SpawnCommand());
         commandManager.registerCommand("s", new SpawnCommand());
         commandManager.registerCommand("build", new BuildCommand());
         commandManager.registerCommand("play", new PlayCommand());
         commandManager.registerCommand("fs", new FlightSpeedCommand());
+        commandManager.registerCommand("plot" , new Plot());
+        commandManager.registerCommand("p" , new Plot());
+        commandManager.registerCommand("editspawn", new EditSpawn());
     }
 
 

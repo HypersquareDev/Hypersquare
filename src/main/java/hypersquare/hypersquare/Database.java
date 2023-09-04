@@ -120,5 +120,118 @@ public class Database {
 
         return info;
     }
+    public static void changePlotName(int plotID, String newName) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "UPDATE Plots SET name = ? WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newName);
+            pstmt.setInt(2, plotID);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    public static void changePlotIcon(int plotID, String newIcon) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "UPDATE Plots SET icon = ? WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newIcon);
+            pstmt.setInt(2, plotID);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    public static boolean doesPlayerOwnPlot(String ownerUUID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean ownsPlot = false;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT COUNT(*) AS plotCount FROM Plots WHERE Owner = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, ownerUUID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int plotCount = rs.getInt("plotCount");
+                ownsPlot = plotCount > 0; // If plotCount is greater than 0, the player owns a plot
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return ownsPlot;
+    }
+
 
 }

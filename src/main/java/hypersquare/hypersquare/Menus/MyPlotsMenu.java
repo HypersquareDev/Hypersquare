@@ -36,13 +36,23 @@ public class MyPlotsMenu extends Gui {
 
     public MyPlotsMenu(Player player) {
         super(player, "myPlots", "My Plots", 2);
+         int i = 0;
+        for (Object list : Hypersquare.plotData.get(player)){
+            if (list != null) {
+                i++;
+                if (i >= this.getSize()){
+                    this.setSize(this.getSize()+9);
+                }
+
+            }
+        }
     }
     @Override
     public void onOpen(InventoryOpenEvent event) {
 
         Icon createPlot = new Icon(Material.GREEN_STAINED_GLASS);
         createPlot.setName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create New Plot");
-        addItem(17, createPlot);
+        addItem(this.getSize()-1, createPlot);
         int i = 0;
         Icon plot = null;
         for (Object list : Hypersquare.plotData.get(player)){
@@ -66,6 +76,7 @@ public class MyPlotsMenu extends Gui {
                     ChangeModeMenu.initItems(finalPlot, (Integer) list1.get(0));
                     new ChangeModeMenu((Player) event.getPlayer()).open();
                 });
+
 
             }
         }

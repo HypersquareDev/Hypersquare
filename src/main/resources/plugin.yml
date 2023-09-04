@@ -25,4 +25,15 @@ commands:
   fs:
     description: set your flightspeed
     usage: /<command> speed
+  plot:
+    description: manage your plot
+    usage: /<command>
+    aliases:
+      - p
+  editspawn:
+    description: edit spawn
+    usage: /<command>
+    aliases:
+      - ps
+
 depend: [NBTAPI]

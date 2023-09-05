@@ -1,21 +1,18 @@
-package hypersquare.hypersquare.Commands;
+package hypersquare.hypersquare.commands;
 
-import hypersquare.hypersquare.ChangeGameMode;
-import hypersquare.hypersquare.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class EditSpawn implements CommandExecutor {
+public class FlightSpeedCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            if (sender.isOp()) {
-                Player player = (Player) sender;
-                ChangeGameMode.editSpawn(player);
-            }
+            Player player = (Player) sender;
+            player.setFlySpeed((float) Integer.parseInt(args[0])/1000);
+
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

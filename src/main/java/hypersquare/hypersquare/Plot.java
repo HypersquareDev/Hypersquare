@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class Plot {
 
-    public static void createPlot(int plotID, SlimePlugin plugin, String ownerUUID){
+    public static void createPlot(int plotID, SlimePlugin plugin, String ownerUUID, String plotType){
         String worldName = "hs." + plotID;
         SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
@@ -25,7 +25,7 @@ public class Plot {
         SlimeWorld world = null;
         SlimeWorld cloned = null;
         try{
-             world = plugin.loadWorld(file, "plot_template_basic", false, properties);
+             world = plugin.loadWorld(file, plotType, false, properties);
              properties = world.getPropertyMap();
 
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldLockedException err){
@@ -50,7 +50,10 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
         Bukkit.getWorld(worldName).setSpawnLocation(25,-55,4);
-        Database.addPlot(plotID,ownerUUID,"map",Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,"Basic");
+        plotType = plotType.replace("plot_template_", "");
+        plotType = Utilities.capitalize(plotType);
+
+        Database.addPlot(plotID,ownerUUID,"map",Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,plotType);
 
     }
 
@@ -70,6 +73,7 @@ public class Plot {
                      WorldLockedException err) {
                 if (err instanceof UnknownWorldException) {
                     player.sendMessage(ChatColor.RED + "This plot does not exist.");
+
                     return;
                 }
                 if (err instanceof CorruptedWorldException){

@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.Commands;
+package hypersquare.hypersquare.commands;
 
 import hypersquare.hypersquare.Database;
 import hypersquare.hypersquare.Hypersquare;
@@ -17,14 +17,22 @@ public class LocateCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             Player target = Bukkit.getPlayer(args[0]);
-            String targetName = target.getName() + "is";
+            String targetName = target.getName() + " is";
             if (target == player){
                 targetName = "You are";
             }
-            String mode = Hypersquare.mode.get(player);
+            String mode = Hypersquare.mode.get(target);
 
 
-            if (!mode.equals("at spawn")) {
+            if (mode.equals("at spawn") || mode.equals("editing spawn")) {
+                ChatColor color = ChatColor.of("#AAD4AA");
+                ChatColor color2 = ChatColor.of("#2AD4D4");
+                String startmessage = color + "&m                                       " + color;
+                String message1 = color + targetName + " currently &f" + mode + color + "";
+                String message2 = color2 + "→ " + color + "Server: &rNode 1";
+                String[] messages = {startmessage, message1, message2, startmessage};
+                Utilities.sendMultiMessage(player, messages);
+            } else {
                 int plotID = Utilities.getPlotID(target.getWorld());
                 ChatColor color = ChatColor.of("#AAD4AA");
                 ChatColor color2 = ChatColor.of("#2AD4D4");
@@ -34,14 +42,6 @@ public class LocateCommand implements CommandExecutor {
                 String message3 = color2 + "→ " + color + "Owner: &r" + Database.getPlotOwner(plotID);
                 String message4 = color2 + "→ " + color + "Server: &rNode " + Database.getPlotNode(plotID);
                 String[] messages = {startmessage, message1, "", message2, message3, message4, startmessage};
-                Utilities.sendMultiMessage(player, messages);
-            } else {
-                ChatColor color = ChatColor.of("#AAD4AA");
-                ChatColor color2 = ChatColor.of("#2AD4D4");
-                String startmessage = color + "&m                                       " + color;
-                String message1 = color + targetName + " currently &f" + mode + color + "";
-                String message2 = color2 + "→ " + color + "Server: &rNode 1";
-                String[] messages = {startmessage, message1, message2, startmessage};
                 Utilities.sendMultiMessage(player, messages);
             }
         } else {

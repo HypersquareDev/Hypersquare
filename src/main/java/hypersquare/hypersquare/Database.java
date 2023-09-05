@@ -366,7 +366,7 @@ public class Database {
             }
         }
 
-        return Bukkit.getPlayer(UUID.fromString(owner)).getName();
+        return Bukkit.getOfflinePlayer(UUID.fromString(owner)).getName();
     }
 
 

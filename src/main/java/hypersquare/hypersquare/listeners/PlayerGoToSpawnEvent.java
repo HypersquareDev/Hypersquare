@@ -1,19 +1,15 @@
-package hypersquare.hypersquare.Listeners;
+package hypersquare.hypersquare.listeners;
 
 import hypersquare.hypersquare.Hypersquare;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import javax.sound.sampled.Line;
 
 public class PlayerGoToSpawnEvent implements Listener {
 

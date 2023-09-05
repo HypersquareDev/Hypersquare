@@ -1,10 +1,10 @@
 package hypersquare.hypersquare;
 
-import hypersquare.hypersquare.Commands.*;
-import hypersquare.hypersquare.Commands.Plot;
-import hypersquare.hypersquare.Listeners.*;
+import hypersquare.hypersquare.commands.*;
+import hypersquare.hypersquare.commands.Plot;
+import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
-import lombok.Getter;
+import hypersquare.hypersquare.dev.CreatePlotMenuItems;
 import mc.obliviate.inventory.InventoryAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,7 +34,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRightClickListener(), this);
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerPlaceBlockListener(), this);
+        pm.registerEvents(new DevEvents(), this);
         pm.registerEvents(new PlayerBreakBlockListener(),this);
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         new InventoryAPI(this).init();
@@ -43,6 +43,7 @@ public final class Hypersquare extends JavaPlugin {
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
         registerCommands(commandManager);
+        CreatePlotMenuItems.init();
 
         CodeItems.register();
 

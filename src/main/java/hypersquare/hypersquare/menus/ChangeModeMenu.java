@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.Menus;
+package hypersquare.hypersquare.menus;
 
 import hypersquare.hypersquare.ChangeGameMode;
 import mc.obliviate.inventory.Gui;

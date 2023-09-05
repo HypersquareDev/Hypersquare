@@ -1,7 +1,6 @@
-package hypersquare.hypersquare.Commands;
+package hypersquare.hypersquare.commands;
 
 import hypersquare.hypersquare.ChangeGameMode;
-import hypersquare.hypersquare.Plot;
 import hypersquare.hypersquare.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,12 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class FlightSpeedCommand implements CommandExecutor {
+public class PlayCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.setFlySpeed((float) Integer.parseInt(args[0])/1000);
+            int plotID = Utilities.getPlotID(player.getWorld());
+            ChangeGameMode.playMode(player,plotID);
 
         } else {
             sender.sendMessage("This command can only be used by players.");

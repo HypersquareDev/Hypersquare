@@ -1,5 +1,6 @@
 package hypersquare.hypersquare;
 
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 import hypersquare.hypersquare.dev.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -20,10 +21,12 @@ public class ChangeGameMode {
     public static void playMode(Player player, int plotID){
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
-        player.closeInventory();
-        player.getInventory().clear();
-        player.setGameMode(GameMode.SURVIVAL);
-        Hypersquare.mode.put(player,"playing");
+        if (player.getWorld().getName().equals(worldName)) {
+            player.closeInventory();
+            player.getInventory().clear();
+            player.setGameMode(GameMode.SURVIVAL);
+            Hypersquare.mode.put(player, "playing");
+        }
 
     }
 

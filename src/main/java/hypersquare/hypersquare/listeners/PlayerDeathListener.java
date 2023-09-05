@@ -1,14 +1,11 @@
-package hypersquare.hypersquare.Listeners;
+package hypersquare.hypersquare.listeners;
 
 import hypersquare.hypersquare.Hypersquare;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerDeathListener implements Listener {
     @EventHandler

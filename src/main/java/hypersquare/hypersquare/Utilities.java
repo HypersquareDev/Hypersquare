@@ -2,30 +2,34 @@ package hypersquare.hypersquare;
 
 import com.alibaba.fastjson.JSON;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static hypersquare.hypersquare.Hypersquare.teleportFlagMap;
+import static hypersquare.hypersquare.Hypersquare.visitedLocationsMap;
+
 public class Utilities {
+
     public static int getPlotID(World world){
         String name = world.getName();
-        name = name.replace("hs.","");
-        name = name.replace(".build","");
-        name = name.replace(".dev","");
-        int plotID = Integer.parseInt(name);
-        return plotID;
+        if (name.contains("hs.")) {
+            name = name.replace("hs.", "");
+            int plotID = Integer.parseInt(name);
+            return plotID;
+        }
+        return 0;
     }
     public static String getPlotType(World world){
         String name = world.getName();
@@ -133,6 +137,83 @@ public class Utilities {
     {
         if (str == null || str.length() == 0) return str;
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public static void sendError(Player player, String message){
+        player.sendMessage(org.bukkit.ChatColor.RED + "Error: " + org.bukkit.ChatColor.GRAY + message);
+        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED,1,1);
+    }
+
+    public static void sendInfo(Player player, String message){
+        player.sendMessage(org.bukkit.ChatColor.GREEN + "" + org.bukkit.ChatColor.BOLD + " » " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static void sendOpenMenuSound(Player player){
+        player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_OFF, 1, 2);
+    }
+
+    public static void sendClickMenuSound(Player player){
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1.5f);
+    }
+
+    public static void sendSecondaryMenuSound(Player player){
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
+    }
+    public static boolean locationWithin(Location targetLocation, Location location1, Location location2) {
+
+
+        return targetLocation.getWorld().equals(location1.getWorld()) &&
+                targetLocation.getWorld().equals(location2.getWorld()) &&
+                targetLocation.getX() >= Math.min(location1.getX(), location2.getX()) &&
+                targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
+                targetLocation.getY() >= Math.min(location1.getY(), location2.getY()) &&
+                targetLocation.getY() <= Math.max(location1.getY(), location2.getY()) &&
+                targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
+                targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
+    }
+    public static int findIndex(List<List<Integer>> listOfLists, int targetNumber) {
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Integer> innerList = listOfLists.get(i);
+            if (!innerList.isEmpty() && innerList.get(0) == targetNumber) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    public static void moveRecursively(Player player, Location location, Location boundary1, Location boundary2) {
+        List<Location> visitedLocations = visitedLocationsMap.computeIfAbsent(player, k -> new ArrayList<>());
+        boolean hasTeleported = teleportFlagMap.computeIfAbsent(player, k -> false);
+
+        if (visitedLocations.contains(location) || hasTeleported) {
+            return;
+        }
+
+        visitedLocations.add(location);
+
+        if (Utilities.locationWithin(location, boundary1, boundary2)) {
+            player.teleport(location);
+            teleportFlagMap.put(player, true); // Set the teleport flag for this player
+            visitedLocations.clear(); // Clears visited locations for this player
+            return;
+        }
+
+        Location[] directions = {
+                location.clone().add(0, 0, -1),
+                location.clone().add(1, 0, 0),
+                location.clone().add(0, 0, 1),
+                location.clone().add(-1, 0, 0)
+        };
+
+        for (Location dir : directions) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    moveRecursively(player, dir, boundary1, boundary2);
+                }
+            }.runTaskLater((Plugin) Hypersquare.getPlugin(Hypersquare.class), (long) (20L * 0.1));
+        }
     }
 
 

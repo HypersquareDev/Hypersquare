@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
@@ -23,7 +24,11 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Player, List> plotData = new HashMap<>();
 
     public static HashMap<Player,String> mode = new HashMap<>();
-    public static HashMap<Location,Location> bracketLoc = new HashMap<>();
+    public static HashMap<Player,String> onPlotType = new HashMap<>();
+    public static HashMap<Integer,List>  localPlotData = new HashMap<>();
+    public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
+    public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
+
 
     ItemManager itemManager = new ItemManager();
 
@@ -37,6 +42,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new DevEvents(), this);
         pm.registerEvents(new PlayerBreakBlockListener(),this);
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
+        pm.registerEvents(new PlayerMoveListener(),this);
         new InventoryAPI(this).init();
         ItemManager.initializeKey(this);
         ItemManager.registerItems();
@@ -68,7 +74,10 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("plot" , new Plot());
         commandManager.registerCommand("p" , new Plot());
         commandManager.registerCommand("editspawn", new EditSpawn());
+        commandManager.registerCommand("fly", new FlyCommand());
     }
+
+
 
 
     private void loadLastUsedWorldNumber() {

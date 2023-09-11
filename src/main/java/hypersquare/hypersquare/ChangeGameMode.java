@@ -11,11 +11,18 @@ public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
-        Bukkit.getWorld(worldName).setTime(1000);
-        LoadItems.devInventory(player);
-        player.setGameMode(GameMode.CREATIVE);
-        Hypersquare.mode.put(player,"coding");
-        player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
+        if (player.getWorld().getName().equals(worldName)) {
+            Bukkit.getWorld(worldName).setTime(1000);
+            LoadItems.devInventory(player);
+            player.setGameMode(GameMode.CREATIVE);
+            Hypersquare.mode.put(player,"coding");
+            player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
+            Utilities.sendInfo(player, "You are now in dev mode.");
+            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+
+
+        }
+
 
     }
     public static void playMode(Player player, int plotID){
@@ -26,6 +33,10 @@ public class ChangeGameMode {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
+            Utilities.sendInfo(player, "Joined game: " +  Utilities.convertToChatColor(Database.getPlotName(plotID)) + " &7by &f" + Database.getPlotOwner(plotID));
+            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+
+
         }
 
     }
@@ -33,11 +44,15 @@ public class ChangeGameMode {
     public static void buildMode(Player player, int plotID){
         Plot.loadPlot(plotID, player);
         String worldName = "hs." + plotID;
-        player.closeInventory();
-        player.getInventory().clear();
-        player.setGameMode(GameMode.CREATIVE);
-        Hypersquare.mode.put(player,"building");
+        if (player.getWorld().getName().equals(worldName)) {
+            player.closeInventory();
+            player.getInventory().clear();
+            player.setGameMode(GameMode.CREATIVE);
+            Hypersquare.mode.put(player,"building");
+            Utilities.sendInfo(player, "You are now in build mode.");
+            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
 
+        }
     }
     public static void editSpawn(Player player){
         player.setGameMode(GameMode.CREATIVE);

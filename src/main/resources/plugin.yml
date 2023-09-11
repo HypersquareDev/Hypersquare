@@ -36,5 +36,8 @@ commands:
     usage: /<command>
     aliases:
       - ps
+  fly:
+    description: sets flight on
+    usage: /<command>
 
 depend: [NBTAPI]

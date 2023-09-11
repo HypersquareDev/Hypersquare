@@ -1,18 +1,25 @@
 package hypersquare.hypersquare;
 
+import com.flowpowered.nbt.CompoundMap;
+import com.flowpowered.nbt.CompoundTag;
+import com.flowpowered.nbt.Tag;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.exceptions.*;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.plugin.NBTAPI;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Plot {
@@ -54,7 +61,8 @@ public class Plot {
         plotType = Utilities.capitalize(plotType);
 
         Database.addPlot(plotID,ownerUUID,"map",Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,plotType);
-
+        Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING,plotType);
+        savePersistentData(Bukkit.getWorld(worldName),plugin,plotType);
     }
 
     public static void loadPlot(int plotID, Player player){
@@ -63,11 +71,11 @@ public class Plot {
         SlimeLoader file = plugin.getLoader("mysql");
         SlimePropertyMap properties = new SlimePropertyMap();
         SlimeWorld test = plugin.getWorld(worldName);
+        SlimeWorld world = null;
         if (!plugin.getLoadedWorlds().contains(test)){
             try {
-                SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
+                world = plugin.loadWorld(file, worldName, false, properties);
                 plugin.loadWorld(world);
-
 
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                      WorldLockedException err) {
@@ -91,10 +99,15 @@ public class Plot {
                 }
             }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
+            player.sendMessage(world.getExtraData().getValue().toString());
+
 
         } else {
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
+            player.sendMessage(test.getExtraData().toString());
+
         }
+
     }
     public static void loadRules(int plotID){
         String worldName = "hs." + plotID;
@@ -104,4 +117,8 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
     }
+    public static void savePersistentData(World world, SlimePlugin plugin, String plotType){
+
+    }
+
 }

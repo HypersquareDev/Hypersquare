@@ -369,6 +369,25 @@ public class Database {
         return Bukkit.getOfflinePlayer(UUID.fromString(owner)).getName();
     }
 
+    public static void updateLocalData(int plotID){
+        List data = new ArrayList();
+        data.set(0,getPlotName(plotID));
+        data.set(1,getPlotOwner(plotID));
+        data.set(2,getPlotNode(plotID));
+        Hypersquare.localPlotData.put(plotID,data);
+
+    }
+
+    public static List getPlotData(int plotID){
+        if (Hypersquare.localPlotData.get(plotID) != null)
+        {
+            return Hypersquare.localPlotData.get(plotID);
+        } else {
+            updateLocalData(plotID);
+            return Hypersquare.localPlotData.get(plotID);
+        }
+    }
+
 
 
 

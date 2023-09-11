@@ -14,6 +14,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,17 +24,59 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class DevEvents implements Listener {
     private final Plugin plugin = Hypersquare.getPlugin(Hypersquare.class);
 
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
+        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+        RestrictMovement.commonVars(event.getBlockPlaced().getLocation());
+        boolean go = true;
+        switch (plotType){
+
+            case "Basic" : {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(),RestrictMovement.commonStart,RestrictMovement.basic)) {
+                    go = false;
+                }
+            }
+            case "Large" : {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(),RestrictMovement.commonStart,RestrictMovement.large)) {
+                    go = false;
+
+                }
+
+            }
+            case "Massive" : {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(),RestrictMovement.commonStart,RestrictMovement.massive)) {
+                    go = false;
+                }
+            }
+            case "Huge" : {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(),RestrictMovement.commonStart,RestrictMovement.huge)) {
+                    go = false;
+                }
+            }
+            case "Gigantic" : {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(),RestrictMovement.commonStart,RestrictMovement.massive)) {
+                    go = false;
+                }
+            }
+        }
+        if (!go)
+            event.setCancelled(true);
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             return;
         }
-        if (event.getBlock().getLocation().getX() > 0){
+        if (event.getBlock().getLocation().getX() > -0.5){
             return;
         }
+
+
 
         event.setCancelled(true);
         placeCodeTemplate(event, plugin);
@@ -176,7 +219,7 @@ public class DevEvents implements Listener {
             return;
         }
 
-        if (event.getBlock().getLocation().getX() > 0){
+        if (event.getBlock().getLocation().getX() > -0.5){
             return;
         }
 
@@ -224,11 +267,13 @@ public class DevEvents implements Listener {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             return;
         }
-        if (event.getClickedBlock().getLocation().getX() > 0){
-            return;
-        }
-        if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
-            event.setCancelled(true);
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock().getLocation().getX() > -0) {
+                return;
+            }
+            if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
+                event.setCancelled(true);
+            }
         }
 
     }

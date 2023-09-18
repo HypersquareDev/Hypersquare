@@ -1,6 +1,6 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.entity.Player;
 
 public class LoadItems {

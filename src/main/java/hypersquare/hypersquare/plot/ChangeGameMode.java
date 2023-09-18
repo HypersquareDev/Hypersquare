@@ -1,6 +1,8 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.plot;
 
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.utils.managers.ItemManager;
+import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.dev.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -18,7 +20,7 @@ public class ChangeGameMode {
             Hypersquare.mode.put(player,"coding");
             player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
             Utilities.sendInfo(player, "You are now in dev mode.");
-            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+            Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
 
 
         }
@@ -62,7 +64,7 @@ public class ChangeGameMode {
     public static void spawn(Player player){
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().setItem(0,ItemManager.getItem("myPlots"));
+        player.getInventory().setItem(0, ItemManager.getItem("myPlots"));
         player.teleport(Bukkit.getWorld("world").getSpawnLocation());
         Hypersquare.mode.put(player,"at spawn");
         player.setHealth(20);

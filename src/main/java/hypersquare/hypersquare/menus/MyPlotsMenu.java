@@ -3,6 +3,7 @@ package hypersquare.hypersquare.menus;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.*;
+import hypersquare.hypersquare.utils.Utilities;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
 import org.bukkit.*;

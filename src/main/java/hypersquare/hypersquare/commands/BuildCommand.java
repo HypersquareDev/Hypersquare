@@ -1,8 +1,7 @@
 package hypersquare.hypersquare.commands;
 
-import hypersquare.hypersquare.ChangeGameMode;
-import hypersquare.hypersquare.Plot;
-import hypersquare.hypersquare.Utilities;
+import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

@@ -1,8 +1,8 @@
 package hypersquare.hypersquare.commands;
 
-import hypersquare.hypersquare.Database;
+import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.Utilities;
+import hypersquare.hypersquare.utils.Utilities;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

@@ -1,6 +1,6 @@
 package hypersquare.hypersquare.listeners;
 
-import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.menus.MyPlotsMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +13,7 @@ public class PlayerRightClickListener implements Listener {
     public void onRightClick(PlayerInteractEvent event){
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
             Player player = event.getPlayer();
-            if (event.getItem().getItemMeta().equals(ItemManager.getItem("myPlots").getItemMeta())){
+            if (event.getItem() != null && event.getItem().getItemMeta().equals(ItemManager.getItem("myPlots").getItemMeta())){
                 new MyPlotsMenu(event.getPlayer()).open();
             }
 

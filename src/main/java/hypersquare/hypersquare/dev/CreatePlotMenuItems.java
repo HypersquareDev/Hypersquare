@@ -1,9 +1,8 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 public class CreatePlotMenuItems {

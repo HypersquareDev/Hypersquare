@@ -1,16 +1,12 @@
 package hypersquare.hypersquare.dev;
 
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTItem;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 public class CodeItems {
     public static void register() {

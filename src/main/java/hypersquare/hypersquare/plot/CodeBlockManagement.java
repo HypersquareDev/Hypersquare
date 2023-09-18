@@ -1,9 +1,9 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.plot;
 
+import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -13,9 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static hypersquare.hypersquare.Utilities.deserializeLocation;
 
 public class CodeBlockManagement {
     public static void placeCodeBlock(Location location, String codeblock, String bracket, String action) {

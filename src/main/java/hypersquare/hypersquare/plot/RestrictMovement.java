@@ -1,12 +1,11 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.plot;
 
-import org.bukkit.Bukkit;
+import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -33,7 +32,6 @@ public class RestrictMovement {
     public static void movementCheck(Player player){
         if (Hypersquare.mode.get(player).equals("coding")) {
             commonVars(player.getLocation());
-            player.sendMessage(basic.toString());
             int plotID = Utilities.getPlotID(player.getWorld());
             String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
             List visitedLocations = new ArrayList();
@@ -84,7 +82,6 @@ public class RestrictMovement {
         }
         if (Hypersquare.mode.get(player).equals("building") || Hypersquare.mode.get(player).equals("playing")) {
             commonVars(player.getLocation());
-            player.sendMessage(basic.toString());
             int plotID = Utilities.getPlotID(player.getWorld());
             String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
             List visitedLocations = new ArrayList();

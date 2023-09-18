@@ -1,4 +1,4 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.utils;
 
 import com.flowpowered.nbt.CompoundMap;
 import com.google.common.collect.Maps;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static hypersquare.hypersquare.NBTUtils.Converter.convertMap;
+import static hypersquare.hypersquare.utils.NBTUtils.Converter.convertMap;
 
 public class NBTUtils {
 

@@ -2,6 +2,10 @@ package hypersquare.hypersquare.menus;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.*;
+import hypersquare.hypersquare.utils.managers.ItemManager;
+import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.Plot;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
 import org.bukkit.Bukkit;
@@ -31,7 +35,7 @@ public class CreatePlotsMenu extends Gui{
                 Plot.createPlot(plotID,plugin,player.getUniqueId().toString(),"plot_template_basic");
                 ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                 Hypersquare.lastUsedWorldNumber++;
-                Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+                Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
             });
 
             Icon large = new Icon(ItemManager.getItem("menu.large_plot"));

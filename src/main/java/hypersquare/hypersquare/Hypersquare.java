@@ -5,6 +5,8 @@ import hypersquare.hypersquare.commands.Plot;
 import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.CreatePlotMenuItems;
+import hypersquare.hypersquare.utils.managers.CommandManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.InventoryAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
@@ -24,7 +27,7 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Player, List> plotData = new HashMap<>();
 
     public static HashMap<Player,String> mode = new HashMap<>();
-    public static HashMap<Player,String> onPlotType = new HashMap<>();
+    public static HashMap<Integer,List<UUID>> devCache = new HashMap<>();
     public static HashMap<Integer,List>  localPlotData = new HashMap<>();
     public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();

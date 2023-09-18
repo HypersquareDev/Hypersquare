@@ -1,6 +1,6 @@
 package hypersquare.hypersquare.menus;
 
-import hypersquare.hypersquare.ChangeGameMode;
+import hypersquare.hypersquare.plot.ChangeGameMode;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
 import net.md_5.bungee.api.ChatColor;

@@ -1,11 +1,11 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.utils.managers;
 
+import hypersquare.hypersquare.Hypersquare;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,6 +1,8 @@
 package hypersquare.hypersquare.listeners;
 
 import hypersquare.hypersquare.*;
+import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.plot.Database;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +17,7 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
         ChangeGameMode.spawn(player);
-        Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+        Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
         player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6◆ &aEmeraldBlaze &6◆"),ChatColor.DARK_GREEN + "ip coming one day",20,60,20);
         player.sendMessage( ChatColor.translateAlternateColorCodes('&', "&4◆ &aWelcome back to EmeraldBlaze!&4 ◆") );
         event.setJoinMessage(ChatColor.GRAY + player.getName() + " joined.");

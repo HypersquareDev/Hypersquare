@@ -1,4 +1,4 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.plot;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -1,9 +1,15 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.utils;
 
-import com.alibaba.fastjson.JSON;
+import com.flowpowered.nbt.CompoundMap;
+import com.flowpowered.nbt.CompoundTag;
+import com.google.gson.JsonParser;
+import com.infernalsuite.aswm.api.SlimePlugin;
+import com.infernalsuite.aswm.api.world.SlimeWorld;
+import hypersquare.hypersquare.Hypersquare;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -15,12 +21,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import static hypersquare.hypersquare.Hypersquare.teleportFlagMap;
 import static hypersquare.hypersquare.Hypersquare.visitedLocationsMap;
 
 public class Utilities {
+    static SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
     public static int getPlotID(World world){
         String name = world.getName();
@@ -214,6 +220,78 @@ public class Utilities {
                 }
             }.runTaskLater((Plugin) Hypersquare.getPlugin(Hypersquare.class), (long) (20L * 0.1));
         }
+    }
+    public static void savePersistentData(World world, SlimePlugin plugin){
+        SlimeWorld slimeWorld = plugin.getWorld(world.getName());
+
+        if (slimeWorld == null){
+            return;
+        }
+
+        CompoundMap extraData = slimeWorld.getExtraData().getValue();
+        Optional<CompoundTag> optionalChunkData = extraData.getOrDefault("worldData", new CompoundTag("worldData", new CompoundMap())).getAsCompoundTag();
+        if (optionalChunkData.isEmpty()){
+            return;
+        }
+        CompoundTag chunkData = optionalChunkData.get();
+        CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
+        chunkData.getValue().put("worldData", new CompoundTag("worldData", compoundMap));
+        slimeWorld.getExtraData().getValue().put("worldData", chunkData);
+    }
+    public static void getWorldDataFromSlimeFun(World world){
+
+        SlimeWorld slimeWorld = plugin.getWorld(world.getName());
+
+        if (slimeWorld == null){
+            return;
+        }
+
+        CompoundMap extraData = slimeWorld.getExtraData().getValue();
+        Optional<CompoundTag> optionalChunkData = extraData.getOrDefault("worldData", new CompoundTag("worldData", new CompoundMap())).getAsCompoundTag();
+        if (optionalChunkData.isEmpty()){
+            return;
+        }
+        CompoundTag chunkData = optionalChunkData.get();
+        CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
+        String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypercubed:plottype").getAsString();
+        world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING,pType1);
+    }
+
+
+
+    public static String randomHSVHex(float minHue, float maxHue, float saturation, float value) {
+        Random random = new Random();
+
+        // Generate a random hue within the specified range
+        float hue = minHue + random.nextFloat() * (maxHue - minHue);
+
+        // Create a Color object using the specified HSV values
+        Color color = Color.fromRGB(java.awt.Color.getHSBColor(hue / 360, saturation, value).getRed(),java.awt.Color.getHSBColor(hue / 360, saturation, value).getGreen(),java.awt.Color.getHSBColor(hue / 360, saturation, value).getBlue());
+
+        // Convert the Color object to hex text
+        String hexText = colorToHex(color);
+
+        return hexText;
+    }
+
+    public static String colorToHex(Color color) {
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+        String redHex = Integer.toHexString(red);
+        String greenHex = Integer.toHexString(green);
+        String blueHex = Integer.toHexString(blue);
+        redHex = padWithZeroes(redHex);
+        greenHex = padWithZeroes(greenHex);
+        blueHex = padWithZeroes(blueHex);
+        return "#" + redHex + greenHex + blueHex;
+    }
+
+    public static String padWithZeroes(String input) {
+        if (input.length() == 1) {
+            return "0" + input;
+        }
+        return input;
     }
 
 

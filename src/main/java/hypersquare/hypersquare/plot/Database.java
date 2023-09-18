@@ -1,5 +1,6 @@
-package hypersquare.hypersquare;
+package hypersquare.hypersquare.plot;
 
+import hypersquare.hypersquare.Hypersquare;
 import org.bukkit.Bukkit;
 
 import java.sql.*;
@@ -385,6 +386,132 @@ public class Database {
         } else {
             updateLocalData(plotID);
             return Hypersquare.localPlotData.get(plotID);
+        }
+    }
+
+    public static String[] getPlotDevs(int plotID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        String devsString = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT devs FROM Plots WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, plotID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                devsString = rs.getString("devs");
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        String[] devs = devsString.split(",");
+
+        return devs;
+    }
+    public static String getRawDevs(int plotID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        String devsString = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT devs FROM Plots WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, plotID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                devsString = rs.getString("devs");
+            }
+
+            rs.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+
+        return devsString;
+    }
+
+    public static void addDev(int plotID, UUID playerID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "UPDATE Plots SET devs = ? WHERE PlotID = ?";
+
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, getRawDevs(plotID) + "," + playerID);
+            pstmt.setInt(2, plotID);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
         }
     }
 

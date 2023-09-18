@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.ItemManager;
+import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

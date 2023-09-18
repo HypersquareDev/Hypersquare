@@ -31,7 +31,7 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Integer,List>  localPlotData = new HashMap<>();
     public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
-
+//test
 
     ItemManager itemManager = new ItemManager();
 

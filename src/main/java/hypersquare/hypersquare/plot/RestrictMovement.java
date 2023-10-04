@@ -37,96 +37,32 @@ public class RestrictMovement {
 
                 case "Basic" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart,basic)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart,basic);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.getX()),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), basic.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), basic.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart, basic);
                     }
                     break;
                 }
                 case "Large" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart,large)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart,large);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.getX()),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), large.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), large.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart, large);
+
                     }
                     break;
                 }
                 case "Massive" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart,massive)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart,massive);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.getX()),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), massive.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), massive.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart, massive);
                     }
                     break;
                 }
                 case "Huge" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart,huge)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart,huge);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.getX()),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), huge.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), huge.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart, huge);
                     }
                     break;
                 }
                 case "Gigantic" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart,gigantic)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart,gigantic);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.getX()),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), gigantic.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), gigantic.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart, gigantic);
                     }
                     break;
                 }
@@ -141,96 +77,31 @@ public class RestrictMovement {
 
                 case "Basic" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),basic)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart.clone().add(20,0,0),basic);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), basic.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), basic.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), basic);
                     }
                     break;
                 }
                 case "Large" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),large)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart.clone().add(20,0,0),large);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), large.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), large.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), large);
                     }
                     break;
                 }
                 case "Massive" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),massive)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart.clone().add(20,0,0),massive);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), massive.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), massive.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), massive);
                     }
                     break;
                 }
                 case "Huge" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),huge)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart.clone().add(20,0,0),huge);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), huge.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), huge.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), huge);
                     }
                     break;
                 }
                 case "Gigantic" : {
                     if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),gigantic)) {
-                        //Hypersquare.teleportFlagMap.put(player, false);
-                        //Utilities.moveRecursively(player,player.getLocation(),commonStart.clone().add(20,0,0),gigantic);
-                        player.teleport(new Location(player.getWorld(),
-                                Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
-                                player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
-                        player.teleport(new Location(player.getWorld(),
-                                Math.min(player.getLocation().getX(), gigantic.getX()),
-                                player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), gigantic.getZ()),
-                                player.getLocation().getYaw(),
-                                player.getLocation().getPitch()));
+                        Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), gigantic);
                     }
                     break;
                 }

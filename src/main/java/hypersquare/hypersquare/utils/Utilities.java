@@ -187,6 +187,21 @@ public class Utilities {
         return -1;
     }
 
+    public static void movePlayerInsidePlot(Player player, Location minLoc, Location maxLoc) {
+        player.teleport(new Location(player.getWorld(),
+                Math.max(player.getLocation().getX(), minLoc.getX()),
+                player.getLocation().getY(),
+                Math.max(player.getLocation().getZ(), minLoc.getZ()),
+                player.getLocation().getYaw(),
+                player.getLocation().getPitch()));
+        player.teleport(new Location(player.getWorld(),
+                Math.min(player.getLocation().getX(), maxLoc.getX()),
+                player.getLocation().getY(),
+                Math.min(player.getLocation().getZ(), maxLoc.getZ()),
+                player.getLocation().getYaw(),
+                player.getLocation().getPitch()));
+    }
+
 
     public static void moveRecursively(Player player, Location location, Location boundary1, Location boundary2) {
         List<Location> visitedLocations = visitedLocationsMap.computeIfAbsent(player, k -> new ArrayList<>());

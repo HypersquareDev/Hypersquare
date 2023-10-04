@@ -126,7 +126,7 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ() + 20)));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), basic.getX()),
                                 player.getLocation().getY(),
@@ -141,7 +141,7 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ() + 20)));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), large.getX()),
                                 player.getLocation().getY(),
@@ -156,7 +156,7 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ() + 20)));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), massive.getX()),
                                 player.getLocation().getY(),
@@ -171,7 +171,7 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ() + 20)));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), huge.getX()),
                                 player.getLocation().getY(),
@@ -186,7 +186,7 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ() + 20)));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), gigantic.getX()),
                                 player.getLocation().getY(),

@@ -42,11 +42,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.getX()),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), basic.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), basic.getZ())));
+                                Math.min(player.getLocation().getZ(), basic.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -57,11 +57,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.getX()),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), large.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), large.getZ())));
+                                Math.min(player.getLocation().getZ(), large.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -72,11 +72,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.getX()),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), massive.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), massive.getZ())));
+                                Math.min(player.getLocation().getZ(), massive.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -87,11 +87,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.getX()),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), huge.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), huge.getZ())));
+                                Math.min(player.getLocation().getZ(), huge.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -102,11 +102,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.getX()),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), gigantic.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), gigantic.getZ())));
+                                Math.min(player.getLocation().getZ(), gigantic.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -126,11 +126,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), basic.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), basic.getZ())));
+                                Math.min(player.getLocation().getZ(), basic.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -141,11 +141,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), large.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), large.getZ())));
+                                Math.min(player.getLocation().getZ(), large.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -156,11 +156,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), massive.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), massive.getZ())));
+                                Math.min(player.getLocation().getZ(), massive.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -171,11 +171,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), huge.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), huge.getZ())));
+                                Math.min(player.getLocation().getZ(), huge.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }
@@ -186,11 +186,11 @@ public class RestrictMovement {
                         player.teleport(new Location(player.getWorld(),
                                 Math.max(player.getLocation().getX(), commonStart.clone().getX() + 20),
                                 player.getLocation().getY(),
-                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())));
+                                Math.max(player.getLocation().getZ(), commonStart.clone().getZ())).setDirection(player.getFacing().getDirection()));
                         player.teleport(new Location(player.getWorld(),
                                 Math.min(player.getLocation().getX(), gigantic.getX()),
                                 player.getLocation().getY(),
-                                Math.min(player.getLocation().getZ(), gigantic.getZ())));
+                                Math.min(player.getLocation().getZ(), gigantic.getZ())).setDirection(player.getFacing().getDirection()));
                     }
                     break;
                 }

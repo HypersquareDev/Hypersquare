@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -220,7 +221,14 @@ public class ItemBuilder {
     }
 
     public ItemBuilder hideFlags(){
+        meta().addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta().addItemFlags(ItemFlag.HIDE_DESTROYS);
+        meta().addItemFlags(ItemFlag.HIDE_DYE);
+        meta().addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        meta().addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta().addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta().addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
         return this;
     }
 
@@ -412,6 +420,7 @@ public class ItemBuilder {
      * @return the ItemStack of the ItemBuilder instance.
      */
     public ItemStack make(){
+        meta().setDisplayName(ChatColor.RESET + meta().getDisplayName());
         item.setItemMeta(meta());
         return item;
     }

@@ -320,6 +320,9 @@ public class Utilities {
             return false;
         }
     }
+    public static void sendUsageError(Player player, String usage){
+        player.sendMessage(org.bukkit.ChatColor.DARK_AQUA + "Usage: " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', usage));
+    }
 
 
 }

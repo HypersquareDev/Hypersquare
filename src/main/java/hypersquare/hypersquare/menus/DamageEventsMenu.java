@@ -10,15 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-public class PlotAndServerEvents extends Gui {
-    public PlotAndServerEvents(Player player) {
-        super(player, "plotEvents", "Plot and server events", 5);
+public class DamageEventsMenu extends Gui {
+    public DamageEventsMenu(Player player) {
+        super(player, "damageEvents", "Damage events", 5);
     }
 
     @Override
     public void onOpen(InventoryOpenEvent event) {
         for (String itemStackKey : ItemManager.registeredItems().keySet()) {
-            if (itemStackKey.contains("player_event.plot_and_server_events.")) {
+            if (itemStackKey.contains("player_event.damage_events.")) {
                 Icon item = new Icon(ItemManager.getItem(itemStackKey));
                 int slot = ItemManager.getItem(itemStackKey).getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "slot"), PersistentDataType.INTEGER);
                 addItem(slot, item);

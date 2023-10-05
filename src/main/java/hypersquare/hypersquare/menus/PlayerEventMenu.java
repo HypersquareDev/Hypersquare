@@ -1,6 +1,9 @@
 package hypersquare.hypersquare.menus;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.Gui;
@@ -26,17 +29,34 @@ public class PlayerEventMenu extends Gui {
 
                 Icon item = new Icon(ItemManager.getItem(itemStackKey));
                 int slot = ItemManager.getItem(itemStackKey).getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"slot"), PersistentDataType.INTEGER);
-                addItem(slot, ItemManager.getItem(itemStackKey));
-                Bukkit.broadcastMessage("hello");
+                addItem(slot, item);
+
                 item.onClick(e -> {
-                    Bukkit.broadcastMessage("hello");
+                    e.setCancelled(true);
                     Utilities.sendClickMenuSound(player);
                     if ("Plot and Server Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
-                        Bukkit.broadcastMessage("hello");
                         new PlotAndServerEvents((Player) event.getPlayer()).open();
                     }
+                    if ("Click Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
+                        new ClickEventsMenu((Player) event.getPlayer()).open();
+                    }
+                    if ("Movement Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
+                        new MovementEventsMenu((Player) event.getPlayer()).open();
+                    }
+                    if ("Damage Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
+                        new DamageEventsMenu((Player) event.getPlayer()).open();
+                    }
+                    if ("Item Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
+                        new ItemEventsMenu((Player) event.getPlayer()).open();
+                    }
+                    if ("Death Events".equals(ChatColor.stripColor(ItemManager.getItem(itemStackKey).getItemMeta().getDisplayName()))) {
+                        new DeathEventsMenu((Player) event.getPlayer()).open();
+                    }
+
+
                 });
             }
         }
     }
 }
+

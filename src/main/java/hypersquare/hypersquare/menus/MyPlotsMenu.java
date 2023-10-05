@@ -10,6 +10,8 @@ import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,20 @@ public class MyPlotsMenu extends Gui {
             lore.add(ChatColor.DARK_GRAY + "ID: " + plotDocument.getInteger("plotID"));
             lore.add(ChatColor.BLUE + "↓ Node " + plotDocument.getInteger("node"));
             plot.setLore(lore);
+            ItemMeta meta = plot.getItem().getItemMeta();
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+            meta.addItemFlags(ItemFlag.HIDE_DYE);
+            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+            meta.setDisplayName(ChatColor.RESET + meta.getDisplayName());
+
+            plot.getItem().setItemMeta(meta);
+
+
             addItem(i, plot);
 
             final Icon finalPlot = plot;

@@ -30,8 +30,6 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Player, List> plotData = new HashMap<>();
 
     public static HashMap<Player,String> mode = new HashMap<>();
-    public static HashMap<Integer,List<UUID>> devCache = new HashMap<>();
-    public static HashMap<Integer,List>  localPlotData = new HashMap<>();
     public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
     public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
@@ -62,6 +60,11 @@ public final class Hypersquare extends JavaPlugin {
         CodeItems.register();
         CodeBlockMenuItems.PlayerEventCategories();
         CodeBlockMenuItems.PlayerEvent_PlotAndServerEvents();
+        CodeBlockMenuItems.PlayerEvent_ClickEvents();
+        CodeBlockMenuItems.PlayerEvent_ItemEvents();
+        CodeBlockMenuItems.PlayerEvent_DamageEvents();
+        CodeBlockMenuItems.PlayerEvent_MovementEvents();
+        CodeBlockMenuItems.PlayerEvent_DeathEvents();
     }
 
     @Override

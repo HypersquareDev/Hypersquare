@@ -68,6 +68,7 @@ public class CodeBlockMenuItems {
                 .lore(ChatColor.GRAY + "Executes code when a")
                 .lore(ChatColor.GRAY + "player joins the plot.")
                 .setCustomIntTag(new NamespacedKey(plugin,"slot"),0)
+                .setCustomTag(new NamespacedKey(plugin,"short"),"Join")
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.Player_Join_Game_Event", Player_Join_Game_Event);
@@ -76,6 +77,8 @@ public class CodeBlockMenuItems {
                 .lore(ChatColor.GRAY + "Executes code when a")
                 .lore(ChatColor.GRAY + "player leaves the plot.")
                 .setCustomIntTag(new NamespacedKey(plugin,"slot"),1)
+                .setCustomTag(new NamespacedKey(plugin,"short"),"Leave")
+
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.Player_Leave_Game_Event", Player_Leave_Game_Event);
@@ -87,6 +90,8 @@ public class CodeBlockMenuItems {
                 .lore(ChatColor.WHITE + "Example:")
                 .lore(ChatColor.AQUA + "\"@command\"")
                 .setCustomIntTag(new NamespacedKey(plugin,"slot"),2)
+                .setCustomTag(new NamespacedKey(plugin,"short"),"Command")
+
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.Player_Command_Event", Player_Command_Event);
@@ -96,6 +101,8 @@ public class CodeBlockMenuItems {
                 .lore(ChatColor.GRAY + "player finishes loading a")
                 .lore(ChatColor.GRAY + "plot resource pack.")
                 .setCustomIntTag(new NamespacedKey(plugin,"slot"),3)
+                .setCustomTag(new NamespacedKey(plugin,"short"),"PackLoad")
+
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.Resource_Pack_Load", Resource_Pack_Load);
@@ -105,6 +112,8 @@ public class CodeBlockMenuItems {
                 .lore(ChatColor.GRAY + "player declines a plot")
                 .lore(ChatColor.GRAY + "resource pack prompt.")
                 .setCustomIntTag(new NamespacedKey(plugin,"slot"),4)
+                .setCustomTag(new NamespacedKey(plugin,"short"),"PackDecline")
+
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.Resource_Pack_Decline", Resource_Pack_Decline);

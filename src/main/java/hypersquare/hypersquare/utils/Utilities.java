@@ -114,7 +114,7 @@ public class Utilities {
 
     }
 
-    public static void sendMultiMessage(Player recipient, String[] messages)
+    public static void sendMultiMessage(Player recipient, List<String> messages)
     {
         for (String message : messages)
         {
@@ -151,7 +151,11 @@ public class Utilities {
     }
 
     public static void sendInfo(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.GREEN + "" + org.bukkit.ChatColor.BOLD + " » " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        player.sendMessage(org.bukkit.ChatColor.GREEN + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static void sendRedInfo(Player player, String message){
+        player.sendMessage(org.bukkit.ChatColor.RED + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
     }
 
     public static void sendOpenMenuSound(Player player){
@@ -221,10 +225,10 @@ public class Utilities {
         }
 
         Location[] directions = {
-                location.clone().add(0, 0, -1),
-                location.clone().add(1, 0, 0),
-                location.clone().add(0, 0, 1),
-                location.clone().add(-1, 0, 0)
+                location.clone().add(0, 0, -0.5),
+                location.clone().add(0.5, 0, 0),
+                location.clone().add(0, 0, 0.5),
+                location.clone().add(-0.5, 0, 0)
         };
 
         for (Location dir : directions) {
@@ -307,6 +311,14 @@ public class Utilities {
             return "0" + input;
         }
         return input;
+    }
+
+    public static Boolean playerOnline(String player){
+        if (Bukkit.getPlayerExact(player) != null){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

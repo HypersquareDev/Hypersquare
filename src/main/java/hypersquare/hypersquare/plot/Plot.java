@@ -21,7 +21,7 @@ public class Plot {
 
     public static void createPlot(int plotID, SlimePlugin plugin, String ownerUUID, String plotType){
         String worldName = "hs." + plotID;
-        SlimeLoader file = plugin.getLoader("mysql");
+        SlimeLoader file = plugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
 
         SlimeWorld world = null;
@@ -58,12 +58,13 @@ public class Plot {
         Database.addPlot(plotID,ownerUUID,"map",Utilities.randomHSVHex(0,360,97,62) + Bukkit.getPlayer( UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,plotType);
         Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING,plotType);
         savePersistentData(Bukkit.getWorld(worldName),plugin);
+        PlotManager.loadPlot(plotID);
     }
 
     public static void loadPlot(int plotID, Player player){
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         String worldName = "hs." + plotID;
-        SlimeLoader file = plugin.getLoader("mysql");
+        SlimeLoader file = plugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
         SlimeWorld test = plugin.getWorld(worldName);
         SlimeWorld world = null;
@@ -111,6 +112,17 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
+    }
+    public static void deletePlot(int plotID) throws UnknownWorldException, IOException {
+        SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+        String worldName = "hs." + plotID;
+        SlimeLoader file = plugin.getLoader("mongodb");
+        SlimePropertyMap properties = new SlimePropertyMap();
+
+        SlimeWorld world = null;
+        SlimeWorld cloned = null;
+        Bukkit.unloadWorld(Bukkit.getWorld(worldName),true);
+        file.deleteWorld(worldName);
     }
 
 

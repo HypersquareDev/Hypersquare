@@ -9,6 +9,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID){
         String worldName = "hs." + plotID;
@@ -21,6 +23,8 @@ public class ChangeGameMode {
             player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
             Utilities.sendInfo(player, "You are now in dev mode.");
             Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
+            Database.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
 
 
         }
@@ -35,8 +39,10 @@ public class ChangeGameMode {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
-            Utilities.sendInfo(player, "Joined game: " +  Utilities.convertToChatColor(Database.getPlotName(plotID)) + " &7by &f" + Database.getPlotOwner(plotID));
+            Utilities.sendInfo(player, "Joined game: " +  Utilities.convertToChatColor(PlotManager.getPlotName(plotID)) + " &7by &f" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
             Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
+            Database.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
 
 
         }
@@ -53,7 +59,8 @@ public class ChangeGameMode {
             Hypersquare.mode.put(player,"building");
             Utilities.sendInfo(player, "You are now in build mode.");
             Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
-
+            Database.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
         }
     }
     public static void editSpawn(Player player){

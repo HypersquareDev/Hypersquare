@@ -2,6 +2,7 @@ package hypersquare.hypersquare.commands;
 
 import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.plot.PlotManager;
 import hypersquare.hypersquare.utils.Utilities;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -10,6 +11,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class LocateCommand implements CommandExecutor {
     @Override
@@ -27,21 +32,23 @@ public class LocateCommand implements CommandExecutor {
             if (mode.equals("at spawn") || mode.equals("editing spawn")) {
                 ChatColor color = ChatColor.of("#AAD4AA");
                 ChatColor color2 = ChatColor.of("#2AD4D4");
-                String startmessage = color + "&m                                       " + color;
-                String message1 = color + targetName + " currently &f" + mode + color + "";
-                String message2 = color2 + "→ " + color + "Server: &rNode 1";
-                String[] messages = {startmessage, message1, message2, startmessage};
+                List<String> messages = new ArrayList<>();
+                messages.add(color + "&m                                       " + color);
+                messages.add(color + targetName + " currently &f" + mode + color + "");
+                messages.add(color2 + "→ " + color + "Server: &rNode 1");
                 Utilities.sendMultiMessage(player, messages);
             } else {
                 int plotID = Utilities.getPlotID(target.getWorld());
                 ChatColor color = ChatColor.of("#AAD4AA");
                 ChatColor color2 = ChatColor.of("#2AD4D4");
-                String startmessage = color + "&m                                       " + color;
-                String message1 = color + targetName + " currently &f" + mode + color + " on:";
-                String message2 = color2 + "→ " + color + Database.getPlotName(plotID) + "&8[" + color + plotID + "&8]";
-                String message3 = color2 + "→ " + color + "Owner: &r" + Database.getPlotOwner(plotID);
-                String message4 = color2 + "→ " + color + "Server: &rNode " + Database.getPlotNode(plotID);
-                String[] messages = {startmessage, message1, "", message2, message3, message4, startmessage};
+                List<String> messages = new ArrayList<>();
+                messages.add(color + "&m                                       " + color);
+                messages.add(color + targetName + " currently &f" + mode + color + " on:");
+                messages.add("");
+                messages.add(color2 + "→ " + color + PlotManager.getPlotName(plotID) + "&8[" + color + plotID + "&8]");
+                messages.add(color2 + "→ " + color + "Owner: &r" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
+                messages.add(color2 + "→ " + color + "Server: &rNode " + PlotManager.getPlotNode(plotID));
+                messages.add(color + "&m                                       " + color);
                 Utilities.sendMultiMessage(player, messages);
             }
         } else {

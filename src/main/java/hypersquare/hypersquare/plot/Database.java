@@ -1,521 +1,203 @@
 package hypersquare.hypersquare.plot;
 
-import hypersquare.hypersquare.Hypersquare;
-import org.bukkit.Bukkit;
-
-import java.sql.*;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Database {
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://156.155.107.104/chicken_plots";
+    private static MongoClient mongoClient;
+    private static MongoDatabase database;
+    private static MongoCollection<Document> plotsCollection;
 
-    static final String USER = "chicken";
-    static final String PASS = System.getenv("DB_PASSWORD");
-
-    public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "INSERT INTO Plots (PlotID, Owner, devs, builders, icon, name, node, tags, votes, size) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-            pstmt.setString(2, ownerUUID);
-            pstmt.setString(3, ownerUUID); // devs column
-            pstmt.setString(4, ownerUUID); // builders column
-            pstmt.setString(5, icon);
-            pstmt.setString(6, name);
-            pstmt.setInt(7, node);
-            pstmt.setString(8, tags);
-            pstmt.setInt(9, votes);
-            pstmt.setString(10, size);
-
-            pstmt.executeUpdate();
-
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
+    public Database() {
+        mongoClient = MongoClients.create("mongodb+srv://chicken:e-Rdk6NUjCJM%5DBy0@loginpage.ltn5olm.mongodb.net/?retryWrites=true&w=majority"); // MongoDB server address
+        database = mongoClient.getDatabase("chicken_plots");
+        plotsCollection = database.getCollection("plots");
     }
 
+    public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size) {
+        Document plotDocument = new Document("plotID", plotID)
+                .append("owner", ownerUUID)
+                .append("devs", ownerUUID) // Consider using an array for devs and builders
+                .append("builders", ownerUUID) // Consider using an array for devs and builders
+                .append("icon", icon)
+                .append("name", name)
+                .append("node", node)
+                .append("tags", tags)
+                .append("votes", votes)
+                .append("size", size);
 
-    public static List<List<Object>> getPlot(String ownerUUID) {
-        Connection conn = null;
-        Statement stmt = null;
-        List<List<Object>> info = new ArrayList<>();
+        plotsCollection.insertOne(plotDocument);
+    }
+
+    public static List<Document> getPlot(String ownerUUID) {
+        List<Document> info = new ArrayList<>();
+
+        Document query = new Document("owner", ownerUUID);
+        MongoCursor<Document> cursor = plotsCollection.find(query).iterator();
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            stmt = conn.createStatement();
-            String sql = "SELECT * FROM Plots WHERE Owner='" + ownerUUID + "'";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                int plotID = rs.getInt("PlotID");
-                String owner = rs.getString("Owner");
-                String devs = rs.getString("devs");
-                String builders = rs.getString("builders");
-                String icon = rs.getString("icon");
-                String name = rs.getString("name");
-                int node = rs.getInt("node");
-                String tags = rs.getString("tags");
-                int votes = rs.getInt("votes");
-                String size = rs.getString("size");
-
-                List<Object> list = new ArrayList<>();
-                list.add(plotID);
-                list.add(owner);
-                list.add(devs);
-                list.add(builders);
-                list.add(icon);
-                list.add(name);
-                list.add(node);
-                list.add(tags);
-                list.add(votes);
-                list.add(size);
-
-                info.add(list);
+            while (cursor.hasNext()) {
+                Document plotDocument = cursor.next();
+                info.add(plotDocument);
             }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+            cursor.close();
         }
 
         return info;
     }
+
     public static void changePlotName(int plotID, String newName) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "UPDATE Plots SET name = ? WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newName);
-            pstmt.setInt(2, plotID);
-
-            pstmt.executeUpdate();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("name", newName));
+        plotsCollection.updateOne(filter, update);
     }
+
     public static void changePlotIcon(int plotID, String newIcon) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "UPDATE Plots SET icon = ? WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newIcon);
-            pstmt.setInt(2, plotID);
-
-            pstmt.executeUpdate();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-    }
-    public static boolean doesPlayerOwnPlot(String ownerUUID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean ownsPlot = false;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT COUNT(*) AS plotCount FROM Plots WHERE Owner = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, ownerUUID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                int plotCount = rs.getInt("plotCount");
-                ownsPlot = plotCount > 0; // If plotCount is greater than 0, the player owns a plot
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-
-        return ownsPlot;
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("icon", newIcon));
+        plotsCollection.updateOne(filter, update);
     }
 
     public static String getPlotName(int plotID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        String name = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT name FROM Plots WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                name = rs.getString("name");
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("name");
         }
-
-        return name;
+        return null;
     }
 
-
     public static int getPlotNode(int plotID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        int node = -1;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT node FROM Plots WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                node = rs.getInt("node");
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getInteger("node", -1);
         }
-
-        return node;
+        return -1;
     }
 
     public static String getPlotOwner(int plotID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        String owner = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT Owner FROM Plots WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                owner = rs.getString("Owner");
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("owner");
         }
-
-        return Bukkit.getOfflinePlayer(UUID.fromString(owner)).getName();
+        return null;
     }
 
-    public static void updateLocalData(int plotID){
-        List data = new ArrayList();
-        data.set(0,getPlotName(plotID));
-        data.set(1,getPlotOwner(plotID));
-        data.set(2,getPlotNode(plotID));
-        Hypersquare.localPlotData.put(plotID,data);
-
+    public static void updateLocalData(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            List<Object> data = new ArrayList<>();
+            data.add(result.getString("name"));
+            data.add(result.getString("owner"));
+            data.add(result.getInteger("node", -1));
+            // Hypersquare.localPlotData.put(plotID, data); // You can update your local data here.
+        }
     }
 
-    public static List getPlotData(int plotID){
-        if (Hypersquare.localPlotData.get(plotID) != null)
-        {
-            return Hypersquare.localPlotData.get(plotID);
-        } else {
-            updateLocalData(plotID);
-            return Hypersquare.localPlotData.get(plotID);
+    public static List<Object> getPlotData(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            List<Object> data = new ArrayList<>();
+            data.add(result.getString("name"));
+            data.add(result.getString("owner"));
+            data.add(result.getInteger("node", -1));
+            return data;
         }
+        return null;
+    }
+
+    public static List<Document> getPlotsByOwner(String ownerUUID) {
+        List<Document> plots = new ArrayList<>();
+        MongoCollection<Document> plotsCollection = database.getCollection("plots");
+
+        // Use Filters.eq to find documents with the matching ownerUUID
+        FindIterable<Document> plotDocuments = plotsCollection.find(Filters.eq("owner", ownerUUID));
+
+        for (Document plotDocument : plotDocuments) {
+            plots.add(plotDocument);
+        }
+
+        return plots;
     }
 
     public static String[] getPlotDevs(int plotID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        String devsString = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT devs FROM Plots WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                devsString = rs.getString("devs");
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            String devsString = result.getString("devs");
+            if (devsString != null) {
+                return devsString.split(",");
             }
         }
-
-        String[] devs = devsString.split(",");
-
-        return devs;
+        return new String[0];
     }
+
     public static String getRawDevs(int plotID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        String devsString = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "SELECT devs FROM Plots WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plotID);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                devsString = rs.getString("devs");
-            }
-
-            rs.close();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("devs");
         }
-
-
-        return devsString;
+        return null;
     }
 
     public static void addDev(int plotID, UUID playerID) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String sql = "UPDATE Plots SET devs = ? WHERE PlotID = ?";
-
-            pstmt = conn.prepareStatement(sql);
-
-            pstmt.setString(1, getRawDevs(plotID) + "," + playerID);
-            pstmt.setInt(2, plotID);
-
-            pstmt.executeUpdate();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            String currentDevs = result.getString("devs");
+            String newDevs = currentDevs + "," + playerID.toString();
+            Document update = new Document("$set", new Document("devs", newDevs));
+            plotsCollection.updateOne(query, update);
         }
     }
+    public static void removeDev(int plotID, UUID playerID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
 
+        if (result != null) {
+            String currentDevs = result.getString("devs");
 
+            // Split the currentDevs string into an array of player IDs
+            String[] devsArray = currentDevs.split(",");
+
+            // Create a StringBuilder to construct the newDevs string
+            StringBuilder newDevsBuilder = new StringBuilder();
+
+            for (String dev : devsArray) {
+                if (!dev.equals(playerID.toString())) {
+                    if (newDevsBuilder.length() > 0) {
+                        newDevsBuilder.append(",");
+                    }
+                    newDevsBuilder.append(dev);
+                }
+            }
+
+            String newDevs = newDevsBuilder.toString();
+
+            // Update the document with the newDevs string
+            Document update = new Document("$set", new Document("devs", newDevs));
+            plotsCollection.updateOne(query, update);
+        }
+    }
+    public static void deleteAllPlots() {
+        Document query = new Document(); // Empty query matches all documents
+        plotsCollection.deleteMany(query);
+    }
+
+    public static void deletePlot(int plotID) {
+        Document query = new Document("plotID", plotID);
+        plotsCollection.deleteOne(query);
+    }
 
 
 }

@@ -1,10 +1,13 @@
 package hypersquare.hypersquare;
 
 import hypersquare.hypersquare.commands.*;
-import hypersquare.hypersquare.commands.Plot;
+import hypersquare.hypersquare.commands.PlotCommands;
+import hypersquare.hypersquare.commands.TabCompleters.PlotCommandsComplete;
+import hypersquare.hypersquare.dev.CodeBlockMenuItems;
 import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.CreatePlotMenuItems;
+import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.utils.managers.CommandManager;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.InventoryAPI;
@@ -31,7 +34,9 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Integer,List>  localPlotData = new HashMap<>();
     public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
-//test
+    public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
+
+
 
     ItemManager itemManager = new ItemManager();
 
@@ -53,9 +58,10 @@ public final class Hypersquare extends JavaPlugin {
         commandManager = new CommandManager(this);
         registerCommands(commandManager);
         CreatePlotMenuItems.init();
-
+        Database database = new Database();
         CodeItems.register();
-
+        CodeBlockMenuItems.PlayerEventCategories();
+        CodeBlockMenuItems.PlayerEvent_PlotAndServerEvents();
     }
 
     @Override
@@ -63,7 +69,7 @@ public final class Hypersquare extends JavaPlugin {
         saveLastUsedWorldNumber();
     }
 
-    public static void registerCommands(CommandManager commandManager){
+    public void registerCommands(CommandManager commandManager){
 
         commandManager.registerCommand("join", new JoinCommand());
         commandManager.registerCommand("dev", new DevCommand());
@@ -74,10 +80,16 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("build", new BuildCommand());
         commandManager.registerCommand("play", new PlayCommand());
         commandManager.registerCommand("fs", new FlightSpeedCommand());
-        commandManager.registerCommand("plot" , new Plot());
-        commandManager.registerCommand("p" , new Plot());
+        commandManager.registerCommand("plot" , new PlotCommands());
+        commandManager.registerCommand("p" , new PlotCommands());
         commandManager.registerCommand("editspawn", new EditSpawn());
         commandManager.registerCommand("fly", new FlyCommand());
+
+        //Tab Completers
+
+        getCommand("plot").setTabCompleter(new PlotCommandsComplete());
+        getCommand("p").setTabCompleter(new PlotCommandsComplete());
+
     }
 
 

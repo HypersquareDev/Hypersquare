@@ -92,10 +92,8 @@ public class CodeBlockManagement {
         while (location.clone().add(0,0,-1).getBlock().getType() != Material.AIR || location.clone().add(0,0,-2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
             if (location.getBlock().getType() == Material.DIAMOND_BLOCK ||location.getBlock().getType() ==  Material.LAPIS_BLOCK ||location.getBlock().getType() ==  Material.EMERALD_BLOCK ||location.getBlock().getType() ==  Material.GOLD_BLOCK){
                 return location;
-
             }
             location.add(0,0,-1);
-            Bukkit.broadcastMessage(String.valueOf(location.getBlock().getType()));
         }
         return null;
     }

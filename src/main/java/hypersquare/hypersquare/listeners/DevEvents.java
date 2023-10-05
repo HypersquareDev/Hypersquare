@@ -2,6 +2,8 @@ package hypersquare.hypersquare.listeners;
 
 import com.google.gson.*;
 import hypersquare.hypersquare.*;
+import hypersquare.hypersquare.menus.MyPlotsMenu;
+import hypersquare.hypersquare.menus.PlayerEventMenu;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
@@ -81,73 +83,98 @@ public class DevEvents implements Listener {
         if (event.getBlock().getLocation().getY() < 0 || event.getBlockAgainst().getLocation().getY() < 0 && event.getBlockAgainst().getType() == Material.STONE) {
             return;
         }
-
-        if (ItemManager.getItemID(event.getItemInHand()).startsWith("dev.")) {
-            Location location = event.getBlock().getLocation();
-            Location againstLocation = event.getBlockAgainst().getLocation();
-
-            int size = event.getItemInHand().getItemMeta().getPersistentDataContainer()
-                    .getOrDefault(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING, "false").equals("true") ? 4 : 2;
-
-            if (event.getBlockAgainst().getType() == Material.STONE || (event.getBlockAgainst().getType() == Material.PISTON && againstLocation.getY() >= 0)) {
-                CodeBlockManagement.moveCodeLine(againstLocation.clone().add(0, 0, 1), size);
-                Vector difference = againstLocation.toVector().subtract(event.getBlock().getLocation().toVector());
-                location.add(difference).add(0, 0, 1);
+        if (event.getBlock().getLocation().add(1,0,0).getX() > 0){
+            processPlace(event);
+        } else {
+            if (event.getBlock().getLocation().add(1,0,0).getBlock().getType() != Material.AIR && event.getBlockAgainst().getType() != Material.STONE)
+            {
+                Utilities.sendError(event.getPlayer(),"Invalid block placement");
             } else {
-                CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().clone().add(0, 0, 1), 1);
+                processPlace(event);
             }
+        }
 
-            if (location.getY() >= 0) {
-                Location signLocation = location.clone().add(-1, 0, 0);
-                String signText = ChatColor.stripColor(event.getItemInHand().getItemMeta().getDisplayName().toUpperCase());
+    }
 
-                signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
-                BlockData blockData = signLocation.getBlock().getBlockData();
-                ((Directional) blockData).setFacing(BlockFace.WEST);
-                Sign sign = (Sign) signLocation.getBlock().getState();
-                sign.setEditable(true);
-                sign.getSide(Side.FRONT).setLine(0, signText);
-                sign.update();
-                signLocation.getBlock().setBlockData(blockData);
+    public void processPlace(BlockPlaceEvent event){
+        if (event.getBlock().getLocation().add(-1,0,0).getX() < 0) {
+            if (ItemManager.getItemID(event.getItemInHand()).startsWith("dev.")) {
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Location codeblockLocation = location.clone();
-                        codeblockLocation.getBlock().setType(event.getItemInHand().getType());
+                Location location = event.getBlock().getLocation();
 
-                        Location stoneLocation = location.clone().add(0, 0, 1);
-                        Location closeBracketLocation = location.clone().add(0, 0, 3);
-                        Location chestLocation = location.add(0, 1, 0);
-                        Location openBracketLocation = location.clone().add(0, -1, 1);
+                Location againstLocation = event.getBlockAgainst().getLocation();
+                int size = event.getItemInHand().getItemMeta().getPersistentDataContainer()
+                        .getOrDefault(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING, "false").equals("true") ? 4 : 2;
 
-                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer()
-                                .getOrDefault(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING, "false").equals("true")) {
-                            // Open Bracket
-                            openBracketLocation.getBlock().setType(Material.PISTON);
-                            BlockData pistonData = openBracketLocation.getBlock().getBlockData();
-                            ((Directional) pistonData).setFacing(BlockFace.SOUTH);
-                            openBracketLocation.getBlock().setBlockData(pistonData);
+                if (event.getBlockAgainst().getType() == Material.STONE || (event.getBlockAgainst().getType() == Material.PISTON && againstLocation.getY() >= 0)) {
+                    CodeBlockManagement.moveCodeLine(againstLocation.clone().add(0, 0, 1), size);
+                    Vector difference = againstLocation.toVector().subtract(event.getBlock().getLocation().toVector());
+                    location.add(difference).add(0, 0, 1);
+                } else {
+                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().clone().add(0, 0, 1), 1);
+                }
+                if (CodeBlockManagement.findCodelineStartLoc(location.clone()) == null) {
+                    Utilities.sendError(event.getPlayer(), "Your code must start with an Event, Function, Process or Entity event.");
+                    return;
+                }
 
-                            // Close bracket
-                            closeBracketLocation.getBlock().setType(Material.PISTON);
-                            pistonData = closeBracketLocation.getBlock().getBlockData();
-                            ((Directional) pistonData).setFacing(BlockFace.NORTH);
-                            closeBracketLocation.getBlock().setBlockData(pistonData);
-                        } else {
-                            // Stone Bracket
-                            stoneLocation.getBlock().setType(Material.STONE);
+                if (location.getY() >= 0) {
+
+
+                    Location signLocation = location.clone().add(-1, 0, 0);
+                    String signText = ChatColor.stripColor(event.getItemInHand().getItemMeta().getDisplayName().toUpperCase());
+
+                    signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
+                    BlockData blockData = signLocation.getBlock().getBlockData();
+                    ((Directional) blockData).setFacing(BlockFace.WEST);
+                    Sign sign = (Sign) signLocation.getBlock().getState();
+                    sign.setEditable(true);
+                    sign.getSide(Side.FRONT).setLine(0, signText);
+                    sign.update();
+                    signLocation.getBlock().setBlockData(blockData);
+
+
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Location codeblockLocation = location.clone();
+                            codeblockLocation.getBlock().setType(event.getItemInHand().getType());
+
+                            Location stoneLocation = location.clone().add(0, 0, 1);
+                            Location closeBracketLocation = location.clone().add(0, 0, 3);
+                            Location chestLocation = location.add(0, 1, 0);
+                            Location openBracketLocation = location.clone().add(0, -1, 1);
+
+                            if (event.getItemInHand().getItemMeta().getPersistentDataContainer()
+                                    .getOrDefault(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING, "false").equals("true")) {
+                                // Open Bracket
+                                openBracketLocation.getBlock().setType(Material.PISTON);
+                                BlockData pistonData = openBracketLocation.getBlock().getBlockData();
+                                ((Directional) pistonData).setFacing(BlockFace.SOUTH);
+                                openBracketLocation.getBlock().setBlockData(pistonData);
+
+                                // Close bracket
+                                closeBracketLocation.getBlock().setType(Material.PISTON);
+                                pistonData = closeBracketLocation.getBlock().getBlockData();
+                                ((Directional) pistonData).setFacing(BlockFace.NORTH);
+                                closeBracketLocation.getBlock().setBlockData(pistonData);
+                            } else {
+                                // Stone Bracket
+                                stoneLocation.getBlock().setType(Material.STONE);
+                            }
+
+                            if (event.getItemInHand().getItemMeta().getPersistentDataContainer()
+                                    .getOrDefault(new NamespacedKey(plugin, "chest"), PersistentDataType.STRING, "false").equals("true")) {
+                                chestLocation.getBlock().setType(Material.CHEST);
+                                BlockData chestBlockData = chestLocation.getBlock().getBlockData();
+                                ((Directional) chestBlockData).setFacing(BlockFace.WEST);
+                                chestLocation.getBlock().setBlockData(chestBlockData);
+                            }
                         }
+                    }.runTaskLater(plugin, 1);
 
-                        if (event.getItemInHand().getItemMeta().getPersistentDataContainer()
-                                .getOrDefault(new NamespacedKey(plugin, "chest"), PersistentDataType.STRING, "false").equals("true")) {
-                            chestLocation.getBlock().setType(Material.CHEST);
-                            BlockData chestBlockData = chestLocation.getBlock().getBlockData();
-                            ((Directional) chestBlockData).setFacing(BlockFace.WEST);
-                            chestLocation.getBlock().setBlockData(chestBlockData);
-                        }
-                    }
-                }.runTaskLater(plugin, 1);
+                }
             }
         }
     }
@@ -270,6 +297,13 @@ public class DevEvents implements Listener {
             }
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
+                Sign sign = (Sign) event.getClickedBlock().getState();
+                sign.getSide(Side.FRONT).getLine(1);
+                switch (sign.getSide(Side.FRONT).getLine(0)){
+                    case ("PLAYER EVENT") :{
+                        new PlayerEventMenu(event.getPlayer()).open();
+                    }
+                }
             }
         }
 

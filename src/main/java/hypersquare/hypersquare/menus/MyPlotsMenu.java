@@ -1,11 +1,12 @@
 package hypersquare.hypersquare.menus;
 
-
 import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.*;
+import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.utils.Utilities;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
+import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -22,50 +23,42 @@ public class MyPlotsMenu extends Gui {
 
     public MyPlotsMenu(Player player) {
         super(player, "myPlots", "My Plots", 2);
-         int i = 0;
-        for (Object list : Hypersquare.plotData.get(player)){
-            if (list != null) {
-                i++;
-                if (i >= this.getSize()){
-                    this.setSize(this.getSize()+9);
-                }
-
-            }
-        }
     }
+
     @Override
     public void onOpen(InventoryOpenEvent event) {
         Icon createPlot = new Icon(Material.GREEN_STAINED_GLASS);
         createPlot.setName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create New Plot");
-        addItem(this.getSize()-1, createPlot);
+        addItem(this.getSize() - 1, createPlot);
+
         int i = 0;
-        Icon plot = null;
         Utilities.sendOpenMenuSound(player);
-        for (Object list : Hypersquare.plotData.get(player)){
-            if (list != null) {
-                List list1 = (List) list;
-                plot = new Icon(Material.matchMaterial((String) list1.get(4)));
-                plot.setName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor((String) list1.get(5))));
-                List lore = new ArrayList();
-                lore.add(ChatColor.DARK_GRAY + "" + list1.get(9) + " Plot");
-                lore.add("");
-                lore.add(ChatColor.GRAY + "Tags: " + ChatColor.DARK_GRAY + list1.get(7));
-                lore.add(ChatColor.GRAY + "Votes: " + ChatColor.YELLOW + list1.get(8) + ChatColor.DARK_GRAY + " (last 2 weeks)");
-                lore.add("");
-                lore.add(ChatColor.DARK_GRAY + "ID: " + list1.get(0));
-                lore.add(ChatColor.BLUE + "↓ Node " + list1.get(6));
-                plot.setLore(lore);
-                addItem(i, plot);
-                i++;
-                Icon finalPlot = plot;
-                plot.onClick(e -> {
-                    ChangeModeMenu.initItems(finalPlot, (Integer) list1.get(0));
-                    new ChangeModeMenu((Player) event.getPlayer()).open();
-                    Utilities.sendClickMenuSound(player);
-                });
 
+        // Retrieve all plots owned by the player
+        List<Document> playerPlots = Database.getPlotsByOwner(player.getUniqueId().toString());
 
-            }
+        for (Document plotDocument : playerPlots) {
+            Icon plot = new Icon(Material.matchMaterial(plotDocument.getString("icon")));
+            plot.setName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.DARK_GRAY + "" + plotDocument.getString("size") + " Plot");
+            lore.add("");
+            lore.add(ChatColor.GRAY + "Tags: " + ChatColor.DARK_GRAY + plotDocument.getString("tags"));
+            lore.add(ChatColor.GRAY + "Votes: " + ChatColor.YELLOW + plotDocument.getInteger("votes") + ChatColor.DARK_GRAY + " (last 2 weeks)");
+            lore.add("");
+            lore.add(ChatColor.DARK_GRAY + "ID: " + plotDocument.getInteger("plotID"));
+            lore.add(ChatColor.BLUE + "↓ Node " + plotDocument.getInteger("node"));
+            plot.setLore(lore);
+            addItem(i, plot);
+
+            final Icon finalPlot = plot;
+            plot.onClick(e -> {
+                ChangeModeMenu.initItems(finalPlot, plotDocument.getInteger("plotID"));
+                new ChangeModeMenu((Player) event.getPlayer()).open();
+                Utilities.sendClickMenuSound(player);
+            });
+
+            i++;
         }
 
         createPlot.onClick(e -> {
@@ -73,7 +66,5 @@ public class MyPlotsMenu extends Gui {
             new CreatePlotsMenu((Player) event.getPlayer()).open();
             Utilities.sendSecondaryMenuSound(player);
         });
-
-
     }
 }

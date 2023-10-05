@@ -58,6 +58,10 @@ public class ItemManager {
         items.put(itemId, item);
     }
 
+    public static HashMap<String,ItemStack> registeredItems(){
+        return items;
+    }
+
     public static ItemStack getItem(String itemId) {
         return items.get(itemId);
     }

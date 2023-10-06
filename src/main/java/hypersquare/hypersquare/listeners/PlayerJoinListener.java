@@ -16,8 +16,8 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
+        Hypersquare.mode.put(player,"at spawn");
         ChangeGameMode.spawn(player);
-        Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
         player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6◆ &aEmeraldBlaze &6◆"),ChatColor.DARK_GREEN + "ip coming one day",20,60,20);
         player.sendMessage( ChatColor.translateAlternateColorCodes('&', "&4◆ &aWelcome back to EmeraldBlaze!&4 ◆") );
         event.setJoinMessage(ChatColor.GRAY + player.getName() + " joined.");

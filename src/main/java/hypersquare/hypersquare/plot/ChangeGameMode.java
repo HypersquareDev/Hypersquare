@@ -39,6 +39,10 @@ public class ChangeGameMode {
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
         if (player.getWorld().getName().equals(worldName)) {
+            if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.Rejoin(player);
+            if (Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.Leave(player);
             Utilities.resetPlayerStats(player);
             Database.updateEventsCache(plotID);
             player.closeInventory();
@@ -90,8 +94,6 @@ public class ChangeGameMode {
         Hypersquare.mode.put(player,"at spawn");
         player.setHealth(20);
         player.setFoodLevel(20);
-
-
     }
 
 

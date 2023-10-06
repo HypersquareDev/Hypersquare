@@ -73,7 +73,7 @@ public class PlotCommands implements CommandExecutor {
                                     Utilities.sendRedInfo(player1, "The plot that you were currently on was unclaimed.");
                                 }
 
-                                Utilities.sendInfo(player, "You succesfully unclaimed " + PlotManager.getPlotName(plotID));
+                                Utilities.sendInfo(player, "Plot "+ plotID + " has been unclaimed.");
                                 Database.deletePlot(plotID);
                                 try {
                                     Plot.deletePlot(plotID);

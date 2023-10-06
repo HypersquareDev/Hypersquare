@@ -2,21 +2,27 @@ package hypersquare.hypersquare.listeners;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.utils.Utilities;
+import net.minecraft.network.chat.PlayerChatMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlaytimeEventExecuter implements Listener {
     static List<String> eventList = new ArrayList();
-    public static void ExecuteEvent(String[] PlotEvents){
+
+    public static void ExecuteEvent(String[] PlotEvents) {
         // Add short values from PlayerEventPlotAndServerEvents
         eventList.add("Join");
         eventList.add("Leave");
@@ -80,22 +86,30 @@ public class PlaytimeEventExecuter implements Listener {
         eventList.add("Respawn");
     }
 
-    public static void Join(Player player){
+    public static void Join(Player player) {
         if (Hypersquare.mode.get(player).equals("playing")) {
-                int plotID = Utilities.getPlotID(player.getWorld());
-                if (Hypersquare.eventCache.get(plotID).contains("Join")) {
-                    player.sendMessage("join event");
-                }
-            }
-
-        }
-    public static void Leave(Player player){
             int plotID = Utilities.getPlotID(player.getWorld());
-            if (Hypersquare.eventCache.get(plotID).contains("Leave")) {
-                player.sendMessage("leave event");
+            if (Hypersquare.eventCache.get(plotID).contains("Join")) {
+                player.sendMessage("join event");
             }
         }
 
+    }
+
+    public static void Leave(Player player) {
+        int plotID = Utilities.getPlotID(player.getWorld());
+        if (Hypersquare.eventCache.get(plotID).contains("Leave")) {
+            player.sendMessage("leave event");
+        }
+    }
+
+    public static void Rejoin(Player player) {
+        int plotID = Utilities.getPlotID(player.getWorld());
+        if (Hypersquare.eventCache.get(plotID).contains("Rejoin")) {
+
+            player.sendMessage("rejoin event");
+        }
+    }
 
 
     @EventHandler
@@ -109,6 +123,120 @@ public class PlaytimeEventExecuter implements Listener {
                 }
             }
 
+        }
+    }
+    @EventHandler
+    public void Chat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("Chat")) {
+                player.sendMessage("chat event");
+            }
+        }
+    }
+    @EventHandler
+    public void PackLoad(PlayerResourcePackStatusEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("PackLoad")) {
+                if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
+                    player.sendMessage("pack load event");
+                }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("PackDecline")) {
+                if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
+                    player.sendMessage("pack decline event");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void Interact(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("RightClick")) {
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                    if (event.getHand() == EquipmentSlot.HAND) {
+                        player.sendMessage("right click event");
+                    }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("LeftClick")) {
+                if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK)
+                    player.sendMessage("left click event");
+            }
+        }
+    }
+    @EventHandler
+    public void InteractAtEntity(PlayerInteractAtEntityEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (event.getRightClicked() instanceof Player) {
+                if (Hypersquare.eventCache.get(plotID).contains("ClickPlayer")) {
+                    if (event.getHand() == EquipmentSlot.HAND) {
+                        player.sendMessage("click player event");
+                    }
+                }
+            } else {
+                if (Hypersquare.eventCache.get(plotID).contains("ClickEntity")) {
+                    player.sendMessage("click entity event");
+
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void PlaceBlock(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("PlaceBlock")) {
+                player.sendMessage("block place event");
+            }
+        }
+    }
+    @EventHandler
+    public void PlaceBlock(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("BreakBlock")) {
+                player.sendMessage("block break event");
+            }
+        }
+    }
+    @EventHandler
+    public void SwapHands(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("SwapHands")) {
+                player.sendMessage("swap hands event");
+            }
+        }
+    }
+    @EventHandler
+    public void ChangeSlot(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("ChangeSlot")) {
+                player.sendMessage("change slot event");
+            }
+        }
+    }
+    @EventHandler
+    public void Tame(EntityTameEvent event) {
+        Player player = (Player) event.getOwner();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("TameMob")) {
+                player.sendMessage("tame event");
+            }
         }
     }
 }

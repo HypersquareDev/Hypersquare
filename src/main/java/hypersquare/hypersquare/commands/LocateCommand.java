@@ -36,6 +36,7 @@ public class LocateCommand implements CommandExecutor {
                 messages.add(color + "&m                                       " + color);
                 messages.add(color + targetName + " currently &f" + mode + color + "");
                 messages.add(color2 + "→ " + color + "Server: &rNode 1");
+                messages.add(color + "&m                                       " + color);
                 Utilities.sendMultiMessage(player, messages);
             } else {
                 int plotID = Utilities.getPlotID(target.getWorld());

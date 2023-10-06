@@ -2,6 +2,7 @@ package hypersquare.hypersquare.codeblockmenuitems;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.ItemBuilder;
+import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -84,11 +85,21 @@ public class PlayerEventItems {
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.player_join_game_event", Player_Join_Game_Event);
 
+        ItemStack Player_Rejoin_Game_Event = new ItemBuilder(Material.PLAYER_HEAD)
+                .name(ChatColor.GREEN + "Player Rejoin Game Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player rejoins the plot.")
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 1)
+                .setCustomTag(new NamespacedKey(plugin, "short"), "Rejoin")
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.plot_and_server_events.player_rejoin_game_event", Player_Rejoin_Game_Event);
+
         ItemStack Player_Leave_Game_Event = new ItemBuilder(Material.POISONOUS_POTATO)
                 .name(ChatColor.GREEN + "Player Leave Game Event")
                 .lore(ChatColor.GRAY + "Executes code when a")
                 .lore(ChatColor.GRAY + "player leaves the plot.")
-                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 1)
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 2)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Leave")
                 .hideFlags()
                 .make();
@@ -101,7 +112,7 @@ public class PlayerEventItems {
                 .lore("")
                 .lore(ChatColor.WHITE + "Example:")
                 .lore(ChatColor.AQUA + "\"@command\"")
-                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 2)
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 3)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Command")
                 .hideFlags()
                 .make();
@@ -112,7 +123,7 @@ public class PlayerEventItems {
                 .lore(ChatColor.GRAY + "Executes code when a")
                 .lore(ChatColor.GRAY + "player finishes loading a")
                 .lore(ChatColor.GRAY + "plot resource pack.")
-                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 3)
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 4)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "PackLoad")
                 .hideFlags()
                 .make();
@@ -123,11 +134,23 @@ public class PlayerEventItems {
                 .lore(ChatColor.GRAY + "Executes code when a")
                 .lore(ChatColor.GRAY + "player declines a plot")
                 .lore(ChatColor.GRAY + "resource pack prompt.")
-                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 4)
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 5)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "PackDecline")
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.plot_and_server_events.resource_pack_decline", Resource_Pack_Decline);
+        ItemStack Player_Chat_Event = new ItemBuilder(Material.WRITABLE_BOOK)
+                .name(ChatColor.BLUE + "Player Chat Event")
+                .lore(ChatColor.GRAY + "Executes code when a")
+                .lore(ChatColor.GRAY + "player sends a message")
+                .lore(ChatColor.GRAY + "in chat")
+                .lore("")
+                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .setCustomIntTag(new NamespacedKey(plugin, "slot"), 6)
+                .setCustomTag(new NamespacedKey(plugin, "short"), "Chat")
+                .hideFlags()
+                .make();
+        ItemManager.addItem("player_event.plot_and_server_events.player_chat_event", Player_Chat_Event);
     }
 
     public static void PlayerEventClickEvents() {
@@ -246,7 +269,7 @@ public class PlayerEventItems {
 
     public static void PlayerEventMovementEvents() {
         ItemStack playerWalkEvent = new ItemBuilder(Material.GRASS_BLOCK)
-                .name("Player Walk Event")
+                .name(Utilities.convertToChatColor("#2AFFAAPlayer Walk Event"))
                 .lore(ChatColor.GRAY + "Executes code while a player is walking.")
                 .lore("")
                 .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")

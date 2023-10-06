@@ -6,9 +6,17 @@ import com.google.gson.JsonParser;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.Plot;
+import mc.obliviate.inventory.Icon;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -257,7 +265,7 @@ public class Utilities {
         chunkData.getValue().put("worldData", new CompoundTag("worldData", compoundMap));
         slimeWorld.getExtraData().getValue().put("worldData", chunkData);
     }
-    public static void getWorldDataFromSlimeFun(World world){
+    public static void getWorldDataFromSlimeWorlds(World world){
 
         SlimeWorld slimeWorld = plugin.getWorld(world.getName());
 
@@ -322,6 +330,40 @@ public class Utilities {
     }
     public static void sendUsageError(Player player, String usage){
         player.sendMessage(org.bukkit.ChatColor.DARK_AQUA + "Usage: " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', usage));
+    }
+    public static void resetPlayerStats(Player player){
+        player.setHealth(20);
+        player.setHealthScale(20);
+        player.setExp(0);
+        player.setFreezeTicks(0);
+        player.setFoodLevel(20);
+        player.getInventory().clear();
+        player.getActivePotionEffects().clear();
+        player.setSaturation(20);
+        player.closeInventory();
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setFlySpeed(0.1f);
+        player.setWalkSpeed(0.2f);
+        player.setGameMode(GameMode.SURVIVAL);
+    }
+
+    public static void setEvent(Block block, Icon item, Player player){
+        if (block.getType() == Material.OAK_WALL_SIGN){
+            String clickedEvent = item.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"short"),PersistentDataType.STRING);
+            Sign sign = (Sign) block.getState();
+            sign.getSide(Side.FRONT).setLine(1,clickedEvent);
+            sign.update();
+            int plotID = Utilities.getPlotID(player.getWorld());
+            HashMap<String,String> map = new HashMap<String,String>();
+            map.put(LocationToString(block.getLocation().add(1,0,0)),clickedEvent);
+            Database.addEvents(plotID,map);
+            Database.updateEventsCache(plotID);
+        }
+        player.closeInventory();
+    }
+    public static String LocationToString(Location location){
+        return String.valueOf(location.getBlockX()) + ", " + String.valueOf(location.getBlockY()) + ", " + String.valueOf(location.getBlockZ());
     }
 
 

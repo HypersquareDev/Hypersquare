@@ -4,6 +4,7 @@ import com.google.gson.*;
 import hypersquare.hypersquare.*;
 import hypersquare.hypersquare.menus.MyPlotsMenu;
 import hypersquare.hypersquare.menus.PlayerEventMenu;
+import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
@@ -27,6 +28,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.Objects;
 
 public class DevEvents implements Listener {
     private final Plugin plugin = Hypersquare.getPlugin(Hypersquare.class);
@@ -253,36 +256,43 @@ public class DevEvents implements Listener {
         if (blockLoc.getY() < 0) {
             return;
         }
-
-        if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta() != null && ItemManager.getItemID(event.getPlayer().getInventory().getItemInMainHand()).equals("dev.glitch"))
-        {
-            event.setCancelled(false);
-        } else {
-            if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
-                blockLoc.add(1, 0, 0);
-            }
-            Block block = blockLoc.getBlock();
-            Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
-
-            if (signBlock.getType() == Material.OAK_WALL_SIGN) {
-                Location signLoc = signBlock.getLocation();
-                Location chestLoc = blockLoc.clone().add(0, 1, 0);
-                Location stoneLoc = blockLoc.clone().add(0, 0, 1);
-
-                Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
-                signBlock.setType(Material.AIR);
-                block.setType(Material.AIR);
-                stoneLoc.getBlock().setType(Material.AIR);
-                chestLoc.getBlock().setType(Material.AIR);
-
-                if (bracketLoc != null) {
-                    bracketLoc.getBlock().setType(Material.AIR);
-                    CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -1);
-                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
-                } else {
-                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+            if (Objects.equals(ItemManager.getItemID(event.getPlayer().getInventory().getItemInMainHand()), "dev.glitch")) {
+                if (event.getBlock().getType() == Material.DIAMOND_BLOCK){
+                    Database.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()),Utilities.LocationToString(event.getBlock().getLocation()));
                 }
-            }
+                event.setCancelled(false);
+            } else {
+                if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
+                    blockLoc.add(1, 0, 0);
+                }
+                Block block = blockLoc.getBlock();
+                Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
+                if (block.getType() == Material.DIAMOND_BLOCK){
+                    Database.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()),Utilities.LocationToString(block.getLocation()));
+                }
+
+                if (signBlock.getType() == Material.OAK_WALL_SIGN) {
+                    Location signLoc = signBlock.getLocation();
+                    Location chestLoc = blockLoc.clone().add(0, 1, 0);
+                    Location stoneLoc = blockLoc.clone().add(0, 0, 1);
+
+                    Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
+                    signBlock.setType(Material.AIR);
+                    block.setType(Material.AIR);
+                    stoneLoc.getBlock().setType(Material.AIR);
+                    chestLoc.getBlock().setType(Material.AIR);
+
+                    if (bracketLoc != null) {
+                        bracketLoc.getBlock().setType(Material.AIR);
+                        CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -1);
+                        CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                    } else {
+                        CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                    }
+                }
+
+
+
         }
     }
 

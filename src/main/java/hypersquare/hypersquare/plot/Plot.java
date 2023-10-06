@@ -95,7 +95,7 @@ public class Plot {
                 }
             }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
-            Utilities.getWorldDataFromSlimeFun(player.getWorld());
+            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
 
 
 
@@ -103,6 +103,7 @@ public class Plot {
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
 
         }
+        loadRules(plotID);
 
     }
     public static void loadRules(int plotID){

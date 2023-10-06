@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.plot;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.listeners.PlaytimeEventExecuter;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.dev.LoadItems;
@@ -16,6 +17,9 @@ public class ChangeGameMode {
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
         if (player.getWorld().getName().equals(worldName)) {
+            if (Hypersquare.mode.get(player).equals("playing"))
+            PlaytimeEventExecuter.Leave(player);
+            Utilities.resetPlayerStats(player);
             Bukkit.getWorld(worldName).setTime(1000);
             LoadItems.devInventory(player);
             player.setGameMode(GameMode.CREATIVE);
@@ -35,6 +39,8 @@ public class ChangeGameMode {
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
         if (player.getWorld().getName().equals(worldName)) {
+            Utilities.resetPlayerStats(player);
+            Database.updateEventsCache(plotID);
             player.closeInventory();
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
@@ -43,6 +49,7 @@ public class ChangeGameMode {
             Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
             Database.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
+            PlaytimeEventExecuter.Join(player);
 
 
         }
@@ -53,6 +60,9 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID, player);
         String worldName = "hs." + plotID;
         if (player.getWorld().getName().equals(worldName)) {
+            if (Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.Leave(player);
+            Utilities.resetPlayerStats(player);
             player.closeInventory();
             player.getInventory().clear();
             player.setGameMode(GameMode.CREATIVE);
@@ -64,11 +74,15 @@ public class ChangeGameMode {
         }
     }
     public static void editSpawn(Player player){
+        Utilities.resetPlayerStats(player);
         player.setGameMode(GameMode.CREATIVE);
         Hypersquare.mode.put(player,"editing spawn");
 
     }
     public static void spawn(Player player){
+        if (Hypersquare.mode.get(player).equals("playing"))
+            PlaytimeEventExecuter.Leave(player);
+        Utilities.resetPlayerStats(player);
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0, ItemManager.getItem("myPlots"));

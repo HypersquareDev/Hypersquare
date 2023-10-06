@@ -3,7 +3,7 @@ package hypersquare.hypersquare;
 import hypersquare.hypersquare.commands.*;
 import hypersquare.hypersquare.commands.PlotCommands;
 import hypersquare.hypersquare.commands.TabCompleters.PlotCommandsComplete;
-import hypersquare.hypersquare.dev.CodeBlockMenuItems;
+import hypersquare.hypersquare.codeblockmenuitems.PlayerEventItems;
 import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.CreatePlotMenuItems;
@@ -21,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
@@ -33,6 +32,8 @@ public final class Hypersquare extends JavaPlugin {
     public static Map<Player, List<Location>> visitedLocationsMap = new HashMap<>();
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
     public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
+
+    public static Map<Integer,List<String>> eventCache = new HashMap<>();
 
 
 
@@ -49,6 +50,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerBreakBlockListener(),this);
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new PlayerMoveListener(),this);
+        pm.registerEvents(new PlaytimeEventExecuter(), this);
         new InventoryAPI(this).init();
         ItemManager.initializeKey(this);
         ItemManager.registerItems();
@@ -58,13 +60,7 @@ public final class Hypersquare extends JavaPlugin {
         CreatePlotMenuItems.init();
         Database database = new Database();
         CodeItems.register();
-        CodeBlockMenuItems.PlayerEventCategories();
-        CodeBlockMenuItems.PlayerEvent_PlotAndServerEvents();
-        CodeBlockMenuItems.PlayerEvent_ClickEvents();
-        CodeBlockMenuItems.PlayerEvent_ItemEvents();
-        CodeBlockMenuItems.PlayerEvent_DamageEvents();
-        CodeBlockMenuItems.PlayerEvent_MovementEvents();
-        CodeBlockMenuItems.PlayerEvent_DeathEvents();
+        PlayerEventItems.initItems();
     }
 
     @Override

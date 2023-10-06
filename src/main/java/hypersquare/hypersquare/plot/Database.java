@@ -3,9 +3,11 @@ package hypersquare.hypersquare.plot;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import javax.xml.stream.Location;
+import java.util.*;
+
+import static hypersquare.hypersquare.Hypersquare.eventCache;
 
 public class Database {
     private static MongoClient mongoClient;
@@ -198,6 +200,65 @@ public class Database {
         Document query = new Document("plotID", plotID);
         plotsCollection.deleteOne(query);
     }
+
+    public static void addEvents(int plotID, Map<String, String> events) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document();
+
+        for (Map.Entry<String, String> entry : events.entrySet()) {
+            String eventKey = entry.getKey();
+            String eventValue = entry.getValue();
+            update.append("events." + eventKey, eventValue);
+        }
+
+        plotsCollection.updateOne(filter, new Document("$set", update));
+    }
+
+
+    public static boolean eventValueExistsInPlot(int plotID, String eventValue) {
+        Document query = new Document("plotID", plotID);
+        query.append("events", new Document("$elemMatch", new Document("$eq", eventValue)));
+
+        Document result = plotsCollection.find(query).first();
+
+        return result != null;
+    }
+
+    public static List<String> getAllUniqueEventsInPlot(int plotID) {
+        List<String> uniqueEvents = new ArrayList<>();
+
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            Document eventsDocument = result.get("events", Document.class);
+
+            if (eventsDocument != null) {
+                for (String eventKey : eventsDocument.keySet()) {
+                    String eventValue = eventsDocument.getString(eventKey);
+                    uniqueEvents.add(eventValue);
+                }
+            }
+        }
+
+        return uniqueEvents;
+    }
+
+    public static void updateEventsCache(int plotID){
+        eventCache.put(plotID,Database.getAllUniqueEventsInPlot(plotID));
+    }
+    public static void removeEventByKey(int plotID, String eventKeyToRemove) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$unset", new Document("events." + eventKeyToRemove, ""));
+
+        plotsCollection.updateOne(filter, update);
+    }
+
+
+
+
+
+
 
 
 }

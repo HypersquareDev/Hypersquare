@@ -8,14 +8,14 @@ public class PlayerActionItems {
 
     public static void initItems(){
         PlayerActionCategories();
-        ItemManagement();
+        PlayerActionItemManagement();
     }
 
     public static void PlayerActionCategories(){
 
     }
 
-    public static void ItemManagement() {
+    public static void PlayerActionItemManagement() {
 
     }
 

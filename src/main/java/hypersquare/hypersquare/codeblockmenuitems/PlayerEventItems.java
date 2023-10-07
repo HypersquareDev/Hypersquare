@@ -270,24 +270,24 @@ public class PlayerEventItems {
     public static void PlayerEventMovementEvents() {
         ItemStack playerWalkEvent = new ItemBuilder(Material.GRASS_BLOCK)
                 .name(Utilities.convertToChatColor("#2AFFAAPlayer Walk Event"))
-                .lore(ChatColor.GRAY + "Executes code while a player is walking.")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code while"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7a player is walking."))
                 .lore("")
-                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 0)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Walk")
-
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.movement_events.player_walk_event", playerWalkEvent);
 
         ItemStack playerJumpEvent = new ItemBuilder(Material.RABBIT_FOOT)
-                .name("Player Jump Event")
-                .lore(ChatColor.GRAY + "Executes code when a player jumps.")
+                .name(Utilities.convertToChatColor("#2AFFAAPlayer Jump Event"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7player jumps."))
                 .lore("")
-                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 1)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Jump")
-
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.movement_events.player_jump_event", playerJumpEvent);
@@ -673,7 +673,7 @@ public class PlayerEventItems {
 
 
     public static void PlayerEventDeathEvents() {
-        ItemStack playerDeathEvent = new ItemBuilder(Material.REDSTONE_WIRE)
+        ItemStack playerDeathEvent = new ItemBuilder(Material.REDSTONE)
                 .name(ChatColor.DARK_RED + "Player Death Event")
                 .lore(ChatColor.GRAY + "Executes code when a player")
                 .lore(ChatColor.GRAY + "dies, not as a result of another")

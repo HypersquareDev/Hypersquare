@@ -12,9 +12,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.entity.HorseJumpEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +127,7 @@ public class PlaytimeEventExecuter implements Listener {
 
         }
     }
+
     @EventHandler
     public void Chat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -135,6 +138,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void PackLoad(PlayerResourcePackStatusEvent event) {
         Player player = event.getPlayer();
@@ -165,11 +169,12 @@ public class PlaytimeEventExecuter implements Listener {
                     }
             }
             if (Hypersquare.eventCache.get(plotID).contains("LeftClick")) {
-                if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK)
+                if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
                     player.sendMessage("left click event");
             }
         }
     }
+
     @EventHandler
     public void InteractAtEntity(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
@@ -189,6 +194,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void PlaceBlock(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -199,6 +205,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void PlaceBlock(BlockBreakEvent event) {
         Player player = event.getPlayer();
@@ -209,6 +216,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void SwapHands(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
@@ -219,6 +227,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void ChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
@@ -229,6 +238,7 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
     @EventHandler
     public void Tame(EntityTameEvent event) {
         Player player = (Player) event.getOwner();
@@ -239,4 +249,123 @@ public class PlaytimeEventExecuter implements Listener {
             }
         }
     }
+
+    //MOVEMENT EVENTS
+
+    @EventHandler
+    public void Jump(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (event.getFrom().getBlockY() < event.getTo().getBlockY()) {
+            if (Hypersquare.mode.get(player).equals("playing")) {
+                int plotID = Utilities.getPlotID(player.getWorld());
+                if (Hypersquare.eventCache.get(plotID).contains("Jump")) {
+                    player.sendMessage("jump event");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void Sneak(PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("Sneak")) {
+                if (event.isSneaking()) {
+                    player.sendMessage("sneak event");
+                }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("Unsneak")) {
+                if (!event.isSneaking()) {
+                    player.sendMessage("unsneak event");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void Sprint(PlayerToggleSprintEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("StartSprint")) {
+                if (event.isSprinting()) {
+                    player.sendMessage("start sprint event");
+                }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("StopSprint")) {
+                if (!event.isSprinting()) {
+                    player.sendMessage("stop sprint event");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void Flying(PlayerToggleFlightEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("StartFly")) {
+                if (event.isFlying()) {
+                    player.sendMessage("start fly event");
+                }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("StopFly")) {
+                if (!event.isFlying()) {
+                    player.sendMessage("stop fly event");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void Riptide(PlayerRiptideEvent event) {
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("Riptide")) {
+                player.sendMessage("riptide event");
+            }
+        }
+    }
+
+    @EventHandler
+    public void Dismount(EntityDismountEvent event) {
+        Player player = (Player) event.getDismounted();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("Dismount")) {
+                player.sendMessage("dismount event");
+            }
+        }
+    }
+
+    @EventHandler
+    public void HorseJump(HorseJumpEvent event) {
+        Player player = (Player) event.getEntity().getPassengers().get(0);
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("HorseJump")) {
+                player.sendMessage("horse jump event");
+            }
+        }
+    }
+
+
+//    @EventHandler
+//    public void VechileJump(Vechile event) {
+//        Player player = event.getPlayer();
+//        if (event.getFrom().getBlockY() < event.getTo().getBlockY()) {
+//            if (Hypersquare.mode.get(player).equals("playing")) {
+//                int plotID = Utilities.getPlotID(player.getWorld());
+//                if (Hypersquare.eventCache.get(plotID).contains("Jump")) {
+//                    player.sendMessage("jump event");
+//                }
+//            }
+//        }
+//    }
 }
+
+
+

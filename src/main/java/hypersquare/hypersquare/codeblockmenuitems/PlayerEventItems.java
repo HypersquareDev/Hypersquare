@@ -740,7 +740,7 @@ public class PlayerEventItems {
                 .make();
         ItemManager.addItem("player_event.death_events.mob_kill_player_event", mobKillPlayerEvent);
 
-        ItemStack playerRespawnEvent = new ItemBuilder(Material.BONE)
+        ItemStack playerRespawnEvent = new ItemBuilder(Material.OAK_SAPLING)
                 .name(ChatColor.DARK_AQUA + "Player Respawn Event")
                 .lore(ChatColor.GRAY + "Executes code when")
                 .lore(ChatColor.GRAY + "a player respawns.")

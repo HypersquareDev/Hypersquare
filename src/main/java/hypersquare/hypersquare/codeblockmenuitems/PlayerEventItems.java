@@ -366,22 +366,23 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_stop_sprinting_event", playerStopSprintingEvent);
 
         ItemStack playerStartFlightEvent = new ItemBuilder(Material.ELYTRA)
-                .name("Player Start Flight Event")
-                .lore(ChatColor.GRAY + "Executes code when a player starts flying.")
+                .name(Utilities.convertToChatColor("#2AFFAAPlayer Start Flight Event"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7player starts flying."))
                 .lore("")
-                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 6)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StartFly")
-
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event.movement_events.player_start_flight_event", playerStartFlightEvent);
 
         ItemStack playerStopFlightEvent = new ItemBuilder(Material.ELYTRA)
-                .name("Player Stop Flight Event")
-                .lore(ChatColor.GRAY + "Executes code when a player stops flying.")
+                .name(Utilities.convertToChatColor("#2AFFAAPlayer Stop Flight Event"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7player stops flying."))
                 .lore("")
-                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 7)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StopFly")
                 .hideFlags()
@@ -596,15 +597,14 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.damage_events.entity_damage_player_event", entityDamagePlayerEvent);
 
         ItemStack playerHealEvent = new ItemBuilder(Material.SPLASH_POTION)
-                .name("Player Heal Event")
-                .lore(ChatColor.GRAY + "Executes code when a player")
-                .lore(ChatColor.GRAY + "regains health from any")
-                .lore(ChatColor.GRAY + "source.")
+                .name(Utilities.convertToChatColor("#2AFFAAPlayer Heal Event"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a player"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7regains health from any"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&7source."))
                 .lore("")
-                .lore(ChatColor.DARK_RED + "∅ " + ChatColor.RED + "Cancellable")
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 4)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "PlayerHeal")
-
                 .hideFlags()
                 .setPotionColor(Color.fromRGB(255, 0, 0))
                 .make();

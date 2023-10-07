@@ -6,17 +6,14 @@ import com.google.gson.JsonParser;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.plot.Database;
-import hypersquare.hypersquare.plot.Plot;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import mc.obliviate.inventory.Icon;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
-import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -357,8 +354,8 @@ public class Utilities {
             int plotID = Utilities.getPlotID(player.getWorld());
             HashMap<String,String> map = new HashMap<String,String>();
             map.put(LocationToString(block.getLocation().add(1,0,0)),clickedEvent);
-            Database.addEvents(plotID,map);
-            Database.updateEventsCache(plotID);
+            PlotDatabase.addEvents(plotID,map);
+            PlotDatabase.updateEventsCache(plotID);
         }
         player.closeInventory();
     }

@@ -26,8 +26,8 @@ public class ChangeGameMode {
             Hypersquare.mode.put(player,"coding");
             player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
             Utilities.sendInfo(player, "You are now in dev mode.");
-            Hypersquare.plotData.put(player, Database.getPlot(player.getUniqueId().toString()));
-            Database.updateLocalData(plotID);
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
 
 
@@ -44,14 +44,14 @@ public class ChangeGameMode {
             if (Hypersquare.mode.get(player).equals("playing"))
                 PlaytimeEventExecuter.Leave(player);
             Utilities.resetPlayerStats(player);
-            Database.updateEventsCache(plotID);
+            PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
             Utilities.sendInfo(player, "Joined game: " +  Utilities.convertToChatColor(PlotManager.getPlotName(plotID)) + " &7by &f" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
-            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
-            Database.updateLocalData(plotID);
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
             PlaytimeEventExecuter.Join(player);
 
@@ -72,8 +72,8 @@ public class ChangeGameMode {
             player.setGameMode(GameMode.CREATIVE);
             Hypersquare.mode.put(player,"building");
             Utilities.sendInfo(player, "You are now in build mode.");
-            Hypersquare.plotData.put(player,Database.getPlot(player.getUniqueId().toString()));
-            Database.updateLocalData(plotID);
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
         }
     }

@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.commands;
 
 import hypersquare.hypersquare.plot.ChangeGameMode;
-import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.command.Command;
@@ -17,7 +17,7 @@ public class DevCommand implements CommandExecutor {
             Player player = (Player) sender;
             int plotID = Utilities.getPlotID(player.getWorld());
             if (plotID != 0) {
-                if (Database.getRawDevs(plotID).contains(player.getUniqueId().toString())) {
+                if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString())) {
                     ChangeGameMode.devMode(player, plotID);
                     Plot.loadRules(plotID);
                 } else {

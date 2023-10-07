@@ -1,8 +1,7 @@
 package hypersquare.hypersquare.menus;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
-import hypersquare.hypersquare.*;
-import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.Utilities;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -37,7 +36,7 @@ public class MyPlotsMenu extends Gui {
         Utilities.sendOpenMenuSound(player);
 
         // Retrieve all plots owned by the player
-        List<Document> playerPlots = Database.getPlotsByOwner(player.getUniqueId().toString());
+        List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
 
         for (Document plotDocument : playerPlots) {
             Icon plot = new Icon(Material.matchMaterial(plotDocument.getString("icon")));

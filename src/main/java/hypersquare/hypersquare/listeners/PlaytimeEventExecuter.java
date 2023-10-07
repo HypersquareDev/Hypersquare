@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.HorseJumpEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.spigotmc.event.entity.EntityDismountEvent;
@@ -365,6 +366,27 @@ public class PlaytimeEventExecuter implements Listener {
 //            }
 //        }
 //    }
+
+    //ITEM EVENTS
+    @EventHandler
+    public void ClickMenuSlot(InventoryClickEvent event){
+        Player player = (Player) event.getWhoClicked();
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).contains("ClickMenuSlot")) {
+                if (event.getClickedInventory() != player.getInventory()) {
+                    player.sendMessage("click menu event");
+                }
+            }
+            if (Hypersquare.eventCache.get(plotID).contains("ClickInvSlot")) {
+                if (event.getClickedInventory() == player.getInventory()) {
+                    player.sendMessage("click inv event");
+                }
+            }
+        }
+    }
+
+
 }
 
 

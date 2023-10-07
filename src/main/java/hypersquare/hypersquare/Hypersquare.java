@@ -7,7 +7,8 @@ import hypersquare.hypersquare.codeblockmenuitems.PlayerEventItems;
 import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.CreatePlotMenuItems;
-import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.PlayerDatabase;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.managers.CommandManager;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.InventoryAPI;
@@ -58,7 +59,8 @@ public final class Hypersquare extends JavaPlugin {
         commandManager = new CommandManager(this);
         registerCommands(commandManager);
         CreatePlotMenuItems.init();
-        Database database = new Database();
+        PlotDatabase plotDatabase = new PlotDatabase();
+        PlayerDatabase playerDatabase = new PlayerDatabase();
         CodeItems.register();
         PlayerEventItems.initItems();
     }

@@ -1,10 +1,6 @@
 package hypersquare.hypersquare.plot;
 
-import org.bukkit.Bukkit;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static hypersquare.hypersquare.Hypersquare.loadedPlots;
 
@@ -12,7 +8,7 @@ public class PlotManager {
 
 
     public static void loadPlot(int plotID) {
-        List<Object> plotData = Database.getPlotData(plotID);
+        List<Object> plotData = PlotDatabase.getPlotData(plotID);
         if (plotData != null) {
             loadedPlots.put(plotID, plotData);
         }

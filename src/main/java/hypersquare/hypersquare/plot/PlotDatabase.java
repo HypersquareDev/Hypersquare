@@ -4,17 +4,16 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
-import javax.xml.stream.Location;
 import java.util.*;
 
 import static hypersquare.hypersquare.Hypersquare.eventCache;
 
-public class Database {
+public class PlotDatabase {
     private static MongoClient mongoClient;
     private static MongoDatabase database;
     private static MongoCollection<Document> plotsCollection;
 
-    public Database() {
+    public PlotDatabase() {
         mongoClient = MongoClients.create("mongodb+srv://chicken:e-Rdk6NUjCJM%5DBy0@loginpage.ltn5olm.mongodb.net/?retryWrites=true&w=majority"); // MongoDB server address
         database = mongoClient.getDatabase("chicken_plots");
         plotsCollection = database.getCollection("plots");
@@ -245,7 +244,7 @@ public class Database {
     }
 
     public static void updateEventsCache(int plotID){
-        eventCache.put(plotID,Database.getAllUniqueEventsInPlot(plotID));
+        eventCache.put(plotID, PlotDatabase.getAllUniqueEventsInPlot(plotID));
     }
     public static void removeEventByKey(int plotID, String eventKeyToRemove) {
         Document filter = new Document("plotID", plotID);

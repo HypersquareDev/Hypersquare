@@ -1,21 +1,15 @@
 package hypersquare.hypersquare.menus;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.plot.ChangeGameMode;
-import hypersquare.hypersquare.plot.Database;
-import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 public class PlayerEventMenu extends Gui {
     public PlayerEventMenu(Player player) {

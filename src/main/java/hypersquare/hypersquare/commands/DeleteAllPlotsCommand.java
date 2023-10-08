@@ -1,8 +1,6 @@
 package hypersquare.hypersquare.commands;
 
-import hypersquare.hypersquare.plot.ChangeGameMode;
-import hypersquare.hypersquare.plot.Database;
-import hypersquare.hypersquare.plot.Plot;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +15,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
             Player player = (Player) sender;
             if (player.isOp()){
                 Utilities.sendInfo(player,"Dumped all plots");
-                Database.deleteAllPlots();
+                PlotDatabase.deleteAllPlots();
             } else {
                 Utilities.sendError(player,"You do not have permission to execute that command!");
             }

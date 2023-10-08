@@ -2,15 +2,13 @@ package hypersquare.hypersquare.listeners;
 
 import com.google.gson.*;
 import hypersquare.hypersquare.*;
-import hypersquare.hypersquare.menus.MyPlotsMenu;
 import hypersquare.hypersquare.menus.PlayerEventMenu;
-import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.utils.Utilities;
-import net.minecraft.world.level.block.StainedGlassBlock;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -269,7 +267,7 @@ public class DevEvents implements Listener {
         if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
             if (Objects.equals(ItemManager.getItemID(event.getPlayer().getInventory().getItemInMainHand()), "dev.glitch")) {
                 if (event.getBlock().getType() == Material.DIAMOND_BLOCK) {
-                    Database.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(event.getBlock().getLocation()));
+                    PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(event.getBlock().getLocation()));
                 }
                 event.setCancelled(false);
             } else {
@@ -279,7 +277,7 @@ public class DevEvents implements Listener {
                 Block block = blockLoc.getBlock();
                 Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
                 if (block.getType() == Material.DIAMOND_BLOCK) {
-                    Database.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+                    PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
                 }
 
                 if (signBlock.getType() == Material.OAK_WALL_SIGN) {
@@ -310,7 +308,7 @@ public class DevEvents implements Listener {
             Block block = blockLoc.getBlock();
             Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
             if (block.getType() == Material.DIAMOND_BLOCK) {
-                Database.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
             }
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {

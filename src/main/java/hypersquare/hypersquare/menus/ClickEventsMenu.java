@@ -1,26 +1,15 @@
 package hypersquare.hypersquare.menus;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.plot.Database;
 import hypersquare.hypersquare.utils.Utilities;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static hypersquare.hypersquare.Hypersquare.eventCache;
 
 public class ClickEventsMenu extends Gui {
     public ClickEventsMenu(Player player) {

@@ -1,22 +1,19 @@
 package hypersquare.hypersquare.commands;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
 import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
-import hypersquare.hypersquare.plot.ChangeGameMode;
-import hypersquare.hypersquare.plot.Database;
+import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.plot.Plot;
-import hypersquare.hypersquare.plot.PlotManager;
 import hypersquare.hypersquare.utils.managers.ItemManager;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -51,7 +48,7 @@ public class PlotCommands implements CommandExecutor {
                                             name.append(" ");
                                         }
                                     }
-                                    Database.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name));
+                                    PlotDatabase.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name));
                                 } else {
                                     Utilities.sendError(player, "You cannot set the plot name to noting");
                                 }
@@ -61,21 +58,23 @@ public class PlotCommands implements CommandExecutor {
                         }
                         case "icon": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
-                                Database.changePlotIcon(Utilities.getPlotID(((Player) sender).getWorld()), ((Player) sender).getInventory().getItemInMainHand().getType().toString());
+                                PlotDatabase.changePlotIcon(Utilities.getPlotID(((Player) sender).getWorld()), ((Player) sender).getInventory().getItemInMainHand().getType().toString());
                             } else
                                 Utilities.sendError((Player) sender, "Only the plot owner can do that!");
                             break;
                         }
                         case "unclaim": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
+                                World world = player.getWorld();
                                 for (Player player1 : player.getWorld().getPlayers()) {
                                     ChangeGameMode.spawn(player1);
                                     Utilities.sendRedInfo(player1, "The plot that you were currently on was unclaimed.");
                                 }
 
                                 Utilities.sendInfo(player, "Plot "+ plotID + " has been unclaimed.");
-                                Database.deletePlot(plotID);
+                                PlotDatabase.deletePlot(plotID);
                                 try {
+                                    PlayerDatabase.removePlot(player.getUniqueId(),world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING).toLowerCase());
                                     Plot.deletePlot(plotID);
                                 } catch (UnknownWorldException e) {
                                     throw new RuntimeException(e);
@@ -182,13 +181,13 @@ public class PlotCommands implements CommandExecutor {
                                         case "add": {
                                             if (!args[2].equalsIgnoreCase(sender.getName())) {
                                                 if (Bukkit.getOfflinePlayer(args[2]).hasPlayedBefore()) {
-                                                    if (Database.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId().toString())) {
+                                                    if (PlotDatabase.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId().toString())) {
                                                         Utilities.sendError((Player) sender, "That player is already a dev.");
                                                     } else {
-                                                        Database.addDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                                                        Utilities.sendInfo((Player) sender, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7now has dev permissions for " + Utilities.convertToChatColor(Database.getPlotName(plotID))));
+                                                        PlotDatabase.addDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+                                                        Utilities.sendInfo((Player) sender, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7now has dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID))));
                                                         if (Utilities.playerOnline(args[2])) {
-                                                            Utilities.sendInfo(Bukkit.getPlayer(args[2]), "You now have dev permissions for " + Utilities.convertToChatColor(Database.getPlotName(plotID)));
+                                                            Utilities.sendInfo(Bukkit.getPlayer(args[2]), "You now have dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID)));
                                                         }
                                                     }
                                                 } else {
@@ -202,7 +201,7 @@ public class PlotCommands implements CommandExecutor {
                                         }
                                         case "list": {
                                             String devs = "&a";
-                                            for (String name : Database.getPlotDevs(plotID)) {
+                                            for (String name : PlotDatabase.getPlotDevs(plotID)) {
                                                 devs = devs + Bukkit.getOfflinePlayer(UUID.fromString(name)).getName() + ", ";
                                             }
 
@@ -217,13 +216,13 @@ public class PlotCommands implements CommandExecutor {
                                         case "remove": {
                                             if (!args[2].equalsIgnoreCase(sender.getName())) {
                                                 if (Bukkit.getOfflinePlayer(args[2]).hasPlayedBefore()) {
-                                                    if (!Database.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId().toString())) {
+                                                    if (!PlotDatabase.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId().toString())) {
                                                         Utilities.sendError((Player) sender, "That player is not a dev.");
                                                     } else {
-                                                        Database.removeDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                                                        Utilities.sendInfo((Player) sender, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7no longer has dev permissions for " + Utilities.convertToChatColor(Database.getPlotName(plotID))));
+                                                        PlotDatabase.removeDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+                                                        Utilities.sendInfo((Player) sender, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7no longer has dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID))));
                                                         if (Utilities.playerOnline(args[2])) {
-                                                            Utilities.sendRedInfo(Bukkit.getPlayer(args[2]), "You no longer have dev permissions for " + Utilities.convertToChatColor(Database.getPlotName(plotID)));
+                                                            Utilities.sendRedInfo(Bukkit.getPlayer(args[2]), "You no longer have dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID)));
                                                             if (Hypersquare.mode.get(Bukkit.getPlayer(args[2])).equals("coding")) {
                                                                 ChangeGameMode.spawn(Bukkit.getPlayer(args[2]));
                                                             }
@@ -256,7 +255,7 @@ public class PlotCommands implements CommandExecutor {
 
             }
 
-            Hypersquare.plotData.put((Player) sender, Database.getPlot(String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId().toString())));
+            Hypersquare.plotData.put((Player) sender, PlotDatabase.getPlot(String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId().toString())));
         }
          else {
             sender.sendMessage("This command can only be used by players.");

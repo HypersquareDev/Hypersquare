@@ -1,31 +1,41 @@
 package hypersquare.hypersquare;
 
-import hypersquare.hypersquare.commands.*;
-import hypersquare.hypersquare.commands.PlotCommands;
-import hypersquare.hypersquare.commands.TabCompleters.PlotCommandsComplete;
-import hypersquare.hypersquare.codeblockmenuitems.PlayerEventItems;
-import hypersquare.hypersquare.listeners.*;
-import hypersquare.hypersquare.dev.CodeItems;
-import hypersquare.hypersquare.dev.CreatePlotMenuItems;
-import hypersquare.hypersquare.plot.PlayerDatabase;
-import hypersquare.hypersquare.plot.PlotDatabase;
-import hypersquare.hypersquare.utils.managers.CommandManager;
-import hypersquare.hypersquare.utils.managers.ItemManager;
+import hypersquare.hypersquare.serverside.DFUtilities;
+import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerActionItems;
+import hypersquare.hypersquare.serverside.commands.*;
+import hypersquare.hypersquare.serverside.commands.PlotCommands;
+import hypersquare.hypersquare.serverside.commands.TabCompleters.PlotCommandsComplete;
+import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerEventItems;
+import hypersquare.hypersquare.serverside.listeners.*;
+import hypersquare.hypersquare.serverside.dev.CodeItems;
+import hypersquare.hypersquare.serverside.dev.CreatePlotMenuItems;
+import hypersquare.hypersquare.serverside.plot.MoveEntities;
+import hypersquare.hypersquare.serverside.plot.PlayerDatabase;
+import hypersquare.hypersquare.serverside.plot.PlotDatabase;
+import hypersquare.hypersquare.serverside.utils.managers.CommandManager;
+import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import mc.obliviate.inventory.InventoryAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
+    public static Logger logger;
+    public static Location origin = new Location(null, 0, 0, 0);
+
+
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
     public static HashMap<Player, List> plotData = new HashMap<>();
 
@@ -34,7 +44,9 @@ public final class Hypersquare extends JavaPlugin {
     public static Map<Player, Boolean> teleportFlagMap = new HashMap<>();
     public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
 
-    public static Map<Integer,List<String>> eventCache = new HashMap<>();
+    public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
+    public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
+    public static JavaPlugin plugin = Hypersquare.getPlugin(Hypersquare.class);
 
 
 
@@ -63,6 +75,8 @@ public final class Hypersquare extends JavaPlugin {
         PlayerDatabase playerDatabase = new PlayerDatabase();
         CodeItems.register();
         PlayerEventItems.initItems();
+        MoveEntities.entityLoop();
+        PlayerActionItems.initItems();
     }
 
     @Override
@@ -85,6 +99,8 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("p" , new PlotCommands());
         commandManager.registerCommand("editspawn", new EditSpawn());
         commandManager.registerCommand("fly", new FlyCommand());
+        commandManager.registerCommand("dumplots", new DeleteAllPlotsCommand());
+        commandManager.registerCommand("giveplot", new GivePlotsCommand());
 
         //Tab Completers
 

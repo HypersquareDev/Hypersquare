@@ -1,0 +1,35 @@
+package hypersquare.hypersquare.serverside.commands;
+
+import hypersquare.hypersquare.serverside.plot.ChangeGameMode;
+import hypersquare.hypersquare.serverside.plot.PlotDatabase;
+import hypersquare.hypersquare.serverside.plot.Plot;
+import hypersquare.hypersquare.serverside.utils.Utilities;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+public class DevCommand implements CommandExecutor {
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (plotID != 0) {
+                if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString())) {
+                    ChangeGameMode.devMode(player, plotID);
+                    Plot.loadRules(plotID);
+                } else {
+                    Utilities.sendError(player,"You do not have dev permissions for this plot!");
+                }
+            } else {
+                Utilities.sendError(player,"You must be on a plot!");
+            }
+
+        } else {
+            sender.sendMessage("This command can only be used by players.");
+        }
+        return true;
+    }
+}

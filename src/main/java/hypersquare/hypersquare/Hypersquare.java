@@ -1,6 +1,5 @@
 package hypersquare.hypersquare;
 
-import hypersquare.hypersquare.serverside.DFUtilities;
 import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerActionItems;
 import hypersquare.hypersquare.serverside.commands.*;
 import hypersquare.hypersquare.serverside.commands.PlotCommands;
@@ -32,8 +31,6 @@ import java.util.logging.Logger;
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
-    public static Logger logger;
-    public static Location origin = new Location(null, 0, 0, 0);
 
 
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
@@ -46,7 +43,6 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
-    public static JavaPlugin plugin = Hypersquare.getPlugin(Hypersquare.class);
 
 
 

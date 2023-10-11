@@ -23,6 +23,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -350,8 +351,10 @@ public class DevEvents implements Listener {
             return;
         }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock().getLocation().getX() > -0) {
-                return;
+            if (event.getClickedBlock() != null) {
+                if (event.getClickedBlock().getLocation().getX() > -0) {
+                    return;
+                }
             }
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
@@ -374,6 +377,12 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onExplode(EntityExplodeEvent event){
         event.setCancelled(true);
+    }
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event){
+        if (Hypersquare.mode.get(event.getDamager()).equals("coding")) {
+            event.setCancelled(true);
+        }
     }
     @EventHandler
     public void onExplode(BlockExplodeEvent event){

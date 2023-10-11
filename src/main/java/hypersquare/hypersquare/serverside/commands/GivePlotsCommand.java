@@ -19,7 +19,11 @@ public class GivePlotsCommand implements CommandExecutor {
                     Player target = Bukkit.getPlayer(args[0]);
                     if (target != null){
                             PlayerDatabase.increaseMaxPlots(target.getUniqueId(), args[1], Integer.parseInt(args[2]));
-
+                            String plotsmessage = "plot";
+                            if (Integer.parseInt(args[2]) > 1)
+                                plotsmessage = "plots";
+                            Utilities.sendInfo(player,"Gave " + args[2] + " "+ args[1] + " " +plotsmessage+ " to " + target.getName());
+                            Utilities.sendInfo(target,"Recieved " + args[2] + " "+ args[1] + " " +plotsmessage+ " from " + sender.getName());
                     } else {
                         Utilities.sendError(player,"That player is not online.");
                     }

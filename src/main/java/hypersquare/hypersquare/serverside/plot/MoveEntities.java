@@ -14,15 +14,15 @@ import org.bukkit.persistence.PersistentDataType;
 public class MoveEntities {
     public static Location basic = null;
     public static Location large = null;
-    public static Location massive = null;
     public static Location huge = null;
+    public static Location massive = null;
     public static Location gigantic = null;
     public static Location commonStart = null;
     public static void commonVars(Location location) {
         basic = new Location(location.getWorld(), 64, -640, 64);
         large = new Location(location.getWorld(), 128, -640, 128);
-        massive = new Location(location.getWorld(), 256, -640, 256);
-        huge = new Location(location.getWorld(), 512, -640, 512);
+        huge = new Location(location.getWorld(), 256, -640, 256);
+        massive = new Location(location.getWorld(), 512, -640, 512);
         gigantic = new Location(location.getWorld(), 1024, -640, 1024);
         commonStart = new Location(location.getWorld(), -20, 255, 0);
     }
@@ -53,15 +53,15 @@ public class MoveEntities {
                                     }
                                     break;
                                 }
-                                case "Massive": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
-                                    }
-                                    break;
-                                }
                                 case "Huge": {
                                     if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), huge)) {
                                         Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
+                                    }
+                                    break;
+                                }
+                                case "Massive": {
+                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
+                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
                                     }
                                     break;
                                 }

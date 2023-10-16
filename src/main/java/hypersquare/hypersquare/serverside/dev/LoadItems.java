@@ -23,15 +23,5 @@ public class LoadItems {
         player.getInventory().setItem(29,ItemManager.getItem("dev.entity_action"));
         player.getInventory().setItem(30,ItemManager.getItem("dev.func"));
         player.getInventory().setItem(31,ItemManager.getItem("dev.process"));
-
-
-
-
-
-
-
-
-
-
     }
 }

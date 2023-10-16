@@ -43,7 +43,7 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
-
+    public static int plotVersion = 0;
 
 
     ItemManager itemManager = new ItemManager();

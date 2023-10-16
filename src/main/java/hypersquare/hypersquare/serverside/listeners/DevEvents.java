@@ -19,10 +19,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -62,18 +59,18 @@ public class DevEvents implements Listener {
                 }
 
             }
-            case "Massive": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.massive)) {
-                    go = false;
-                }
-            }
-            case "Huge": {
+            case "huge": {
                 if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge)) {
                     go = false;
                 }
             }
-            case "Gigantic": {
+            case "massive": {
                 if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.massive)) {
+                    go = false;
+                }
+            }
+            case "Gigantic": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge)) {
                     go = false;
                 }
             }
@@ -113,21 +110,27 @@ public class DevEvents implements Listener {
                 int size = event.getItemInHand().getItemMeta().getPersistentDataContainer()
                         .getOrDefault(new NamespacedKey(plugin, "brackets"), PersistentDataType.STRING, "false").equals("true") ? 4 : 2;
 
+
+                if (CodeBlockManagement.findCodelineStartLoc(location.clone()) == null) {
+                    if (event.getBlockAgainst().getType() == Material.STONE || (event.getBlockAgainst().getType() == Material.PISTON && againstLocation.getY() >= 0)) {
+
+                    } else {
+                        Utilities.sendError(event.getPlayer(), "Your code must start with an Event, Function, Process or Entity event.");
+                        return;
+                    }
+                }
+                if (location.clone().add(0, 0, 2).getBlock().getType() == Material.PISTON || location.clone().add(0, 0, 2).getBlock().getType() == Material.STICKY_PISTON) {
+                    CodeBlockManagement.moveCodeLine(location.clone().add(0, 0, 2), 1);
+                }
                 if (event.getBlockAgainst().getType() == Material.STONE || (event.getBlockAgainst().getType() == Material.PISTON && againstLocation.getY() >= 0)) {
                     CodeBlockManagement.moveCodeLine(againstLocation.clone().add(0, 0, 1), size);
                     Vector difference = againstLocation.toVector().subtract(event.getBlock().getLocation().toVector());
                     location.add(difference).add(0, 0, 1);
                 } else {
-                    CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().clone().add(0, 0, 1), 1);
+                    if (event.getBlock().getLocation().getBlockY() % 6 == 0) {
+                        CodeBlockManagement.moveCodeLine(event.getBlock().getLocation().clone().add(0, 0, 1), 1);
+                    }
                 }
-                if (CodeBlockManagement.findCodelineStartLoc(location.clone()) == null) {
-                    Utilities.sendError(event.getPlayer(), "Your code must start with an Event, Function, Process or Entity event.");
-                    return;
-                }
-                if (location.clone().add(0, 0, 2).getBlock().getType() == Material.PISTON || location.clone().add(0, 0, 2).getBlock().getType() == Material.STICKY_PISTON) {
-                    CodeBlockManagement.moveCodeLine(location.clone().add(0, 0, 2), 1);
-                }
-
 
                 if (location.getY() >= 0) {
                     if (location.clone().getBlockY() % 6 == 0) {
@@ -351,11 +354,13 @@ public class DevEvents implements Listener {
             return;
         }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock() != null) {
-                if (event.getClickedBlock().getLocation().getX() > -0) {
-                    return;
-                }
+            if (event.getClickedBlock() == null) {
+                return;
             }
+            if (event.getClickedBlock().getLocation().getX() > -0) {
+                return;
+            }
+
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
@@ -380,12 +385,108 @@ public class DevEvents implements Listener {
     }
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event){
-        if (Hypersquare.mode.get(event.getDamager()).equals("coding")) {
+        if (!Hypersquare.mode.get(event.getDamager()).equals("playing")) {
             event.setCancelled(true);
         }
     }
     @EventHandler
     public void onExplode(BlockExplodeEvent event){
         event.setCancelled(true);
+    }
+
+    public static Location basic = null;
+    public static Location large = null;
+    public static Location huge = null;
+    public static Location massive = null;
+    public static Location gigantic = null;
+    public static Location commonStart = null;
+
+    public static void commonVars(Location location) {
+        basic = new Location(location.getWorld(), 64, -640, 64);
+        large = new Location(location.getWorld(), 128, -640, 128);
+        huge = new Location(location.getWorld(), 256, -640, 256);
+        massive = new Location(location.getWorld(), 512, -640, 512);
+        gigantic = new Location(location.getWorld(), 1024, -640, 1024);
+        commonStart = new Location(location.getWorld(), 0, 255, 0);
+    }
+    @EventHandler
+    public void onSpread(BlockFromToEvent event){
+        commonVars(event.getToBlock().getLocation());
+        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+
+        switch (plotType){
+
+            case "Basic" : {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,basic)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Large" : {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,large)) {
+                    event.setCancelled(true);
+
+                }
+                break;
+            }
+            case "Huge" : {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,huge)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Massive" : {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,massive)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Gigantic" : {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,gigantic)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+        }
+    }
+    @EventHandler
+    public void onPiston(BlockPistonExtendEvent event){
+        commonVars(event.getBlock().getLocation());
+        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+
+        switch (plotType){
+
+            case "Basic" : {
+                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,basic)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Large" : {
+                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,large)) {
+                    event.setCancelled(true);
+
+                }
+                break;
+            }
+            case "Huge" : {
+                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,huge)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Massive" : {
+                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,massive)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+            case "Gigantic" : {
+                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,gigantic)) {
+                    event.setCancelled(true);
+                }
+                break;
+            }
+        }
     }
 }

@@ -40,23 +40,23 @@ public class CreatePlotsMenu extends Gui{
             int maxBasic = playerData.get("maxBasic");
             int usedLarge = playerData.get("usedLarge");
             int maxLarge = playerData.get("maxLarge");
-            int usedMassive = playerData.get("usedMassive");
-            int maxMassive = playerData.get("maxMassive");
-            int usedHuge = playerData.get("usedHuge");
-            int maxHuge = playerData.get("maxHuge");
+            int usedhuge = playerData.get("usedhuge");
+            int maxhuge = playerData.get("maxhuge");
+            int usedmassive = playerData.get("usedmassive");
+            int maxmassive = playerData.get("maxmassive");
             int usedGigantic = playerData.get("usedGigantic");
             int maxGigantic = playerData.get("maxGigantic");
 
             Icon basic = basicPlot(usedBasic, maxBasic);
             Icon large = largePlot(usedLarge, maxLarge);
-            Icon massive = massivePlot(usedMassive, maxMassive);
-            Icon huge = hugePlot(usedHuge, maxHuge);
+            Icon huge = hugePlot(usedhuge, maxhuge);
+            Icon massive = massivePlot(usedmassive, maxmassive);
             Icon gigantic = giganticPlot(usedGigantic, maxGigantic);
 
             addItem(0, basic);
             addItem(2, large);
-            addItem(4, massive);
-            addItem(6, huge);
+            addItem(4, huge);
+            addItem(6, massive);
             addItem(8, gigantic);
 
 
@@ -84,25 +84,25 @@ public class CreatePlotsMenu extends Gui{
                 }
             });
 
-            massive.onClick(e -> {
+            huge.onClick(e -> {
                 e.setCancelled(true);
-                if (usedMassive != maxMassive) {
+                if (usedhuge != maxhuge) {
                     int plotID = Hypersquare.lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_massive");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
-                    PlayerDatabase.addPlot(player.getUniqueId(),"massive");
+                    PlayerDatabase.addPlot(player.getUniqueId(),"huge");
                     Hypersquare.lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
                 }
             });
 
-            huge.onClick(e -> {
+            massive.onClick(e -> {
                 e.setCancelled(true);
-                if (usedHuge != maxHuge) {
+                if (usedmassive != maxmassive) {
                     int plotID = Hypersquare.lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_huge");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
-                    PlayerDatabase.addPlot(player.getUniqueId(),"huge");
+                    PlayerDatabase.addPlot(player.getUniqueId(),"massive");
                     Hypersquare.lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
                 }
@@ -160,16 +160,16 @@ public class CreatePlotsMenu extends Gui{
         Icon basic = new Icon(item);
         return basic;
     }
-    public static Icon massivePlot(int usedPlot, int maxPlot){
-        ItemStack item = ItemManager.getItem("menu.massive_plot");
+    public static Icon hugePlot(int usedPlot, int maxPlot){
+        ItemStack item = ItemManager.getItem("menu.huge_plot");
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Size: 256x256");
         lore.add("");
         if (usedPlot != maxPlot) {
-            lore.add(ChatColor.GRAY + "You have used " + ChatColor.GREEN + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your Massive plots.");
+            lore.add(ChatColor.GRAY + "You have used " + ChatColor.GREEN + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your huge plots.");
         } else {
-            lore.add(ChatColor.GRAY + "You have used " + ChatColor.RED + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your Massive plots.");
+            lore.add(ChatColor.GRAY + "You have used " + ChatColor.RED + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your huge plots.");
         }
         lore.add("");
         lore.add(ChatColor.GREEN + "Click to create!");
@@ -178,16 +178,16 @@ public class CreatePlotsMenu extends Gui{
         Icon basic = new Icon(item);
         return basic;
     }
-    public static Icon hugePlot(int usedPlot, int maxPlot){
-        ItemStack item = ItemManager.getItem("menu.huge_plot");
+    public static Icon massivePlot(int usedPlot, int maxPlot){
+        ItemStack item = ItemManager.getItem("menu.massive_plot");
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Size: 512x512");
         lore.add("");
         if (usedPlot != maxPlot) {
-            lore.add(ChatColor.GRAY + "You have used " + ChatColor.GREEN + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your Huge plots.");
+            lore.add(ChatColor.GRAY + "You have used " + ChatColor.GREEN + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your massive plots.");
         } else {
-            lore.add(ChatColor.GRAY + "You have used " + ChatColor.RED + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your Huge plots.");
+            lore.add(ChatColor.GRAY + "You have used " + ChatColor.RED + usedPlot + "/" + maxPlot + ChatColor.GRAY + " of your massive plots.");
         }
         lore.add("");
         lore.add(ChatColor.GREEN + "Click to create!");

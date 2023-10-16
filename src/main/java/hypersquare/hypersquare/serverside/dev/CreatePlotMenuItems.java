@@ -30,27 +30,27 @@ public class CreatePlotMenuItems {
                 .make();
         ItemManager.addItem("menu.large_plot", CreateLargePlot);
 
-        ItemStack CreateMassivePlot = new ItemBuilder(Material.GOLD_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#FFFFAA") + "Massive Plot")
+        ItemStack CreatehugePlot = new ItemBuilder(Material.GOLD_BLOCK)
+                .name(net.md_5.bungee.api.ChatColor.of("#FFFFAA") + "Huge Plot")
                 .lore(ChatColor.GRAY + "Size: 256x256")
                 .lore("")
-                .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your Massive plots.")
+                .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your huge plots.")
                 .lore("")
                 .lore(ChatColor.GREEN + "Click to create!")
                 .hideFlags()
                 .make();
-        ItemManager.addItem("menu.massive_plot", CreateMassivePlot);
+        ItemManager.addItem("menu.huge_plot", CreatehugePlot);
 
-        ItemStack CreateHugePlot  = new ItemBuilder(Material.DIAMOND_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#00e8ff") + "Huge Plot")
+        ItemStack CreatemassivePlot  = new ItemBuilder(Material.DIAMOND_BLOCK)
+                .name(net.md_5.bungee.api.ChatColor.of("#00e8ff") + "Massive Plot")
                 .lore(ChatColor.GRAY + "Size: 512x512")
                 .lore("")
-                .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your Huge Plots.")
+                .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your massive Plots.")
                 .lore("")
                 .lore(ChatColor.GREEN + "Click to create!")
                 .hideFlags()
                 .make();
-        ItemManager.addItem("menu.huge_plot", CreateHugePlot);
+        ItemManager.addItem("menu.massive_plot", CreatemassivePlot);
 
         ItemStack CreateGiganticPlot  = new ItemBuilder(Material.NETHERITE_BLOCK)
                 .name(net.md_5.bungee.api.ChatColor.of("#333232") + "Gigantic Plot")

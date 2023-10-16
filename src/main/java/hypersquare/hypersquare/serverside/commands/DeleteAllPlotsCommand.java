@@ -27,7 +27,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
 
                 Utilities.sendInfo(player,"Dumped all plots");
                 for (Player player1 : Bukkit.getOnlinePlayers()){
-                    player1.kickPlayer(ChatColor.translateAlternateColorCodes('&',"&c&lKick from Hypersquare \n &fReason: Huge dump"));
+                    player1.kickPlayer(ChatColor.translateAlternateColorCodes('&',"&c&lKick from Hypersquare \n &fReason: massive dump"));
                 }
                 PlotDatabase.deleteAllPlots();
                 PlayerDatabase.deleteAllPlayers();

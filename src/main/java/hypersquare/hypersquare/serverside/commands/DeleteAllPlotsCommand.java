@@ -19,12 +19,10 @@ import java.io.IOException;
 
 public class DeleteAllPlotsCommand implements CommandExecutor {
     @Override
-
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (player.hasPermission("hypersquare.dumplots")) {
-
                 Utilities.sendInfo(player,"Dumped all plots");
                 for (Player player1 : Bukkit.getOnlinePlayers()){
                     player1.kickPlayer(ChatColor.translateAlternateColorCodes('&',"&c&lKick from Hypersquare \n &fReason: massive dump"));
@@ -49,7 +47,6 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
             } else {
                 Utilities.sendError(player,"You do not have permission to execute this command.");
             }
-
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

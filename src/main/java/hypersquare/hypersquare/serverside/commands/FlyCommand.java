@@ -19,7 +19,6 @@ public class FlyCommand implements CommandExecutor {
                 player.setAllowFlight(true);
                 Utilities.sendInfo(player,"Flight enabled.");
             }
-
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

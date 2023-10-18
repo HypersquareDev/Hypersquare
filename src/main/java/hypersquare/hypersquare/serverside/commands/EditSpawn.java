@@ -12,14 +12,12 @@ public class EditSpawn implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-
-                Player player = (Player) sender;
+            Player player = (Player) sender;
             if (player.hasPermission("hypersquare.editspawn")) {
                 ChangeGameMode.editSpawn(player);
             } else {
                 Utilities.sendError(player,"You do not have permission to execute this command.");
             }
-
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

@@ -20,7 +20,6 @@ import java.util.UUID;
 
 public class PlotCommands implements CommandExecutor {
 
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
@@ -252,10 +251,7 @@ public class PlotCommands implements CommandExecutor {
                 } else {
                     Utilities.sendError(player, "Invalid command usage. /plot help");
                 }
-
-
             }
-
             Hypersquare.plotData.put((Player) sender, PlotDatabase.getPlot(String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId().toString())));
         }
          else {

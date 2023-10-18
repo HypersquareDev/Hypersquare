@@ -26,7 +26,6 @@ public class DevCommand implements CommandExecutor {
             } else {
                 Utilities.sendError(player,"You must be on a plot!");
             }
-
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

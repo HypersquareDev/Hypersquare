@@ -3,10 +3,12 @@ package hypersquare.hypersquare.serverside.dev;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
+import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.noise.NoiseGenerator;
 
 public class CodeItems {
     public static void register() {
@@ -23,7 +25,6 @@ public class CodeItems {
             .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "chest"), "false")
 
             .make();
-
 
         ItemManager.addItem("dev.event", playerEvent);
         ItemStack ifPlayer = new ItemBuilder(Material.OAK_PLANKS)
@@ -286,7 +287,5 @@ public class CodeItems {
                 .lore(ChatColor.GRAY + "break it with this.")
                 .make();
         ItemManager.addItem("dev.glitch", glitch);
-
-
     }
 }

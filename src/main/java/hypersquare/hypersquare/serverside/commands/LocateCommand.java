@@ -31,8 +31,6 @@ public class LocateCommand implements CommandExecutor {
                 targetName = "You are";
             }
             String mode = Hypersquare.mode.get(target);
-
-
             if (mode.equals("at spawn") || mode.equals("editing spawn")) {
                 ChatColor color = ChatColor.of("#AAD4AA");
                 ChatColor color2 = ChatColor.of("#2AD4D4");

@@ -23,6 +23,7 @@ public class PlayerEventItems {
         PlayerEventPlotAndServerEvents();
         PlayerEventClickEvents();
     }
+
     public static void PlayerEventCategories(){
         ItemStack plotandServerEvents = new ItemBuilder(Material.COMMAND_BLOCK)
                 .name(ChatColor.translateAlternateColorCodes('&', "&ePlot and Server Events"))
@@ -269,7 +270,6 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.click_events.player_tame_mob_event", playerTameMobEvent);
     }
 
-
     public static void PlayerEventMovementEvents() {
         ItemStack playerWalkEvent = new ItemBuilder(Material.GRASS_BLOCK)
                 .name(Utilities.convertToChatColor("#2AFFAAPlayer Walk Event"))
@@ -436,7 +436,6 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_vehicle_jump_event", playerVehicleJumpEvent);
     }
 
-
     public static void PlayerEventItemEvents() {
         ItemStack playerClickMenuSlotEvent = new ItemBuilder(Material.CRAFTING_TABLE)
                 .name(ChatColor.AQUA + "Player Click Menu Slot Event")
@@ -540,8 +539,6 @@ public class PlayerEventItems {
                 .make();
         ItemManager.addItem("player_event.item_events.player_fish_event", playerFishEvent);
     }
-
-
 
     public static void PlayerEventDamageEvents() {
         ItemStack playerTakeDamageEvent = new ItemBuilder(Material.DEAD_BUSH)
@@ -680,7 +677,6 @@ public class PlayerEventItems {
                 .make();
         ItemManager.addItem("player_event.damage_events.potion_cloud_imbue_player_event", potionCloudImbuePlayerEvent);
     }
-
 
     public static void PlayerEventDeathEvents() {
         ItemStack playerDeathEvent = new ItemBuilder(Material.REDSTONE)

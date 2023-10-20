@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
+
 public class DeleteAllPlotsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -29,7 +31,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                 }
                 PlotDatabase.deleteAllPlots();
                 PlayerDatabase.deleteAllPlayers();
-                for (int i = 0; i <= Hypersquare.lastUsedWorldNumber;i++){
+                for (int i = 0; i <= lastUsedWorldNumber;i++){
                     int finalI = i;
                     new BukkitRunnable() {
 
@@ -43,7 +45,8 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                     }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class), 1);
 
                 }
-                Hypersquare.lastUsedWorldNumber = 0;
+                lastUsedWorldNumber = 1;
+                PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
             } else {
                 Utilities.sendError(player,"You do not have permission to execute this command.");
             }

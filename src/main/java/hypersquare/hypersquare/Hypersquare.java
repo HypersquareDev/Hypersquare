@@ -53,6 +53,8 @@ public final class Hypersquare extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        PlotDatabase plotDatabase = new PlotDatabase();
+        PlayerDatabase playerDatabase = new PlayerDatabase();
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new PlayerRightClickListener(), this);
@@ -70,8 +72,7 @@ public final class Hypersquare extends JavaPlugin {
         commandManager = new CommandManager(this);
         registerCommands(commandManager);
         CreatePlotMenuItems.init();
-        PlotDatabase plotDatabase = new PlotDatabase();
-        PlayerDatabase playerDatabase = new PlayerDatabase();
+
         CodeItems.register();
         PlayerEventItems.initItems();
         MoveEntities.entityLoop();

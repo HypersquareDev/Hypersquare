@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
 import static org.bukkit.Bukkit.getLogger;
 
 public class CreatePlotsMenu extends Gui{
@@ -63,60 +64,65 @@ public class CreatePlotsMenu extends Gui{
             basic.onClick(e -> {
                 e.setCancelled(true);
                 if (usedBasic != maxBasic) {
-                    int plotID = Hypersquare.lastUsedWorldNumber;
+                    int plotID = lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_basic");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                     PlayerDatabase.addPlot(player.getUniqueId(),"basic");
-                    Hypersquare.lastUsedWorldNumber++;
+                    lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                    PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 }
             });
 
             large.onClick(e -> {
                 e.setCancelled(true);
                 if (usedLarge != maxLarge) {
-                    int plotID = Hypersquare.lastUsedWorldNumber;
+                    int plotID = lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_large");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                     PlayerDatabase.addPlot(player.getUniqueId(),"large");
-                    Hypersquare.lastUsedWorldNumber++;
+                    lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                    PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 }
             });
 
             huge.onClick(e -> {
                 e.setCancelled(true);
                 if (usedhuge != maxhuge) {
-                    int plotID = Hypersquare.lastUsedWorldNumber;
+                    int plotID = lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_massive");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                     PlayerDatabase.addPlot(player.getUniqueId(),"huge");
-                    Hypersquare.lastUsedWorldNumber++;
+                    lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                    PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 }
             });
 
             massive.onClick(e -> {
                 e.setCancelled(true);
                 if (usedmassive != maxmassive) {
-                    int plotID = Hypersquare.lastUsedWorldNumber;
+                    int plotID = lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_huge");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                     PlayerDatabase.addPlot(player.getUniqueId(),"massive");
-                    Hypersquare.lastUsedWorldNumber++;
+                    lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                    PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 }
             });
 
             gigantic.onClick(e -> {
                 e.setCancelled(true);
                 if (usedGigantic != maxGigantic) {
-                    int plotID = Hypersquare.lastUsedWorldNumber;
+                    int plotID = lastUsedWorldNumber;
                     Plot.createPlot(plotID, plugin, player.getUniqueId().toString(), "plot_template_gigantic");
                     ChangeGameMode.devMode((Player) event.getPlayer(), plotID);
                     PlayerDatabase.addPlot(player.getUniqueId(),"gigantic");
-                    Hypersquare.lastUsedWorldNumber++;
+                    lastUsedWorldNumber++;
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                    PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 }
             });
 

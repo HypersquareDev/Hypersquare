@@ -63,9 +63,8 @@ public class PlotDatabase {
     }
 
     public static void setRecentPlotID(int plotID) {
-        Document filter = new Document("plotID", plotID);
-        Document update = new Document("$set", new Document("plotID", plotID)); // Updated line
-        additionalCollection.updateOne(filter, update);
+        Document update = new Document("$set", new Document("plotID", plotID));
+        additionalCollection.updateOne(new Document(), update);
     }
 
     public static int getRecentPlotID() {

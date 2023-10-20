@@ -49,20 +49,21 @@ public class MyPlotsMenu extends Gui {
             if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
                 meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
             } else {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + Utilities.convertToChatColor(plotDocument.getString("name"))));
+                String name = ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name")));
+                meta.setDisplayName(name + ChatColor.RED + " (Out of date)");
             }
             List<Component> lore = new ArrayList<>();
-            lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC,false));
             lore.add(MiniMessage.miniMessage().deserialize(""));
-            lore.add(MiniMessage.miniMessage().deserialize("<i><gray>Tags: <dark_gray>" + plotDocument.getString("tags")).decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize("<i><gray>Votes: <yellow>" + plotDocument.getInteger("votes") + "<dark_gray> (last 2 weeks)").decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<gray>Tags: <dark_gray>" + plotDocument.getString("tags")).decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<gray>Votes: <yellow>" + plotDocument.getInteger("votes") + "<dark_gray> (last 2 weeks)").decoration(TextDecoration.ITALIC,false));
             lore.add(MiniMessage.miniMessage().deserialize(""));
-            lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>ID: " + plotDocument.getInteger("plotID")).decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize("<i><blue>↓ Node " + plotDocument.getInteger("node")).decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotDocument.getInteger("plotID")).decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<blue>↓ Node " + plotDocument.getInteger("node")).decoration(TextDecoration.ITALIC,false));
             if (Hypersquare.plotVersion == plotDocument.getInteger("version")){
-                lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false));
+                lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false));
             } else {
-                Component aa = MiniMessage.miniMessage().deserialize("<i><red>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false);
+                Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false);
                 lore.add(aa);
             }
 

@@ -11,12 +11,16 @@ import static hypersquare.hypersquare.Hypersquare.eventCache;
 public class PlotDatabase {
     private static MongoClient mongoClient;
     private static MongoDatabase database;
+
     private static MongoCollection<Document> plotsCollection;
+    private static MongoCollection<Document> additionalCollection;
+
 
     public PlotDatabase() {
         mongoClient = MongoClients.create("mongodb+srv://chicken:e-Rdk6NUjCJM%5DBy0@loginpage.ltn5olm.mongodb.net/?retryWrites=true&w=majority"); // MongoDB server address
         database = mongoClient.getDatabase("chicken_plots");
         plotsCollection = database.getCollection("plots");
+        additionalCollection = database.getCollection("additional_info");
     }
 
     public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size,int version) {
@@ -57,6 +61,26 @@ public class PlotDatabase {
         Document update = new Document("$set", new Document("name", newName));
         plotsCollection.updateOne(filter, update);
     }
+
+    public static void setRecentPlotID(int plotID) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("plotID", plotID)); // Updated line
+        additionalCollection.updateOne(filter, update);
+    }
+
+    public static int getRecentPlotID() {
+        Document filter = new Document(); // an empty filter to get all documents
+        Document result = additionalCollection.find(filter).first();
+        if (result != null) {
+            return result.getInteger("plotID");
+        } else {
+            Document newDocument = new Document("plotID", 1);
+            additionalCollection.insertOne(newDocument);
+            return 1;
+        }
+    }
+
+
 
     public static void changePlotIcon(int plotID, String newIcon) {
         Document filter = new Document("plotID", plotID);

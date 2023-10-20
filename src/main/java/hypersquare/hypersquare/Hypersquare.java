@@ -114,17 +114,14 @@ public final class Hypersquare extends JavaPlugin {
 
     private void loadLastUsedWorldNumber() {
         // Load the last used world number from the configuration file
-        FileConfiguration config = getConfig();
-        if (config.contains("lastUsedWorldNumber")) {
-            lastUsedWorldNumber = config.getInt("lastUsedWorldNumber");
-        }
+
+            lastUsedWorldNumber = PlotDatabase.getRecentPlotID();
+
     }
 
     private void saveLastUsedWorldNumber() {
         // Save the last used world number to the configuration file
-        FileConfiguration config = getConfig();
-        config.set("lastUsedWorldNumber", lastUsedWorldNumber);
-        saveConfig();
+        PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
     }
 
 

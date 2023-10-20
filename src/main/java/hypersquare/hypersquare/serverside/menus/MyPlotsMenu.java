@@ -1,15 +1,20 @@
 package hypersquare.hypersquare.serverside.menus;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.serverside.plot.PlotDatabase;
 import hypersquare.hypersquare.serverside.utils.Utilities;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -39,18 +44,29 @@ public class MyPlotsMenu extends Gui {
         List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
 
         for (Document plotDocument : playerPlots) {
-            Icon plot = new Icon(Material.matchMaterial(plotDocument.getString("icon")));
-            plot.setName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.DARK_GRAY + "" + plotDocument.getString("size") + " Plot");
-            lore.add("");
-            lore.add(ChatColor.GRAY + "Tags: " + ChatColor.DARK_GRAY + plotDocument.getString("tags"));
-            lore.add(ChatColor.GRAY + "Votes: " + ChatColor.YELLOW + plotDocument.getInteger("votes") + ChatColor.DARK_GRAY + " (last 2 weeks)");
-            lore.add("");
-            lore.add(ChatColor.DARK_GRAY + "ID: " + plotDocument.getInteger("plotID"));
-            lore.add(ChatColor.BLUE + "↓ Node " + plotDocument.getInteger("node"));
-            plot.setLore(lore);
-            ItemMeta meta = plot.getItem().getItemMeta();
+            ItemStack plotItem = new ItemStack(Material.matchMaterial(plotDocument.getString("icon")));
+            ItemMeta meta = plotItem.getItemMeta();
+            if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
+            } else {
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + Utilities.convertToChatColor(plotDocument.getString("name"))));
+            }
+            List<Component> lore = new ArrayList<>();
+            lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize(""));
+            lore.add(MiniMessage.miniMessage().deserialize("<i><gray>Tags: <dark_gray>" + plotDocument.getString("tags")).decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<i><gray>Votes: <yellow>" + plotDocument.getInteger("votes") + "<dark_gray> (last 2 weeks)").decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize(""));
+            lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>ID: " + plotDocument.getInteger("plotID")).decoration(TextDecoration.ITALIC,false));
+            lore.add(MiniMessage.miniMessage().deserialize("<i><blue>↓ Node " + plotDocument.getInteger("node")).decoration(TextDecoration.ITALIC,false));
+            if (Hypersquare.plotVersion == plotDocument.getInteger("version")){
+                lore.add(MiniMessage.miniMessage().deserialize("<i><dark_gray>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false));
+            } else {
+                Component aa = MiniMessage.miniMessage().deserialize("<i><red>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false);
+                lore.add(aa);
+            }
+
+            meta.lore(lore);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
@@ -61,8 +77,8 @@ public class MyPlotsMenu extends Gui {
             meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
             meta.setDisplayName(ChatColor.RESET + meta.getDisplayName());
 
-            plot.getItem().setItemMeta(meta);
-
+            plotItem.setItemMeta(meta);
+            Icon plot = new Icon(plotItem);
 
             addItem(i, plot);
 

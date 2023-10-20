@@ -1,5 +1,6 @@
 package hypersquare.hypersquare;
 
+import com.mongodb.lang.NonNull;
 import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerActionItems;
 import hypersquare.hypersquare.serverside.commands.*;
 import hypersquare.hypersquare.serverside.commands.PlotCommands;
@@ -43,10 +44,12 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
-    public static int plotVersion = 0;
+    public static int plotVersion = 2;
 
 
     ItemManager itemManager = new ItemManager();
+
+
 
     @Override
     public void onEnable() {
@@ -78,6 +81,7 @@ public final class Hypersquare extends JavaPlugin {
     @Override
     public void onDisable() {
         saveLastUsedWorldNumber();
+
     }
 
     public void registerCommands(CommandManager commandManager){

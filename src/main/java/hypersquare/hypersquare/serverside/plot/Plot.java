@@ -55,7 +55,7 @@ public class Plot {
         plotType = plotType.replace("plot_template_", "");
         plotType = Utilities.capitalize(plotType);
 
-        PlotDatabase.addPlot(plotID,ownerUUID,"map",Utilities.randomHSVHex(0,360,97,62) + Bukkit.getPlayer( UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,plotType);
+        PlotDatabase.addPlot(plotID,ownerUUID,"map",Utilities.randomHSVHex(0,360,97,62) + Bukkit.getPlayer( UUID.fromString(ownerUUID)).getName() + "'s Game",1,"None",0,plotType,Hypersquare.plotVersion);
         Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING,plotType);
         savePersistentData(Bukkit.getWorld(worldName),plugin);
         PlotManager.loadPlot(plotID);

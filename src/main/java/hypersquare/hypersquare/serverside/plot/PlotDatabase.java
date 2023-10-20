@@ -19,7 +19,7 @@ public class PlotDatabase {
         plotsCollection = database.getCollection("plots");
     }
 
-    public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size) {
+    public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size,int version) {
         Document plotDocument = new Document("plotID", plotID)
                 .append("owner", ownerUUID)
                 .append("devs", ownerUUID) // Consider using an array for devs and builders
@@ -29,8 +29,8 @@ public class PlotDatabase {
                 .append("node", node)
                 .append("tags", tags)
                 .append("votes", votes)
-                .append("size", size);
-
+                .append("size", size)
+                .append("version", version);
         plotsCollection.insertOne(plotDocument);
     }
 
@@ -69,6 +69,14 @@ public class PlotDatabase {
         Document result = plotsCollection.find(query).first();
         if (result != null) {
             return result.getString("name");
+        }
+        return null;
+    }
+    public static Integer getPlotVersion(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getInteger("version");
         }
         return null;
     }

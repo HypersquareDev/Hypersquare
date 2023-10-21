@@ -123,6 +123,9 @@ public class DevEvents implements Listener {
                     CodeBlockManagement.moveCodeLine(location.clone().add(0, 0, 2), 1);
                 }
                 if (event.getBlockAgainst().getType() == Material.STONE || (event.getBlockAgainst().getType() == Material.PISTON && againstLocation.getY() >= 0)) {
+                    if (event.getBlockAgainst().getLocation().add(0,0,2).getBlock().getType() == Material.AIR) {
+                        size = size/2;
+                    }
                     CodeBlockManagement.moveCodeLine(againstLocation.clone().add(0, 0, 1), size);
                     Vector difference = againstLocation.toVector().subtract(event.getBlock().getLocation().toVector());
                     location.add(difference).add(0, 0, 1);
@@ -347,6 +350,9 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null) {
+            return;
+        }
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             if (event.getClickedBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
                 event.setCancelled(true);
@@ -354,9 +360,7 @@ public class DevEvents implements Listener {
             return;
         }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock() == null) {
-                return;
-            }
+
             if (event.getClickedBlock().getLocation().getX() > -0) {
                 return;
             }
@@ -375,6 +379,9 @@ public class DevEvents implements Listener {
                         break;
                     }
                 }
+            } else {
+                if (!ItemManager.getItemID(event.getItem()).startsWith("dev."))
+                event.setCancelled(true);
             }
         }
 

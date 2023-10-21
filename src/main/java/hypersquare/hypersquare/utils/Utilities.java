@@ -175,14 +175,21 @@ public class Utilities {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
     }
     public static boolean locationWithin(Location targetLocation, Location location1, Location location2) {
-
-
         return targetLocation.getWorld().equals(location1.getWorld()) &&
                 targetLocation.getWorld().equals(location2.getWorld()) &&
                 targetLocation.getX() >= Math.min(location1.getX(), location2.getX()) &&
                 targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
                 targetLocation.getY() >= Math.min(location1.getY(), location2.getY()) &&
                 targetLocation.getY() <= Math.max(location1.getY(), location2.getY()) &&
+                targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
+                targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
+    }
+
+    public static boolean locationWithinIgnoreY(Location targetLocation, Location location1, Location location2) {
+        return targetLocation.getWorld().equals(location1.getWorld()) &&
+                targetLocation.getWorld().equals(location2.getWorld()) &&
+                targetLocation.getX() >= Math.min(location1.getX(), location2.getX()) &&
+                targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
                 targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
                 targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
     }

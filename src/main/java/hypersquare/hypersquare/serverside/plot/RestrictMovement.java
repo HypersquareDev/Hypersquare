@@ -36,32 +36,32 @@ public class RestrictMovement {
             switch (plotType){
 
                 case "Basic" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart,basic)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,basic)) {
                         Utilities.movePlayerInsidePlot(player, commonStart, basic);
                     }
                     break;
                 }
                 case "Large" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart,large)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,large)) {
                         Utilities.movePlayerInsidePlot(player, commonStart, large);
 
                     }
                     break;
                 }
                 case "Huge" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart,huge)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,huge)) {
                         Utilities.movePlayerInsidePlot(player, commonStart, huge);
                     }
                     break;
                 }
                 case "Massive" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart,massive)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,massive)) {
                         Utilities.movePlayerInsidePlot(player, commonStart, massive);
                     }
                     break;
                 }
                 case "Gigantic" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart,gigantic)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,gigantic)) {
                         Utilities.movePlayerInsidePlot(player, commonStart, gigantic);
                     }
                     break;
@@ -76,31 +76,31 @@ public class RestrictMovement {
             switch (plotType){
 
                 case "Basic" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),basic)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),basic)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), basic);
                     }
                     break;
                 }
                 case "Large" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),large)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),large)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), large);
                     }
                     break;
                 }
                 case "huge" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),huge)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),huge)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), huge);
                     }
                     break;
                 }
                 case "massive" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),massive)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),massive)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), massive);
                     }
                     break;
                 }
                 case "Gigantic" : {
-                    if (!Utilities.locationWithin(player.getLocation(),commonStart.clone().add(20,0,0),gigantic)) {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),gigantic)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), gigantic);
                     }
                     break;

@@ -39,5 +39,11 @@ commands:
   fly:
     description: sets flight on
     usage: /<command>
+  dumplots:
+    description: deletes all plots
+    usage: /<command>
+  giveplot:
+    description: deletes all plots
+    usage: /<command>
 
 depend: [NBTAPI]

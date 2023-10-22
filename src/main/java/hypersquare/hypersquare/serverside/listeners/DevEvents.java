@@ -37,46 +37,13 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (event.getBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editspawn")){
+            if (event.getBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
                 event.setCancelled(true);
             }
+            blockInPlot(event);
             return;
         }
-        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
-        RestrictMovement.commonVars(event.getBlockPlaced().getLocation());
-        boolean go = true;
-        switch (plotType) {
-
-            case "Basic": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.basic)) {
-                    go = false;
-                }
-            }
-            case "Large": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.large)) {
-                    go = false;
-
-                }
-
-            }
-            case "huge": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge)) {
-                    go = false;
-                }
-            }
-            case "massive": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.massive)) {
-                    go = false;
-                }
-            }
-            case "Gigantic": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge)) {
-                    go = false;
-                }
-            }
-        }
-        if (!go)
-            event.setCancelled(true);
+        blockInPlot(event);
 
         if (event.getBlock().getLocation().getX() > -0.5) {
             return;
@@ -99,6 +66,44 @@ public class DevEvents implements Listener {
             }
         }
 
+    }
+
+    public static void blockInPlot(BlockPlaceEvent event){
+        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
+        RestrictMovement.commonVars(event.getBlockPlaced().getLocation());
+        boolean go = true;
+        switch (plotType) {
+
+            case "Basic": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1,0,-1))) {
+                    go = false;
+                }
+            }
+            case "Large": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1,0,-1))) {
+                    go = false;
+
+                }
+
+            }
+            case "Huge": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1,0,-1))) {
+                    go = false;
+                }
+            }
+            case "Massive": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1,0,-1))) {
+                    go = false;
+                }
+            }
+            case "Gigantic": {
+                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1,0,-1))) {
+                    go = false;
+                }
+            }
+        }
+        if (!go)
+            event.setCancelled(true);
     }
 
     public void processPlace(BlockPlaceEvent event) {

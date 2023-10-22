@@ -25,6 +25,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -47,9 +50,33 @@ public final class Hypersquare extends JavaPlugin {
     ItemManager itemManager = new ItemManager();
 
 
+    private final String serverAddress = "34.125.242.222";
+    private final int serverPort = 25566;
 
     @Override
     public void onEnable() {
+
+
+
+        String currentServerAddress = Bukkit.getServer().getIp();
+        int currentServerPort = Bukkit.getServer().getPort();
+        getServer().getScheduler().runTaskTimer(this, () -> {
+                    if (currentServerAddress.equals(serverAddress) && currentServerPort == serverPort) {
+                        getLogger().info("The current server IP and port are the same as the target server.");
+
+                    } else {
+                        getLogger().info("The current server is not the target server.");
+                        if (isServerOnline(serverAddress, serverPort)) {
+                            getLogger().info("Stopping the server due to public server being online...");
+                            for (Player player : Bukkit.getOnlinePlayers())
+                                player.kickPlayer("Public Beta server opened");
+                            Bukkit.shutdown();
+                        } else {
+                            getLogger().info("Server is not online.");
+                        }
+                    }
+                }, 0, 10);
+
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
         PluginManager pm = getServer().getPluginManager();
@@ -120,6 +147,15 @@ public final class Hypersquare extends JavaPlugin {
     private void saveLastUsedWorldNumber() {
         // Save the last used world number to the configuration file
         PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
+    }
+    private boolean isServerOnline(String ipAddress, int port) {
+        try (Socket socket = new Socket()) {
+            InetSocketAddress endpoint = new InetSocketAddress(ipAddress, port);
+            socket.connect(endpoint, 1000);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 

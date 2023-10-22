@@ -92,7 +92,10 @@ public class ChangeGameMode {
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0, ItemManager.getItem("myPlots"));
         player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-        PlayerDatabase.updateLocalPlayerData(player);
+        Thread thread = new Thread(() -> {
+            PlayerDatabase.updateLocalPlayerData(player);
+        });
+        thread.start();
         Hypersquare.mode.put(player,"at spawn");
         player.setHealth(20);
         player.setFoodLevel(20);

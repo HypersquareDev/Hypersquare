@@ -8,6 +8,8 @@ import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.serverside.plot.PlotDatabase;
 import mc.obliviate.inventory.Icon;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -126,6 +128,13 @@ public class Utilities {
         {
             message = convertToChatColor(message);
             recipient.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        }
+    }
+    public static void sendMultiMiniMessage(Player recipient, List<String> messages)
+    {
+        for (String message : messages)
+        {
+            recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
         }
     }
 
@@ -409,6 +418,17 @@ public class Utilities {
             }
         }
         return null;
+    }
+    public static String replaceHexWithColorTag(String text) {
+        String pattern = "#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, "<color:" + m.group(0) + ">");
+        }
+        m.appendTail(sb);
+        return sb.toString();
     }
 
 

@@ -113,6 +113,10 @@ public class Plot {
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_FIRE_TICK, false);
+
+
     }
     public static void deletePlot(int plotID) throws UnknownWorldException, IOException {
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");

@@ -40,11 +40,14 @@ public class DevEvents implements Listener {
             if (event.getBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
                 event.setCancelled(true);
             }
-            blockInPlot(event);
+            if (!blockInPlot(event.getBlockPlaced().getLocation())) {
+                event.setCancelled(true);
+            }
             return;
         }
-        blockInPlot(event);
-
+        if (!blockInPlot(event.getBlockPlaced().getLocation())) {
+            event.setCancelled(true);
+        }
         if (event.getBlock().getLocation().getX() > -0.5) {
             return;
         }
@@ -68,43 +71,40 @@ public class DevEvents implements Listener {
 
     }
 
-    public static void blockInPlot(BlockPlaceEvent event){
-        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
-        RestrictMovement.commonVars(event.getBlockPlaced().getLocation());
+    public static boolean blockInPlot(Location location) {
+        String plotType = location.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
+        RestrictMovement.commonVars(location);
         boolean go = true;
         switch (plotType) {
-
-            case "Basic": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1,0,-1))) {
+            case "Basic":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1,0,-1))) {
                     go = false;
                 }
-            }
-            case "Large": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1,0,-1))) {
-                    go = false;
-
-                }
-
-            }
-            case "Huge": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1,0,-1))) {
+                break;
+            case "Large":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1,0,-1))) {
                     go = false;
                 }
-            }
-            case "Massive": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1,0,-1))) {
+                break;
+            case "Huge":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1,0,-1))) {
                     go = false;
                 }
-            }
-            case "Gigantic": {
-                if (!Utilities.locationWithin(event.getBlockPlaced().getLocation(), RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1,0,-1))) {
+                break;
+            case "Massive":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1,0,-1))) {
                     go = false;
                 }
-            }
+                break;
+            case "Gigantic":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1,0,-1))) {
+                    go = false;
+                }
+                break;
         }
-        if (!go)
-            event.setCancelled(true);
+        return go;
     }
+
 
     public void processPlace(BlockPlaceEvent event) {
         if (event.getBlock().getLocation().add(-1, 0, 0).getX() < 0) {
@@ -462,43 +462,12 @@ public class DevEvents implements Listener {
         }
     }
     @EventHandler
-    public void onPiston(BlockPistonExtendEvent event){
-        commonVars(event.getBlock().getLocation());
-        String plotType = event.getBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        event.setCancelled(true);
+    }
 
-        switch (plotType){
-
-            case "Basic" : {
-                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,basic)) {
-                    event.setCancelled(true);
-                }
-                break;
-            }
-            case "Large" : {
-                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,large)) {
-                    event.setCancelled(true);
-
-                }
-                break;
-            }
-            case "Huge" : {
-                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,huge)) {
-                    event.setCancelled(true);
-                }
-                break;
-            }
-            case "Massive" : {
-                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,massive)) {
-                    event.setCancelled(true);
-                }
-                break;
-            }
-            case "Gigantic" : {
-                if (!Utilities.locationWithin(event.getBlock().getLocation(),commonStart,gigantic)) {
-                    event.setCancelled(true);
-                }
-                break;
-            }
-        }
+    @EventHandler
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        event.setCancelled(true);
     }
 }

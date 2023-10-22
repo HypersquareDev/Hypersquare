@@ -50,7 +50,7 @@ public final class Hypersquare extends JavaPlugin {
     ItemManager itemManager = new ItemManager();
 
 
-    private final String serverAddress = "34.125.242.222";
+    private final String serverAddress = "0.0.0.0";
     private final int serverPort = 25566;
 
     @Override
@@ -61,11 +61,12 @@ public final class Hypersquare extends JavaPlugin {
         String currentServerAddress = Bukkit.getServer().getIp();
         int currentServerPort = Bukkit.getServer().getPort();
         getServer().getScheduler().runTaskTimer(this, () -> {
-                    if (currentServerAddress.equals(serverAddress) && currentServerPort == serverPort) {
+                    if (currentServerAddress.equals(serverAddress)) {
                         getLogger().info("The current server IP and port are the same as the target server.");
 
                     } else {
                         getLogger().info("The current server is not the target server.");
+                        getLogger().info(currentServerAddress);
                         if (isServerOnline(serverAddress, serverPort)) {
                             getLogger().info("Stopping the server due to public server being online...");
                             for (Player player : Bukkit.getOnlinePlayers())
@@ -75,7 +76,7 @@ public final class Hypersquare extends JavaPlugin {
                             getLogger().info("Server is not online.");
                         }
                     }
-                }, 0, 10);
+                }, 0, 600);
 
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();

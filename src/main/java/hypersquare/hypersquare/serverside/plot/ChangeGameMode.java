@@ -38,6 +38,7 @@ public class ChangeGameMode {
     public static void playMode(Player player, int plotID){
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player);
+        PlotManager.loadPlot(plotID);
         if (player.getWorld().getName().equals(worldName)) {
             if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))
                 PlaytimeEventExecuter.Rejoin(player);

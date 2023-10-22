@@ -7,8 +7,12 @@ import com.mongodb.client.MongoDatabase;
 import hypersquare.hypersquare.Hypersquare;
 import org.bson.Document;
 import org.bukkit.entity.Player;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PlayerDatabase {
@@ -18,7 +22,17 @@ public class PlayerDatabase {
     private static MongoCollection<Document> playerCollection;
 
     public PlayerDatabase() {
-        mongoClient = MongoClients.create("mongodb+srv://chicken:e-Rdk6NUjCJM%5DBy0@loginpage.ltn5olm.mongodb.net/?retryWrites=true&w=majority"); // MongoDB server address
+        Yaml yaml = new Yaml();
+        String DBPASS = null;
+        try {
+            // Load the YAML file
+            Map<String, String> data = yaml.load(new FileInputStream("credentials.yml"));
+            // Fetch the value of DB_PASS
+            DBPASS = data.get("DB_PASS");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mongoClient = MongoClients.create(System.getenv(DBPASS));
         database = mongoClient.getDatabase("chicken_plots");
         playerCollection = database.getCollection("players");
     }

@@ -3,7 +3,10 @@ package hypersquare.hypersquare.serverside.plot;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import static hypersquare.hypersquare.Hypersquare.eventCache;
@@ -17,7 +20,17 @@ public class PlotDatabase {
 
 
     public PlotDatabase() {
-        mongoClient = MongoClients.create("mongodb+srv://chicken:e-Rdk6NUjCJM%5DBy0@loginpage.ltn5olm.mongodb.net/?retryWrites=true&w=majority"); // MongoDB server address
+        Yaml yaml = new Yaml();
+        String DBPASS = null;
+        try {
+            // Load the YAML file
+            Map<String, String> data = yaml.load(new FileInputStream("credentials.yml"));
+            // Fetch the value of DB_PASS
+            DBPASS = data.get("DB_PASS");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mongoClient = MongoClients.create(System.getenv(DBPASS));
         database = mongoClient.getDatabase("chicken_plots");
         plotsCollection = database.getCollection("plots");
         additionalCollection = database.getCollection("additional_info");

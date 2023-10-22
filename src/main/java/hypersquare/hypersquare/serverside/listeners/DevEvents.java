@@ -20,6 +20,7 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -469,5 +470,14 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void creatureSpawnEvent(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.NATURAL ||
+                event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND
+        ){
+         event.setCancelled(true);
+        }
     }
 }

@@ -31,6 +31,7 @@ public class MoveEntities {
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.getPlugin(Hypersquare.class), new Runnable() {
             public void run() {
+                assert plugin != null;
                 for (SlimeWorld world : plugin.getLoadedWorlds()) {
                     for (Entity entity : Bukkit.getWorld(world.getName()).getEntities()) {
                         if (entity.getType() != EntityType.PLAYER){

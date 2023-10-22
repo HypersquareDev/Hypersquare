@@ -15,25 +15,22 @@ import hypersquare.hypersquare.serverside.plot.PlotDatabase;
 import hypersquare.hypersquare.serverside.utils.managers.CommandManager;
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import mc.obliviate.inventory.InventoryAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
-
-
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
     public static HashMap<Player, List> plotData = new HashMap<>();
 

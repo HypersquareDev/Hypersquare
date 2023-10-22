@@ -7,6 +7,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import static hypersquare.hypersquare.Hypersquare.eventCache;
@@ -22,15 +24,20 @@ public class PlotDatabase {
     public PlotDatabase() {
         Yaml yaml = new Yaml();
         String DBPASS = null;
-        try {
-            // Load the YAML file
-            Map<String, String> data = yaml.load(new FileInputStream("credentials.yml"));
-            // Fetch the value of DB_PASS
-            DBPASS = data.get("DB_PASS");
-        } catch (FileNotFoundException e) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.yml")) {
+            if (inputStream != null) {
+                // Load the YAML file
+                Map<String, String> data = yaml.load(inputStream);
+                // Fetch the value of DB_PASS
+                DBPASS = data.get("DB_PASS");
+            } else {
+                System.out.println("File not found!");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        mongoClient = MongoClients.create(System.getenv(DBPASS));
+
+        mongoClient = MongoClients.create(DBPASS);
         database = mongoClient.getDatabase("chicken_plots");
         plotsCollection = database.getCollection("plots");
         additionalCollection = database.getCollection("additional_info");

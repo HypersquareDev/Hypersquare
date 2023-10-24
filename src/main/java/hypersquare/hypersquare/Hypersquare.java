@@ -1,14 +1,14 @@
 package hypersquare.hypersquare;
 
-import com.mongodb.lang.NonNull;
 import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerActionItems;
 import hypersquare.hypersquare.serverside.commands.*;
 import hypersquare.hypersquare.serverside.commands.PlotCommands;
 import hypersquare.hypersquare.serverside.commands.TabCompleters.PlotCommandsComplete;
 import hypersquare.hypersquare.serverside.codeblockmenuitems.PlayerEventItems;
+import hypersquare.hypersquare.serverside.commands.TabCompleters.SpawnBillboardCommandsComplete;
 import hypersquare.hypersquare.serverside.listeners.*;
-import hypersquare.hypersquare.serverside.dev.CodeItems;
-import hypersquare.hypersquare.serverside.dev.CreatePlotMenuItems;
+import hypersquare.hypersquare.serverside.CodeItems;
+import hypersquare.hypersquare.serverside.CreatePlotMenuItems;
 import hypersquare.hypersquare.serverside.plot.MoveEntities;
 import hypersquare.hypersquare.serverside.plot.PlayerDatabase;
 import hypersquare.hypersquare.serverside.plot.PlotDatabase;
@@ -18,10 +18,7 @@ import mc.obliviate.inventory.InventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.boss.BossBar;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,7 +26,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.*;
-import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static int lastUsedWorldNumber;
@@ -44,7 +40,7 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
-    public static int plotVersion = 2;
+    public static int plotVersion = 3;
 
 
     ItemManager itemManager = new ItemManager();
@@ -55,29 +51,6 @@ public final class Hypersquare extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-
-
-        String currentServerAddress = Bukkit.getServer().getIp();
-        int currentServerPort = Bukkit.getServer().getPort();
-        getServer().getScheduler().runTaskTimer(this, () -> {
-                    if (currentServerAddress.equals(serverAddress)) {
-                        getLogger().info("The current server IP and port are the same as the target server.");
-
-                    } else {
-                        getLogger().info("The current server is not the target server.");
-                        getLogger().info(currentServerAddress);
-                        if (isServerOnline(serverAddress, serverPort)) {
-                            getLogger().info("Stopping the server due to public server being online...");
-                            for (Player player : Bukkit.getOnlinePlayers())
-                                player.kickPlayer("Public Beta server opened");
-                            Bukkit.shutdown();
-                        } else {
-                            getLogger().info("Server is not online.");
-                        }
-                    }
-                }, 0, 600);
-
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
         PluginManager pm = getServer().getPluginManager();
@@ -127,11 +100,17 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("fly", new FlyCommand());
         commandManager.registerCommand("dumplots", new DeleteAllPlotsCommand());
         commandManager.registerCommand("giveplot", new GivePlotsCommand());
+        commandManager.registerCommand("spawnbillboard",new SpawnBillboard());
+        commandManager.registerCommand("sb",new SpawnBillboard());
+
 
         //Tab Completers
 
         getCommand("plot").setTabCompleter(new PlotCommandsComplete());
         getCommand("p").setTabCompleter(new PlotCommandsComplete());
+        getCommand("spawnbillboard").setTabCompleter(new SpawnBillboardCommandsComplete());
+        getCommand("sb").setTabCompleter(new SpawnBillboardCommandsComplete());
+
 
     }
 

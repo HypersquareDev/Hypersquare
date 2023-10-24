@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.serverside.dev;
+package hypersquare.hypersquare.serverside;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

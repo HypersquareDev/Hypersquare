@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.serverside.dev;
+package hypersquare.hypersquare.serverside;
 
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import org.bukkit.entity.Player;

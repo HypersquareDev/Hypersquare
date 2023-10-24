@@ -1,14 +1,12 @@
-package hypersquare.hypersquare.serverside.dev;
+package hypersquare.hypersquare.serverside;
 
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
-import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.noise.NoiseGenerator;
 
 public class CodeItems {
     public static void register() {
@@ -133,7 +131,7 @@ public class CodeItems {
             .lore(ChatColor.GRAY + "the code block sign with a " + ChatColor.AQUA + "string" + ChatColor.GRAY + ".")
             .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Set the name color, icon, and lore of the")
             .lore(ChatColor.GRAY + "function by putting an item in the chest.")
-            .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Put " + net.md_5.bungee.api.ChatColor.of("#AAFFAA") + "parameter" + ChatColor.GRAY + " items to specify the")
+            .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Put " + "#AAFFAA" + "parameter" + ChatColor.GRAY + " items to specify the")
             .lore(ChatColor.GRAY + "parameters of the function.")
             .lore(ChatColor.AQUA + "» " + ChatColor.GRAY + "Functions can also be used for continuing")
             .lore(ChatColor.GRAY + "lines of code that are out of space.")

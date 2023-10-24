@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.serverside.plot;
+package hypersquare.hypersquare.serverside.plot.CodeExecution;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

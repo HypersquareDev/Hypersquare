@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.serverside.dev;
+package hypersquare.hypersquare.serverside;
 
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
@@ -9,7 +9,7 @@ public class CreatePlotMenuItems {
 
     public static void init(){
         ItemStack CreateBasicPlot = new ItemBuilder(Material.POLISHED_ANDESITE)
-                .name(net.md_5.bungee.api.ChatColor.of("#7070FF") + "Basic Plot")
+                .name("<color:#7070FF>"+ "Basic Plot")
                 .lore(ChatColor.GRAY + "Size: 64x64")
                 .lore("")
                 .lore(ChatColor.GRAY + "You have used " + ChatColor.GREEN + "goofy haah" + ChatColor.GRAY + " of your Basic plots.")
@@ -20,7 +20,7 @@ public class CreatePlotMenuItems {
         ItemManager.addItem("menu.basic_plot", CreateBasicPlot);
 
         ItemStack CreateLargePlot = new ItemBuilder(Material.IRON_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#7FFF7F") + "Large Plot")
+                .name("<color:#7FFF7F>"+ "Large Plot")
                 .lore(ChatColor.GRAY + "Size: 128x128")
                 .lore("")
                 .lore(ChatColor.GRAY + "You have used " + ChatColor.GREEN + "goofy haah" + ChatColor.GRAY + " of your Large plots.")
@@ -31,7 +31,7 @@ public class CreatePlotMenuItems {
         ItemManager.addItem("menu.large_plot", CreateLargePlot);
 
         ItemStack CreatehugePlot = new ItemBuilder(Material.GOLD_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#FFFFAA") + "Huge Plot")
+                .name("<color:#FFFFAA>"+ "Huge Plot")
                 .lore(ChatColor.GRAY + "Size: 256x256")
                 .lore("")
                 .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your huge plots.")
@@ -42,7 +42,7 @@ public class CreatePlotMenuItems {
         ItemManager.addItem("menu.huge_plot", CreatehugePlot);
 
         ItemStack CreatemassivePlot  = new ItemBuilder(Material.DIAMOND_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#00e8ff") + "Massive Plot")
+                .name("<color:#00e8ff>"+ "Massive Plot")
                 .lore(ChatColor.GRAY + "Size: 512x512")
                 .lore("")
                 .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaa" + ChatColor.GRAY + " of your massive Plots.")
@@ -53,7 +53,7 @@ public class CreatePlotMenuItems {
         ItemManager.addItem("menu.massive_plot", CreatemassivePlot);
 
         ItemStack CreateGiganticPlot  = new ItemBuilder(Material.NETHERITE_BLOCK)
-                .name(net.md_5.bungee.api.ChatColor.of("#333232") + "Gigantic Plot")
+                .name("<color:#333232>"+ "Gigantic Plot")
                 .lore(ChatColor.GRAY + "Size: 1024x1024")
                 .lore("")
                 .lore(ChatColor.GRAY + "You have used " + ChatColor.RED + "goofy ahaha" + ChatColor.GRAY + " of your Gigantic Plots.")
@@ -64,7 +64,7 @@ public class CreatePlotMenuItems {
         ItemManager.addItem("menu.gigantic_plot", CreateGiganticPlot);
 
         ItemStack CreatePlot  = new ItemBuilder(Material.GREEN_STAINED_GLASS)
-                .name(net.md_5.bungee.api.ChatColor.of("#7FFF7F") + "Claim new plot")
+                .name("<color:#7FFF7F>"+ "Claim new plot")
                 .lore(ChatColor.GRAY + "Click here to claim a new plot!")
                 .hideFlags()
                 .make();

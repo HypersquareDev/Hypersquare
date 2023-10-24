@@ -10,6 +10,7 @@ import hypersquare.hypersquare.serverside.plot.PlotDatabase;
 import mc.obliviate.inventory.Icon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -36,7 +37,7 @@ import static hypersquare.hypersquare.Hypersquare.visitedLocationsMap;
 public class Utilities {
     static SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
-    public static int getPlotID(World world){
+    public static int getPlotID(World world) {
         String name = world.getName();
         if (name.contains("hs.")) {
             name = name.replace("hs.", "");
@@ -44,12 +45,6 @@ public class Utilities {
             return plotID;
         }
         return 0;
-    }
-    public static String getPlotType(World world){
-        String name = world.getName();
-        name = name.replace("hs.","");
-        name = name.replace(".","");
-        return name;
     }
 
 
@@ -77,81 +72,15 @@ public class Utilities {
             return null; // Or any other error handling mechanism you prefer.
         }
     }
-    public static Location deserializeLocation(String l, World world) {
-        l = l.replace("Location{", "").replace("}", "");
-
-        String[] keyValuePairs = l.split(",");
-        String worldName = "";
-        double x = 0.0, y = 0.0, z = 0.0, pitch = 0.0, yaw = 0.0;
-
-        for (String pair : keyValuePairs) {
-            String[] parts = pair.split("=");
-            if (parts.length == 2) {
-                String key = parts[0].trim();
-                String value = parts[1].trim();
-                Bukkit.broadcastMessage(key);
-                switch (key) {
-                    case "world":
-                        worldName = value;
-                        break;
-                    case "x":
-                        x = Double.parseDouble(value);
-                        break;
-                    case "y":
-                        y = Double.parseDouble(value);
-                        break;
-                    case "z":
-                        z = Double.parseDouble(value);
-                        break;
-                    case "pitch":
-                        pitch = Double.parseDouble(value);
-                        break;
-                    case "yaw":
-                        yaw = Double.parseDouble(value);
-                        break;
-                    default:
-                        // Handle unknown keys or errors if needed
-                        break;
-                }
-            }
-        }
-
-        // Use the extracted values to create a Location object
-        return new Location(world, x, y, z, (float) yaw, (float) pitch);
-
+    public static void convertToChatColor(){
 
     }
-
     public static void sendMultiMessage(Player recipient, List<String> messages)
-    {
-        for (String message : messages)
-        {
-            message = convertToChatColor(message);
-            recipient.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
-        }
-    }
-    public static void sendMultiMiniMessage(Player recipient, List<String> messages)
     {
         for (String message : messages)
         {
             recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
         }
-    }
-
-    public static String convertToChatColor(String input) {
-        Pattern pattern = Pattern.compile("#[0-9A-Fa-f]{6}");
-        Matcher matcher = pattern.matcher(input);
-        StringBuilder formattedString = new StringBuilder();
-        int prevEnd = 0;
-        while (matcher.find()) {
-            String colorCode = matcher.group();
-            String chatColor = ChatColor.of(colorCode).toString();
-            formattedString.append(input.substring(prevEnd, matcher.start()));
-            formattedString.append(chatColor);
-            prevEnd = matcher.end();
-        }
-        formattedString.append(input.substring(prevEnd));
-        return formattedString.toString();
     }
 
     public static final String capitalize(String str)
@@ -161,16 +90,17 @@ public class Utilities {
     }
 
     public static void sendError(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.RED + "Error: " + org.bukkit.ChatColor.GRAY + message);
+
+        player.sendMessage(MiniMessage.miniMessage().deserialize( "<red>Error: " + "<gray>" + message));
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED,1,1);
     }
 
     public static void sendInfo(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.GREEN + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>»<reset> <gray>" + message));
     }
 
     public static void sendRedInfo(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.RED + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("<red><bold>»<reset> <gray>" + message));
     }
 
     public static void sendOpenMenuSound(Player player){
@@ -202,15 +132,6 @@ public class Utilities {
                 targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
                 targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
                 targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
-    }
-    public static int findIndex(List<List<Integer>> listOfLists, int targetNumber) {
-        for (int i = 0; i < listOfLists.size(); i++) {
-            List<Integer> innerList = listOfLists.get(i);
-            if (!innerList.isEmpty() && innerList.get(0) == targetNumber) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public static void movePlayerInsidePlot(Player player, Location minLoc, Location maxLoc) {
@@ -260,40 +181,6 @@ public class Utilities {
         }
     }
 
-
-    public static void moveRecursively(Player player, Location location, Location boundary1, Location boundary2) {
-        List<Location> visitedLocations = visitedLocationsMap.computeIfAbsent(player, k -> new ArrayList<>());
-        boolean hasTeleported = teleportFlagMap.computeIfAbsent(player, k -> false);
-
-        if (visitedLocations.contains(location) || hasTeleported) {
-            return;
-        }
-
-        visitedLocations.add(location);
-
-        if (Utilities.locationWithin(location, boundary1, boundary2)) {
-            player.teleport(location);
-            teleportFlagMap.put(player, true); // Set the teleport flag for this player
-            visitedLocations.clear(); // Clears visited locations for this player
-            return;
-        }
-
-        Location[] directions = {
-                location.clone().add(0, 0, -0.5),
-                location.clone().add(0.5, 0, 0),
-                location.clone().add(0, 0, 0.5),
-                location.clone().add(-0.5, 0, 0)
-        };
-
-        for (Location dir : directions) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    moveRecursively(player, dir, boundary1, boundary2);
-                }
-            }.runTaskLater((Plugin) Hypersquare.getPlugin(Hypersquare.class), (long) (20L * 0.1));
-        }
-    }
     public static void savePersistentData(World world, SlimePlugin plugin){
         SlimeWorld slimeWorld = plugin.getWorld(world.getName());
 

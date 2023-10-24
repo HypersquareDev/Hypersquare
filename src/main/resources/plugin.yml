@@ -45,5 +45,11 @@ commands:
   giveplot:
     description: deletes all plots
     usage: /<command>
+  spawnbillboard:
+    description: deletes all plots
+    usage: /<command>
+  sb:
+    description: set your flightspeed
+    usage: /<command> speed
 
 depend: [NBTAPI]

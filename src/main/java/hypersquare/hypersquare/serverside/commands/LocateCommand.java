@@ -32,13 +32,13 @@ public class LocateCommand implements CommandExecutor {
             }
             String mode = Hypersquare.mode.get(target);
             if (mode.equals("at spawn") || mode.equals("editing spawn")) {
-                ChatColor color = ChatColor.of("#AAD4AA");
-                ChatColor color2 = ChatColor.of("#2AD4D4");
+                String color = "<color:#AAD4AA>";
+                String color2 = "<color:#2AD4D4>";
                 List<String> messages = new ArrayList<>();
-                messages.add(color + "&m                                       " + color);
-                messages.add(color + targetName + " currently &f" + mode + color + "");
-                messages.add(color2 + "→ " + color + "Server: &rNode 1");
-                messages.add(color + "&m                                       " + color);
+                messages.add(color + "<st>                                       " + color);
+                messages.add(color + targetName + " currently <reset>" + mode + color + "");
+                messages.add(color2 + "→ " + color + "Server: <reset>Node 1");
+                messages.add(color + "<st>                                       " + color);
                 Utilities.sendMultiMessage(player, messages);
             } else {
                 int plotID = Utilities.getPlotID(target.getWorld());
@@ -54,7 +54,7 @@ public class LocateCommand implements CommandExecutor {
                 messages.add(color2 + "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'>→ " + color + "Owner: <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
                 messages.add(color2 + "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'>→ " + color + "Server: <white>Node " + PlotManager.getPlotNode(plotID));
                 messages.add(color + "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'><st>                                       " + color);
-                Utilities.sendMultiMiniMessage(player, messages);
+                Utilities.sendMultiMessage(player, messages);
             }
         } else {
             sender.sendMessage("This command can only be used by players.");

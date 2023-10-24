@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.serverside.codeblockmenuitems;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.serverside.dev.ItemBuilder;
+import hypersquare.hypersquare.serverside.ItemBuilder;
 import hypersquare.hypersquare.serverside.utils.Utilities;
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import org.bukkit.ChatColor;
@@ -26,48 +26,48 @@ public class PlayerEventItems {
 
     public static void PlayerEventCategories(){
         ItemStack plotandServerEvents = new ItemBuilder(Material.COMMAND_BLOCK)
-                .name(ChatColor.translateAlternateColorCodes('&', "&ePlot and Server Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Joining and leaving plots,"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7plot commands"))
+                .name(ChatColor.translateAlternateColorCodes('&', "<yellow>Plot and Server Events"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Joining and leaving plots,"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>plot commands"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 10)
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event_categories.plot_and_server_events", plotandServerEvents);
         ItemStack clickEvents = new ItemBuilder(Material.DIAMOND_PICKAXE)
-                .name(ChatColor.translateAlternateColorCodes('&', "&bClick Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Right and left clicking,"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7breaking blocks"))
+                .name(ChatColor.translateAlternateColorCodes('&', "<aqua>Click Events"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Right and left clicking,"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>breaking blocks"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 13)
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event_categories.click_events", clickEvents);
         ItemStack movementEvents = new ItemBuilder(Material.LEATHER_BOOTS)
-                .name(ChatColor.translateAlternateColorCodes('&', "&3Movement Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Jumping, walking,"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7and flying"))
+                .name(ChatColor.translateAlternateColorCodes('&', "<dark_aqua>Movement Events"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Jumping, walking,"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>and flying"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 16)
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event_categories.movement_events", movementEvents);
         ItemStack itemEvents = new ItemBuilder(Material.ITEM_FRAME)
-                .name(ChatColor.translateAlternateColorCodes('&', "&6Item Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Dropping, picking up"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7and eating items"))
+                .name(ChatColor.translateAlternateColorCodes('&', "<gold>Item Events"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Dropping, picking up"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>and eating items"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 28)
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event_categories.item_events", itemEvents);
         ItemStack damageEvents = new ItemBuilder(Material.IRON_SWORD)
-                .name(ChatColor.translateAlternateColorCodes('&', "&cDamage Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Getting damaged,"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7shooting a bow"))
+                .name(ChatColor.translateAlternateColorCodes('&', "<red>Damage Events"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Getting damaged,"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>shooting a bow"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 31)
                 .hideFlags()
                 .make();
         ItemManager.addItem("player_event_categories.damage_events", damageEvents);
         ItemStack deathEvents = new ItemBuilder(Material.SKELETON_SKULL)
                 .name(ChatColor.translateAlternateColorCodes('&', "&4Death Events"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Dying, and respawning"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Dying, and respawning"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 34)
                 .hideFlags()
                 .make();
@@ -77,9 +77,9 @@ public class PlayerEventItems {
 
     public static void PlayerEventPlotAndServerEvents() {
         ItemStack playerJoinGameEvent = new ItemBuilder(Material.POTATO)
-                .name(ChatColor.translateAlternateColorCodes('&', "&aPlayer Join Game Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player joins the plot."))
+                .name(ChatColor.translateAlternateColorCodes('&', "<green>Player Join Game Event"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player joins the plot."))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 0)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Join")
                 .hideFlags()
@@ -87,12 +87,12 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.plot_and_server_events.player_join_game_event", playerJoinGameEvent);
 
         ItemStack playerRejoin = new ItemBuilder(Material.PLAYER_HEAD)
-                .name(ChatColor.translateAlternateColorCodes('&', "&ePlayer Rejoin"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when the player"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7re-enters the world with the"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7/play command."))
+                .name(ChatColor.translateAlternateColorCodes('&', "<yellow>Player Rejoin"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when the player"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>re-enters the world with the"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>/play command."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4ø &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4ø <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 1)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Rejoin")
                 .hideFlags()
@@ -272,11 +272,11 @@ public class PlayerEventItems {
 
     public static void PlayerEventMovementEvents() {
         ItemStack playerWalkEvent = new ItemBuilder(Material.GRASS_BLOCK)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Walk Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code while"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7a player is walking."))
+                .name("#2AFFAAPlayer Walk Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code while"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>a player is walking."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 0)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Walk")
                 .hideFlags()
@@ -284,11 +284,11 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_walk_event", playerWalkEvent);
 
         ItemStack playerJumpEvent = new ItemBuilder(Material.RABBIT_FOOT)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Jump Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player jumps."))
+                .name("#2AFFAAPlayer Jump Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player jumps."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 1)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Jump")
                 .hideFlags()
@@ -328,18 +328,18 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_unsneak_event", playerUnsneakEvent);
 
         ItemStack playerStartSprintEvent = new ItemBuilder(Material.GOLDEN_BOOTS)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Start Sprint Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player starts sprinting."))
+                .name("#2AFFAAPlayer Start Sprint Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player starts sprinting."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&9Additional Info:"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&b» &7Cancelling this event will"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7only result in the sprint"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7particles being hidden."))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&b» &7Client side particles are"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7not hidden!"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<blue>Additional Info:"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<aqua>» <gray>Cancelling this event will"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>only result in the sprint"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>particles being hidden."))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<aqua>» <gray>Client side particles are"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>not hidden!"))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 4)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StartSprint")
                 .hideFlags()
@@ -347,18 +347,18 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_start_sprint_event", playerStartSprintEvent);
 
         ItemStack playerStopSprintingEvent = new ItemBuilder(Material.IRON_BOOTS)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Stop Sprinting Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player stops sprinting."))
+                .name("#2AFFAAPlayer Stop Sprinting Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player stops sprinting."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&9Additional Info:"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&b» &7Cancelling this event will"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7only result in the sprint"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7particles being shown."))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&b» &7Client side particles are"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7not shown!"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<blue>Additional Info:"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<aqua>» <gray>Cancelling this event will"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>only result in the sprint"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>particles being shown."))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<aqua>» <gray>Client side particles are"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>not shown!"))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 5)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StopSprint")
                 .hideFlags()
@@ -366,11 +366,11 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_stop_sprinting_event", playerStopSprintingEvent);
 
         ItemStack playerStartFlightEvent = new ItemBuilder(Material.ELYTRA)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Start Flight Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player starts flying."))
+                .name("#2AFFAAPlayer Start Flight Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player starts flying."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 6)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StartFly")
                 .hideFlags()
@@ -378,11 +378,11 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_start_flight_event", playerStartFlightEvent);
 
         ItemStack playerStopFlightEvent = new ItemBuilder(Material.ELYTRA)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Stop Flight Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player stops flying."))
+                .name("#2AFFAAPlayer Stop Flight Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player stops flying."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 7)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "StopFly")
                 .hideFlags()
@@ -392,9 +392,9 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_stop_flight_event", playerStopFlightEvent);
 
         ItemStack playerRiptideEvent = new ItemBuilder(Material.TRIDENT)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Riptide Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a player"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7throws a riptide trident."))
+                .name("#2AFFAAPlayer Riptide Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a player"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>throws a riptide trident."))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 8)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "Riptide")
                 .hideFlags()
@@ -414,9 +414,9 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_dismount_event", playerDismountEvent);
 
         ItemStack playerHorseJumpEvent = new ItemBuilder(Material.GOLDEN_HORSE_ARMOR)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Horse Jump Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a player"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7causes a horse to jump."))
+                .name("#2AFFAAPlayer Horse Jump Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a player"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>causes a horse to jump."))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 10)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "HorseJump")
                 .hideFlags()
@@ -424,11 +424,11 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.movement_events.player_horse_jump_event", playerHorseJumpEvent);
 
         ItemStack playerVehicleJumpEvent = new ItemBuilder(Material.FURNACE_MINECART)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Vehicle Jump Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7player presses the jump key"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7while riding a vehicle"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7or other entity."))
+                .name("#2AFFAAPlayer Vehicle Jump Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>player presses the jump key"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>while riding a vehicle"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>or other entity."))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 11)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "VehicleJump")
                 .hideFlags()
@@ -594,12 +594,12 @@ public class PlayerEventItems {
         ItemManager.addItem("player_event.damage_events.entity_damage_player_event", entityDamagePlayerEvent);
 
         ItemStack playerHealEvent = new ItemBuilder(Material.SPLASH_POTION)
-                .name(Utilities.convertToChatColor("#2AFFAAPlayer Heal Event"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7Executes code when a player"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7regains health from any"))
-                .lore(ChatColor.translateAlternateColorCodes('&', "&7source."))
+                .name("#2AFFAAPlayer Heal Event")
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>Executes code when a player"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>regains health from any"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "<gray>source."))
                 .lore("")
-                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ &cCancellable"))
+                .lore(ChatColor.translateAlternateColorCodes('&', "&4∅ <red>Cancellable"))
                 .setCustomIntTag(new NamespacedKey(plugin, "slot"), 4)
                 .setCustomTag(new NamespacedKey(plugin, "short"), "PlayerHeal")
                 .hideFlags()

@@ -27,26 +27,26 @@ public class ChangeModeMenu extends Gui {
         plotID = plotid;
         icon = plotIcon;
         play = new Icon(Material.DIAMOND);
-        play.setName(ChatColor.of("#2AD4D4") + "Play");
+        play.setName("<color:#2AD4D4>" + "Play");
         List lore = new ArrayList();
         lore.add(ChatColor.GRAY + "");
         lore.add(ChatColor.GRAY + "Click to enter your plot");
-        lore.add(ChatColor.GRAY + "in " + ChatColor.of("#2AD4D4") + "play " + ChatColor.GRAY + "mode");
+        lore.add(ChatColor.GRAY + "in " + "<color:#2AD4D4>" + "play " + ChatColor.GRAY + "mode");
         lore.add(ChatColor.GRAY + "");
         play.setLore(lore);
 
         build = new Icon(Material.GRASS_BLOCK);
-        build.setName(ChatColor.of("#2AD42A") + "Build");
+        build.setName("<color:#2AD42A>" + "Build");
         lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "");
         lore.add(ChatColor.GRAY + "Click to enter your plot");
-        lore.add(ChatColor.GRAY + "in " + ChatColor.of("#2AD42A") + "build " + ChatColor.GRAY + "mode");
+        lore.add(ChatColor.GRAY + "in " + "<color:#2AD42A>" + "build " + ChatColor.GRAY + "mode");
         lore.add(ChatColor.GRAY + "");
         build.setLore(lore);
 
         code = new Icon(Material.COMMAND_BLOCK);
 
-        code.setName(ChatColor.of("#FFFF00") + "Code");
+        code.setName("<color:#FFFF00>" + "Code");
         lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "");
         lore.add(ChatColor.GRAY + "Click to enter your plot");

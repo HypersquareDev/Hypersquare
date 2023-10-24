@@ -47,9 +47,9 @@ public class MyPlotsMenu extends Gui {
             ItemStack plotItem = new ItemStack(Material.matchMaterial(plotDocument.getString("icon")));
             ItemMeta meta = plotItem.getItemMeta();
             if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plotDocument.getString("name")));
             } else {
-                String name = ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name")));
+                String name = ChatColor.translateAlternateColorCodes('&', plotDocument.getString("name"));
                 meta.setDisplayName(name + ChatColor.RED + " (Out of date)");
             }
             List<Component> lore = new ArrayList<>();

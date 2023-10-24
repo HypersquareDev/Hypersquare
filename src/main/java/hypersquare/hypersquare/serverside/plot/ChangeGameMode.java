@@ -4,7 +4,7 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.serverside.listeners.PlaytimeEventExecuter;
 import hypersquare.hypersquare.serverside.utils.managers.ItemManager;
 import hypersquare.hypersquare.serverside.utils.Utilities;
-import hypersquare.hypersquare.serverside.dev.LoadItems;
+import hypersquare.hypersquare.serverside.LoadItems;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -50,7 +50,7 @@ public class ChangeGameMode {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
-            Utilities.sendInfo(player, "Joined game: " +  Utilities.convertToChatColor(PlotManager.getPlotName(plotID)) + " &7by &f" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
+            Utilities.sendInfo(player, "Joined game: " +  PlotManager.getPlotName(plotID) + " <gray>by <reset>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
             Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
             PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);

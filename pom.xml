@@ -32,7 +32,11 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
+                                <!-- Dear future coder :) -->
+                    <!-- The directory bellow probably isn't yours. -->
+                    <!-- Unless you're updating some versions, try to not commit -->
+                     <!-- changes in this file. -->
+                    <outputDirectory>D:\Folders\Code\Hypersquare\server\plugins</outputDirectory>
                 </configuration>
             </plugin>
 
@@ -118,6 +122,10 @@
             <url>https://repo.infernalsuite.com/repository/maven-snapshots/</url>
         </repository>
         <repository>
+            <id>enginehub-maven</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+        <repository>
             <id>flow-nbt</id>
             <url>https://repo.rapture.pw/repository/maven-releases/</url>
         </repository>
@@ -183,7 +191,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
+            <version>1.2.83</version>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
@@ -227,14 +235,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.3</version>
+            <version>2.13.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.2.0-SNAPSHOT</version>
+            <version>7.2.9</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

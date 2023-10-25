@@ -1,0 +1,49 @@
+name: Hypersquare
+version: '${project.version}'
+main: hypersquare.hypersquare.Hypersquare
+api-version: 1.20
+commands:
+  join:
+    description: Join a plot
+    usage: /<command> plotID
+  dev:
+    description: Go to dev on your current plot
+    usage: /<command>
+  locate:
+    description: Find another player
+    usage: /<command> player
+    aliases: [find]
+  spawn:
+    description: Teleports to spawn
+    usage: /<command>
+    aliases: [s]
+  build:
+    description: Go to build on your current plot
+    usage: /<command>
+  play:
+    description: Go to play on your current plot
+    usage: /<command>
+  fs:
+    description: set your flightspeed
+    usage: /<command> speed
+  plot:
+    description: manage your plot
+    usage: /<command>
+    aliases:
+      - p
+  editspawn:
+    description: edit spawn
+    usage: /<command>
+    aliases:
+      - ps
+  fly:
+    description: sets flight on
+    usage: /<command>
+  dumplots:
+    description: deletes all plots
+    usage: /<command>
+  giveplot:
+    description: deletes all plots
+    usage: /<command>
+
+depend: [NBTAPI]

@@ -43,10 +43,9 @@
                     <!-- The directory bellow probably isn't yours. -->
                     <!-- Unless you're updating some versions, try to not commit -->
                      <!-- changes in this file. -->
-                    <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
+                    <outputDirectory>D:\Folders\Code\Hypersquare\server\plugins</outputDirectory>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -112,6 +111,10 @@
             <url>https://repo.rapture.pw/repository/maven-releases/</url>
         </repository>
         <repository>
+            <id>repo</id>
+            <url>https://repo.mattstudios.me/artifactory/public/</url>
+        </repository>
+        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
             <layout>default</layout>
@@ -162,6 +165,11 @@
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.11.3</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-gui</artifactId>
+            <version>3.1.6</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

@@ -7,7 +7,6 @@ import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
-import mc.obliviate.inventory.Icon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
@@ -198,6 +197,10 @@ public class Utilities {
 
     public static void sendSecondaryMenuSound(Player player){
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
+    }
+
+    public static void sendSuccessClickMenuSound(Player player){
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
     }
     public static boolean locationWithin(Location targetLocation, Location location1, Location location2) {
         return targetLocation.getWorld().equals(location1.getWorld()) &&
@@ -409,15 +412,14 @@ public class Utilities {
         player.setGameMode(GameMode.SURVIVAL);
     }
 
-    public static void setEvent(Block block, Icon item, Player player){
+    public static void setAction(Block block, String id, Player player){
         if (block.getType() == Material.OAK_WALL_SIGN){
-            String clickedEvent = item.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"short"),PersistentDataType.STRING);
             Sign sign = (Sign) block.getState();
-            sign.getSide(Side.FRONT).setLine(1,clickedEvent);
+            sign.getSide(Side.FRONT).setLine(1, id);
             sign.update();
             int plotID = Utilities.getPlotID(player.getWorld());
             HashMap<String,String> map = new HashMap<String,String>();
-            map.put(LocationToString(block.getLocation().add(1,0,0)),clickedEvent);
+            map.put(LocationToString(block.getLocation().add(1,0,0)), id);
             PlotDatabase.addEvents(plotID,map);
             PlotDatabase.updateEventsCache(plotID);
         }

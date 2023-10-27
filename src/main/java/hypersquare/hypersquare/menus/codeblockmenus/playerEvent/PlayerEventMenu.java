@@ -27,15 +27,16 @@ public class PlayerEventMenu extends Gui {
                 e.setCancelled(true);
                 Utilities.sendClickMenuSound(player);
                 for (PlayerEventItems action : PlayerEventItems.getEvents(playerEventItem)) {
+                    setTitle(playerEventItem.getName() + " > " + action.getName());
+                    getInventory().clear();
                     Icon eventItem = new Icon(action.build());
-                    int eventSlot = action.getSlot();
-                    addItem(eventSlot, eventItem);
+                    addItem(eventItem);
 
                     eventItem.onClick(e1 -> {
                         e1.setCancelled(true);
                         Utilities.sendClickMenuSound(player);
                         Block block = player.getTargetBlock(null, 5);
-                        Utilities.setEvent(block,item,player);
+                        Utilities.setEvent(block, eventItem, player);
                     });
                 }
             });

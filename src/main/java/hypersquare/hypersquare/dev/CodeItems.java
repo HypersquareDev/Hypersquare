@@ -79,7 +79,7 @@ public class CodeItems {
                 .build();
 
         ENTITY_EVENT_ITEM = new ItemBuilder(Material.GOLD_BLOCK)
-                .name(mm.deserialize("<yellow>Entity Action"))
+                .name(mm.deserialize("<yellow>Entity Event"))
                 .lore(mm.deserialize("<gray>Used to execute code when an entity"))
                 .lore(mm.deserialize("<gray>does something or when something"))
                 .lore(mm.deserialize("<gray>happens to an entity."))

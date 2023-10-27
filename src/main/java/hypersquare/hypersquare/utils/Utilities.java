@@ -45,12 +45,7 @@ public class Utilities {
         }
         return 0;
     }
-    public static String getPlotType(World world){
-        String name = world.getName();
-        name = name.replace("hs.","");
-        name = name.replace(".","");
-        return name;
-    }
+
 
 
 
@@ -76,50 +71,6 @@ public class Utilities {
             // Handle the exception appropriately.
             return null; // Or any other error handling mechanism you prefer.
         }
-    }
-    public static Location deserializeLocation(String l, World world) {
-        l = l.replace("Location{", "").replace("}", "");
-
-        String[] keyValuePairs = l.split(",");
-        String worldName = "";
-        double x = 0.0, y = 0.0, z = 0.0, pitch = 0.0, yaw = 0.0;
-
-        for (String pair : keyValuePairs) {
-            String[] parts = pair.split("=");
-            if (parts.length == 2) {
-                String key = parts[0].trim();
-                String value = parts[1].trim();
-                Bukkit.broadcastMessage(key);
-                switch (key) {
-                    case "world":
-                        worldName = value;
-                        break;
-                    case "x":
-                        x = Double.parseDouble(value);
-                        break;
-                    case "y":
-                        y = Double.parseDouble(value);
-                        break;
-                    case "z":
-                        z = Double.parseDouble(value);
-                        break;
-                    case "pitch":
-                        pitch = Double.parseDouble(value);
-                        break;
-                    case "yaw":
-                        yaw = Double.parseDouble(value);
-                        break;
-                    default:
-                        // Handle unknown keys or errors if needed
-                        break;
-                }
-            }
-        }
-
-        // Use the extracted values to create a Location object
-        return new Location(world, x, y, z, (float) yaw, (float) pitch);
-
-
     }
 
     public static void sendMultiMessage(Player recipient, List<String> messages)
@@ -279,39 +230,7 @@ public class Utilities {
     }
 
 
-    public static void moveRecursively(Player player, Location location, Location boundary1, Location boundary2) {
-        List<Location> visitedLocations = visitedLocationsMap.computeIfAbsent(player, k -> new ArrayList<>());
-        boolean hasTeleported = teleportFlagMap.computeIfAbsent(player, k -> false);
 
-        if (visitedLocations.contains(location) || hasTeleported) {
-            return;
-        }
-
-        visitedLocations.add(location);
-
-        if (Utilities.locationWithin(location, boundary1, boundary2)) {
-            player.teleport(location);
-            teleportFlagMap.put(player, true); // Set the teleport flag for this player
-            visitedLocations.clear(); // Clears visited locations for this player
-            return;
-        }
-
-        Location[] directions = {
-                location.clone().add(0, 0, -0.5),
-                location.clone().add(0.5, 0, 0),
-                location.clone().add(0, 0, 0.5),
-                location.clone().add(-0.5, 0, 0)
-        };
-
-        for (Location dir : directions) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    moveRecursively(player, dir, boundary1, boundary2);
-                }
-            }.runTaskLater((Plugin) Hypersquare.getPlugin(Hypersquare.class), (long) (20L * 0.1));
-        }
-    }
     public static void savePersistentData(World world, SlimePlugin plugin){
         SlimeWorld slimeWorld = plugin.getWorld(world.getName());
 

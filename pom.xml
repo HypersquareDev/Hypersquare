@@ -43,7 +43,7 @@
                     <!-- The directory bellow probably isn't yours. -->
                     <!-- Unless you're updating some versions, try to not commit -->
                      <!-- changes in this file. -->
-                    <outputDirectory>D:\Folders\Code\Hypersquare\server\plugins</outputDirectory>
+                    <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
                 </configuration>
             </plugin>
 

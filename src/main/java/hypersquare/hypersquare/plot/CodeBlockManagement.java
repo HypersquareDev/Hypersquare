@@ -54,9 +54,7 @@ public class CodeBlockManagement {
                 }
 
             }
-
         return null;
-
     }
 
     public static Location findCodelineStartLoc(Location location){
@@ -67,6 +65,19 @@ public class CodeBlockManagement {
             location.add(0,0,-1);
         }
         return null;
+    }
+
+    public static Location findNextBracket(Location location){
+        while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
+            location.add(0,0,1);
+            if (location.getBlock().getType() == Material.PISTON || location.getBlock().getType() == Material.STICKY_PISTON) {
+                return location;
+            }
+
+        }
+
+        return null;
+
     }
 
 

@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
         {
             PlayerDatabase.addPlayer(player.getUniqueId(),2,1,0,0,0);
         }
-        ChangeGameMode.spawn(player);
+       ChangeGameMode.spawn(player);
         player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&9◆ &bHypersquare &9◆"),ChatColor.AQUA + "hypersquare.my.pebble.host",20,60,20);
         player.sendMessage( ChatColor.translateAlternateColorCodes('&', "&9◆ &bWelcome back to Hypersquare.&9 ◆") );
         event.setJoinMessage(ChatColor.GRAY + player.getName() + " joined.");

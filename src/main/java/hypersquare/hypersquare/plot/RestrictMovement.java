@@ -87,13 +87,13 @@ public class RestrictMovement {
                     }
                     break;
                 }
-                case "huge" : {
+                case "Huge" : {
                     if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),huge)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), huge);
                     }
                     break;
                 }
-                case "massive" : {
+                case "Massive" : {
                     if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),massive)) {
                         Utilities.movePlayerInsidePlot(player, commonStart.clone().add(20,0,0), massive);
                     }

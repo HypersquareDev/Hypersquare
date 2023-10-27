@@ -341,7 +341,7 @@ public class Utilities {
         }
         CompoundTag chunkData = optionalChunkData.get();
         CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
-        String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypercubed:plottype").getAsString();
+        String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypersquare:plottype").getAsString();
         world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING,pType1);
     }
 

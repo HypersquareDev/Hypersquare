@@ -21,7 +21,6 @@ public class PlayerEventMenu extends Gui {
             Icon item = new Icon(playerEventItem.build());
 
             addItem(slot, item);
-            System.out.println("Added item " + playerEventItem.name() + " to slot " + slot);
 
             item.onClick(e -> {
                 e.setCancelled(true);

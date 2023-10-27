@@ -7,8 +7,8 @@ import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.CodeItems;
-import hypersquare.hypersquare.menus.codeblockmenus.playerEvent.PlayerEventMenu;
-import hypersquare.hypersquare.menus.codeblockmenus.playerEvent.playAction.PlayerActionMenu;
+import hypersquare.hypersquare.menus.codeblockmenus.PlayerEventMenu;
+import hypersquare.hypersquare.menus.codeblockmenus.PlayerActionMenu;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.PlotDatabase;
@@ -17,6 +17,7 @@ import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -361,14 +362,15 @@ public class DevEvents implements Listener {
                 sign.getSide(Side.FRONT).getLine(1);
                 switch (sign.getSide(Side.FRONT).getLine(0)){
                     case ("PLAYER EVENT") :{
-                        new PlayerEventMenu(event.getPlayer()).open();
+                        PlayerEventMenu.create().open(event.getPlayer());
                         break;
                     }
                     case ("PLAYER ACTION") :{
-                        new PlayerActionMenu(event.getPlayer()).open();
+                        PlayerActionMenu.create().open(event.getPlayer());
                         break;
                     }
                 }
+                event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else {
                 if (CodeBlocks.getByMaterial(event.getItem().getType()) == null)
                     event.setCancelled(true);

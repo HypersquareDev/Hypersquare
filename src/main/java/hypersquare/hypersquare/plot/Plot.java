@@ -11,6 +11,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -18,15 +19,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static hypersquare.hypersquare.utils.Utilities.savePersistentData;
+import static org.bukkit.Bukkit.getServer;
 
 public class Plot {
 
     public static void createPlot(Player player, int plotID, SlimePlugin plugin, String ownerUUID, final String plotType) {
-        PlayerDatabase.addPlot(player.getUniqueId(),Utilities.capitalize(plotType.replace("plot_template_", "")));
-        Thread playerThread = new Thread(() -> {
-            PlayerDatabase.updateLocalPlayerData(player);
-        });
-        playerThread.start();
+        PlayerDatabase.addPlot(player.getUniqueId(),plotType.replace("plot_template_", ""));
         Utilities.sendInfo(player, "Starting creation of new " + Utilities.capitalize(plotType.replace("plot_template_", "")) + " plot.");
         AtomicReference<SlimeWorld> cloned = new AtomicReference<>(null);
         String worldName = "hs." + plotID;
@@ -41,7 +39,6 @@ public class Plot {
                 properties.set(world.get().getPropertyMap());
             } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                      WorldLockedException err) {
-                System.out.println(err.getMessage());
                 return;
             }
             try {
@@ -72,7 +69,9 @@ public class Plot {
                     Bukkit.getWorld(worldName).setSpawnLocation(25, -55, 4);
 
                     PlotDatabase.addPlot(plotID, ownerUUID, "map", Utilities.randomHSVHex(0, 360, 97, 62) + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
-                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING, plotType.replace("plot_template_", ""));
+                    player.sendMessage(Utilities.capitalize(plotType.replace("plot_template_", "")));
+                    String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
+                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING, capitalized);
                     savePersistentData(Bukkit.getWorld(worldName), plugin);
                     PlotManager.loadPlot(plotID);
                     ChangeGameMode.devMode(player, plotID);
@@ -84,7 +83,7 @@ public class Plot {
     }
 
 
-        public static void loadPlot(int plotID, Player player){
+        public static void loadPlot(int plotID, Player player) throws WorldLockedException, CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         String worldName = "hs." + plotID;
         SlimeLoader file = plugin.getLoader("mongodb");
@@ -92,22 +91,9 @@ public class Plot {
         SlimeWorld test = plugin.getWorld(worldName);
         SlimeWorld world = null;
         if (!plugin.getLoadedWorlds().contains(test)){
-            try {
+
                 world = plugin.loadWorld(file, worldName, false, properties);
                 plugin.loadWorld(world);
-
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                     WorldLockedException err) {
-                if (err instanceof UnknownWorldException) {
-                    player.sendMessage(ChatColor.RED + "This plot does not exist.");
-
-                    return;
-                }
-                if (err instanceof CorruptedWorldException){
-                    player.sendMessage(ChatColor.RED + "This world is corrupted");
-                    return;
-                }
-            }
             new BukkitRunnable() {
                 @Override
                 public void run() {

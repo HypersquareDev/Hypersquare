@@ -29,7 +29,6 @@ public class PlotDatabase {
                 // Fetch the value of DB_PASS
                 DBPASS = data.get("DB_PASS");
             } else {
-                System.out.println("File not found!");
             }
         } catch (IOException e) {
             e.printStackTrace();

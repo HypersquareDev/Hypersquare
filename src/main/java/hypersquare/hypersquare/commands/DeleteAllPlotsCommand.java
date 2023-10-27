@@ -31,7 +31,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                 }
                 PlotDatabase.deleteAllPlots();
                 PlayerDatabase.deleteAllPlayers();
-                for (int i = 0; i <= lastUsedWorldNumber;i++){
+                for (int i = 1; i <= lastUsedWorldNumber;i++){
                     int finalI = i;
                     new BukkitRunnable() {
 
@@ -42,7 +42,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                             } catch (UnknownWorldException | IOException ignored) {
                             }
                         }
-                    }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class), 1);
+                    }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class), 40);
 
                 }
                 lastUsedWorldNumber = 1;

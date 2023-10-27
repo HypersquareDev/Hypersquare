@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import hypersquare.hypersquare.Hypersquare;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class PlayerDatabase {
 
@@ -31,7 +33,7 @@ public class PlayerDatabase {
                 // Fetch the value of DB_PASS
                 DBPASS = data.get("DB_PASS");
             } else {
-                System.out.println("File not found!");
+                Hypersquare.logger.log(Level.WARNING,"File not found!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,6 +58,7 @@ public class PlayerDatabase {
                 .append("massive",0)
                 .append("gigantic", 0);
         playerCollection.insertOne(plotDocument);
+        updateLocalPlayerData(Bukkit.getPlayer(playerUUID));
     }
 
     public static int getRemainingPlots(UUID playerUUID, String plotSize) {
@@ -107,6 +110,7 @@ public class PlayerDatabase {
             int currentPlots = playerDocument.getInteger(plotSize, 0); // Get the current plot count or default to 0
             playerDocument.put(plotSize, currentPlots + 1); // Increment the plot count
             playerCollection.updateOne(query, new Document("$set", playerDocument)); // Update the document in the collection
+            updateLocalPlayerData(Bukkit.getPlayer(playerUUID));
         }
     }
 
@@ -119,23 +123,27 @@ public class PlayerDatabase {
             if (currentPlots > 0) {
                 playerDocument.put(plotSize, currentPlots - 1); // Decrement the plot count (if it's greater than 0)
                 playerCollection.updateOne(query, new Document("$set", playerDocument)); // Update the document in the collection
+                updateLocalPlayerData(Bukkit.getPlayer(playerUUID));
             }
         }
     }
 
     public static void updateLocalPlayerData(Player player){
-        HashMap<String, Integer> playerData = new HashMap<>();
-        playerData.put("usedBasic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "basic"));
-        playerData.put("usedLarge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "large"));
-        playerData.put("usedhuge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "huge"));
-        playerData.put("usedmassive", PlayerDatabase.getUsedPlots(player.getUniqueId(), "massive"));
-        playerData.put("usedGigantic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "gigantic"));
-        playerData.put("maxBasic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "basic"));
-        playerData.put("maxLarge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "large"));
-        playerData.put("maxhuge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "huge"));
-        playerData.put("maxmassive", PlayerDatabase.getMaxPlots(player.getUniqueId(), "massive"));
-        playerData.put("maxGigantic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "gigantic"));
-        Hypersquare.localPlayerData.put(player.getUniqueId(), playerData);
+        Thread thread = new Thread(() -> {
+            HashMap<String, Integer> playerData = new HashMap<>();
+            playerData.put("usedBasic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "basic"));
+            playerData.put("usedLarge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "large"));
+            playerData.put("usedhuge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "huge"));
+            playerData.put("usedmassive", PlayerDatabase.getUsedPlots(player.getUniqueId(), "massive"));
+            playerData.put("usedGigantic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "gigantic"));
+            playerData.put("maxBasic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "basic"));
+            playerData.put("maxLarge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "large"));
+            playerData.put("maxhuge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "huge"));
+            playerData.put("maxmassive", PlayerDatabase.getMaxPlots(player.getUniqueId(), "massive"));
+            playerData.put("maxGigantic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "gigantic"));
+            Hypersquare.localPlayerData.put(player.getUniqueId(), playerData);
+        });
+        thread.start();
     }
 
     public static void deleteAllPlayers() {
@@ -152,6 +160,7 @@ public class PlayerDatabase {
 
             playerDocument.put("max_" + plotSize, newMaxPlots);
             playerCollection.updateOne(query, new Document("$set", playerDocument));
+            updateLocalPlayerData(Bukkit.getPlayer(playerUUID));
         }
     }
 

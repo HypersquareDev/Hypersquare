@@ -12,14 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
-import static org.bukkit.Bukkit.getLogger;
 
 public class CreatePlotsMenu extends Gui{
 
-    public static Logger logger = getLogger();
     SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
     public CreatePlotsMenu(Player player) {
         super(player, "createPlot", "Choose a plot size", 2);

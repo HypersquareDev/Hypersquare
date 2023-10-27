@@ -32,16 +32,22 @@ public class MoveEntities {
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.getPlugin(Hypersquare.class), new Runnable() {
             public void run() {
 
+                assert plugin != null;
                 for (SlimeWorld world : plugin.getLoadedWorlds()) {
                     if (Bukkit.getWorld(world.getName()) == null){
                         return;
                     }
                     for (Entity entity : Bukkit.getWorld(world.getName()).getEntities()) {
+                        if (entity == null){
+                            return;
+                        }
                         if (entity.getType() != EntityType.PLAYER){
                             commonVars(entity.getLocation());
                             int plotID = Utilities.getPlotID(entity.getWorld());
                             String plotType = (entity).getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
-
+                            if (plotType == null){
+                                return;
+                            }
 
                             switch (plotType) {
 

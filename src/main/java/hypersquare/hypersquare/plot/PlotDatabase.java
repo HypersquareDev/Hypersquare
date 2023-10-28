@@ -2,6 +2,7 @@ package hypersquare.hypersquare.plot;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
+import hypersquare.hypersquare.Hypersquare;
 import org.bson.Document;
 import org.yaml.snakeyaml.Yaml;
 
@@ -20,21 +21,7 @@ public class PlotDatabase {
 
 
     public PlotDatabase() {
-        Yaml yaml = new Yaml();
-        String DBPASS = null;
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.yml")) {
-            if (inputStream != null) {
-                // Load the YAML file
-                Map<String, String> data = yaml.load(inputStream);
-                // Fetch the value of DB_PASS
-                DBPASS = data.get("DB_PASS");
-            } else {
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mongoClient = MongoClients.create(DBPASS);
+        mongoClient = MongoClients.create(Hypersquare.DB_PASS);
         database = mongoClient.getDatabase("chicken_plots");
         plotsCollection = database.getCollection("plots");
         additionalCollection = database.getCollection("additional_info");

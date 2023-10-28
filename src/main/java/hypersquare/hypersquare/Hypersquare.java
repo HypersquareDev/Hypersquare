@@ -15,9 +15,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.enginehub.piston.config.Config;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -45,10 +48,16 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Logger logger = Logger.getLogger("Hypersquare");
     public static JavaPlugin instance;
+    public static FileConfiguration config;
+    public static String DB_PASS;
 
     @Override
     public void onEnable() {
         instance = this;
+        saveDefaultConfig();
+        config = this.getConfig();
+        DB_PASS = config.getString("DB_PASS");
+        assert DB_PASS != null : "No DB_PASS found in config.yml";
 
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
@@ -58,7 +67,6 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new DevEvents(), this);
-        pm.registerEvents(new PlayerBreakBlockListener(),this);
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new PlayerMoveListener(),this);
         pm.registerEvents(new PlaytimeEventExecuter(), this);

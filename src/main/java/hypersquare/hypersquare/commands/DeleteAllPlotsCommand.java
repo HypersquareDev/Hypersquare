@@ -42,7 +42,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                             } catch (UnknownWorldException | IOException ignored) {
                             }
                         }
-                    }.runTaskLater(Hypersquare.getPlugin(Hypersquare.class), 40);
+                    }.runTaskLater(Hypersquare.instance, 40);
 
                 }
                 lastUsedWorldNumber = 1;

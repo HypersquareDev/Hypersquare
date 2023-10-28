@@ -111,7 +111,7 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onSpread(BlockFromToEvent event){
         commonVars(event.getToBlock().getLocation());
-        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
 
         switch (plotType){
 

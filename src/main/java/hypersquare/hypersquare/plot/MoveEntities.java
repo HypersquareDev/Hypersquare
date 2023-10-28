@@ -29,7 +29,7 @@ public class MoveEntities {
 
     public static void entityLoop() {
         SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.getPlugin(Hypersquare.class), new Runnable() {
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.instance, new Runnable() {
             public void run() {
 
                 assert plugin != null;
@@ -44,7 +44,7 @@ public class MoveEntities {
                         if (entity.getType() != EntityType.PLAYER){
                             commonVars(entity.getLocation());
                             int plotID = Utilities.getPlotID(entity.getWorld());
-                            String plotType = (entity).getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
+                            String plotType = (entity).getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
                             if (plotType == null){
                                 return;
                             }

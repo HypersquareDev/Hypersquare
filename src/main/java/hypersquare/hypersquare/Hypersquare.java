@@ -3,6 +3,7 @@ package hypersquare.hypersquare;
 import hypersquare.hypersquare.commands.*;
 import hypersquare.hypersquare.commands.PlotCommands;
 import hypersquare.hypersquare.commands.TabCompleters.PlotCommandsComplete;
+import hypersquare.hypersquare.commands.codeValues.Text;
 import hypersquare.hypersquare.listeners.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.plot.MoveEntities;
@@ -12,7 +13,6 @@ import hypersquare.hypersquare.utils.managers.CommandManager;
 
 import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -61,6 +61,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerMoveListener(),this);
         pm.registerEvents(new PlaytimeEventExecuter(), this);
         pm.registerEvents(new CodePlacement(), this);
+        pm.registerEvents(new Text(),this);
         new InventoryAPI(this).init();
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
@@ -93,6 +94,8 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("fly", new FlyCommand());
         commandManager.registerCommand("dumplots", new DeleteAllPlotsCommand());
         commandManager.registerCommand("giveplot", new GivePlotsCommand());
+        commandManager.registerCommand("text",new Text());
+        commandManager.registerCommand("txt", new Text());
 
         //Tab Completers
 

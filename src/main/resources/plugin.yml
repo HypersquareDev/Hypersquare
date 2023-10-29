@@ -45,5 +45,10 @@ commands:
   giveplot:
     description: deletes all plots
     usage: /<command>
+  text:
+    description: Gives player a text item
+    usage: /<command> text
+    aliases:
+      - txt
 
 depend: [NBTAPI]

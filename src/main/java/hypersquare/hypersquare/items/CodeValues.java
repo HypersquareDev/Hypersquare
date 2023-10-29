@@ -81,7 +81,6 @@ public enum CodeValues {
                     .build();
         } else {
             return new ItemBuilder(material)
-
                     .name(mm.deserialize(value))
                     .lore(list)
                     .hideFlags()

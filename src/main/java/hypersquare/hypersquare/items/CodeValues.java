@@ -1,9 +1,6 @@
 package hypersquare.hypersquare.items;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.utils.ItemBuilder;
 import hypersquare.hypersquare.utils.Utilities;
@@ -87,8 +84,27 @@ public enum CodeValues {
                     .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem"), jsonString)
                     .build();
         }
+    }
 
+    public static String getValue(ItemStack item){
+        NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem");
+        if (item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING) != null) {
+            String data = item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING);
+            JsonObject jsonObject = JsonParser.parseString(data).getAsJsonObject();
+            return jsonObject.getAsJsonObject("data").get("name").getAsString();
+        }
+        return null;
 
+    }
 
+    public static String getType(ItemStack item){
+        NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem");
+        if (item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING) != null) {
+            String data = item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING);
+            JsonObject jsonObject = JsonParser.parseString(data).getAsJsonObject();
+            return jsonObject.get("id").getAsString();
+        }
+
+        return null;
     }
 }

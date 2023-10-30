@@ -1,21 +1,25 @@
 package hypersquare.hypersquare.items.actions;
 
-import hypersquare.hypersquare.items.Action;
-import hypersquare.hypersquare.items.ActionArgument;
-import hypersquare.hypersquare.items.ActionItem;
-import hypersquare.hypersquare.items.DisplayValue;
+import hypersquare.hypersquare.items.*;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 import static hypersquare.hypersquare.Hypersquare.mm;
 
-public class GiveItemsAction extends Action {
+public class GiveItemsAction implements Action {
 
-    public static ItemStack item(){
+    public ItemStack item() {
         return new ActionItem()
             .setMaterial(Material.CHEST)
             .setName("<green>Give Items")
-            .setDescription("<gray>Gives the player all of the%n<gray>items in the chest")
+            .setDescription("Gives the player all of the", "items in the chest")
             .setArguments(
                     new ActionArgument()
                             .setType(DisplayValue.ITEM)
@@ -26,7 +30,56 @@ public class GiveItemsAction extends Action {
                             .setOptional(true)
                             .setDescription("Amount to give")
             )
+                .addAdditionalInfo("This is the first action", "we added!")
+                .setEnchanted(true)
             .build();
     }
 
+    @Override
+    public void executeBlockAction(List<Entity> targets, Chest chest) {
+        int multiple = 1;
+        Inventory contents = chest.getBlockInventory();
+        if (contents.contains(Material.SLIME_BALL)){
+            for (ItemStack itemStack : contents){
+                String type = CodeValues.getType(itemStack);
+                if (type != null){
+                    if (type == "num")
+                    {
+                        multiple = Integer.parseInt(CodeValues.getValue(itemStack));
+                        break;
+                    }
+                }
+            }
+        }
+        // in df its execute(Entity[] targets, ArgumentSet argumentSet)
+        // Then argumentSet.get("items")
+        // Where 'items' is defined as an ID **somewhere**
+        // Wiat now there just has to be somewhere here where they define the arguments in code
+        // Also look im gonna change it here
+        // Gonna look through code again to see if i can find how they provide args
+        // df code
+        // Actually it might just be in the arguments here (follow)
+        for (Entity entity : targets){
+            if (entity instanceof Player){
+                Player player = (Player) entity;
+                for (ItemStack item : contents){
+                    if (item != null) {
+                        if (CodeValues.getType(item) == null) {
+                            for (int i = 0; i != multiple; i++) {
+                                player.getInventory().addItem(item);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public String getId() {
+        return "GiveItems";
+    }
+
+    public PlayerActionItems getCategory() {
+        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
+    }
 }

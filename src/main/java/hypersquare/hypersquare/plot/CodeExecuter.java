@@ -1,11 +1,18 @@
 package hypersquare.hypersquare.plot;
 
+import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.items.Action;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CodeExecuter {
     public static void  runThroughCode(Location startLoc, Entity defaultTarget){
@@ -45,7 +52,12 @@ public class CodeExecuter {
                             }
                         }
                         Chest chest = (Chest) startLoc.clone().add(0,1,0).getBlock().getState();
-                        target.sendMessage(signInfo[1]);
+
+                        for (Action action : Actions.actions) {
+                            if (action.getId().equals(signInfo[1])) {
+                                action.executeBlockAction(targets,chest);
+                            }
+                        }
                     }
                 }
                 startLoc.add(0,0,1);

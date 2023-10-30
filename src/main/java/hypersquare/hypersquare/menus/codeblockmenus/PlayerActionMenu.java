@@ -3,6 +3,8 @@ package hypersquare.hypersquare.menus.codeblockmenus;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
+import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.items.Action;
 import hypersquare.hypersquare.items.PlayerActionItems;
 import hypersquare.hypersquare.items.actions.GiveItemsAction;
 import hypersquare.hypersquare.utils.Utilities;
@@ -46,8 +48,9 @@ public class PlayerActionMenu {
                         .create();
 
                 // Loop through all actions in the category
-                for (PlayerActionItems action : PlayerActionItems.getActions(playerActionItem)) {
-                    GuiItem actionItem = ItemBuilder.from(action.build()).asGuiItem(event2 -> {
+                for (Action action : Actions.actions) {
+                    if (action.getCategory() != playerActionItem) continue;
+                    GuiItem actionItem = ItemBuilder.from(action.item()).asGuiItem(event2 -> {
                         event.setCancelled(true);
                         Utilities.sendSuccessClickMenuSound(player);
                         Block block = player.getTargetBlock(null, 5);

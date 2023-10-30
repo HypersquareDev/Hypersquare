@@ -5,6 +5,8 @@ import hypersquare.hypersquare.utils.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,7 +21,7 @@ public class ActionItem {
     private ItemStack actionItem;
     String name;
     Material material;
-    String description;
+    String[] description;
     ActionArgument[] arguments;
     List<String[]> additionalInfo = List.of();
     boolean enchanted;
@@ -32,7 +34,8 @@ public class ActionItem {
         this.name = name;
         return this;
     }
-    public ActionItem setDescription(String lore){
+
+    public ActionItem setDescription(String... lore){
         this.description = lore;
         return this;
     }
@@ -57,12 +60,13 @@ public class ActionItem {
     public ItemStack build(){
         actionItem = new ItemStack(material);
         ItemMeta meta = actionItem.getItemMeta();
-
         List<Component> lore = new ArrayList<>(List.of());
 
+        //Name
+        meta.displayName(mm.deserialize("<!italic>" + name));
+
         // Description
-        String[] parts = description.split("%n");
-        for (String part : parts) {
+        for (String part : description) {
             lore.add(mm.deserialize("<!italic><gray>" + part));
         }
 
@@ -101,6 +105,7 @@ public class ActionItem {
         if (enchanted) meta.addEnchant(Enchantment.LURE, 1, true);
 
         meta.lore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS,  ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         actionItem.setItemMeta(meta);
         return actionItem;
     }

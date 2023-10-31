@@ -51,14 +51,6 @@ public class GiveItemsAction implements Action {
                 }
             }
         }
-        // in df its execute(Entity[] targets, ArgumentSet argumentSet)
-        // Then argumentSet.get("items")
-        // Where 'items' is defined as an ID **somewhere**
-        // Wiat now there just has to be somewhere here where they define the arguments in code
-        // Also look im gonna change it here
-        // Gonna look through code again to see if i can find how they provide args
-        // df code
-        // Actually it might just be in the arguments here (follow)
         for (Entity entity : targets){
             if (entity instanceof Player){
                 Player player = (Player) entity;

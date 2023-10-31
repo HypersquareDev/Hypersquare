@@ -40,7 +40,7 @@ public class CodePlacement implements Listener {
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (event.getBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
+            if (!Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
                 event.setCancelled(true);
             }
             if (!blockInPlot(event.getBlockPlaced().getLocation())) {
@@ -122,49 +122,53 @@ public class CodePlacement implements Listener {
 
 
     public void processPlace(BlockPlaceEvent event) {
-        boolean brackets = CodeBlocks.getByMaterial(event.getItemInHand().getType()).isBrackets();
-        boolean chest = CodeBlocks.getByMaterial(event.getItemInHand().getType()).isChest();
-        String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (event.getBlock().getLocation().getBlockX() < 0) {
-                    Location againstLocation = event.getBlockAgainst().getLocation();
-                    Block againstBlock = event.getBlockAgainst();
-                    Location location = event.getBlock().getLocation();
-                    Player player = event.getPlayer();
-                    int size = brackets ? 3 : 2;
+        long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
 
-                    if (checkIfValidAgainst(againstBlock))
-                    {
-                        location = againstLocation.clone().add(0,0,1);
-                    }
+        if (cooldown <= System.currentTimeMillis()) {
+            Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(),System.currentTimeMillis()+150);
+            boolean brackets = CodeBlocks.getByMaterial(event.getItemInHand().getType()).isBrackets();
+            boolean chest = CodeBlocks.getByMaterial(event.getItemInHand().getType()).isChest();
+            String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (event.getBlock().getLocation().getBlockX() < 0) {
+                        Location againstLocation = event.getBlockAgainst().getLocation();
+                        Block againstBlock = event.getBlockAgainst();
+                        Location location = event.getBlock().getLocation();
+                        Player player = event.getPlayer();
+                        int size = brackets ? 3 : 2;
 
-                    if (location.getBlockY()%6!=0){
-                        Utilities.sendError(player,"Invalid block placement.");
-                        return;
-                    }
-                    if (location.getBlockX()%3!=0){
-                        Utilities.sendError(player,"Invalid block placement. Place on the highlighted block.");
-                        return;
-                    }
+                        if (checkIfValidAgainst(againstBlock)) {
+                            location = againstLocation.clone().add(0, 0, 1);
+                        }
 
-                    if (CodeBlockManagement.findCodelineStartLoc(location.clone()) == null) {
-                        if (name.equalsIgnoreCase("Player Event") || name.equalsIgnoreCase("Function") || name.equalsIgnoreCase("Process") || name.equalsIgnoreCase("Entity Event")) {
-
-                        } else {
-                            Utilities.sendError(event.getPlayer(), "Your code must start with an Event, Function, Process or Entity event.");
+                        if (location.getBlockY() % 6 != 0) {
+                            Utilities.sendError(player, "Invalid block placement.");
                             return;
                         }
+                        if (location.getBlockX() % 3 != 0) {
+                            Utilities.sendError(player, "Invalid block placement. Place on the highlighted block.");
+                            return;
+                        }
+
+                        if (CodeBlockManagement.findCodelineStartLoc(location.clone()) == null) {
+                            if (name.equalsIgnoreCase("Player Event") || name.equalsIgnoreCase("Function") || name.equalsIgnoreCase("Process") || name.equalsIgnoreCase("Entity Event")) {
+
+                            } else {
+                                Utilities.sendError(event.getPlayer(), "Your code must start with an Event, Function, Process or Entity event.");
+                                return;
+                            }
+                        }
+
+
+                        CodeBlockManagement.moveCodeLine(location, size);
+                        placeBlock(event.getItemInHand(), location, brackets, chest, name);
+
                     }
-
-
-                    CodeBlockManagement.moveCodeLine(location,size);
-                    placeBlock(event.getItemInHand(), location, brackets, chest, name);
-
                 }
-            }
-        }.runTaskLater(plugin,2);
+            }.runTaskLater(plugin, 2);
+        }
 
     }
 
@@ -271,7 +275,7 @@ public class CodePlacement implements Listener {
     public void onPlayerBreakBlock(BlockBreakEvent event) {
 
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (event.getBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
+            if (!Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
                 event.setCancelled(true);
             }
             return;
@@ -287,12 +291,49 @@ public class CodePlacement implements Listener {
         if (blockLoc.getY() < 0) {
             return;
         }
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
-            if (event.getPlayer().getInventory().getItemInMainHand().equals(CodeItems.GLITCH_STICK_ITEM)) {
-                if (event.getBlock().getType() == Material.DIAMOND_BLOCK) {
-                    PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(event.getBlock().getLocation()));
+
+        long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
+        if (cooldown <= System.currentTimeMillis()) {
+            Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
+
+            if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
+                if (event.getPlayer().getInventory().getItemInMainHand().equals(CodeItems.GLITCH_STICK_ITEM)) {
+                    if (event.getBlock().getType() == Material.DIAMOND_BLOCK) {
+                        PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(event.getBlock().getLocation()));
+                    }
+                    event.setCancelled(false);
+                } else {
+                    if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
+                        blockLoc.add(1, 0, 0);
+                    }
+                    Block block = blockLoc.getBlock();
+                    Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
+                    if (block.getType() == Material.DIAMOND_BLOCK) {
+                        PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+                    }
+
+                    if (signBlock.getType() == Material.OAK_WALL_SIGN) {
+                        Location signLoc = signBlock.getLocation();
+                        Location chestLoc = blockLoc.clone().add(0, 1, 0);
+                        Location stoneLoc = blockLoc.clone().add(0, 0, 1);
+
+                        Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
+                        signBlock.setType(Material.AIR);
+                        block.setType(Material.AIR);
+                        if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
+                            bracketLoc.getBlock().setType(Material.AIR);
+                        }
+                        stoneLoc.getBlock().setType(Material.AIR);
+                        chestLoc.getBlock().setType(Material.AIR);
+
+                        if (bracketLoc != null) {
+                            CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                            CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, -1), -2);
+                        } else {
+                            CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                        }
+                    }
                 }
-                event.setCancelled(false);
             } else {
                 if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
                     blockLoc.add(1, 0, 0);
@@ -319,39 +360,10 @@ public class CodePlacement implements Listener {
 
                     if (bracketLoc != null) {
                         CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                        CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -3);
                     } else {
                         CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                     }
-                }
-            }
-        } else {
-            if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
-                blockLoc.add(1, 0, 0);
-            }
-            Block block = blockLoc.getBlock();
-            Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
-            if (block.getType() == Material.DIAMOND_BLOCK) {
-                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
-            }
-
-            if (signBlock.getType() == Material.OAK_WALL_SIGN) {
-                Location signLoc = signBlock.getLocation();
-                Location chestLoc = blockLoc.clone().add(0, 1, 0);
-                Location stoneLoc = blockLoc.clone().add(0, 0, 1);
-
-                Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
-                signBlock.setType(Material.AIR);
-                block.setType(Material.AIR);
-                if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
-                    bracketLoc.getBlock().setType(Material.AIR);
-                }
-                stoneLoc.getBlock().setType(Material.AIR);
-                chestLoc.getBlock().setType(Material.AIR);
-
-                if (bracketLoc != null) {
-                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
-                } else {
-                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                 }
             }
         }

@@ -72,7 +72,7 @@ public class ChangeGameMode {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
-            Utilities.sendInfo(player, "Joined game: " +  PlotManager.getPlotName(plotID) + " <gray>by <reset>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
+            Utilities.sendInfo(player, "Joined game: <white>" +  PlotManager.getPlotName(plotID) + " <gray>by <reset>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
             Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
             PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);

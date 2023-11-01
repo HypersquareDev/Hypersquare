@@ -4,6 +4,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import hypersquare.hypersquare.items.PlayerEventItems;
+import hypersquare.hypersquare.items.actions.GiveItemsAction;
 import hypersquare.hypersquare.utils.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;

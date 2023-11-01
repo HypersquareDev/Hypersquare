@@ -126,16 +126,16 @@ public class Utilities {
     }
 
     public static void sendError(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.RED + "Error: " + org.bukkit.ChatColor.GRAY + message);
+        player.sendMessage(mm.deserialize("<red>Error: <gray>" + message));
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED,1,1);
     }
 
     public static void sendInfo(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.GREEN + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        player.sendMessage(mm.deserialize("<b><green>»</b> <gray>" + message));
     }
 
     public static void sendRedInfo(Player player, String message){
-        player.sendMessage(org.bukkit.ChatColor.RED + "" + org.bukkit.ChatColor.BOLD + "» " + org.bukkit.ChatColor.GRAY + org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+        player.sendMessage(mm.deserialize("<b><red>»</b> <gray>" + message));
     }
 
     public static void sendOpenMenuSound(Player player){

@@ -66,7 +66,7 @@ public class PlotCommands implements CommandExecutor {
                         case "unclaim": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
                                 World world = player.getWorld();
-                                PlayerDatabase.removePlot(player.getUniqueId(),world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING).toLowerCase());
+                                PlayerDatabase.removePlot(player.getUniqueId(),world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING).toLowerCase());
                                 for (Player player1 : player.getWorld().getPlayers()) {
                                     ChangeGameMode.spawn(player1);
                                     Utilities.sendRedInfo(player1, "The plot that you were currently on was unclaimed.");

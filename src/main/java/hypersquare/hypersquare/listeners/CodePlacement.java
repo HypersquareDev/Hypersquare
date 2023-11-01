@@ -35,8 +35,6 @@ import org.bukkit.util.Vector;
 import java.util.logging.Level;
 
 public class CodePlacement implements Listener {
-    private static final Plugin plugin = Hypersquare.getPlugin(Hypersquare.class);
-
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
@@ -57,7 +55,7 @@ public class CodePlacement implements Listener {
 
 
         event.setCancelled(true);
-        placeCodeTemplate(event, plugin);
+        placeCodeTemplate(event, Hypersquare.instance);
 
         if (event.getBlock().getLocation().getY() < 0 || event.getBlockAgainst().getLocation().getY() < 0 && checkIfValidAgainst(event.getBlockAgainst())) {
             return;
@@ -87,7 +85,7 @@ public class CodePlacement implements Listener {
     }
 
     public static boolean blockInPlot(Location location) {
-        String plotType = location.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING);
+        String plotType = location.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
         RestrictMovement.commonVars(location);
         boolean go = true;
         switch (plotType) {
@@ -167,9 +165,8 @@ public class CodePlacement implements Listener {
 
                     }
                 }
-            }.runTaskLater(plugin, 2);
-        }
-
+            }
+        }.runTaskLater(Hypersquare.instance,2);
     }
 
     private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean chest, String name) {
@@ -227,7 +224,7 @@ public class CodePlacement implements Listener {
                     chestLocation.getBlock().setBlockData(chestBlockData);
                 }
             }
-        }.runTaskLater(plugin, 1);
+        }.runTaskLater(Hypersquare.instance, 1);
     }
 
 

@@ -31,7 +31,7 @@ public class RestrictMovement {
         if (Hypersquare.mode.get(player).equals("coding")) {
             commonVars(player.getLocation());
             int plotID = Utilities.getPlotID(player.getWorld());
-            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
 
             switch (plotType){
 
@@ -71,7 +71,7 @@ public class RestrictMovement {
         if (Hypersquare.mode.get(player).equals("building") || Hypersquare.mode.get(player).equals("playing")) {
             commonVars(player.getLocation());
             int plotID = Utilities.getPlotID(player.getWorld());
-            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING);
+            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
 
             switch (plotType){
 

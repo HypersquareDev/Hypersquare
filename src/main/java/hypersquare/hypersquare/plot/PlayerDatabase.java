@@ -24,22 +24,7 @@ public class PlayerDatabase {
     private static MongoCollection<Document> playerCollection;
 
     public PlayerDatabase() {
-        Yaml yaml = new Yaml();
-        String DBPASS = null;
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.yml")) {
-            if (inputStream != null) {
-                // Load the YAML file
-                Map<String, String> data = yaml.load(inputStream);
-                // Fetch the value of DB_PASS
-                DBPASS = data.get("DB_PASS");
-            } else {
-                Hypersquare.logger.log(Level.WARNING,"File not found!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mongoClient = MongoClients.create(DBPASS);
+        mongoClient = MongoClients.create(Hypersquare.DB_PASS);
         database = mongoClient.getDatabase("chicken_plots");
         playerCollection = database.getCollection("players");
     }

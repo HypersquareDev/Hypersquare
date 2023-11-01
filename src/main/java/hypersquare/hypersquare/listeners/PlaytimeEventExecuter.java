@@ -141,7 +141,7 @@ public class PlaytimeEventExecuter implements Listener {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (Hypersquare.eventCache.get(plotID).containsValue("Chat")) {
                 player.sendMessage("chat event");
-                Bukkit.getScheduler().runTask(Hypersquare.getPlugin(Hypersquare.class), new Runnable() {
+                Bukkit.getScheduler().runTask(Hypersquare.instance, new Runnable() {
                     @Override
                     public void run() {
                         CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Chat"), player.getWorld()),player);

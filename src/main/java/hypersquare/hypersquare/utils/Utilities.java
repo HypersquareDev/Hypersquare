@@ -264,7 +264,7 @@ public class Utilities {
         CompoundTag chunkData = optionalChunkData.get();
         CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
         String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypersquare:plottype").getAsString();
-        world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"plotType"), PersistentDataType.STRING,pType1);
+        world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING,pType1);
     }
 
 

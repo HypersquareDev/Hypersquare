@@ -44,7 +44,7 @@ public class PlotCommands implements CommandExecutor {
                                             name.append(" ");
                                         }
                                     }
-                                    PlotDatabase.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name));
+                                    PlotDatabase.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name).trim());
                                 } else {
                                     Utilities.sendError(player, "You cannot set the plot name to noting");
                                 }

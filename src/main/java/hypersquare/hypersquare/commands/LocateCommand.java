@@ -45,7 +45,6 @@ public class LocateCommand implements CommandExecutor {
                 String cmd = "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'>";
                 List<String> messages = new ArrayList<>();
                 String plotName = PlotManager.getPlotName(plotID);
-                plotName = Utilities.replaceHexWithColorTag(plotName);
                 messages.add(color + cmd + "<st>                                       " + color);
                 messages.add(color + targetName + cmd + "currently <white>" + mode + color + " on:");
                 messages.add("");

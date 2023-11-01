@@ -15,12 +15,9 @@ import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.enginehub.piston.config.Config;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -42,24 +39,16 @@ public final class Hypersquare extends JavaPlugin {
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
     public static HashMap<UUID,Long> cooldownMap = new HashMap<>();
-    public static int plotVersion = 2;
+    public static int plotVersion = 4;
 
     public static MiniMessage mm = MiniMessage.miniMessage();
 
-
-    public static Logger logger = Logger.getLogger("Hypersquare");
-    public static JavaPlugin instance;
-    public static FileConfiguration config;
-    public static String DB_PASS;
+    private final String serverAddress = "0.0.0.0";
+    private final int serverPort = 25566;
+    public static Logger logger = Logger.getLogger(Hypersquare.class.getName());
 
     @Override
     public void onEnable() {
-        instance = this;
-        saveDefaultConfig();
-        config = this.getConfig();
-        DB_PASS = config.getString("DB_PASS");
-        assert DB_PASS != null : "No DB_PASS found in config.yml";
-
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
         PluginManager pm = getServer().getPluginManager();
@@ -68,6 +57,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new DevEvents(), this);
+        pm.registerEvents(new PlayerBreakBlockListener(),this);
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new PlayerMoveListener(),this);
         pm.registerEvents(new PlaytimeEventExecuter(), this);

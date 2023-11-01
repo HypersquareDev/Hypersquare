@@ -68,10 +68,10 @@ public class Plot {
                     Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
                     Bukkit.getWorld(worldName).setSpawnLocation(25, -55, 4);
 
-                    PlotDatabase.addPlot(plotID, ownerUUID, "map", Utilities.randomHSVHex(0, 360, 97, 62) + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
+                    PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
                     player.sendMessage(Utilities.capitalize(plotType.replace("plot_template_", "")));
                     String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
-                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, capitalized);
+                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING, capitalized);
                     savePersistentData(Bukkit.getWorld(worldName), plugin);
                     PlotManager.loadPlot(plotID);
                     ChangeGameMode.devMode(player, plotID);
@@ -79,7 +79,7 @@ public class Plot {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(Hypersquare.instance, 0L, 5L);
+        }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class), 0L, 5L);
     }
 
 
@@ -102,7 +102,7 @@ public class Plot {
                     }
 
                 }
-            }.runTaskTimer(Hypersquare.instance,1,100);
+            }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
             Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
 

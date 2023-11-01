@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static hypersquare.hypersquare.Hypersquare.mm;
 import static org.bukkit.Bukkit.getLogger;
 
 public class MyPlotsMenu extends Gui {
@@ -47,10 +48,10 @@ public class MyPlotsMenu extends Gui {
             ItemStack plotItem = new ItemStack(Material.matchMaterial(plotDocument.getString("icon")));
             ItemMeta meta = plotItem.getItemMeta();
             if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name"))));
+                meta.displayName(mm.deserialize(plotDocument.getString("name")));
             } else {
-                String name = ChatColor.translateAlternateColorCodes('&', Utilities.convertToChatColor(plotDocument.getString("name")));
-                meta.setDisplayName(name + ChatColor.RED + " (Out of date)");
+                String name = plotDocument.getString("name");
+                meta.displayName(mm.deserialize(name + "<red>" + " (Out of date)"));
             }
             List<Component> lore = new ArrayList<>();
             lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC,false));

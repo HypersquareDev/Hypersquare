@@ -165,8 +165,8 @@ public class CodePlacement implements Listener {
 
                     }
                 }
-            }
-        }.runTaskLater(Hypersquare.instance,2);
+            }.runTaskLater(Hypersquare.instance,2);
+        }
     }
 
     private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean chest, String name) {

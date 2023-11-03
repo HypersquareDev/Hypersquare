@@ -72,7 +72,7 @@ public class Utilities {
             return null; // Or any other error handling mechanism you prefer.
         }
     }
-
+    @Deprecated
     public static void sendMultiMessage(Player recipient, List<String> messages)
     {
         for (String message : messages)
@@ -83,10 +83,8 @@ public class Utilities {
     }
     public static void sendMultiMiniMessage(Player recipient, List<String> messages)
     {
-        for (String message : messages)
-        {
-            recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
-        }
+        String message = String.join("<newline><reset>",messages);
+        recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
     public static String convertToChatColor(String input) {

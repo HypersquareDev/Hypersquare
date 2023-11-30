@@ -66,7 +66,7 @@
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.2</version>
+                <version>1.4.3</version>
                 <executions>
                     <execution>
                         <phase>process-classes</phase>
@@ -229,7 +229,7 @@
         <dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
-            <version>1.20.1-SNAPSHOT</version>
+            <version>1.20.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -9,6 +9,7 @@ import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.plot.PlotDatabase;
+import hypersquare.hypersquare.plot.PlotStats;
 import hypersquare.hypersquare.utils.managers.CommandManager;
 
 import mc.obliviate.inventory.InventoryAPI;
@@ -59,6 +60,8 @@ public final class Hypersquare extends JavaPlugin {
         DB_PASS = (String) getConfig().get("DB_PASS");
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
+        PlotStats plotStats = new PlotStats();
+
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new PlayerRightClickListener(), this);
@@ -71,6 +74,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new CodePlacement(), this);
         pm.registerEvents(new Text(),this);
         new InventoryAPI(this).init();
+
         loadLastUsedWorldNumber();
         commandManager = new CommandManager(this);
         registerCommands(commandManager);

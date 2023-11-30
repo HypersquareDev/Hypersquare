@@ -2,6 +2,7 @@ package hypersquare.hypersquare.listeners;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.CodeExecuter;
+import hypersquare.hypersquare.plot.PlotStats;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -103,6 +104,7 @@ public class PlaytimeEventExecuter implements Listener {
 
     public static void Leave(Player player) {
         int plotID = Utilities.getPlotID(player.getWorld());
+        PlotStats.updatePlayerTime(plotID,player.getUniqueId(),System.currentTimeMillis());
         if (Hypersquare.eventCache.get(plotID).containsValue("Leave")) {
             player.sendMessage("leave event");
             CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Leave"), player.getWorld()),player);

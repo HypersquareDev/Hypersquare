@@ -42,7 +42,7 @@ public enum CodeValues {
     }
 
     public ItemStack build(String value, Boolean legacy) {
-        String tempLore = lore.replace("%l",legacy==true ? "<green>True" : "<red>False");
+        String tempLore = lore.replace("%l", legacy ? "<green>True" : "<red>False");
         String[] parts = tempLore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {

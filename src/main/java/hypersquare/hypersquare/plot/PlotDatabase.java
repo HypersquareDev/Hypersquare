@@ -134,7 +134,6 @@ public class PlotDatabase {
             data.add(result.getString("name"));
             data.add(result.getString("owner"));
             data.add(result.getInteger("node", -1));
-            // Hypersquare.localPlotData.put(plotID, data); // You can update your local data here.
         }
     }
 

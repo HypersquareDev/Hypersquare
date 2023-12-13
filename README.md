@@ -3,7 +3,6 @@
 Hypersquare is a remake of the popular server Diamondfire.
 We aim to include all the most requested features by the community that Diamondfire denied.
 
-[![CodeFactor](https://www.codefactor.io/repository/github/purpurmc/purpur/badge)](https://www.codefactor.io/repository/github/purpurmc/purpur)
 
 ## Contributing
 

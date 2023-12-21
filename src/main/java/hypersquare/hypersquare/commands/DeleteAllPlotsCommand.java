@@ -5,6 +5,7 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.plot.PlotDatabase;
+import hypersquare.hypersquare.plot.PlotStats;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +32,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
                 }
                 PlotDatabase.deleteAllPlots();
                 PlayerDatabase.deleteAllPlayers();
+                PlotStats.deleteAllPlotStats();
                 for (int i = 1; i <= lastUsedWorldNumber;i++){
                     int finalI = i;
                     new BukkitRunnable() {

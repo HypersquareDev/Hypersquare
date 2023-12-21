@@ -9,6 +9,7 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -72,7 +73,7 @@ public class Utilities {
             return null; // Or any other error handling mechanism you prefer.
         }
     }
-
+    @Deprecated
     public static void sendMultiMessage(Player recipient, List<String> messages)
     {
         for (String message : messages)
@@ -81,12 +82,32 @@ public class Utilities {
             recipient.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
         }
     }
+
+
+    public static int findLengthOfLongestString(List<String> strings) {
+        if (strings == null || strings.isEmpty()) {
+            return 0; // Return 0 if the list is null or empty
+        }
+
+
+        int maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
+
+        for (String s : strings) {
+            if (PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length() > maxLength) {
+                maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length();; // Update maxLength if a longer string is found
+            }
+        }
+
+        return maxLength;
+    }
+
     public static void sendMultiMiniMessage(Player recipient, List<String> messages)
     {
-        for (String message : messages)
-        {
-            recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
-        }
+        int size = findLengthOfLongestString(messages);
+        String before = "<#AAAAFF><strikethrough>" + " ".repeat((int) (size*1.5)) + "<#AAAAFF>";
+        String message = String.join("<newline><reset>",messages);
+        message = before + "<newline><reset>" + message + "<newline>" + before;
+        recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
     public static String convertToChatColor(String input) {

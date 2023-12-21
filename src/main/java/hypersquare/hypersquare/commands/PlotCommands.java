@@ -4,6 +4,7 @@ import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.utils.Colors;
 import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -44,7 +45,9 @@ public class PlotCommands implements CommandExecutor {
                                             name.append(" ");
                                         }
                                     }
-                                    PlotDatabase.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name));
+                                    PlotDatabase.changePlotName(Utilities.getPlotID(((Player) sender).getWorld()), String.valueOf(name).strip());
+                                    Utilities.sendInfo(player,"Successfully changed the plot name to " + String.valueOf(name).strip() + ".");
+                                    PlotManager.loadPlot(plotID);
                                 } else {
                                     Utilities.sendError(player, "You cannot set the plot name to noting");
                                 }
@@ -56,6 +59,7 @@ public class PlotCommands implements CommandExecutor {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
                                 if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     PlotDatabase.changePlotIcon(Utilities.getPlotID(((Player) sender).getWorld()), ((Player) sender).getInventory().getItemInMainHand().getType().toString());
+                                    Utilities.sendInfo(player,"Successfully changed the plot icon to " + Utilities.capitalize(((Player) sender).getInventory().getItemInMainHand().getType().toString()) + ".");
                                 } else {
                                     Utilities.sendError(player,"You cannot set the plot's icon to nothing.");
                                 }
@@ -82,95 +86,6 @@ public class PlotCommands implements CommandExecutor {
                             } else
                                 Utilities.sendError((Player) sender, "Only the plot owner can do that!");
                             break;
-                        }
-                        case "help": {
-                            List<String> messages = new ArrayList<>();
-                            if (args.length >= 2) {
-                                player.sendMessage(args);
-                                switch (args[1]) {
-                                    case "1": {
-                                        messages.add("&3&m------&b PLOT HELP (Page 1/3) &3&m------");
-                                        messages.add("&a/plot name <name>");
-                                        messages.add("&b- Rename your minigame. Supports colors! (E.g, &4)");
-                                        messages.add("&a/plot editname");
-                                        messages.add("&b- Prepares a /plot name command with the plot's name.");
-                                        messages.add("&a/plot icon");
-                                        messages.add("&b- Sets your plot icon to the item in your hand.");
-                                        messages.add("&a/plot tags");
-                                        messages.add("&b- Change the categories your plot shows up in.");
-                                        messages.add("&a/plot <dev/builder> <add/remove/list/clear> [player]");
-                                        messages.add("&b- Give a player build or dev access to your plot, list who has access, or clear all builders/devs.");
-                                        messages.add("&a/plot codespace add|remove");
-                                        messages.add("&b- Add a glass layer to your codespace to code on. When adding a layer, you can add -c, -l, and -d for different styles.");
-                                        messages.add("&a/plot setspawn");
-                                        messages.add("&b- Set your plot's spawnpoint to your current location.");
-                                        messages.add("&a/plot spawn");
-                                        messages.add("&b- Teleports you to the plot spawn.");
-                                        messages.add("&a/plot ad <purchase/[message]>");
-                                        messages.add("&b- Advertise your plot.");
-                                        messages.add("&e/plot help <page number>");
-                                        break;
-                                    }
-                                    case "2": {
-                                        messages.add("&3&m------&b PLOT HELP (Page 2/3) &3&m------");
-                                        messages.add("&a/plot codespace <add|remove> [color] [-l] [-c]");
-                                        messages.add("&b- Add another layer to your plot's code area! Use the -l flag to generate lines rather than a full layer.");
-                                        messages.add("&a/plot kick <player>");
-                                        messages.add("&b- Kick a player from your plot.");
-                                        messages.add("&a/plot ban <player>");
-                                        messages.add("&b- Bans a player from your plot.");
-                                        messages.add("&a/plot banlist");
-                                        messages.add("&b- List bans on your plot.");
-                                        messages.add("&a/plot unban <player>");
-                                        messages.add("&b- Unbans a player from your plot.");
-                                        messages.add("&a/plot whitelist <on/off/add/remove> <player>");
-                                        messages.add("&b- Whitelist your plot.");
-                                        messages.add("&a/plot vars [name/value]");
-                                        messages.add("&b- List plot variables.");
-                                        messages.add("&e/plot help [page number]");
-                                        break;
-                                    }
-                                    case "3": {
-                                        messages.add("&3&m------&b PLOT HELP (Page 3/3) &3&m------");
-                                        messages.add("&cDANGER ZONE");
-                                        messages.add("&a/plot varpurge [name]");
-                                        messages.add("&b- Clears plot variables (all if no name is specified).");
-                                        messages.add("&a/plot clear");
-                                        messages.add("&b- Clears the build and code areas of your plot.");
-                                        messages.add("&a/plot glitch OR /plot g");
-                                        messages.add("&b- Get a Glitch Stick to break glitched code blocks.");
-                                        messages.add("&a/plot unclaim");
-                                        messages.add("&b- Unclaim your plot.");
-                                        messages.add("&e/plot help <page number>");
-                                        break;
-
-                                    }
-                                }
-                            } else {
-                                messages.add("&3&m------&b PLOT HELP (Page 1/3) &3&m------");
-                                messages.add("&a/plot name <name>");
-                                messages.add("&b- Rename your minigame. Supports colors! (E.g, &4)");
-                                messages.add("&a/plot editname");
-                                messages.add("&b- Prepares a /plot name command with the plot's name.");
-                                messages.add("&a/plot icon");
-                                messages.add("&b- Sets your plot icon to the item in your hand.");
-                                messages.add("&a/plot tags");
-                                messages.add("&b- Change the categories your plot shows up in.");
-                                messages.add("&a/plot <dev/builder> <add/remove/list/clear> [player]");
-                                messages.add("&b- Give a player build or dev access to your plot, list who has access, or clear all builders/devs.");
-                                messages.add("&a/plot codespace add|remove");
-                                messages.add("&b- Add a glass layer to your codespace to code on. When adding a layer, you can add -c, -l, and -d for different styles.");
-                                messages.add("&a/plot setspawn");
-                                messages.add("&b- Set your plot's spawnpoint to your current location.");
-                                messages.add("&a/plot spawn");
-                                messages.add("&b- Teleports you to the plot spawn.");
-                                messages.add("&a/plot ad <purchase/[message]>");
-                                messages.add("&b- Advertise your plot.");
-                                messages.add("&e/plot help <page number>");
-                            }
-                            Utilities.sendMultiMessage(player, messages);
-                            break;
-
                         }
                         case "dev": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
@@ -245,9 +160,21 @@ public class PlotCommands implements CommandExecutor {
                                 Utilities.sendError((Player) sender, "Only the plot owner can do that!");
                             break;
                         }
+                        case "stats":{
+                            if (Hypersquare.mode.get(player).equals("coding")){
+                                List<String> messages = new ArrayList<>();
+                                messages.add(Colors.PRIMARY_INFO + "Plot stats for:");
+                                messages.add("");
+                                messages.add(Colors.DECORATION + "→ <reset>" + PlotManager.getPlotName(plotID) + "<reset>" + Colors.PRIMARY_INFO + " by <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName() + " <dark_gray>[" + Colors.PRIMARY_INFO + plotID + "<dark_gray>]");
+                                messages.add(Colors.DECORATION + "→ " + Colors.SECONDARY_INFO + "Total unique joins: <white>" + PlotStats.getTotalUniquePlayers(plotID));
+                                messages.add(Colors.DECORATION + "→ " + Colors.SECONDARY_INFO + "Total playtime: <white>" + PlotStats.calculateTotalTimePlayed(plotID));
+
+                                Utilities.sendMultiMiniMessage(player,messages);
+                            }
+                        }
                     }
                 } else {
-                    Utilities.sendError(player, "Invalid command usage. /plot help");
+                    Utilities.sendError(player, "Invalid command usage.");
                 }
             }
             Hypersquare.plotData.put((Player) sender, PlotDatabase.getPlot(String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId().toString())));

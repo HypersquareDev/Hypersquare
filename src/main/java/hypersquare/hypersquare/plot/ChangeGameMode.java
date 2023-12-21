@@ -77,6 +77,7 @@ public class ChangeGameMode {
             PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
             PlaytimeEventExecuter.Join(player);
+            PlotStats.addPlayer(plotID,player);
         }
     }
 

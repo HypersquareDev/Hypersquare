@@ -21,8 +21,8 @@ public class LocateCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             Player target;
-            String color = "<#AAD4AA>";
-            String color2 = "<#2AD4D4>";
+            String color = "<#AAD4FF>";
+            String color2 = "<#AAAAFF>";
             if (args.length > 0) {
                 target = Bukkit.getPlayer(args[0]);
             } else {
@@ -35,23 +35,19 @@ public class LocateCommand implements CommandExecutor {
             String mode = Hypersquare.mode.get(target);
             if (mode.equals("at spawn") || mode.equals("editing spawn")) {
                 List<String> messages = new ArrayList<>();
-                messages.add(color + "<st>                                       " + color);
                 messages.add(color + targetName + " currently <white>" + mode + color + " on:");
                 messages.add(color2 + "→ " + color + "Server: <white>Node 1");
-                messages.add(color + "<st>                                       " + color);
                 Utilities.sendMultiMiniMessage(player, messages);
             } else {
                 int plotID = Utilities.getPlotID(target.getWorld());
                 String cmd = "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'>";
                 List<String> messages = new ArrayList<>();
                 String plotName = PlotManager.getPlotName(plotID);
-                messages.add(color + cmd + "<st>                                       " + color);
-                messages.add(color + targetName + cmd + "currently <white>" + mode + color + " on:");
+                messages.add(color + targetName + cmd + " currently <white>" + mode + color + " on:");
                 messages.add("");
                 messages.add(color2 + cmd + "→ " + "<white>" + plotName +  " <dark_gray>[" + color + plotID + "<dark_gray>]");
                 messages.add(color2 + cmd + "→ " + color + "Owner: <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
                 messages.add(color2 + cmd + "→ " + color + "Server: <white>Node " + PlotManager.getPlotNode(plotID));
-                messages.add(color + cmd + "<st>                                       " + color);
                 Utilities.sendMultiMiniMessage(player, messages);
             }
         } else {

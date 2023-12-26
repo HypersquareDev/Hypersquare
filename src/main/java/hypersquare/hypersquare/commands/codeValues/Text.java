@@ -19,7 +19,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -43,23 +45,22 @@ public class Text implements CommandExecutor, Listener {
                     }
 
                     String finalValue = String.valueOf(value);
+                    player.getInventory().addItem(new hypersquare.hypersquare.dev.Text(finalValue).getItem());
+//                    if (finalValue.contains("--legacy")) {
+//                        legacy = true;
+//                        finalValue = finalValue.replace("--legacy","").strip();
+//                    }
+//
+//
+//                    player.getInventory().addItem(CodeValues.TEXT.build(finalValue,legacy));
+//                } else {
+//                    player.getInventory().addItem(CodeValues.TEXT.build(null,false));
+//                }
 
-                    if (finalValue.contains("--legacy")) {
-                        legacy = true;
-                        finalValue = finalValue.replace("--legacy","").strip();
-                    }
-
-
-                    player.getInventory().addItem(CodeValues.TEXT.build(finalValue,legacy));
                 } else {
-                    player.getInventory().addItem(CodeValues.TEXT.build(null,false));
+                    Utilities.sendError(player, "You can only use this command in dev mode.");
                 }
-
-            } else {
-                Utilities.sendError(player,"You can only use this command in dev mode.");
             }
-        } else {
-
         }
         return true;
     }
@@ -83,6 +84,18 @@ public class Text implements CommandExecutor, Listener {
 
 
                 event.getPlayer().getInventory().setItemInMainHand(CodeValues.TEXT.build(finalValue,legacy));
+            }
+        }
+    }
+
+    @EventHandler
+    public void left(PlayerInteractEvent event){
+        if (event.getAction() == Action.LEFT_CLICK_AIR){
+            if (event.getPlayer().isSneaking()){
+                hypersquare.hypersquare.dev.Text text = new hypersquare.hypersquare.dev.Text(event.getPlayer().getInventory().getItemInMainHand());
+                if (text != null){
+                    event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(text.getValue()));
+                }
             }
         }
     }

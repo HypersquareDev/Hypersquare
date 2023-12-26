@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.commands;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.PlotManager;
 import hypersquare.hypersquare.utils.Utilities;
 import net.md_5.bungee.api.ChatColor;
@@ -47,7 +48,7 @@ public class LocateCommand implements CommandExecutor {
                 messages.add("");
                 messages.add(color2 + cmd + "→ " + "<white>" + plotName +  " <dark_gray>[" + color + plotID + "<dark_gray>]");
                 messages.add(color2 + cmd + "→ " + color + "Owner: <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
-                messages.add(color2 + cmd + "→ " + color + "Server: <white>Node " + PlotManager.getPlotNode(plotID));
+                messages.add(color2 + cmd + "→ " + color + "Description:<reset> " + PlotDatabase.getPlotDescription(plotID));
                 Utilities.sendMultiMiniMessage(player, messages);
             }
         } else {

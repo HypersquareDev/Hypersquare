@@ -95,7 +95,6 @@ public class PlaytimeEventExecuter implements Listener {
         if (Hypersquare.mode.get(player).equals("playing")) {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (Hypersquare.eventCache.get(plotID).containsValue("Join")) {
-                player.sendMessage("join event");
                 CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Join"), player.getWorld()),player);
             }
         }
@@ -106,7 +105,6 @@ public class PlaytimeEventExecuter implements Listener {
         int plotID = Utilities.getPlotID(player.getWorld());
         PlotStats.updatePlayerTime(plotID,player.getUniqueId(),System.currentTimeMillis());
         if (Hypersquare.eventCache.get(plotID).containsValue("Leave")) {
-            player.sendMessage("leave event");
             CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Leave"), player.getWorld()),player);
         }
     }
@@ -115,7 +113,6 @@ public class PlaytimeEventExecuter implements Listener {
         int plotID = Utilities.getPlotID(player.getWorld());
         if (Hypersquare.eventCache.get(plotID).containsValue("Rejoin")) {
 
-            player.sendMessage("rejoin event");
             CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Rejoin"), player.getWorld()),player);
         }
     }
@@ -128,7 +125,6 @@ public class PlaytimeEventExecuter implements Listener {
             if (event.getFrom().getBlock() != event.getTo().getBlock() && !player.isSprinting() && !player.isFlying() && !player.isSwimming()) {
                 int plotID = Utilities.getPlotID(player.getWorld());
                 if (Hypersquare.eventCache.get(plotID).containsValue("Walk")) {
-                    player.sendMessage("walk event");
                     CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Walk"), player.getWorld()),player);
                 }
             }
@@ -420,6 +416,21 @@ public class PlaytimeEventExecuter implements Listener {
                     CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"ClickInvSlot"), player.getWorld()),player);
                 }
             }
+        }
+    }
+
+    //DEATH EVENTS
+    @EventHandler
+    public void Respawn(PlayerRespawnEvent event){
+        Player player = event.getPlayer();
+        player.sendMessage("respawn");
+        if (Hypersquare.mode.get(player).equals("playing")) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (Hypersquare.eventCache.get(plotID).containsValue("Respawn")) {
+                player.sendMessage("respawn");
+                CodeExecuter.runThroughCode(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),"Respawn"), player.getWorld()),player);
+            }
+
         }
     }
 

@@ -20,10 +20,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -41,6 +43,7 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         if (event.getClickedBlock() == null) {
             return;
         }
@@ -72,8 +75,17 @@ public class DevEvents implements Listener {
                 }
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else {
-                if (CodeBlocks.getByMaterial(event.getItem().getType()) == null)
-                    event.setCancelled(true);
+//                if (CodeBlocks.getByMaterial(event.getItem().getType()) == null)
+//                    event.setCancelled(true);
+            }
+        }
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK){
+            if (event.getClickedBlock().getType() == Material.CHEST){
+                Chest chest = (Chest) event.getClickedBlock().getState();
+                if (player.getInventory().getItemInMainHand().getType() != Material.AIR){
+                chest.getInventory().setItem(chest.getInventory().firstEmpty(),event.getPlayer().getInventory().getItemInMainHand());
+                player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,1.0f,1.0f);
+                }
             }
         }
 

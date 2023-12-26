@@ -67,6 +67,20 @@ public class PlotCommands implements CommandExecutor {
                                 Utilities.sendError((Player) sender, "Only the plot owner can do that!");
                             break;
                         }
+                        case "setspawn": {
+                            if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
+                                if (player.getLocation().getX() > 0){
+                                    PlotDatabase.setPlotSpawnLocation(plotID,player.getLocation());
+                                    Utilities.sendInfo(player,"Set plot spawn location to " + player.getLocation().getBlock() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + "");
+                                }
+                            } else
+                                Utilities.sendError((Player) sender, "Only the plot owner can do that!");
+                            break;
+                        }
+                        case "spawn": {
+                            player.teleport(PlotDatabase.getPlotSpawnLocation(plotID));
+                            break;
+                        }
                         case "unclaim": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
                                 World world = player.getWorld();

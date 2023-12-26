@@ -4,6 +4,9 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import hypersquare.hypersquare.Hypersquare;
 import org.bson.Document;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -27,19 +30,89 @@ public class PlotDatabase {
         additionalCollection = database.getCollection("additional_info");
     }
 
-    public static void addPlot(int plotID, String ownerUUID, String icon, String name, int node, String tags, int votes, String size,int version) {
+    public static void addPlot(int plotID, String ownerUUID, String icon, String name, String size, int votes, boolean published, String description) {
         Document plotDocument = new Document("plotID", plotID)
                 .append("owner", ownerUUID)
                 .append("devs", ownerUUID) // Consider using an array for devs and builders
                 .append("builders", ownerUUID) // Consider using an array for devs and builders
                 .append("icon", icon)
                 .append("name", name)
-                .append("node", node)
-                .append("tags", tags)
-                .append("votes", votes)
+                .append("description",description)
                 .append("size", size)
-                .append("version", version);
+                .append("published",published)
+                .append("votes",votes)
+                .append("version", Hypersquare.plotVersion);
         plotsCollection.insertOne(plotDocument);
+    }
+
+    public static Location getPlotSpawnLocation(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null && result.containsKey("spawnLocation")) {
+            Document spawnLocationDoc = result.get("spawnLocation", Document.class);
+
+            String worldName = spawnLocationDoc.getString("world");
+            World world = Bukkit.getWorld(worldName);
+
+            if (world != null) {
+                double x = spawnLocationDoc.getDouble("x");
+                double y = spawnLocationDoc.getDouble("y");
+                double z = spawnLocationDoc.getDouble("z");
+                double yaw = spawnLocationDoc.getDouble("yaw");
+                double pitch = spawnLocationDoc.getDouble("pitch");
+
+                return new Location(world, x, y, z,(float) yaw,(float) pitch);
+            }
+        }
+
+        return null;
+    }
+
+    public static void setPlotSpawnLocation(int plotID, Location spawnLocation) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set",
+                new Document("spawnLocation",
+                        new Document("world", spawnLocation.getWorld().getName())
+                                .append("x", spawnLocation.getX())
+                                .append("y", spawnLocation.getY())
+                                .append("z", spawnLocation.getZ())
+                                .append("yaw", spawnLocation.getYaw())
+                                .append("pitch", spawnLocation.getPitch())
+                )
+        );
+
+        plotsCollection.updateOne(filter, update);
+    }
+
+    public static void changePlotSize(int plotID, String newSize) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("size", newSize));
+        plotsCollection.updateOne(filter, update);
+    }
+
+    public static String getPlotSize(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("size");
+        }
+        return null;
+    }
+
+    public static void changePlotDescription(int plotID, String newDescription) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("description", newDescription));
+        plotsCollection.updateOne(filter, update);
+    }
+
+    public static String getPlotDescription(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("description");
+        }
+        return null;
     }
 
     public static List<Document> getPlot(String ownerUUID) {
@@ -64,6 +137,39 @@ public class PlotDatabase {
         Document filter = new Document("plotID", plotID);
         Document update = new Document("$set", new Document("name", newName));
         plotsCollection.updateOne(filter, update);
+    }
+
+    public static String getPlotIcon(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            return result.getString("icon");
+        }
+
+        return null;
+    }
+
+    public static boolean isPlotPublished(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            return result.getBoolean("published", false);
+        }
+
+        return false;
+    }
+
+    public static int getPlotVotes(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            return result.getInteger("votes", 0);
+        }
+
+        return 0;
     }
 
     public static void setRecentPlotID(int plotID) {
@@ -108,15 +214,6 @@ public class PlotDatabase {
         return null;
     }
 
-    public static int getPlotNode(int plotID) {
-        Document query = new Document("plotID", plotID);
-        Document result = plotsCollection.find(query).first();
-        if (result != null) {
-            return result.getInteger("node", -1);
-        }
-        return -1;
-    }
-
     public static String getPlotOwner(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
@@ -144,7 +241,6 @@ public class PlotDatabase {
             List<Object> data = new ArrayList<>();
             data.add(result.getString("name"));
             data.add(result.getString("owner"));
-            data.add(result.getInteger("node", -1));
             return data;
         }
         return null;
@@ -163,6 +259,21 @@ public class PlotDatabase {
 
         return plots;
     }
+
+    public static List<Document> getAllPlots() {
+        List<Document> plots = new ArrayList<>();
+        MongoCollection<Document> plotsCollection = database.getCollection("plots");
+
+        // Retrieve all documents from the "plots" collection
+        FindIterable<Document> plotDocuments = plotsCollection.find();
+
+        for (Document plotDocument : plotDocuments) {
+            plots.add(plotDocument);
+        }
+
+        return plots;
+    }
+
 
     public static String[] getPlotDevs(int plotID) {
         Document query = new Document("plotID", plotID);

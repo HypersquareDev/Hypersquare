@@ -3,6 +3,7 @@ package hypersquare.hypersquare.menus;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.items.MiscItems;
+import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.Utilities;
 import mc.obliviate.inventory.Gui;
@@ -45,41 +46,8 @@ public class MyPlotsMenu extends Gui {
         List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
 
         for (Document plotDocument : playerPlots) {
-            ItemStack plotItem = new ItemStack(Material.matchMaterial(plotDocument.getString("icon")));
-            ItemMeta meta = plotItem.getItemMeta();
-            if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
-                meta.displayName(mm.deserialize(plotDocument.getString("name")));
-            } else {
-                String name = plotDocument.getString("name");
-                meta.displayName(mm.deserialize(name + "<red>" + " (Out of date)"));
-            }
-            List<Component> lore = new ArrayList<>();
-            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize(""));
-            lore.add(MiniMessage.miniMessage().deserialize("<gray>Tags: <dark_gray>" + plotDocument.getString("tags")).decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize("<gray>Votes: <yellow>" + plotDocument.getInteger("votes") + "<dark_gray> (last 2 weeks)").decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize(""));
-            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotDocument.getInteger("plotID")).decoration(TextDecoration.ITALIC,false));
-            lore.add(MiniMessage.miniMessage().deserialize("<blue>↓ Node " + plotDocument.getInteger("node")).decoration(TextDecoration.ITALIC,false));
-            if (Hypersquare.plotVersion == plotDocument.getInteger("version")){
-                lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false));
-            } else {
-                Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + plotDocument.getInteger("version")).decoration(TextDecoration.ITALIC,false);
-                lore.add(aa);
-            }
-
-            meta.lore(lore);
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-            meta.addItemFlags(ItemFlag.HIDE_DYE);
-            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-            meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
-            meta.setDisplayName(ChatColor.RESET + meta.getDisplayName());
-
-            plotItem.setItemMeta(meta);
+            int plotID = plotDocument.getInteger("plotID");
+            ItemStack plotItem = Plot.getPlotItem(plotID);
             Icon plot = new Icon(plotItem);
 
             addItem(i, plot);

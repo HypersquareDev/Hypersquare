@@ -78,6 +78,7 @@ public class ChangeGameMode {
             PlotManager.loadPlot(plotID);
             PlaytimeEventExecuter.Join(player);
             PlotStats.addPlayer(plotID,player);
+
         }
     }
 
@@ -116,6 +117,7 @@ public class ChangeGameMode {
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0, MiscItems.MY_PLOTS.build());
+        player.getInventory().setItem(4,MiscItems.GAME_MENU.build());
         player.teleport(Bukkit.getWorld("world").getSpawnLocation());
         Hypersquare.mode.put(player,"at spawn");
         PlayerDatabase.updateLocalPlayerData(player);

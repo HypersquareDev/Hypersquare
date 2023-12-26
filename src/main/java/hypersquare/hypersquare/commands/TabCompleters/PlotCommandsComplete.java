@@ -21,6 +21,9 @@ public class PlotCommandsComplete implements TabCompleter {
             completions.add("g");
             completions.add("unclaim");
             completions.add("stats");
+            completions.add("setspawn");
+            completions.add("spawn");
+
 
 
             if (args.length >= 2) {

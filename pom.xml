@@ -43,7 +43,7 @@
                     <!-- The directory bellow probably isn't yours. -->
                     <!-- Unless you're updating some versions, try to not commit -->
                      <!-- changes in this file. -->
-                    <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
+                    <outputDirectory/>
                 </configuration>
             </plugin>
 
@@ -66,7 +66,7 @@
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.3</version>
+                <version>1.4.2</version>
                 <executions>
                     <execution>
                         <phase>process-classes</phase>

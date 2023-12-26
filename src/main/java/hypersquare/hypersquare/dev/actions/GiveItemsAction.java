@@ -1,30 +1,32 @@
-package hypersquare.hypersquare.items.actions;
+package hypersquare.hypersquare.dev.actions;
 
 import hypersquare.hypersquare.items.*;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
-
 public class GiveItemsAction implements Action {
 
     public ItemStack item() {
         return new ActionItem()
             .setMaterial(Material.CHEST)
-            .setName("<green>Give Items")
+            .setName("<gold>Give Items")
             .setDescription("Gives the player all of the", "items in the chest")
             .setArguments(
                     new ActionArgument()
                             .setType(DisplayValue.ITEM)
                             .setPlural(true)
                             .setDescription("Item(s) to give"),
+                    new ActionArgument()
+                            .setType(DisplayValue.LIST)
+                            .setPlural(false)
+                            .setOptional(true)
+                            .setDescription("Return list"),
                     new ActionArgument()
                             .setType(DisplayValue.NUMBER)
                             .setOptional(true)

@@ -4,9 +4,8 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import hypersquare.hypersquare.dev.Actions;
-import hypersquare.hypersquare.items.Action;
+import hypersquare.hypersquare.dev.actions.Action;
 import hypersquare.hypersquare.items.PlayerActionItems;
-import hypersquare.hypersquare.items.actions.GiveItemsAction;
 import hypersquare.hypersquare.utils.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -35,7 +34,7 @@ public class PlayerActionMenu {
                 Player player = (Player) event.getWhoClicked();
                 Utilities.sendSecondaryMenuSound(player);
 
-                if (PlayerActionItems.getActions(playerActionItem).isEmpty()) return; // In case there are no actions
+//                if (PlayerActionItems.getActions(playerActionItem).isEmpty()) return; // In case there are no actions
 
                 // Strip Color Codes
                 Pattern pattern = Pattern.compile("<[^>]+?>");

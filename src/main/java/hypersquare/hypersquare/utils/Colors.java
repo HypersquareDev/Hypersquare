@@ -11,5 +11,7 @@ public class Colors {
     public static final String SECONDARY_INFO = "<#AAAAAA>";
     public static final String DECORATION = "<#AAAAFF>";
 
+    public static final String CELEBRATORY = "<#d7ff00>";
+
 
 }

@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.dev;
 
 
-import hypersquare.hypersquare.utils.ItemBuilder;
+import hypersquare.hypersquare.util.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

@@ -3,7 +3,7 @@ package hypersquare.hypersquare.plot;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.utils.Utilities;
+import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;

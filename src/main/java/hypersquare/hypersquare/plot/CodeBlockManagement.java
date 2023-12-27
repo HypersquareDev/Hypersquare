@@ -1,8 +1,5 @@
 package hypersquare.hypersquare.plot;
 
-import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.listeners.CodePlacement;
-import hypersquare.hypersquare.utils.Utilities;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -12,7 +9,6 @@ import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.sign.Side;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class CodeBlockManagement {
     @Deprecated

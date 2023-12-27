@@ -1,16 +1,16 @@
 package hypersquare.hypersquare;
 
-import hypersquare.hypersquare.commands.*;
-import hypersquare.hypersquare.commands.PlotCommands;
-import hypersquare.hypersquare.commands.TabCompleters.PlotCommandsComplete;
-import hypersquare.hypersquare.commands.codeValues.Text;
-import hypersquare.hypersquare.listeners.*;
+import hypersquare.hypersquare.command.*;
+import hypersquare.hypersquare.command.PlotCommands;
+import hypersquare.hypersquare.command.TabCompleter.PlotCommandsComplete;
+import hypersquare.hypersquare.command.codeValue.Text;
+import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.PlotStats;
-import hypersquare.hypersquare.utils.managers.CommandManager;
+import hypersquare.hypersquare.util.manager.CommandManager;
 
 import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -21,9 +21,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.*;
 import java.util.logging.Logger;
 

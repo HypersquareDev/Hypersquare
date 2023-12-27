@@ -6,20 +6,18 @@ import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.utils.Utilities;
+import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static hypersquare.hypersquare.utils.Utilities.savePersistentData;
-import static org.bukkit.Bukkit.getServer;
+import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 
 public class Plot {
 

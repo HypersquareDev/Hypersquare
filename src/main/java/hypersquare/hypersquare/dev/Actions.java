@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.items.Action;
-import hypersquare.hypersquare.items.actions.GiveItemsAction;
+import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.item.actions.GiveItemsAction;
 
 import java.util.List;
 

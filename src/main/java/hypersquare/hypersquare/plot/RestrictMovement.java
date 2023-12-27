@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.plot;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.utils.Utilities;
+import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

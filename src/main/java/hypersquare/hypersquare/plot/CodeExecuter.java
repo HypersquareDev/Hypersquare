@@ -2,7 +2,7 @@ package hypersquare.hypersquare.plot;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
-import hypersquare.hypersquare.items.Action;
+import hypersquare.hypersquare.item.Action;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static hypersquare.hypersquare.Hypersquare.mm;
@@ -46,8 +47,19 @@ public class CodeItem {
         if (lines != null) {
             lore.add(Component.empty());
             lore.add(mm.deserialize(header));
+
+            // Create a new entry in the list for each %n effectively creating a newline
+            List<String> finalLines = new ArrayList<>(Arrays.asList(lines));
+            for (int i = 0; i < finalLines.size(); i++) {
+                if (finalLines.get(i).contains("%n")) {
+                    String[] split = finalLines.get(i).split("%n", 2);
+                    finalLines.set(i, split[0]);
+                    finalLines.add(i + 1, split[1]);
+                }
+            }
+
             for (String line : lines) {
-                lore.add(mm.deserialize(("<aqua>» <gray>" + line).replace("%n", "<newline>")));
+                lore.add(mm.deserialize(("<aqua>» <gray>" + line)));
             }
         }
     }

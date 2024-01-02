@@ -59,20 +59,12 @@ public class CodeItems {
                         "Clear a player's inventory"
                 ).build();
 
-        CALL_FUNCTION_ITEM = new ItemBuilder(Material.LAPIS_ORE)
-                .name(mm.deserialize("<blue>Call Function"))
-                .lore(mm.deserialize("<gray>Used to call functions declared by"))
-                .lore(mm.deserialize("<gray>a Function block."))
-                .lore(mm.deserialize("<gray>Code will not continue past this block"))
-                .lore(mm.deserialize("<gray>until the Function completes/returns."))
-                .build();
-
         CALL_FUNCTION_ITEM = new CodeItem(Material.LAPIS_ORE)
                 .name("<blue>Call Function")
                 .description("Used to call functions declared by",
                              "a Function block.",
                              "Code will not continue past this block",
-                                "until the Function completes/returns.")
+                             "until the Function completes/returns.")
                 .build();
 
         START_PROCESS_ITEM = new CodeItem(Material.EMERALD_ORE)
@@ -102,8 +94,7 @@ public class CodeItems {
                              "entity or multiple entities is met.")
                 .examples(
                         "Check if an entity is a projectile",
-                        "Check if an entity is a certain type",
-                                "of mob",
+                        "Check if an entity is a certain type%nof mob",
                         "Check the name of an entity"
                 ).build();
 
@@ -122,13 +113,13 @@ public class CodeItems {
                 .description("Used to define a line of code that can be",
                              "called with a Call Function block.")
                 .additionalInfo(
-                        "Set the function name by right clicking",
+                        "Set the function name by right clicking%n" +
                                 "the code block sign with a <aqua>string</aqua>.",
-                        "Set the name color, icon, and lore of the",
+                        "Set the name color, icon, and lore of the%n" +
                                 "function by putting an item in the chest.",
-                        "Put <#aaffaa>parameter</#aaffaa> items to specify the",
+                        "Put <#aaffaa>parameter</#aaffaa> items to specify the%n" +
                                 "parameters of the function.",
-                        "Functions can also be used for continuing",
+                        "Functions can also be used for continuing%n" +
                                 "lines of code that are out of space."
                 )
                 .build();
@@ -138,13 +129,13 @@ public class CodeItems {
                 .description("Used to execute code when the process",
                              "is started using a Start Process block.")
                 .additionalInfo(
-                        "Set the process name by right clicking",
+                        "Set the process name by right clicking%n" +
                                 "the code block sign with a <aqua>string</aqua>.",
-                        "Set the name color, icon, and lore of the",
+                        "Set the name color, icon, and lore of the%n" +
                                 "process by putting an item in the chest.",
-                        "Processes are not a replacement for",
-                                "Functions. Processes are much more CPU",
-                                "intensive than functions, and should only",
+                        "Processes are not a replacement for%n" +
+                                "Functions. Processes are much more CPU%n" +
+                                "intensive than functions, and should only%n" +
                                 "be used when needed."
                 )
                 .build();
@@ -154,7 +145,7 @@ public class CodeItems {
                 .description("Used to set the value of a variable.")
                 .examples(
                         "Set a variable to a sum of numbers",
-                        "Remove all instances of a certain",
+                        "Remove all instances of a certain%n" +
                                 "string from a string variable",
                         "Set a variable to a random value"
                 ).build();
@@ -165,11 +156,11 @@ public class CodeItems {
                              "if a certain condition related to the",
                              "value of a variable is met.")
                 .examples(
-                        "Check if a number variable is less",
+                        "Check if a number variable is less%n" +
                                 "than or equal to another number",
-                        "Check if a string variable contains",
+                        "Check if a string variable contains%n" +
                                 "a certain string",
-                        "Check if a variable is equal",
+                        "Check if a variable is equal%n" +
                                 "to something"
                 ).build();
 
@@ -189,25 +180,24 @@ public class CodeItems {
                              "it if a certain condition related",
                              "to the plot is met.")
                 .examples(
-                        "Check if a container has all of",
+                        "Check if a container has all of%n" +
                                 "a certain set of items",
-                        "Check if a sign's text contains",
+                        "Check if a sign's text contains%n" +
                                 "a certain text",
-                        "Check if a block at a certain",
+                        "Check if a block at a certain%n" +
                                 "location is a certain block"
                 ).build();
 
-        CONTROL_ITEM = new ItemBuilder(Material.COAL_BLOCK)
-                .name(mm.deserialize("<blue>Control"))
-                .lore(mm.deserialize("<gray>Used to control the execution of"))
-                .lore(mm.deserialize("<gray>some or all code blocks after it."))
-                .lore("")
-                .lore(mm.deserialize("<white>Example:"))
-                .lore(mm.deserialize("<aqua>» <gray>Pause the code sequence"))
-                .lore(mm.deserialize("<gray>for a certain duration"))
-                .lore(mm.deserialize("<aqua>» <gray>Stop the code sequence"))
-                .lore(mm.deserialize("<aqua>» <gray>Skip a repeat iteration"))
-                .build();
+        CONTROL_ITEM = new CodeItem(Material.COAL_BLOCK)
+                .name("<blue>Control")
+                .description("Used to control the execution of",
+                        "some or all code blocks after it.")
+                .examples(
+                        "Pause the code sequence for a%n" +
+                                "certain duration",
+                        "Stop the code sequence",
+                        "Skip a repeat iteration"
+                ).build();
 
         SELECT_OBJECT_ITEM = new CodeItem(Material.PURPUR_BLOCK)
                 .name("<light_purple>Select Object")
@@ -217,7 +207,7 @@ public class CodeItems {
                 .examples(
                         "Select all players on the plot",
                         "Select a player with a certain username",
-                        "Select all players on the plot that meet",
+                        "Select all players on the plot that meet%n" +
                                 "a certain condition"
                 ).build();
 
@@ -226,9 +216,9 @@ public class CodeItems {
                 .description("Used to repeat the code inside it.")
                 .examples(
                         "Repeat code forever",
-                        "Repeat code a certain number",
+                        "Repeat code a certain number%n" +
                                 "of times",
-                        "Repeat code until a certain",
+                        "Repeat code until a certain%n" +
                                 "condition is met"
                 ).build();
 
@@ -245,9 +235,9 @@ public class CodeItems {
                 .description("If a code block won't break,",
                              "break it with this.")
                 .additionalInfo(
-                        "Be careful with this. It can even",
+                        "Be careful with this. It can even%n" +
                                 "break codespaces!",
-                        "Right click to delete entities",
+                        "Right click to delete entities%n" +
                                 "around you."
                 )
                 .build();

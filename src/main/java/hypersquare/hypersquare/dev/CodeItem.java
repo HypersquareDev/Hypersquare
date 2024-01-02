@@ -51,15 +51,20 @@ public class CodeItem {
             // Create a new entry in the list for each %n effectively creating a newline
             List<String> finalLines = new ArrayList<>(Arrays.asList(lines));
             for (int i = 0; i < finalLines.size(); i++) {
-                if (finalLines.get(i).contains("%n")) {
+                finalLines.set(i, "<aqua>» " + finalLines.get(i));
+                while (finalLines.get(i).contains("%n")) {
                     String[] split = finalLines.get(i).split("%n", 2);
                     finalLines.set(i, split[0]);
-                    finalLines.add(i + 1, split[1]);
+                    if (split.length > 1) {
+                        finalLines.add(i + 1, split[1]);
+                        i++;
+                    }
                 }
             }
+            lines = finalLines.toArray(new String[0]);
 
             for (String line : lines) {
-                lore.add(mm.deserialize(("<aqua>» <gray>" + line)));
+                lore.add(mm.deserialize("<gray>" + line));
             }
         }
     }

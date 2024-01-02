@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ChangeGameMode {
@@ -55,6 +56,7 @@ public class ChangeGameMode {
 
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                  WorldLockedException ignored) {
+            Utilities.sendRedInfo(player, "Error loading plot. Please try again later.");
         }
         PlotManager.loadPlot(plotID);
         if (player.getWorld().getName().equals(worldName)) {
@@ -68,7 +70,13 @@ public class ChangeGameMode {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             Hypersquare.mode.put(player, "playing");
-            Utilities.sendInfo(player, "Joined game: <white>" +  PlotManager.getPlotName(plotID) + " <gray>by <reset>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
+            String ownerName;
+            try { // Edge case where the owner of the plot is not in the database
+                ownerName = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
+            } catch (NullPointerException e) {
+                ownerName = "Unknown"; // This should never happen!
+            }
+            Utilities.sendInfo(player, "Joined game: <white>" +  PlotManager.getPlotName(plotID) + " <gray>by <reset>" + ownerName);
             Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
             PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);

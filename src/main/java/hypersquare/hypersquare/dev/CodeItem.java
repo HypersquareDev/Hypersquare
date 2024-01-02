@@ -1,0 +1,77 @@
+package hypersquare.hypersquare.dev;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static hypersquare.hypersquare.Hypersquare.mm;
+
+public class CodeItem {
+    private final Material material;
+    private String name;
+    private String[] description;
+    private String[] examples;
+    private String[] additionalInfo;
+
+    public CodeItem(Material material) {
+        this.material = material;
+    }
+
+    public CodeItem name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public CodeItem description(String... description) {
+        this.description = description;
+        return this;
+    }
+
+    public CodeItem examples(String... examples) {
+        this.examples = examples;
+        return this;
+    }
+
+    public CodeItem additionalInfo(String... additionalInfo) {
+        this.additionalInfo = additionalInfo;
+        return this;
+    }
+
+    private void addSection(List<Component> lore, String header, String[] lines) {
+        if (lines != null) {
+            lore.add(Component.empty());
+            lore.add(mm.deserialize(header));
+            for (String line : lines) {
+                lore.add(mm.deserialize(("<aqua>» <gray>" + line).replace("%n", "<newline>")));
+            }
+        }
+    }
+
+    public ItemStack build() {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.displayName(mm.deserialize(name).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        List<Component> lore = new ArrayList<>();
+
+        // Treat %n as a newline
+        for (String s : description) {
+            lore.add(mm.deserialize("<gray>" + s));
+        }
+
+        // Examples and Additional Info share same function due to similar formatting
+        addSection(lore, "<white>Examples:", examples);
+        addSection(lore, "<blue>Additional Info:", additionalInfo);
+
+        lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
+        return item;
+    }
+}

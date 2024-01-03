@@ -32,8 +32,6 @@ import java.util.zip.GZIPInputStream;
 import static hypersquare.hypersquare.Hypersquare.mm;
 
 public class Utilities {
-    static SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-
     public static int getPlotID(World world){
         String name = world.getName();
         if (name.contains("hs.")) {
@@ -268,7 +266,7 @@ public class Utilities {
     }
     public static void getWorldDataFromSlimeWorlds(World world){
 
-        SlimeWorld slimeWorld = plugin.getWorld(world.getName());
+        SlimeWorld slimeWorld = Hypersquare.slimePlugin.getWorld(world.getName());
 
         if (slimeWorld == null){
             return;

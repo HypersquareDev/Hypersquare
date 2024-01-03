@@ -59,7 +59,7 @@ public class Text implements CommandExecutor, Listener {
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             System.out.println("coding");
             ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-            NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem");
+            NamespacedKey key = new NamespacedKey(Hypersquare.instance,"varitem");
             if (item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING) != null) {
                 event.setCancelled(true);
                 boolean legacy = false;

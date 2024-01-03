@@ -67,20 +67,20 @@ public enum CodeValues {
                     .name(LegacyComponentSerializer.legacyAmpersand().deserialize(value))
                     .lore(list)
                     .hideFlags()
-                    .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem"), jsonString)
+                    .setCustomTag(new NamespacedKey(Hypersquare.instance,"varitem"), jsonString)
                     .build();
         } else {
             return new ItemBuilder(material)
                     .name(mm.deserialize(value))
                     .lore(list)
                     .hideFlags()
-                    .setCustomTag(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem"), jsonString)
+                    .setCustomTag(new NamespacedKey(Hypersquare.instance,"varitem"), jsonString)
                     .build();
         }
     }
 
     public static String getValue(ItemStack item){
-        NamespacedKey key = new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class),"varitem");
+        NamespacedKey key = new NamespacedKey(Hypersquare.instance,"varitem");
         if (item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING) != null) {
             String data = item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING);
             JsonObject jsonObject = JsonParser.parseString(data).getAsJsonObject();

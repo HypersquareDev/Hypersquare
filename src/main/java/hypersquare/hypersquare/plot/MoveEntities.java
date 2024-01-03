@@ -28,7 +28,7 @@ public class MoveEntities {
     }
 
     public static void entityLoop() {
-        SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+        SlimePlugin plugin = Hypersquare.slimePlugin;
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.instance, new Runnable() {
             public void run() {
 

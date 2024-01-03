@@ -1,6 +1,5 @@
 package hypersquare.hypersquare.menu;
 
-import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.item.CreatePlotMenuItems;
 import hypersquare.hypersquare.plot.Plot;
@@ -16,8 +15,6 @@ import java.util.HashMap;
 import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
 
 public class CreatePlotsMenu extends Gui{
-
-    SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
     public CreatePlotsMenu(Player player) {
         super(player, "createPlot", "Choose a plot size", 2);
     }
@@ -55,7 +52,7 @@ public class CreatePlotsMenu extends Gui{
             e.setCancelled(true);
             if (usedBasic != maxBasic) {
                 int plotID = lastUsedWorldNumber;
-                Plot.createPlot(player, plotID, plugin, player.getUniqueId().toString(), "plot_template_basic");
+                Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_basic");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
@@ -68,7 +65,7 @@ public class CreatePlotsMenu extends Gui{
             e.setCancelled(true);
             if (usedLarge != maxLarge) {
                 int plotID = lastUsedWorldNumber;
-                Plot.createPlot(player, plotID, plugin, player.getUniqueId().toString(), "plot_template_large");
+                Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_large");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
@@ -80,7 +77,7 @@ public class CreatePlotsMenu extends Gui{
             e.setCancelled(true);
             if (usedhuge != maxhuge) {
                 int plotID = lastUsedWorldNumber;
-                Plot.createPlot(player, plotID, plugin, player.getUniqueId().toString(), "plot_template_massive");
+                Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_massive");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
@@ -92,7 +89,7 @@ public class CreatePlotsMenu extends Gui{
             e.setCancelled(true);
             if (usedmassive != maxmassive) {
                 int plotID = lastUsedWorldNumber;
-                Plot.createPlot(player, plotID, plugin, player.getUniqueId().toString(), "plot_template_huge");
+                Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_huge");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
@@ -104,7 +101,7 @@ public class CreatePlotsMenu extends Gui{
             e.setCancelled(true);
             if (usedGigantic != maxGigantic) {
                 int plotID = lastUsedWorldNumber;
-                Plot.createPlot(player, plotID, plugin, player.getUniqueId().toString(), "plot_template_gigantic");
+                Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_gigantic");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();

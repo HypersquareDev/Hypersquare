@@ -27,8 +27,6 @@ import static org.bukkit.Bukkit.getLogger;
 
 public class MyPlotsMenu extends Gui {
     public static Logger logger = getLogger();
-    SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-
     public MyPlotsMenu(Player player) {
         super(player, "myPlots", "My Plots", 2);
     }

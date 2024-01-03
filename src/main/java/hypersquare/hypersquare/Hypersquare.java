@@ -43,9 +43,7 @@ public final class Hypersquare extends JavaPlugin {
 
     public static MiniMessage mm = MiniMessage.miniMessage();
 
-    private final String serverAddress = "0.0.0.0";
-    private final int serverPort = 25566;
-    public static Logger logger = Logger.getLogger(Hypersquare.class.getName());
+    public static String pluginName = "Hypersquare";
 
     public static Plugin instance;
 

@@ -29,11 +29,6 @@ public class PlotCommands implements CommandExecutor {
                 Player player = (Player) sender;
                 if (args.length >= 1) {
                     switch (args[0]) {
-                        case "glitch":
-                        case "g": {
-                            ((Player) sender).getInventory().addItem(CodeItems.GLITCH_STICK_ITEM);
-                            break;
-                        }
                         case "name": {
                             if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString())) {
                                 if (args.length >= 2) {

@@ -26,7 +26,6 @@ public class CodeItems {
     public static ItemStack SELECT_OBJECT_ITEM;
     public static ItemStack REPEAT_ITEM;
     public static ItemStack ELSE_ITEM;
-    public static ItemStack GLITCH_STICK_ITEM;
     public static void register() {
         PLAYER_EVENT_ITEM = new CodeItem(Material.DIAMOND_BLOCK)
                 .name("<aqua>Player Event")
@@ -229,18 +228,5 @@ public class CodeItems {
                              "was not met. Else must be placed directly",
                              "after any If block's closing bracket.")
                 .build();
-
-        GLITCH_STICK_ITEM = new CodeItem(Material.STICK)
-                .name("<red>Glitch Stick")
-                .description("If a code block won't break,",
-                             "break it with this.")
-                .additionalInfo(
-                        "Be careful with this. It can even%n" +
-                                "break codespaces!",
-                        "Right click to delete entities%n" +
-                                "around you."
-                )
-                .build();
-
     }
 }

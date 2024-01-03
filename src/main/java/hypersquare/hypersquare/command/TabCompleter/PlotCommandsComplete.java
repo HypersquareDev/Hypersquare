@@ -17,8 +17,6 @@ public class PlotCommandsComplete implements TabCompleter {
             completions.add("icon");
             completions.add("dev");
             completions.add("builder");
-            completions.add("glitch");
-            completions.add("g");
             completions.add("unclaim");
             completions.add("stats");
 

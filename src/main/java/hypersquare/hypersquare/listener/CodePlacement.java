@@ -291,41 +291,35 @@ public class CodePlacement implements Listener {
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
-            if (event.getPlayer().getInventory().getItemInMainHand().equals(CodeItems.GLITCH_STICK_ITEM)) {
-                if (event.getBlock().getType() == Material.DIAMOND_BLOCK) {
-                    PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(event.getBlock().getLocation()));
-                }
-                event.setCancelled(false);
-            } else {
-                if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
-                    blockLoc.add(1, 0, 0);
-                }
-                Block block = blockLoc.getBlock();
-                Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
-                if (block.getType() == Material.DIAMOND_BLOCK) {
-                    PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
-                }
 
-                if (signBlock.getType() == Material.OAK_WALL_SIGN) {
-                    Location signLoc = signBlock.getLocation();
-                    Location chestLoc = blockLoc.clone().add(0, 1, 0);
-                    Location stoneLoc = blockLoc.clone().add(0, 0, 1);
+            if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
+                blockLoc.add(1, 0, 0);
+            }
+            Block block = blockLoc.getBlock();
+            Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
+            if (block.getType() == Material.DIAMOND_BLOCK) {
+                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+            }
 
-                    Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
-                    signBlock.setType(Material.AIR);
-                    block.setType(Material.AIR);
-                    if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
-                        bracketLoc.getBlock().setType(Material.AIR);
-                    }
-                    stoneLoc.getBlock().setType(Material.AIR);
-                    chestLoc.getBlock().setType(Material.AIR);
+            if (signBlock.getType() == Material.OAK_WALL_SIGN) {
+                Location signLoc = signBlock.getLocation();
+                Location chestLoc = blockLoc.clone().add(0, 1, 0);
+                Location stoneLoc = blockLoc.clone().add(0, 0, 1);
 
-                    if (bracketLoc != null) {
-                        CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -2);
-                        CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
-                    } else {
-                        CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
-                    }
+                Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
+                signBlock.setType(Material.AIR);
+                block.setType(Material.AIR);
+                if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
+                    bracketLoc.getBlock().setType(Material.AIR);
+                }
+                stoneLoc.getBlock().setType(Material.AIR);
+                chestLoc.getBlock().setType(Material.AIR);
+
+                if (bracketLoc != null) {
+                    CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -2);
+                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                } else {
+                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                 }
             }
         }

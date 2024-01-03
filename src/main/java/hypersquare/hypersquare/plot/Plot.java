@@ -6,6 +6,7 @@ import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.compiler.CodeFile;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -68,7 +69,8 @@ public class Plot {
 
                     PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
                     String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
-                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.getPlugin(Hypersquare.class), "plotType"), PersistentDataType.STRING, capitalized);
+                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, capitalized);
+                    new CodeFile(Bukkit.getWorld(worldName)).setCode("[]");
                     savePersistentData(Bukkit.getWorld(worldName), plugin);
                     PlotManager.loadPlot(plotID);
                     ChangeGameMode.devMode(player, plotID);
@@ -76,12 +78,12 @@ public class Plot {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class), 0L, 5L);
+        }.runTaskTimer(Hypersquare.instance, 0L, 5L);
     }
 
 
         public static void loadPlot(int plotID, Player player) throws WorldLockedException, CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
-        SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+        SlimePlugin plugin = Hypersquare.slimePlugin;
         String worldName = "hs." + plotID;
         SlimeLoader file = plugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
@@ -99,7 +101,7 @@ public class Plot {
                     }
 
                 }
-            }.runTaskTimer(Hypersquare.getPlugin(Hypersquare.class),1,100);
+            }.runTaskTimer(Hypersquare.instance,1,100);
             player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
             Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
 
@@ -125,9 +127,8 @@ public class Plot {
 
     }
     public static void deletePlot(int plotID) throws UnknownWorldException, IOException {
-        SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         String worldName = "hs." + plotID;
-        SlimeLoader file = plugin.getLoader("mongodb");
+        SlimeLoader file = Hypersquare.slimePlugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
 
         SlimeWorld world = null;

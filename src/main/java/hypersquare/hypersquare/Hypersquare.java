@@ -1,5 +1,6 @@
 package hypersquare.hypersquare;
 
+import com.infernalsuite.aswm.api.SlimePlugin;
 import hypersquare.hypersquare.command.*;
 import hypersquare.hypersquare.command.PlotCommands;
 import hypersquare.hypersquare.command.TabCompleter.PlotCommandsComplete;
@@ -14,6 +15,7 @@ import hypersquare.hypersquare.util.manager.CommandManager;
 
 import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -47,9 +49,13 @@ public final class Hypersquare extends JavaPlugin {
 
     public static Plugin instance;
 
+    public static SlimePlugin slimePlugin;
+
     @Override
     public void onEnable() {
         instance = this;
+        slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+
         saveDefaultConfig();
         getConfig().addDefault("DB_PASS", "");
         DB_PASS = (String) getConfig().get("DB_PASS");

@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.dev.compiler;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -43,6 +44,7 @@ public class CodeFile {
 
     public void setCode(String newCode) {
         world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING, newCode);
+        Utilities.savePersistentData(world, Hypersquare.slimePlugin);
     }
 
     public String getEncodedCode() throws IOException {

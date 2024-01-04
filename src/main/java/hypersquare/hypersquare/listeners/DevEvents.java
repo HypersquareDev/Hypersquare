@@ -82,7 +82,7 @@ public class DevEvents implements Listener {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK){
             if (event.getClickedBlock().getType() == Material.CHEST){
                 Chest chest = (Chest) event.getClickedBlock().getState();
-                if (player.getInventory().getItemInMainHand().getType() != Material.AIR){
+                if (player.getInventory().getItemInMainHand().getType() != Material.AIR && !player.getInventory().getItemInMainHand().getItemMeta().equals(CodeItems.GLITCH_STICK_ITEM.getItemMeta())){
                 chest.getInventory().setItem(chest.getInventory().firstEmpty(),event.getPlayer().getInventory().getItemInMainHand());
                 player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,1.0f,1.0f);
                 }

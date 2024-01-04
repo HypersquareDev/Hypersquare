@@ -17,12 +17,8 @@ public class DevCommand implements CommandExecutor {
             Player player = (Player) sender;
             int plotID = Utilities.getPlotID(player.getWorld());
             if (plotID != 0) {
-                if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString()) || player.isOp()) {
                     ChangeGameMode.devMode(player, plotID);
                     Plot.loadRules(plotID);
-                } else {
-                    Utilities.sendError(player,"You do not have dev permissions for this plot!");
-                }
             } else {
                 Utilities.sendError(player,"You must be on a plot!");
             }

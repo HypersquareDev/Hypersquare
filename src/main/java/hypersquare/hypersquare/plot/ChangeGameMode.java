@@ -34,18 +34,23 @@ public class ChangeGameMode {
 
 
         if (player.getWorld().getName().equals(worldName)) {
-            if (Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.Leave(player);
-            Utilities.resetPlayerStats(player);
-            Bukkit.getWorld(worldName).setTime(1000);
-            LoadItems.devInventory(player);
-            player.setGameMode(GameMode.CREATIVE);
-            Hypersquare.mode.put(player,"coding");
-            player.teleport(new Location(Bukkit.getWorld(worldName),-10,0,10,-90,0));
-            Utilities.sendInfo(player, "You are now in dev mode.");
-            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-            PlotDatabase.updateLocalData(plotID);
-            PlotManager.loadPlot(plotID);
+            if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.developers")) {
+
+                if (Hypersquare.mode.get(player).equals("playing"))
+                    PlaytimeEventExecuter.Leave(player);
+                Utilities.resetPlayerStats(player);
+                Bukkit.getWorld(worldName).setTime(1000);
+                LoadItems.devInventory(player);
+                player.setGameMode(GameMode.CREATIVE);
+                Hypersquare.mode.put(player, "coding");
+                player.teleport(new Location(Bukkit.getWorld(worldName), -10, 0, 10, -90, 0));
+                Utilities.sendInfo(player, "You are now in dev mode.");
+                Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                PlotDatabase.updateLocalData(plotID);
+                PlotManager.loadPlot(plotID);
+            } else {
+                Utilities.sendError(player, "You do not have dev permissions on this plot");
+            }
 
 
         }
@@ -91,17 +96,21 @@ public class ChangeGameMode {
         }
         String worldName = "hs." + plotID;
         if (player.getWorld().getName().equals(worldName)) {
-            if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.Leave(player);
-            Utilities.resetPlayerStats(player);
-            player.closeInventory();
-            player.getInventory().clear();
-            player.setGameMode(GameMode.CREATIVE);
-            Hypersquare.mode.put(player,"building");
-            Utilities.sendInfo(player, "You are now in build mode.");
-            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-            PlotDatabase.updateLocalData(plotID);
-            PlotManager.loadPlot(plotID);
+            if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.builders")) {
+                if (Hypersquare.mode.get(player).equals("playing"))
+                    PlaytimeEventExecuter.Leave(player);
+                Utilities.resetPlayerStats(player);
+                player.closeInventory();
+                player.getInventory().clear();
+                player.setGameMode(GameMode.CREATIVE);
+                Hypersquare.mode.put(player, "building");
+                Utilities.sendInfo(player, "You are now in build mode.");
+                Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                PlotDatabase.updateLocalData(plotID);
+                PlotManager.loadPlot(plotID);
+            } else {
+                Utilities.sendError(player,"You do not have build permissions on this plot.");
+            }
         }
     }
     public static void editSpawn(Player player){

@@ -53,5 +53,8 @@ commands:
   ping:
     description: returns player's ping
     usage: /<command>
+  test:
+    description: test something
+    usage: /<command>
 
 depend: [NBTAPI]

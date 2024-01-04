@@ -17,7 +17,7 @@ public class PlayerRightClickListener implements Listener {
         Player player = event.getPlayer();
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
             if (event.getItem() != null && event.getItem().getItemMeta().equals(MiscItems.MY_PLOTS.build().getItemMeta())){
-                new MyPlotsMenu(event.getPlayer()).open();
+                MyPlotsMenu.create(player).open(player);
             }
             if (event.getItem() != null && event.getItem().getItemMeta().equals(MiscItems.GAME_MENU.build().getItemMeta())){
                 GameMenu.create().open(player);

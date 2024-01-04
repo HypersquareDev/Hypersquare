@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.plot;
 
+import com.mongodb.Block;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import hypersquare.hypersquare.Hypersquare;
@@ -43,6 +44,36 @@ public class PlotDatabase {
                 .append("votes",votes)
                 .append("version", Hypersquare.plotVersion);
         plotsCollection.insertOne(plotDocument);
+    }
+
+    public static void setPlotPublishedStatus(int plotID, boolean published) {
+        Document query = new Document("plotID", plotID);
+        Document update = new Document("$set", new Document("published", published));
+
+        plotsCollection.updateOne(query, update);
+    }
+
+    public static void addPlotToNew(int value) {
+        Document document = new Document("value", value);
+        plotsCollection.insertOne(document);
+    }
+
+    // Method to get the most recent 9 integers added
+    public static List<Integer> getRecentPlots() {
+        List<Integer> values = new LinkedList<>();
+        FindIterable<Document> iterable = plotsCollection.find();
+
+        try (MongoCursor<Document> cursor = iterable.iterator()) {
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                Integer value = document.getInteger("value");
+                if (value != null) {
+                    values.add(0, value);
+                }
+            }
+        }
+
+        return values;
     }
 
     public static Location getPlotSpawnLocation(int plotID) {

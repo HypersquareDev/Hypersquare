@@ -36,7 +36,7 @@ public class GameMenu {
         gui.disableAllInteractions();
         gui.getFiller().fillBorder(ItemBuilder.from(MiscItems.MENU_FILLER.build()).asGuiItem());
         gui.setItem(1,5, ItemBuilder.from(MiscItems.FEATURED_PLOTS.build()).asGuiItem());
-        gui.setItem(5,2, ItemBuilder.from(MiscItems.NEWLY_PUBLISHED.build()).asGuiItem());
+        gui.setItem(5,2, ItemBuilder.from(MiscItems.NEWLY_PUBLISHED.build()).asGuiItem(event -> NewlyPublishedMenu.create().open(event.getWhoClicked())));
 
         return gui;
     }

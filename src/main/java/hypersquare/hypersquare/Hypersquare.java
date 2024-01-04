@@ -42,6 +42,7 @@ public final class Hypersquare extends JavaPlugin {
     public static Map<Integer, HashMap<String,String>> eventCache = new HashMap<>();
     public static HashMap<UUID,HashMap<String,Integer>> localPlayerData = new HashMap<>();
     public static HashMap<UUID,Long> cooldownMap = new HashMap<>();
+    public static HashMap<Integer,String> admap = new HashMap<>();
     public static int plotVersion = 5;
 
     public static MiniMessage mm = MiniMessage.miniMessage();
@@ -109,6 +110,7 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("text",new Text());
         commandManager.registerCommand("txt", new Text());
         commandManager.registerCommand("ping", new PingCommand());
+        commandManager.registerCommand("test",new TestPermissions());
 
         //Tab Completers
 

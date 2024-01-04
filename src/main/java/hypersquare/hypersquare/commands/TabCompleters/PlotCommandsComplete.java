@@ -23,6 +23,7 @@ public class PlotCommandsComplete implements TabCompleter {
             completions.add("stats");
             completions.add("setspawn");
             completions.add("spawn");
+            completions.add("ad");
 
 
 
@@ -36,6 +37,11 @@ public class PlotCommandsComplete implements TabCompleter {
                         completions.add("remove");
                         completions.add("list");
                         completions.add("clear");
+                        break;
+                    }
+                    case "ad": {
+                        completions.add("message");
+                        completions.add("confirm");
                         break;
                     }
                 }

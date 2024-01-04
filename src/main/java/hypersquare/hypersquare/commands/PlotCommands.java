@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,7 +113,7 @@ public class PlotCommands implements CommandExecutor {
                                                         Utilities.sendError((Player) sender, "That player is already a dev.");
                                                     } else {
                                                         PlotDatabase.addDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                                                        Utilities.sendInfo((Player) sender, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7now has dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID))));
+                                                        Utilities.sendInfo((Player) sender, ("<reset>" + Bukkit.getOfflinePlayer(args[2]).getName() + " <gray>now has dev permissions for " + PlotDatabase.getPlotName(plotID)));
                                                         if (Utilities.playerOnline(args[2])) {
                                                             Utilities.sendInfo(Bukkit.getPlayer(args[2]), "You now have dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID)));
                                                         }
@@ -165,7 +166,8 @@ public class PlotCommands implements CommandExecutor {
 
                                         }
                                     }
-                                } catch (Exception IndexOutOfBoundsException) {
+                                } catch (IndexOutOfBoundsException e) {
+                                    e.printStackTrace();
                                     Utilities.sendUsageError(player, "/plot <dev/builder> <add/remove/list/clear> [player]");
                                 }
 
@@ -185,8 +187,87 @@ public class PlotCommands implements CommandExecutor {
 
                                 Utilities.sendMultiMiniMessage(player,messages);
                             }
+                            break;
                         }
-                    }
+                        case "ad":{
+                            if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString()) || player.hasPermission("hypersquare.override.ad")) {
+                                    List<String> messages = new ArrayList<>();
+                                    player.sendMessage(args);
+                                        if (args[1].equals("message")) {
+                                            String finalAd = getString(args);
+                                            if (finalAd.isEmpty()){
+                                                finalAd = PlotDatabase.getPlotDescription(plotID);
+                                            }
+                                            StringBuilder devs = new StringBuilder();
+                                            for (String name : PlotDatabase.getPlotDevs(plotID)) {
+                                                devs.append(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName()).append(", ");
+                                            }
+                                            if (devs.length() > 2) {
+                                                devs = new StringBuilder(devs.substring(0, devs.length() - 2));
+                                            }
+
+
+                                            String authors = String.valueOf(devs);
+                                            messages.add(PlotDatabase.getPlotName(plotID) + " <gray>by " + authors + "<reset>: " + finalAd);
+                                            Utilities.sendMultiMiniMessage(player,messages);
+                                            Hypersquare.admap.put(plotID,finalAd);
+                                        }
+                                        if (args[1].equals("confirm")) {
+                                            String finalAd = Hypersquare.admap.get(plotID);
+                                            if (finalAd == null){
+                                                finalAd = PlotDatabase.getPlotDescription(plotID);
+                                            }
+                                            StringBuilder devs = new StringBuilder();
+                                            for (String name : PlotDatabase.getPlotDevs(plotID)) {
+                                                devs.append(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName()).append(", ");
+                                            }
+                                            if (devs.length() > 2) {
+                                                devs = new StringBuilder(devs.substring(0, devs.length() - 2));
+                                            }
+
+
+                                            String authors = String.valueOf(devs);
+                                            messages.add(PlotDatabase.getPlotName(plotID) + " <gray>by " + authors + "<reset>: " + finalAd);
+                                            for (Player player1 : Bukkit.getOnlinePlayers()) {
+                                                player1.playSound(player1.getLocation(),Sound.ITEM_LODESTONE_COMPASS_LOCK,1,2);
+                                                player1.playSound(player1.getLocation(),Sound.UI_TOAST_IN,1,2);
+                                                Utilities.sendMultiMiniMessage(player1, messages);
+                                            }
+                                            if (!PlotDatabase.isPlotPublished(plotID)){
+                                                PlotDatabase.addPlotToNew(plotID);
+                                                PlotDatabase.setPlotPublishedStatus(plotID,true);
+                                                if (PlotDatabase.getPlotDescription(plotID) == null){
+                                                    PlotDatabase.changePlotDescription(plotID,finalAd);
+                                                }
+                                            }
+                                        }
+
+                                } else {
+                                Utilities.sendError((Player) sender, "Only the plot owner can do that!");
+                            }
+                                break;
+                            }
+                        case "description": {
+                            if (PlotManager.getPlotOwner(plotID).equals(((Player) sender).getUniqueId().toString()) || player.hasPermission("hypersquare.override.description")) {
+                                if (args.length >= 2) {
+                                    StringBuilder name = new StringBuilder();
+
+                                    for (int i = 1; i <= args.length - 1; i++) {
+                                        name.append(args[i]);
+                                        if (i < 100) {
+                                            name.append(" ");
+                                        }
+                                    }
+                                    PlotDatabase.changePlotDescription(plotID,name.toString().strip());
+                                    Utilities.sendInfo(player,"Successfully changed the plot description to " + String.valueOf(name).strip() + ".");
+                                    PlotManager.loadPlot(plotID);
+                                } else {
+                                    Utilities.sendError(player, "You cannot set the plot description to nothing");
+                                }
+                            }
+                            }
+                        }
+
                 } else {
                     Utilities.sendError(player, "Invalid command usage.");
                 }
@@ -197,5 +278,19 @@ public class PlotCommands implements CommandExecutor {
             sender.sendMessage("This command can only be used by players.");
         }
         return true;
+    }
+
+    @NotNull
+    private static String getString(@NotNull String @NotNull [] args) {
+        StringBuilder name = new StringBuilder();
+
+        for (int i = 2; i <= args.length - 1; i++) {
+            name.append(args[i]);
+            if (i < 100) {
+                name.append(" ");
+            }
+        }
+        String finalAd = String.valueOf(name).strip();
+        return finalAd;
     }
 }

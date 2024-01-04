@@ -3,7 +3,9 @@ package hypersquare.hypersquare.menus.codeblockmenus;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.items.PlayerEventItems;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.utils.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -43,15 +45,22 @@ public class PlayerEventMenu {
                         .title(mm.deserialize("Player Events <dark_gray>> ").append(mm.deserialize(matcher.replaceAll(""))))
                         .rows(5)
                         .create();
-
+                int plotID = Utilities.getPlotID(player.getWorld());
 
                 // Loop through all actions in the category
                 for (PlayerEventItems action : PlayerEventItems.getEvents(playerEventItem)) {
                     GuiItem actionItem = ItemBuilder.from(action.build()).asGuiItem(event2 -> {
                         event.setCancelled(true);
-                        Utilities.sendSuccessClickMenuSound(player);
-                        Block block = player.getTargetBlock(null, 5);
-                        Utilities.setAction(block, action.getId(), player);
+                        PlotDatabase.updateEventsCache(plotID);
+                        if (Hypersquare.eventCache.get(plotID).containsValue(action.getId())){
+                            Utilities.sendError(player,"This event already exists in the plot.");
+                            player.closeInventory();
+                            player.teleport(Utilities.parseLocation(Utilities.getKeyFromValue(Hypersquare.eventCache.get(plotID),action.getId()),player.getWorld()).add(-1,0,0));
+                        } else {
+                            Utilities.sendSuccessClickMenuSound(player);
+                            Block block = player.getTargetBlock(null, 5);
+                            Utilities.setAction(block, action.getId(), player);
+                        }
                     });
                     categoryGui.addItem(actionItem);
                 }

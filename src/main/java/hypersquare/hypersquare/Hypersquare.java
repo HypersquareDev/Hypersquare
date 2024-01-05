@@ -68,11 +68,14 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerRightClickListener(), this);
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new DevEvents(), this);
-        pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new PlayerMoveListener(),this);
+        pm.registerEvents(new PaperServerListPingListener(), this);
+
+        pm.registerEvents(new PlayerGoToSpawnEvent(), this);
+        pm.registerEvents(new DevEvents(), this);
         pm.registerEvents(new PlaytimeEventExecuter(), this);
         pm.registerEvents(new CodePlacement(), this);
+
         pm.registerEvents(new Text(),this);
         new InventoryAPI(this).init();
 

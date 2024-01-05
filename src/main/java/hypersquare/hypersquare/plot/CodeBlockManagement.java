@@ -2,6 +2,7 @@ package hypersquare.hypersquare.plot;
 
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -103,8 +104,7 @@ public class CodeBlockManagement {
                         blocks.add(currentLoc.clone().add(0, 0, amount));
                         blocks.add(currentLoc.getBlock().getType());
                         blocks.add(currentLoc.getBlock().getBlockData());
-                        if (currentLoc.getBlock().getState() instanceof Sign) {
-                            Sign sign = (Sign) currentLoc.getBlock().getState();
+                        if (currentLoc.getBlock().getState() instanceof Sign sign) {
                             blocks.add(sign.getSide(Side.FRONT).getLines());
                         }
                         clipboard.add(blocks);
@@ -116,20 +116,20 @@ public class CodeBlockManagement {
         for (Object list : clipboard) {
             ArrayList list1 = (ArrayList) list;
             Location location1 = (Location) list1.get(0);
-                location1.getBlock().setType((Material) list1.get(1));
-                location1.getBlock().setBlockData((BlockData) list1.get(2));
-                if (list1.size() == 4) {
-                    Sign sign = (Sign) location1.getBlock().getState();
-                    sign.setEditable(true);
+            location1.getBlock().setType((Material) list1.get(1));
+            location1.getBlock().setBlockData((BlockData) list1.get(2));
+            if (list1.size() == 4) {
+                Sign sign = (Sign) location1.getBlock().getState();
+                sign.setEditable(true);
 
-                    sign.update();
-                    int i = 0;
-                    for (String text : (String[]) list1.get(3)) {
-                        sign.getSide(Side.FRONT).setLine(i, text);
-                        i++;
-                    }
-                    sign.update();
+                sign.update();
+                int i = 0;
+                for (String text : (String[]) list1.get(3)) {
+                    sign.getSide(Side.FRONT).setLine(i, text);
+                    i++;
                 }
+                sign.update();
+            }
         }
 
     }

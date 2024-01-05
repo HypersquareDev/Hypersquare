@@ -55,7 +55,7 @@ public class DevEvents implements Listener {
                 }
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else {
-                if (CodeBlocks.getByMaterial(event.getItem().getType()) == null)
+                if (event.getItem() != null && CodeBlocks.getByMaterial(event.getItem().getType()) == null)
                     event.setCancelled(true);
             }
         }

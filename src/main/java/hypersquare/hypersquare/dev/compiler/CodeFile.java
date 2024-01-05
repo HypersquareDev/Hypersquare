@@ -30,14 +30,21 @@ public class CodeFile {
     }
 
     public JsonObject getCodeJson() {
-        player.sendMessage(JsonParser.parseString(getCode()).getAsJsonObject().toString());
-        return JsonParser.parseString(getCode()).getAsJsonObject();
+        String code = getCode();
+        world.sendMessage(Component.text(code));
+
+        JsonArray array = JsonParser.parseString(code).getAsJsonArray();
+
+        if (!array.isJsonNull() && array.size() > 0) {
+            return array.get(0).getAsJsonObject();
+        } else {
+            return new JsonObject();
+        }
     }
 
     public String getCode() {
         String code = world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
         assert code != null;
-        world.sendMessage(Component.text(code));
         return code;
     }
 

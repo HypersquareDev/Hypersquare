@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.compiler.CodeFile;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.PlotDatabase;
@@ -30,6 +31,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.Objects;
 
@@ -141,10 +145,9 @@ public class CodePlacement implements Listener {
                         }
 
                         // Invalid placements
-                        if (location.getBlockY() % 6 != 0 ||         // Codeblock on top of codeblock
-                                location.getBlockX() % 3 != 0 ||     // Codelines not spaced 3 blocks apart
-                                (location.getBlockZ() + 1) % 2 != 0 ||  // Codeblocks not spaced 2 blocks apart
-                                CodeBlockManagement.findCodelineStartLoc(location) == null // Codeline does not start with a threadstarter
+                        if (location.getBlockY() % 6 != 0 ||            // Codeblock on top of codeblock
+                                location.getBlockX() % 3 != 0 ||        // Codelines not spaced 3 blocks apart
+                                (location.getBlockZ() + 1) % 2 != 0     // Codeblocks not spaced 2 blocks apart
                         ) {
                             Utilities.sendError(player, "Invalid block placement.");
                             return;
@@ -152,6 +155,8 @@ public class CodePlacement implements Listener {
                             // Line starter not at the very start
                             Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
                             return;
+                        } else if (!lineStarter && CodeBlockManagement.findCodelineStartLoc(location) == null) {
+                            Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
                         }
 
                         if (!blockInPlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0,0, size))) {
@@ -170,6 +175,13 @@ public class CodePlacement implements Listener {
 
     private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean chest, String name) {
         Location signLocation = location.clone().add(-1, 0, 0);
+
+        CodeFile code = new CodeFile(location.getWorld());
+        JsonArray codeJson = addCodeblock(location, name, code);
+        code.setCode(codeJson.toString());
+
+
+
 
         if (name != null) {
             signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
@@ -226,6 +238,58 @@ public class CodePlacement implements Listener {
                 }
             }
         }.runTaskLater(Hypersquare.instance, 1);
+    }
+
+    @NotNull
+    private static JsonArray addCodeblock(Location location, String name, CodeFile code) {
+        JsonArray codeJson = code.getCodeJson();
+
+        int codelineIndex = location.getBlockX() / 3;
+        int codeblockIndex = location.getBlockZ() / 2;
+
+        JsonArray codelines = codeJson;
+        JsonObject codeline = codelines.get(codelineIndex).getAsJsonObject();
+        if (CodeBlocks.getByName(name).isThreadStarter()) {
+            JsonObject event = new JsonObject();
+            String type = getStarterType(name);
+            event.addProperty("type",type);
+            event.addProperty(type,"");
+            event.addProperty("position",codelineIndex);
+            codeline = event;
+        } else {
+            JsonArray actions = codeline.get("actions").getAsJsonArray();
+            JsonObject action = actions.get(codeblockIndex).getAsJsonObject();
+            action.addProperty("action", genEmptyCodeblock(name));
+        }
+        // Update main codeJson
+        codelines.set(codelineIndex, codeline);
+        codeJson.add(codelines);
+        return codeJson;
+    }
+
+    @NotNull
+    private static String genEmptyCodeblock(String name) {
+        // PLAYER ACTION => player_action_empty
+        return name.toLowerCase().replace(" ", "_") + "_empty";
+    }
+
+    private static String getStarterType(String name){
+        switch (name){
+            case "PLAYER EVENT" : {
+                return "event";
+            }
+            case "ENTITY EVENT" : {
+                return "entity_event";
+            }
+            case "FUNCTION" : {
+                return "func";
+            }
+            case "PROCESS" : {
+                return "process";
+            }
+
+        }
+        return null;
     }
 
 

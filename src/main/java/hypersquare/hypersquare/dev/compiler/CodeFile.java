@@ -1,7 +1,9 @@
 package hypersquare.hypersquare.dev.compiler;
 
+import com.google.gson.*;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -27,19 +29,16 @@ public class CodeFile {
         this.world = player.getWorld();
     }
 
-    public JSONObject getCodeJson() {
-        getCode();
-        JSONParser parser = new JSONParser();
-        try {
-            return (JSONObject) parser.parse(getCode());
-        } catch (ParseException e) {
-            e.printStackTrace(); // Something went wrong
-        }
-        return null;
+    public JsonArray getCodeJson() {
+        player.sendMessage(JsonParser.parseString(getCode()).getAsJsonObject().toString());
+        return JsonParser.parseString(getCode()).getAsJsonArray();
     }
 
     public String getCode() {
-        return world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
+        String code = world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
+        assert code != null;
+        world.sendMessage(Component.text(code));
+        return code;
     }
 
     public void setCode(String newCode) {

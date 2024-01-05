@@ -77,6 +77,15 @@ public enum CodeBlocks {
         return null;
     }
 
+    public static CodeBlocks getByName(String name) {
+        for (CodeBlocks codeBlock : CodeBlocks.values()) {
+            if (Objects.equals(codeBlock.name, name)) {
+                return codeBlock;
+            }
+        }
+        return null;
+    }
+
     public Material material() {
         return material;
     }

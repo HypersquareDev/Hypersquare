@@ -6,13 +6,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.compiler.CodeFile;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -32,10 +33,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CodePlacement implements Listener {
     @EventHandler
@@ -52,31 +52,22 @@ public class CodePlacement implements Listener {
         if (!blockInPlot(event.getBlockPlaced().getLocation())) {
             event.setCancelled(true);
         }
-        if (event.getBlock().getLocation().getX() > -0.5) {
-            return;
-        }
 
-
-        event.setCancelled(true);
-        placeCodeTemplate(event, Hypersquare.instance);
-
-        if (event.getBlock().getLocation().getY() < 0 || event.getBlockAgainst().getLocation().getY() < 0 && checkIfValidAgainst(event.getBlockAgainst())) {
-            return;
-        }
         if (event.getBlock().getLocation().add(1, 0, 0).getX() > 0) {
 
             processPlace(event);
-        } else {
-            if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-                Utilities.sendError(event.getPlayer(), "Invalid block placement");
-            } else {
-                if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-                    Utilities.sendError(event.getPlayer(), "Invalid block placement");
-                } else {
-                    processPlace(event);
-                }
-            }
         }
+//        } else {
+//            if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
+//                Utilities.sendError(event.getPlayer(), "Invalid block placement");
+//            } else {
+//                if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
+//                    Utilities.sendError(event.getPlayer(), "Invalid block placement");
+//                } else {
+//                    processPlace(event);
+//                }
+//            }
+//        }
 
     }
 
@@ -164,7 +155,7 @@ public class CodePlacement implements Listener {
                             return;
                         }
 
-                        CodeBlockManagement.moveCodeLine(location, size);
+                        //CodeBlockManagement.moveCodeLine(location, size);
                         placeBlock(event.getItemInHand(), location, brackets, chest, name);
 
                     }
@@ -177,7 +168,8 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonObject codeJson = addCodeblock(location, name, code);
+        JsonArray codeJson = addCodeblock(location.clone(), name, code);
+        location.getWorld().sendMessage(Component.text(codeJson.toString()));
         code.setCode(codeJson.toString());
 
 
@@ -241,31 +233,59 @@ public class CodePlacement implements Listener {
     }
 
     @NotNull
-    private static JsonObject addCodeblock(Location location, String name, CodeFile code) {
-        JsonObject codeJson = code.getCodeJson();
+    private static JsonArray addCodeblock(Location location, String name, CodeFile code) {
+        JsonArray plotCode = code.getCodeJson();
 
-        int codelineIndex = location.getBlockX() / 3;
-        int codeblockIndex = location.getBlockZ() / 2;
+        int codelineIndex = Math.abs(location.getBlockX() / 3)-1;
+        int codeblockIndex = (int) Math.floor((double) location.getBlockZ() / 2);
+
+        Bukkit.broadcastMessage(codelineIndex + " index");
+        Bukkit.broadcastMessage(location.getBlockX() + " block x");
+
+        JsonObject codeline = new JsonObject();
+
+        final int[] _position = {-1};
+        plotCode.iterator().forEachRemaining(element -> {
+            if (element.getAsJsonObject().get("position").getAsInt() == codelineIndex){
+                _position[0] = codelineIndex;
+            }
+
+        });
+        int position = _position[0];
 
 
-        JsonArray codelines = codeJson.get("events").getAsJsonArray();
-        JsonObject codeline = codelines.get(codelineIndex).getAsJsonObject();
         if (CodeBlocks.getByName(name).isThreadStarter()) {
             JsonObject event = new JsonObject();
             String type = getStarterType(name);
             event.addProperty("type",type);
-            event.addProperty(type,"");
+            event.addProperty(type,type+"_empty");
             event.addProperty("position",codelineIndex);
+            event.add("actions",new JsonArray());
             codeline = event;
         } else {
+            if (!plotCode.isEmpty()) {
+                codeline = plotCode.get(position).getAsJsonObject();
+            }
             JsonArray actions = codeline.get("actions").getAsJsonArray();
-            JsonObject action = actions.get(codeblockIndex).getAsJsonObject();
+            JsonObject action = new JsonObject();
             action.addProperty("action", genEmptyCodeblock(name));
+            actions.add(action);
         }
         // Update main codeJson
-        codelines.set(codelineIndex, codeline);
-        codeJson.add("events", codelines);
-        return codeJson;
+
+
+
+        Bukkit.broadcastMessage(position + " postion");
+
+
+        if (position == -1){
+            plotCode.add(codeline);
+
+        } else {
+            plotCode.set(position,codeline);
+        }
+
+        return plotCode;
     }
 
     @NotNull

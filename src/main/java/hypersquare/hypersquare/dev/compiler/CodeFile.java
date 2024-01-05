@@ -29,16 +29,16 @@ public class CodeFile {
         this.world = player.getWorld();
     }
 
-    public JsonObject getCodeJson() {
+    public JsonArray getCodeJson() {
         String code = getCode();
         world.sendMessage(Component.text(code));
 
         JsonArray array = JsonParser.parseString(code).getAsJsonArray();
 
         if (!array.isJsonNull() && array.size() > 0) {
-            return array.get(0).getAsJsonObject();
+            return array;
         } else {
-            return new JsonObject();
+            return new JsonArray();
         }
     }
 

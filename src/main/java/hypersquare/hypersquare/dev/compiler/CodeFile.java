@@ -29,9 +29,9 @@ public class CodeFile {
         this.world = player.getWorld();
     }
 
-    public JsonArray getCodeJson() {
+    public JsonObject getCodeJson() {
         player.sendMessage(JsonParser.parseString(getCode()).getAsJsonObject().toString());
-        return JsonParser.parseString(getCode()).getAsJsonArray();
+        return JsonParser.parseString(getCode()).getAsJsonObject();
     }
 
     public String getCode() {

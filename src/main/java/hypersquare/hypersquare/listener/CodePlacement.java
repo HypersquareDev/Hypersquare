@@ -177,7 +177,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = addCodeblock(location, name, code);
+        JsonObject codeJson = addCodeblock(location, name, code);
         code.setCode(codeJson.toString());
 
 
@@ -241,13 +241,13 @@ public class CodePlacement implements Listener {
     }
 
     @NotNull
-    private static JsonArray addCodeblock(Location location, String name, CodeFile code) {
-        JsonArray codeJson = code.getCodeJson();
+    private static JsonObject addCodeblock(Location location, String name, CodeFile code) {
+        JsonObject codeJson = code.getCodeJson();
 
         int codelineIndex = location.getBlockX() / 3;
         int codeblockIndex = location.getBlockZ() / 2;
 
-        JsonArray codelines = codeJson;
+        JsonArray codelines = codeJson.get("events").getAsJsonArray();
         JsonObject codeline = codelines.get(codelineIndex).getAsJsonObject();
         if (CodeBlocks.getByName(name).isThreadStarter()) {
             JsonObject event = new JsonObject();
@@ -263,7 +263,7 @@ public class CodePlacement implements Listener {
         }
         // Update main codeJson
         codelines.set(codelineIndex, codeline);
-        codeJson.add(codelines);
+        codeJson.add("events", codelines);
         return codeJson;
     }
 

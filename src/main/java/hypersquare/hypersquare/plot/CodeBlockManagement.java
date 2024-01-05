@@ -91,7 +91,6 @@ public class CodeBlockManagement {
 
 
     public static void moveCodeLine(Location location, int amount){
-
         Location loc1 = location.clone().add(-1,0,0);
         Location loc2 = findCodeEnd(location.clone()).add(0,1,0);
         ArrayList clipboard = new ArrayList<ArrayList>();

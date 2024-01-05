@@ -54,7 +54,6 @@ public class CodePlacement implements Listener {
         }
 
         if (event.getBlock().getLocation().add(1, 0, 0).getX() > 0) {
-
             processPlace(event);
         }
 //        } else {
@@ -119,7 +118,7 @@ public class CodePlacement implements Listener {
             CodeBlocks codeblock = CodeBlocks.getByMaterial(event.getItemInHand().getType());
             boolean brackets = codeblock.hasBrackets();
             boolean chest = codeblock.hasChest();
-            boolean lineStarter = codeblock.isThreadStarter();
+            boolean threadStarter = codeblock.isThreadStarter();
             String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
             new BukkitRunnable() {
                 @Override
@@ -142,11 +141,14 @@ public class CodePlacement implements Listener {
                         ) {
                             Utilities.sendError(player, "Invalid block placement.");
                             return;
-                        } else if (lineStarter && location.getBlockZ() != 1) {
-                            // Line starter not at the very start
+                        } else if (threadStarter && location.getBlockZ() != 1) {
+                            // Thread starter not at the very start
                             Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
                             return;
-                        } else if (!lineStarter && CodeBlockManagement.findCodelineStartLoc(location) == null) {
+                        }
+                        JsonArray code = new CodeFile(event.getPlayer()).getCodeJson();
+                        if (!threadStarter && code.get(event.getBlock().getX() % 3) == null) {
+                            // No thread starter, check if we have a thread starter already at the position
                             Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
                         }
 
@@ -157,7 +159,6 @@ public class CodePlacement implements Listener {
 
                         //CodeBlockManagement.moveCodeLine(location, size);
                         placeBlock(event.getItemInHand(), location, brackets, chest, name);
-
                     }
                 }
             }.runTaskLater(Hypersquare.instance,2);
@@ -172,10 +173,7 @@ public class CodePlacement implements Listener {
         location.getWorld().sendMessage(Component.text(codeJson.toString()));
         code.setCode(codeJson.toString());
 
-
-
-
-        if (name != null) {
+        if (name != null) { // Either invalid or empty codeblock
             signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
             BlockData blockData = signLocation.getBlock().getBlockData();
             ((Directional) blockData).setFacing(BlockFace.WEST);
@@ -199,8 +197,6 @@ public class CodePlacement implements Listener {
                 Location openBracketLocation = location.clone().add(0, -1, 1);
 
                 if (brackets) {
-
-
                     // Open Bracket
                     openBracketLocation.getBlock().setType(Material.PISTON);
                     BlockData pistonData = openBracketLocation.getBlock().getBlockData();
@@ -213,9 +209,8 @@ public class CodePlacement implements Listener {
                     pistonData = closeBracketLocation.getBlock().getBlockData();
                     ((Directional) pistonData).setFacing(BlockFace.NORTH);
                     closeBracketLocation.getBlock().setBlockData(pistonData);
-
                 } else {
-                    // Stone Separator
+                    // Stone Separator, skip if empty codeblock
                     if (!Objects.equals(name, "empty")) stoneLocation.getBlock().setType(Material.STONE);
                     if (stoneLocation.clone().add(0,0,1).getBlock().getType() == Material.PISTON ||stoneLocation.clone().add(0,0,1).getBlock().getType() == Material.STICKY_PISTON){
                         CodeBlockManagement.moveCodeLine(stoneLocation.clone().add(0,0,1),1);

@@ -6,7 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.dev.compiler.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.PlotDatabase;
@@ -35,7 +36,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CodePlacement implements Listener {
     @EventHandler
@@ -49,24 +49,21 @@ public class CodePlacement implements Listener {
             }
             return;
         }
-        if (!blockInPlot(event.getBlockPlaced().getLocation())) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
 
         if (event.getBlock().getLocation().add(1, 0, 0).getX() > 0) {
             processPlace(event);
+        } else {
+            if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
+                Utilities.sendError(event.getPlayer(), "Invalid block placement");
+            } else {
+                if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
+                    Utilities.sendError(event.getPlayer(), "Invalid block placement");
+                } else {
+                    processPlace(event);
+                }
+            }
         }
-//        } else {
-//            if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-//                Utilities.sendError(event.getPlayer(), "Invalid block placement");
-//            } else {
-//                if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-//                    Utilities.sendError(event.getPlayer(), "Invalid block placement");
-//                } else {
-//                    processPlace(event);
-//                }
-//            }
-//        }
 
     }
 
@@ -112,7 +109,7 @@ public class CodePlacement implements Listener {
 
     public void processPlace(BlockPlaceEvent event) {
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
-
+        event.setCancelled(true);
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(),System.currentTimeMillis()+150);
             CodeBlocks codeblock = CodeBlocks.getByMaterial(event.getItemInHand().getType());
@@ -128,10 +125,10 @@ public class CodePlacement implements Listener {
                         Block againstBlock = event.getBlockAgainst();
                         Location location = event.getBlock().getLocation();
                         Player player = event.getPlayer();
-                        int size = brackets ? 3 : 2;
 
+                        int size = brackets ? 3 : 2;
                         if (checkIfValidAgainst(againstBlock)) {
-                            location = againstLocation.clone().add(0, 0, 1);
+                            location = event.getBlockAgainst().getLocation().clone().add(0, 0, 1);
                         }
 
                         // Invalid placements
@@ -147,9 +144,10 @@ public class CodePlacement implements Listener {
                             return;
                         }
                         JsonArray code = new CodeFile(event.getPlayer()).getCodeJson();
-                        if (!threadStarter && code.get(event.getBlock().getX() % 3) == null) {
+                        if (!threadStarter && code.get(location.getBlockX() % 3) == null) {
                             // No thread starter, check if we have a thread starter already at the position
                             Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
+                            return;
                         }
 
                         if (!blockInPlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0,0, size))) {
@@ -157,7 +155,7 @@ public class CodePlacement implements Listener {
                             return;
                         }
 
-                        //CodeBlockManagement.moveCodeLine(location, size);
+                        CodeBlockManagement.moveCodeLine(location.clone(), size);
                         placeBlock(event.getItemInHand(), location, brackets, chest, name);
                     }
                 }
@@ -169,7 +167,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = addCodeblock(location.clone(), name, code);
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, code);
         location.getWorld().sendMessage(Component.text(codeJson.toString()));
         code.setCode(codeJson.toString());
 
@@ -227,88 +225,10 @@ public class CodePlacement implements Listener {
         }.runTaskLater(Hypersquare.instance, 1);
     }
 
-    @NotNull
-    private static JsonArray addCodeblock(Location location, String name, CodeFile code) {
-        JsonArray plotCode = code.getCodeJson();
-
-        int codelineIndex = Math.abs(location.getBlockX() / 3)-1;
-        int codeblockIndex = (int) Math.floor((double) location.getBlockZ() / 2);
-
-        Bukkit.broadcastMessage(codelineIndex + " index");
-        Bukkit.broadcastMessage(location.getBlockX() + " block x");
-
-        JsonObject codeline = new JsonObject();
-
-        final int[] _position = {-1};
-        plotCode.iterator().forEachRemaining(element -> {
-            if (element.getAsJsonObject().get("position").getAsInt() == codelineIndex){
-                _position[0] = codelineIndex;
-            }
-
-        });
-        int position = _position[0];
-
-
-        if (CodeBlocks.getByName(name).isThreadStarter()) {
-            JsonObject event = new JsonObject();
-            String type = getStarterType(name);
-            event.addProperty("type",type);
-            event.addProperty(type,type+"_empty");
-            event.addProperty("position",codelineIndex);
-            event.add("actions",new JsonArray());
-            codeline = event;
-        } else {
-            if (!plotCode.isEmpty()) {
-                codeline = plotCode.get(position).getAsJsonObject();
-            }
-            JsonArray actions = codeline.get("actions").getAsJsonArray();
-            JsonObject action = new JsonObject();
-            action.addProperty("action", genEmptyCodeblock(name));
-            actions.add(action);
-        }
-        // Update main codeJson
-
-
-
-        Bukkit.broadcastMessage(position + " postion");
-
-
-        if (position == -1){
-            plotCode.add(codeline);
-
-        } else {
-            plotCode.set(position,codeline);
-        }
-
-        return plotCode;
-    }
-
-    @NotNull
-    private static String genEmptyCodeblock(String name) {
-        // PLAYER ACTION => player_action_empty
-        return name.toLowerCase().replace(" ", "_") + "_empty";
-    }
-
-    private static String getStarterType(String name){
-        switch (name){
-            case "PLAYER EVENT" : {
-                return "event";
-            }
-            case "ENTITY EVENT" : {
-                return "entity_event";
-            }
-            case "FUNCTION" : {
-                return "func";
-            }
-            case "PROCESS" : {
-                return "process";
-            }
-
-        }
-        return null;
-    }
-
-
+    /**
+        * @deprecated TODO: Use new CodeFile system
+     **/
+    @Deprecated
     public static void placeCodeTemplate(BlockPlaceEvent event, Plugin plugin) {
         if (event.getItemInHand().getType() == Material.ENDER_CHEST) {
             String data = LoadCodeTemplate.load(event.getItemInHand());
@@ -358,12 +278,12 @@ public class CodePlacement implements Listener {
             }
             return;
         }
+        event.setCancelled(true);
 
         if (event.getBlock().getLocation().getX() > -0.5) {
             return;
         }
 
-        event.setCancelled(true);
         Location blockLoc = event.getBlock().getLocation();
 
         if (blockLoc.getY() < 0) {
@@ -373,6 +293,8 @@ public class CodePlacement implements Listener {
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
+
+
 
             if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
                 blockLoc.add(1, 0, 0);
@@ -404,6 +326,9 @@ public class CodePlacement implements Listener {
                     CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                 }
             }
+            CodeFile code = new CodeFile(blockLoc.getWorld());
+            JsonArray codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+            code.setCode(codeJson.toString());
         }
     }
 }

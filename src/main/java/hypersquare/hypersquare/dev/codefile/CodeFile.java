@@ -1,24 +1,24 @@
-package hypersquare.hypersquare.dev.compiler;
+package hypersquare.hypersquare.dev.codefile;
 
 import com.google.gson.*;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.Base64;
 import java.util.zip.Deflater;
 
 public class CodeFile {
-    World world;
-    Player player;
+    public World world;
+    public Player player;
 
     public CodeFile(World world) {
         this.world = world;
@@ -35,7 +35,7 @@ public class CodeFile {
 
         JsonArray array = JsonParser.parseString(code).getAsJsonArray();
 
-        if (!array.isJsonNull() && array.size() > 0) {
+        if (!array.isJsonNull() && !array.isEmpty()) {
             return array;
         } else {
             return new JsonArray();

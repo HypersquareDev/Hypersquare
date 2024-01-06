@@ -6,7 +6,7 @@ import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.compiler.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

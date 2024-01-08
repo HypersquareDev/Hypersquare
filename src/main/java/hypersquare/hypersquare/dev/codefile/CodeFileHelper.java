@@ -14,16 +14,6 @@ public class CodeFileHelper {
         return name.toLowerCase().replace(" ", "_") + "_empty";
     }
 
-    private static String getStarterType(String name) {
-        return switch (name) {
-            case "PLAYER EVENT" -> "event";
-            case "ENTITY EVENT" -> "entity_event";
-            case "FUNCTION" -> "func";
-            case "PROCESS" -> "process";
-            default -> null;
-        };
-    }
-
     private static int getCodelineIndex(Location location) {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
@@ -32,7 +22,8 @@ public class CodeFileHelper {
         return (int) Math.floor((double) location.getBlockZ() / 2) -1;
     }
 
-    private static int getCodelinePosition(Location location, CodeFile codeFile, int codelineIndex) {
+    private static int getCodelineListIndex(Location location, CodeFile codeFile) {
+        int codelineIndex = getCodelineIndex(location);
         JsonArray plotCode = codeFile.getCodeJson();
 
         final int[] _position = {-1};
@@ -54,16 +45,15 @@ public class CodeFileHelper {
         JsonArray plotCode = code.getCodeJson();
 
         int codelineIndex = getCodelineIndex(location);
-        int codeblockIndex = getCodeblockIndex(location);
 
         JsonObject codeline = new JsonObject();
 
         int position = getCodelineListIndex(location, code);
 
-
-        if (CodeBlocks.getByName(name).isThreadStarter()) {
+        CodeBlocks codeblock = CodeBlocks.getByName(name);
+        if (codeblock.isThreadStarter()) {
             JsonObject event = new JsonObject();
-            String type = getStarterType(name);
+            String type = CodeBlocks.getByName(name).id();
             event.addProperty("type", type);
             if (codeblock.hasActions) {
                 event.addProperty("event", type + "_empty");
@@ -78,7 +68,21 @@ public class CodeFileHelper {
             JsonArray actions = codeline.get("actions").getAsJsonArray();
             JsonObject action = new JsonObject();
             action.addProperty("action", genEmptyCodeblock(name));
-            actions.add(action);
+
+            // Insert the element if the index is null
+            if (index < actions.size() || index == -1) {
+                JsonArray temp = new JsonArray();
+                for (int i = 0; i < actions.size(); i++) {
+                    if (i == index) {
+                        temp.add(action);
+                    } else {
+                        temp.add(actions.get(i));
+                    }
+                }
+                actions = temp;
+            } else {
+                actions.add(action);
+            }
         }
 
         if (position == -1) {
@@ -95,8 +99,9 @@ public class CodeFileHelper {
     public static JsonArray removeCodeBlock(Location location, CodeFile code) {
         JsonArray plotCode = code.getCodeJson();
 
-        int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
+
+        // ok wait lemme cook for a sec
 
         int position = getCodelineListIndex(location, code);
         JsonObject codeline = plotCode.get(position).getAsJsonObject();
@@ -108,6 +113,7 @@ public class CodeFileHelper {
         } else {
             JsonArray actions = codeline.get("actions").getAsJsonArray();
             actions.remove(codeblockIndex);
+            plotCode.set(position, codeline);
         }
         Bukkit.broadcastMessage(plotCode + "");
         return plotCode;

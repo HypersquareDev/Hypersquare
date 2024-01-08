@@ -54,4 +54,6 @@ commands:
     description: Debug code
     usage: /<command>
 
-depend: [NBTAPI]
+depend:
+  - NBTAPI
+  - LuckPerms

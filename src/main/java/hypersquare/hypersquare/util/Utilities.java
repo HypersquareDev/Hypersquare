@@ -42,7 +42,14 @@ public class Utilities {
         return 0;
     }
 
-
+    public static String getPlayerGroup(Player player, Collection<String> possibleGroups) {
+        for (String group : possibleGroups) {
+            if (player.hasPermission("group." + group)) {
+                return group;
+            }
+        }
+        return null;
+    }
 
 
     public static String decode(String data) {

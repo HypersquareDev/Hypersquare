@@ -32,7 +32,7 @@ public enum CodeBlocks {
     final boolean isThreadStarter;
     final boolean hasChest;
     final boolean hasBrackets;
-    final boolean hasActions;
+    public final boolean hasActions;
     @NotNull final String defaultAction;
 
     CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets) {

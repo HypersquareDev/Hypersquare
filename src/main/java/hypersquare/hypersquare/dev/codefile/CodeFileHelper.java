@@ -28,8 +28,8 @@ public class CodeFileHelper {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
 
-    private static int getCodeblockIndex(Location location) {
-        return (int) Math.floor((double) location.getBlockZ() / 2) - 1;
+    public static int getCodeblockIndex(Location location) {
+        return (int) Math.floor((double) location.getBlockZ() / 2) -1;
     }
 
     private static int getCodelinePosition(Location location, CodeFile codeFile, int codelineIndex) {
@@ -43,31 +43,31 @@ public class CodeFileHelper {
 
         });
         int position = _position[0];
-        Bukkit.broadcastMessage(codelineIndex + "");
         return position;
     }
 
-    public static JsonArray addCodeblock(Location location, String name, CodeFile code) {
-        Bukkit.broadcastMessage(location.toString());
+    /**
+     * Set index to -1 for the codeblock to be appended instead of inserted.
+     * @return
+     */
+    public static JsonArray addCodeblock(Location location, String name, int index, CodeFile code) {
         JsonArray plotCode = code.getCodeJson();
 
         int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
 
-        Bukkit.broadcastMessage(codelineIndex + " index");
-        Bukkit.broadcastMessage(location.getBlockX() + " block x");
-
         JsonObject codeline = new JsonObject();
 
-        int position = getCodelinePosition(location, code, codelineIndex);
-        Bukkit.broadcastMessage(codelineIndex + " codeline index");
+        int position = getCodelineListIndex(location, code);
 
 
         if (CodeBlocks.getByName(name).isThreadStarter()) {
             JsonObject event = new JsonObject();
             String type = getStarterType(name);
             event.addProperty("type", type);
-            event.addProperty(type, type + "_empty");
+            if (codeblock.hasActions) {
+                event.addProperty("event", type + "_empty");
+            }
             event.addProperty("position", codelineIndex);
             event.add("actions", new JsonArray());
             codeline = event;
@@ -80,11 +80,6 @@ public class CodeFileHelper {
             action.addProperty("action", genEmptyCodeblock(name));
             actions.add(action);
         }
-        // Update main codeJson
-
-
-        Bukkit.broadcastMessage(position + " postion");
-
 
         if (position == -1) {
             plotCode.add(codeline);
@@ -93,65 +88,28 @@ public class CodeFileHelper {
             plotCode.set(position, codeline);
         }
 
+        Bukkit.broadcastMessage(plotCode.toString());
         return plotCode;
     }
 
     public static JsonArray removeCodeBlock(Location location, CodeFile code) {
-        Bukkit.broadcastMessage(location.toString());
         JsonArray plotCode = code.getCodeJson();
 
         int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
 
-        Bukkit.broadcastMessage(codelineIndex + " index");
-        Bukkit.broadcastMessage(location.getBlockX() + " block x");
+        int position = getCodelineListIndex(location, code);
+        JsonObject codeline = plotCode.get(position).getAsJsonObject();
+        Bukkit.broadcastMessage(codeblockIndex + "");
 
-        JsonObject codeline = new JsonObject();
-
-        int position = getCodelinePosition(location, code, codelineIndex);
-
-        JsonObject event = plotCode.get(position).getAsJsonObject();
-
-        if (codeblockIndex == 0){
-            plotCode.remove(position);
+        if (codeblockIndex == -1) {
+            // Is a thread starter (first codeblock)
+            plotCode.remove(codeline);
         } else {
-            JsonArray actions = event.get("actions").getAsJsonArray();
+            JsonArray actions = codeline.get("actions").getAsJsonArray();
             actions.remove(codeblockIndex);
         }
-
-
-
-
-//        if (CodeBlocks.getByName(name).isThreadStarter()) {
-//            JsonObject event = new JsonObject();
-//            String type = getStarterType(name);
-//            event.addProperty("type", type);
-//            event.addProperty(type, type + "_empty");
-//            event.addProperty("position", codelineIndex);
-//            event.add("actions", new JsonArray());
-//            codeline = event;
-//        } else {
-//            if (!plotCode.isEmpty()) {
-//                codeline = plotCode.get(position).getAsJsonObject();
-//            }
-//            JsonArray actions = codeline.get("actions").getAsJsonArray();
-//            JsonObject action = new JsonObject();
-//            action.addProperty("action", genEmptyCodeblock(name));
-//            actions.add(action);
-//        }
-        // Update main codeJson
-
-
-        Bukkit.broadcastMessage(position + " postion");
-
-
-        if (position == -1) {
-            plotCode.add(codeline);
-
-        } else {
-            plotCode.set(position, codeline);
-        }
-
+        Bukkit.broadcastMessage(plotCode + "");
         return plotCode;
     }
 
@@ -159,10 +117,7 @@ public class CodeFileHelper {
         int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
 
-        Bukkit.broadcastMessage(codelineIndex + " index");
-        Bukkit.broadcastMessage(location.getBlockX() + " block x");
-
-        int position = getCodelinePosition(location, code, codelineIndex);
+        int position = getCodelineListIndex(location, code);
 
         if (position == -1) {
             // We are somehow updating a non-existent codeline

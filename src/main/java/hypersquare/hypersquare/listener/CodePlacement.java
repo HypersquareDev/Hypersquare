@@ -167,8 +167,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, code);
-        location.getWorld().sendMessage(Component.text(codeJson.toString()));
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, CodeFileHelper.getCodeblockIndex(location), code);
         code.setCode(codeJson.toString());
 
         if (name != null) { // Either invalid or empty codeblock
@@ -293,8 +292,6 @@ public class CodePlacement implements Listener {
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
-
-
 
             if (blockLoc.getBlock().getType() == Material.OAK_WALL_SIGN) {
                 blockLoc.add(1, 0, 0);

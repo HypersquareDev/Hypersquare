@@ -31,7 +31,6 @@ public class CodeFile {
 
     public JsonArray getCodeJson() {
         String code = getCode();
-        world.sendMessage(Component.text(code));
 
         JsonArray array = JsonParser.parseString(code).getAsJsonArray();
 

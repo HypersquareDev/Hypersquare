@@ -15,12 +15,14 @@ import hypersquare.hypersquare.util.manager.CommandManager;
 
 import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -45,16 +47,21 @@ public final class Hypersquare extends JavaPlugin {
 
     public static MiniMessage mm = MiniMessage.miniMessage();
 
-    public static String pluginName = "Hypersquare";
 
     public static Plugin instance;
+    public static LuckPerms lpPlugin;
 
     public static SlimePlugin slimePlugin;
 
     @Override
     public void onEnable() {
         instance = this;
-        slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+        // Register Dependencies
+        slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager"); // Slime
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider != null) {
+            lpPlugin = provider.getProvider(); // LuckPerms
+        }
 
         saveDefaultConfig();
         getConfig().addDefault("DB_PASS", "");
@@ -112,6 +119,7 @@ public final class Hypersquare extends JavaPlugin {
         commandManager.registerCommand("giveplot", new GivePlotsCommand());
         commandManager.registerCommand("text",new Text());
         commandManager.registerCommand("txt", new Text());
+        commandManager.registerCommand("debug", new DebugCommand());
 
         //Tab Completers
 

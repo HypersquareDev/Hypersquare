@@ -144,10 +144,14 @@ public class CodePlacement implements Listener {
                             return;
                         }
                         JsonArray code = new CodeFile(event.getPlayer()).getCodeJson();
-                        if (!threadStarter && code.get(location.getBlockX() % 3) == null) {
-                            // No thread starter, check if we have a thread starter already at the position
-                            Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
-                            return;
+                        if (!threadStarter) {
+                            try {
+                                code.get(location.getBlockX() % 3);
+                            } catch (IndexOutOfBoundsException e) {
+                                // If we error while getting the codeblock, it means there is no thread starter.
+                                Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
+                                return;
+                            }
                         }
 
                         if (!blockInPlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0,0, size))) {
@@ -300,6 +304,10 @@ public class CodePlacement implements Listener {
             Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
             if (block.getType() == Material.DIAMOND_BLOCK) {
                 PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+            }
+
+            if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
+               // TODO: PURGE THE ENTIRE LINE
             }
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {

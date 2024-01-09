@@ -23,7 +23,7 @@ public enum CodeBlocks {
     COAL_BLOCK(Material.COAL_BLOCK, "CONTROL", "control", true, false, false, false, "wait"),
     PURPUR_BLOCK(Material.PURPUR_BLOCK, "SELECT OBJECT", "select_object", true, false),
     PRISMARINE(Material.PRISMARINE, "REPEAT", "repeat", true, true),
-    END_STONE(Material.END_STONE, "ELSE", "else", true, true, false, false),
+    END_STONE(Material.END_STONE, "ELSE", "else", false, true, false, false),
     EMPTY(Material.AIR, "empty");
 
     @NotNull final Material material;

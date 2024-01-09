@@ -35,6 +35,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class CodePlacement implements Listener {
@@ -307,7 +308,16 @@ public class CodePlacement implements Listener {
             }
 
             if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
-               // TODO: PURGE THE ENTIRE LINE
+                Location loc1 = blockLoc.clone().add(-1,0,0);
+                Location loc2 = CodeBlockManagement.findCodeEnd(blockLoc.clone()).add(0,1,0);
+                for (Double x = loc1.getX(); x <= loc2.getX(); x++) {
+                    for (Double y = loc1.getY(); y <= loc2.getY(); y++) {
+                        for (Double z = loc1.getZ(); z <= loc2.getZ(); z++) {
+                            Location currentLoc = new Location(blockLoc.getWorld(), x.intValue(), y.intValue(), z.intValue());
+                            currentLoc.getBlock().setType(Material.AIR);
+                        }
+                    }
+                }
             }
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {

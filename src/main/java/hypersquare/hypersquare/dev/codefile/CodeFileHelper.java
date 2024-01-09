@@ -1,11 +1,15 @@
 package hypersquare.hypersquare.dev.codefile;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.CodeBlocks;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class CodeFileHelper {
     @NotNull
@@ -22,19 +26,17 @@ public class CodeFileHelper {
         return (int) Math.floor((double) location.getBlockZ() / 2) -1;
     }
 
-    private static int getCodelineListIndex(Location location, CodeFile codeFile) {
+    public static int getCodelineListIndex(Location location, CodeFile codeFile) {
         int codelineIndex = getCodelineIndex(location);
         JsonArray plotCode = codeFile.getCodeJson();
 
-        final int[] _position = {-1};
-        plotCode.iterator().forEachRemaining(element -> {
+        List<JsonElement> plotCodeList = plotCode.asList();
+        for (JsonElement element : plotCodeList) {
             if (element.getAsJsonObject().get("position").getAsInt() == codelineIndex) {
-                _position[0] = codelineIndex;
+                return plotCodeList.indexOf(element);
             }
-
-        });
-        int position = _position[0];
-        return position;
+        }
+        return -1;
     }
 
     /**
@@ -62,32 +64,31 @@ public class CodeFileHelper {
             event.add("actions", new JsonArray());
             codeline = event;
         } else {
-            if (!plotCode.isEmpty()) {
-                codeline = plotCode.get(position).getAsJsonObject();
-            }
+            codeline = plotCode.get(position).getAsJsonObject();
             JsonArray actions = codeline.get("actions").getAsJsonArray();
             JsonObject action = new JsonObject();
             action.addProperty("action", genEmptyCodeblock(name));
 
-            // Insert the element if the index is null
-            if (index < actions.size() || index == -1) {
+            // Insert the element if the index is -1  or if the index is less than the size of the array
+            Bukkit.broadcast(Component.text("requrested insert index: " + index));
+            if (index < actions.size() && index != -1) {
                 JsonArray temp = new JsonArray();
                 for (int i = 0; i < actions.size(); i++) {
                     if (i == index) {
                         temp.add(action);
-                    } else {
-                        temp.add(actions.get(i));
                     }
+                    temp.add(actions.get(i));
                 }
                 actions = temp;
             } else {
                 actions.add(action);
             }
+
+            codeline.add("actions", actions);
         }
 
         if (position == -1) {
             plotCode.add(codeline);
-
         } else {
             plotCode.set(position, codeline);
         }
@@ -100,8 +101,6 @@ public class CodeFileHelper {
         JsonArray plotCode = code.getCodeJson();
 
         int codeblockIndex = getCodeblockIndex(location);
-
-        // ok wait lemme cook for a sec
 
         int position = getCodelineListIndex(location, code);
         JsonObject codeline = plotCode.get(position).getAsJsonObject();

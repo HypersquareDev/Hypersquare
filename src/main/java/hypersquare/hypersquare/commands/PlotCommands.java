@@ -50,7 +50,7 @@ public class PlotCommands implements CommandExecutor {
                                     Utilities.sendInfo(player,"Successfully changed the plot name to " + String.valueOf(name).strip() + ".");
                                     PlotManager.loadPlot(plotID);
                                 } else {
-                                    Utilities.sendError(player, "You cannot set the plot name to noting");
+                                    Utilities.sendError(player, "You cannot set the plot name to nothing");
                                 }
                             } else
                                 Utilities.sendError((Player) sender, "Only the plot owner can do that!");
@@ -262,7 +262,7 @@ public class PlotCommands implements CommandExecutor {
                                     Utilities.sendInfo(player,"Successfully changed the plot description to " + String.valueOf(name).strip() + ".");
                                     PlotManager.loadPlot(plotID);
                                 } else {
-                                    Utilities.sendError(player, "You cannot set the plot description to nothing");
+                                    Utilities.sendError(player, "You cannot set the plot description to nothing.");
                                 }
                             }
                             }
@@ -271,6 +271,8 @@ public class PlotCommands implements CommandExecutor {
                 } else {
                     Utilities.sendError(player, "Invalid command usage.");
                 }
+            } else {
+                Utilities.sendError((Player) sender,"You must be in dev mode on a plot.");
             }
             Hypersquare.plotData.put((Player) sender, PlotDatabase.getPlot(String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId().toString())));
         }

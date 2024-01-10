@@ -25,7 +25,7 @@ import static hypersquare.hypersquare.Hypersquare.mm;
 
 public enum CodeValues {
 
-    TEXT(Material.BOOK,"<#7FD42A>Text", "<gray>Colors, and other tags like%n<gray><hover> are supported in default mode%n%n<gray>Used for bossbar, scoreboard,%n<gray>titles, messages, etc.%n%n<dark_gray>Legacy color codes: %l","txt"),
+    TEXT(Material.BOOK,"<#7FD42A>Text", "<gray>Colors, and other tags like%n<gray><hover> are supported in default mode%n%n<gray>Used for bossbar, scoreboard,%n<gray>titles, messages, etc.%n%n<aqua>How to use:%n<gray>Hold the <white>Text<gray> item in main hand%nand type in chat.","txt"),
     STRING(Material.STRING,"<aqua>String", "No colors%nUsed for dict keys, UUIDs, etc.","string"),
     NUMBER(Material.SLIME_BALL,"<red>Number","","num");
 

@@ -43,7 +43,6 @@
                     <!-- The directory bellow probably isn't yours. -->
                     <!-- Unless you're updating some versions, try to not commit -->
                      <!-- changes in this file. -->
-                    <outputDirectory/>
                 </configuration>
             </plugin>
 

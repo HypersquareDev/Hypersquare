@@ -58,8 +58,10 @@ public class Text implements CommandExecutor, Listener {
 //                }
 
                 } else {
-                    Utilities.sendError(player, "You can only use this command in dev mode.");
+                    player.getInventory().addItem(new hypersquare.hypersquare.dev.Text("<#7FD42A>Text").getItem());
                 }
+            } else {
+                Utilities.sendError(player, "You can only use this command in dev mode.");
             }
         }
         return true;

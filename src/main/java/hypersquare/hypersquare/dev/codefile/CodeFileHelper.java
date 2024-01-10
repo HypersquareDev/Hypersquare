@@ -70,7 +70,7 @@ public class CodeFileHelper {
             action.addProperty("action", genEmptyCodeblock(name));
 
             // Insert the element if the index is -1  or if the index is less than the size of the array
-            Bukkit.broadcast(Component.text("requrested insert index: " + index));
+            Bukkit.broadcast(Component.text("requested insert index: " + index));
             if (index < actions.size() && index != -1) {
                 JsonArray temp = new JsonArray();
                 for (int i = 0; i < actions.size(); i++) {

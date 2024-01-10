@@ -1,5 +1,20 @@
 package hypersquare.hypersquare.plot;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.blocks.Blocks;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.world.block.BlockState;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -91,45 +106,31 @@ public class CodeBlockManagement {
 
 
     public static void moveCodeLine(Location location, int amount){
-        Location loc1 = location.clone().add(-1,0,0);
-        Location loc2 = findCodeEnd(location.clone()).add(0,1,0);
-        ArrayList clipboard = new ArrayList<ArrayList>();
-        for (Double x = loc1.getX(); x <= loc2.getX(); x++) {
-            for (Double y = loc1.getY(); y <= loc2.getY(); y++) {
-                for (Double z = loc1.getZ(); z <= loc2.getZ(); z++) {
-                    Location currentLoc = new Location(location.getWorld(), x.intValue(), y.intValue(), z.intValue());
-                    ArrayList blocks = new ArrayList();
-                    if (currentLoc.getBlock().getType() != Material.AIR) {
-                        blocks.add(currentLoc.clone().add(0, 0, amount));
-                        blocks.add(currentLoc.getBlock().getType());
-                        blocks.add(currentLoc.getBlock().getBlockData());
-                        if (currentLoc.getBlock().getState() instanceof Sign sign) {
-                            blocks.add(sign.getSide(Side.FRONT).getLines());
-                        }
-                        clipboard.add(blocks);
-                        currentLoc.getBlock().setType(Material.AIR);
-                    }
-                }
-            }
-        }
-        for (Object list : clipboard) {
-            ArrayList list1 = (ArrayList) list;
-            Location location1 = (Location) list1.get(0);
-            location1.getBlock().setType((Material) list1.get(1));
-            location1.getBlock().setBlockData((BlockData) list1.get(2));
-            if (list1.size() == 4) {
-                Sign sign = (Sign) location1.getBlock().getState();
-                sign.setEditable(true);
+        Location loc1 = location.clone().add(-1, 0, 0);
+        Location loc2 = findCodeEnd(location.clone()).add(0, 1, 0);
+        World world = BukkitAdapter.adapt(loc1.getWorld());
+        Location pasteLoc = location.clone().add(0, 0, amount);
 
-                sign.update();
-                int i = 0;
-                for (String text : (String[]) list1.get(3)) {
-                    sign.getSide(Side.FRONT).setLine(i, text);
-                    i++;
-                }
-                sign.update();
-            }
+        Region region = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+        ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+                world, region, clipboard, BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ())
+        );
+
+        Operations.complete(forwardExtentCopy);
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            BlockState block = BukkitAdapter.adapt(Material.AIR.createBlockData());
+            editSession.setBlocks(region, block);
         }
 
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            Operation operation = new ClipboardHolder(clipboard)
+                    .createPaste(editSession)
+                    .to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
+                    .build();
+
+            Operations.complete(operation);
+        }
     }
 }

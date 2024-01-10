@@ -4,6 +4,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.blocks.Blocks;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.function.pattern.Pattern;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.World;
+
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
@@ -13,8 +24,7 @@ import hypersquare.hypersquare.plot.LoadCodeTemplate;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.util.Utilities;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -33,9 +43,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class CodePlacement implements Listener {
@@ -308,15 +316,16 @@ public class CodePlacement implements Listener {
             }
 
             if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
-                Location loc1 = blockLoc.clone().add(-1,0,0);
-                Location loc2 = CodeBlockManagement.findCodeEnd(blockLoc.clone()).add(0,1,0);
-                for (Double x = loc1.getX(); x <= loc2.getX(); x++) {
-                    for (Double y = loc1.getY(); y <= loc2.getY(); y++) {
-                        for (Double z = loc1.getZ(); z <= loc2.getZ(); z++) {
-                            Location currentLoc = new Location(blockLoc.getWorld(), x.intValue(), y.intValue(), z.intValue());
-                            currentLoc.getBlock().setType(Material.AIR);
-                        }
-                    }
+                Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());
+                BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() + 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
+                BlockVector3 loc2 = BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY() + 1, endLoc.getBlockZ());
+                // Create the region based on the two locations
+                Region selection = new CuboidRegion(loc1, loc2);
+                // Create a FAWE world based on the world of the blockLoc
+                World faweWorld = BukkitAdapter.adapt(blockLoc.getWorld());
+                // Create an EditSession that auto-closes where we set all the blocks in the region to air
+                try (EditSession editSession = WorldEdit.getInstance().newEditSession(faweWorld)) {
+                    editSession.setBlocks(selection, BukkitAdapter.asBlockState(new ItemStack(Material.AIR)));
                 }
             }
 

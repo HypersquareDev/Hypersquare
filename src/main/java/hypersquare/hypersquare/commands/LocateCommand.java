@@ -26,6 +26,11 @@ public class LocateCommand implements CommandExecutor {
             String color2 = "<#AAAAFF>";
             if (args.length > 0) {
                 target = Bukkit.getPlayer(args[0]);
+                if (target == null)
+                {
+                    Utilities.sendError(player,"This player is not online.");
+                    return true;
+                }
             } else {
                 target = player;
             }

@@ -114,9 +114,9 @@ public class CodeBlockManagement {
 
         Region region = new CuboidRegion(world, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ()), BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ()));
         BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-        try (EditSession es1 = WorldEdit.getInstance().newEditSession(world)) {
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-                    es1, region, clipboard, region.getMinimumPoint());
+                    editSession, region, clipboard, region.getMinimumPoint());
             Operations.complete(forwardExtentCopy);
         }
 

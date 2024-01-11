@@ -1,10 +1,12 @@
 package hypersquare.hypersquare.plot;
 
+import com.fastasyncworldedit.core.FaweAPI;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
@@ -23,6 +25,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.sign.Side;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -105,32 +108,35 @@ public class CodeBlockManagement {
 
 
 
-    public static void moveCodeLine(Location location, int amount){
-        Location loc1 = location.clone().add(-1, 0, 0);
-        Location loc2 = findCodeEnd(location.clone()).add(0, 1, 0);
-        World world = BukkitAdapter.adapt(loc1.getWorld());
-        Location pasteLoc = location.clone().add(0, 0, amount);
+    public static void moveCodeLine(Location copyLoc, int amount) {
+        Location endLoc = findCodeEnd(copyLoc.clone()).add(-1,1,0);
+        World world = FaweAPI.getWorld(copyLoc.getWorld().getName());
 
-        Region region = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
+        Region region = new CuboidRegion(world, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ()), BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ()));
         BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+        try (EditSession es1 = WorldEdit.getInstance().newEditSession(world)) {
+            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+                    es1, region, clipboard, region.getMinimumPoint());
+            Operations.complete(forwardExtentCopy);
+        }
 
-        ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-                world, region, clipboard, BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ())
-        );
-
-        Operations.complete(forwardExtentCopy);
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             BlockState block = BukkitAdapter.adapt(Material.AIR.createBlockData());
             editSession.setBlocks(region, block);
         }
 
+
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
-                    .to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
+                    .to(region.getMinimumPoint().add(0,0,amount))
                     .build();
 
             Operations.complete(operation);
         }
+
+
+
     }
+
 }

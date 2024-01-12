@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.util.BracketFinder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,6 +45,7 @@ public class CodeFileHelper {
      * @return
      */
     public static JsonArray addCodeblock(Location location, String name, int index, CodeFile code) {
+
         JsonArray plotCode = code.getCodeJson();
 
         int codelineIndex = getCodelineIndex(location);
@@ -53,6 +55,10 @@ public class CodeFileHelper {
         int position = getCodelineListIndex(location, code);
 
         CodeBlocks codeblock = CodeBlocks.getByName(name);
+
+        if (!codeblock.isThreadStarter()){
+            Bukkit.broadcastMessage(BracketFinder.isInIfStatement(location) + " is in if");
+        }
         if (codeblock.isThreadStarter()) {
             JsonObject event = new JsonObject();
             String type = CodeBlocks.getByName(name).id();
@@ -64,27 +70,53 @@ public class CodeFileHelper {
             event.add("actions", new JsonArray());
             codeline = event;
         } else {
-            codeline = plotCode.get(position).getAsJsonObject();
-            JsonArray actions = codeline.get("actions").getAsJsonArray();
-            JsonObject action = new JsonObject();
-            action.addProperty("action", genEmptyCodeblock(name));
+            if(codeblock.hasBrackets()){
+                codeline = plotCode.get(position).getAsJsonObject();
+                JsonArray actions = codeline.get("actions").getAsJsonArray();
+                JsonObject action = new JsonObject();
+                action.addProperty("action", genEmptyCodeblock(name));
+                JsonArray array = new JsonArray();
+                action.add("actions",array);
 
-            // Insert the element if the index is -1  or if the index is less than the size of the array
-            Bukkit.broadcast(Component.text("requested insert index: " + index));
-            if (index < actions.size() && index != -1) {
-                JsonArray temp = new JsonArray();
-                for (int i = 0; i < actions.size(); i++) {
-                    if (i == index) {
-                        temp.add(action);
+                // Insert the element if the index is -1  or if the index is less than the size of the array
+                Bukkit.broadcast(Component.text("requested insert index: " + index));
+                if (index < actions.size() && index != -1) {
+                    JsonArray temp = new JsonArray();
+                    for (int i = 0; i < actions.size(); i++) {
+                        if (i == index) {
+                            temp.add(action);
+                        }
+                        temp.add(actions.get(i));
                     }
-                    temp.add(actions.get(i));
+                    actions = temp;
+                } else {
+                    actions.add(action);
                 }
-                actions = temp;
-            } else {
-                actions.add(action);
-            }
 
-            codeline.add("actions", actions);
+                codeline.add("actions", actions);
+            } else {
+                codeline = plotCode.get(position).getAsJsonObject();
+                JsonArray actions = codeline.get("actions").getAsJsonArray();
+                JsonObject action = new JsonObject();
+                action.addProperty("action", genEmptyCodeblock(name));
+
+                // Insert the element if the index is -1  or if the index is less than the size of the array
+                Bukkit.broadcast(Component.text("requested insert index: " + index));
+                if (index < actions.size() && index != -1) {
+                    JsonArray temp = new JsonArray();
+                    for (int i = 0; i < actions.size(); i++) {
+                        if (i == index) {
+                            temp.add(action);
+                        }
+                        temp.add(actions.get(i));
+                    }
+                    actions = temp;
+                } else {
+                    actions.add(action);
+                }
+
+                codeline.add("actions", actions);
+            }
         }
 
         if (position == -1) {

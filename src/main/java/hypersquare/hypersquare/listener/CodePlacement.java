@@ -58,8 +58,6 @@ public class CodePlacement implements Listener {
             }
             return;
         }
-        event.setCancelled(true);
-
         if (event.getBlock().getLocation().add(1, 0, 0).getX() > 0) {
             processPlace(event);
         } else {

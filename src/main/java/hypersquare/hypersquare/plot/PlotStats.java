@@ -1,31 +1,23 @@
 package hypersquare.hypersquare.plot;
 
-import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
 import hypersquare.hypersquare.Hypersquare;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class PlotStats {
 
-    private static MongoClient mongoClient;
-    private static MongoDatabase database;
-
     private static MongoCollection<Document> plotStats;
 
-    public PlotStats() {
-        mongoClient = MongoClients.create(Hypersquare.DB_PASS);
-        database = mongoClient.getDatabase(Hypersquare.DB_NAME);
+    public static void init() {
+        MongoDatabase database = Hypersquare.mongoClient.getDatabase(Hypersquare.DB_NAME);
         plotStats = database.getCollection("plot_stats");
     }
-
 
 
     public static void addPlayer(int plotID, Player player) {
@@ -101,6 +93,7 @@ public class PlotStats {
                 }
             }
         }
+        cursor.close();
 
         long seconds = totalTime / 1000;
         long days = seconds / 86400;
@@ -112,9 +105,6 @@ public class PlotStats {
 
         return String.format("%d Days %d Hours %d Minutes %d Seconds", days, hours, minutes, seconds);
     }
-
-
-
 }
 
 

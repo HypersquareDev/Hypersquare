@@ -25,8 +25,8 @@ public class PlayerActionMenu {
 
         // Loop through all categories
         for (PlayerActionItems playerActionItem : PlayerActionItems.values()) {
-            if (playerActionItem.getCategory() != null) continue; // Skip if not a category
-            int slot = playerActionItem.getSlot();
+            if (playerActionItem.category != null) continue; // Skip if not a category
+            int slot = playerActionItem.slot;
 
             // Clicking a category
             GuiItem item = ItemBuilder.from(playerActionItem.build()).asGuiItem(event -> {

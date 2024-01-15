@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -15,27 +14,27 @@ public class GiveItemsAction implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.CHEST)
-            .setName("<green>Give Items")
-            .setDescription("Gives the player all of the", "items in the chest")
-            .setArguments(
-                    new ActionArgument()
-                            .setType(DisplayValue.ITEM)
-                            .setPlural(true)
-                            .setDescription("Item(s) to give"),
-                    new ActionArgument()
-                            .setType(DisplayValue.NUMBER)
-                            .setOptional(true)
-                            .setDescription("Amount to give")
-            )
+                .setMaterial(Material.CHEST)
+                .setName("<green>Give Items")
+                .setDescription("Gives the player all of the", "items in the chest")
+                .setArguments(
+                        new ActionArgument()
+                                .setType(DisplayValue.ITEM)
+                                .setPlural(true)
+                                .setDescription("Item(s) to give"),
+                        new ActionArgument()
+                                .setType(DisplayValue.NUMBER)
+                                .setOptional(true)
+                                .setDescription("Amount to give")
+                )
                 .addAdditionalInfo("This is the first action", "we added!")
                 .setEnchanted(true)
-            .build();
+                .build();
     }
 
     @Override
     public void executeBlockAction(List<Entity> targets, Chest chest) {
-        for (Entity entity : targets){
+        for (Entity entity : targets) {
             if (entity instanceof Player player) {
                 Utilities.sendRedInfo(player, "I know how much you wanna start coding, but our systems aren't done yet.");
             }

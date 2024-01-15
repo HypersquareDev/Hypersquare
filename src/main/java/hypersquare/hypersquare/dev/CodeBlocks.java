@@ -26,14 +26,18 @@ public enum CodeBlocks {
     END_STONE(Material.END_STONE, "ELSE", "else", false, true, false, false),
     EMPTY(Material.AIR, "empty");
 
-    @NotNull final Material material;
-    @NotNull final String name;
-    @NotNull final String id;
+    @NotNull
+    final Material material;
+    @NotNull
+    final String name;
+    @NotNull
+    final String id;
     final boolean isThreadStarter;
     final boolean hasChest;
     final boolean hasBrackets;
     public final boolean hasActions;
-    @NotNull final String defaultAction;
+    @NotNull
+    final String defaultAction;
 
     CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets) {
         this.material = material;

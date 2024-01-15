@@ -1,11 +1,8 @@
 package hypersquare.hypersquare.dev;
 
 
-import hypersquare.hypersquare.util.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import static hypersquare.hypersquare.Hypersquare.mm;
 
 public class CodeItems {
     public static ItemStack PLAYER_EVENT_ITEM;
@@ -26,11 +23,12 @@ public class CodeItems {
     public static ItemStack SELECT_OBJECT_ITEM;
     public static ItemStack REPEAT_ITEM;
     public static ItemStack ELSE_ITEM;
+
     public static void register() {
         PLAYER_EVENT_ITEM = new CodeItem(Material.DIAMOND_BLOCK)
                 .name("<aqua>Player Event")
                 .description("Used to execute code when something",
-                          "is done by (or happens to) a player.")
+                        "is done by (or happens to) a player.")
                 .examples(
                         "Detect when a player joins the plot",
                         "Detect when a player right clicks",
@@ -40,8 +38,8 @@ public class CodeItems {
         IF_PLAYER_ITEM = new CodeItem(Material.OAK_PLANKS)
                 .name("<gold>If Player")
                 .description("Used to execute the code inside it",
-                             "if a certain condition related to a",
-                             "player is met.")
+                        "if a certain condition related to a",
+                        "player is met.")
                 .examples(
                         "Check if a player is swimming",
                         "Check if a player has an item",
@@ -51,7 +49,7 @@ public class CodeItems {
         PLAYER_ACTION_ITEM = new CodeItem(Material.COBBLESTONE)
                 .name("<green>Player Action")
                 .description("Used to do something related to",
-                             "a player or multiple players.")
+                        "a player or multiple players.")
                 .examples(
                         "Send a message to a player",
                         "Damage or heal a player",
@@ -61,24 +59,24 @@ public class CodeItems {
         CALL_FUNCTION_ITEM = new CodeItem(Material.LAPIS_ORE)
                 .name("<blue>Call Function")
                 .description("Used to call functions declared by",
-                             "a Function block.",
-                             "Code will not continue past this block",
-                             "until the Function completes/returns.")
+                        "a Function block.",
+                        "Code will not continue past this block",
+                        "until the Function completes/returns.")
                 .build();
 
         START_PROCESS_ITEM = new CodeItem(Material.EMERALD_ORE)
                 .name("<dark_green>Start Process")
                 .description("Used to start processes declared by",
-                             "a Process block.",
-                             "Waits inside the Process will not",
-                             "stop this code line, unlike Functions.")
+                        "a Process block.",
+                        "Waits inside the Process will not",
+                        "stop this code line, unlike Functions.")
                 .build();
 
         ENTITY_EVENT_ITEM = new CodeItem(Material.GOLD_BLOCK)
                 .name("<yellow>Entity Event")
                 .description("Used to execute code when an entity",
-                             "does something or when something",
-                             "happens to an entity.")
+                        "does something or when something",
+                        "happens to an entity.")
                 .examples(
                         "Detect when a mob takes damage",
                         "Detect when a projectile kills a mob",
@@ -89,8 +87,8 @@ public class CodeItems {
         IF_ENTITY_ITEM = new CodeItem(Material.BRICKS)
                 .name("<dark_green>If Entity")
                 .description("Used to execute the code inside it",
-                             "if a certain condition related to an",
-                             "entity or multiple entities is met.")
+                        "if a certain condition related to an",
+                        "entity or multiple entities is met.")
                 .examples(
                         "Check if an entity is a projectile",
                         "Check if an entity is a certain type%nof mob",
@@ -100,7 +98,7 @@ public class CodeItems {
         ENTITY_ACTION_ITEM = new CodeItem(Material.MOSSY_COBBLESTONE)
                 .name("<red>Entity Action")
                 .description("Used to do something related to",
-                             "an entity or multiple entities.")
+                        "an entity or multiple entities.")
                 .examples(
                         "Set the age or size of a mob",
                         "Give a mob a potion effect",
@@ -110,7 +108,7 @@ public class CodeItems {
         FUNCTION_ITEM = new CodeItem(Material.LAPIS_BLOCK)
                 .name("<aqua>Function")
                 .description("Used to define a line of code that can be",
-                             "called with a Call Function block.")
+                        "called with a Call Function block.")
                 .additionalInfo(
                         "Set the function name by right clicking%n" +
                                 "the code block sign with a <aqua>string</aqua>.",
@@ -126,7 +124,7 @@ public class CodeItems {
         PROCESS_ITEM = new CodeItem(Material.EMERALD_BLOCK)
                 .name("<green>Process")
                 .description("Used to execute code when the process",
-                             "is started using a Start Process block.")
+                        "is started using a Start Process block.")
                 .additionalInfo(
                         "Set the process name by right clicking%n" +
                                 "the code block sign with a <aqua>string</aqua>.",
@@ -152,8 +150,8 @@ public class CodeItems {
         IF_VARIABLE_ITEM = new CodeItem(Material.OBSIDIAN)
                 .name("<gold>If Variable")
                 .description("Used to execute the code inside it",
-                             "if a certain condition related to the",
-                             "value of a variable is met.")
+                        "if a certain condition related to the",
+                        "value of a variable is met.")
                 .examples(
                         "Check if a number variable is less%n" +
                                 "than or equal to another number",
@@ -166,7 +164,7 @@ public class CodeItems {
         GAME_ACTION_ITEM = new CodeItem(Material.NETHERRACK)
                 .name("<red>Game Action")
                 .description("Used to do something related to",
-                             "the plot and everyone playing it.")
+                        "the plot and everyone playing it.")
                 .examples(
                         "Spawn a mob or other entity",
                         "Change a block or block region",
@@ -176,8 +174,8 @@ public class CodeItems {
         IF_GAME_ITEM = new CodeItem(Material.RED_NETHER_BRICKS)
                 .name("<red>If Game")
                 .description("Used to execute the code inside",
-                             "it if a certain condition related",
-                             "to the plot is met.")
+                        "it if a certain condition related",
+                        "to the plot is met.")
                 .examples(
                         "Check if a container has all of%n" +
                                 "a certain set of items",
@@ -201,8 +199,8 @@ public class CodeItems {
         SELECT_OBJECT_ITEM = new CodeItem(Material.PURPUR_BLOCK)
                 .name("<light_purple>Select Object")
                 .description("Used to change the selection on the",
-                             "current line of code, which will affect",
-                             "the targets of most code blocks.")
+                        "current line of code, which will affect",
+                        "the targets of most code blocks.")
                 .examples(
                         "Select all players on the plot",
                         "Select a player with a certain username",
@@ -224,9 +222,9 @@ public class CodeItems {
         ELSE_ITEM = new CodeItem(Material.END_STONE)
                 .name("<dark_aqua>Else")
                 .description("Used to execute the code inside it",
-                             "if the condition directly before it",
-                             "was not met. Else must be placed directly",
-                             "after any If block's closing bracket.")
+                        "if the condition directly before it",
+                        "was not met. Else must be placed directly",
+                        "after any If block's closing bracket.")
                 .build();
     }
 }

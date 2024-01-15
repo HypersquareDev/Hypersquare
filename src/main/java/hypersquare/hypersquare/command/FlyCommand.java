@@ -10,14 +10,13 @@ import org.jetbrains.annotations.NotNull;
 public class FlyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (player.getAllowFlight()){
+        if (sender instanceof Player player) {
+            if (player.getAllowFlight()) {
                 player.setAllowFlight(false);
-                Utilities.sendInfo(player,"Flight disabled.");
+                Utilities.sendInfo(player, "Flight disabled.");
             } else {
                 player.setAllowFlight(true);
-                Utilities.sendInfo(player,"Flight enabled.");
+                Utilities.sendInfo(player, "Flight enabled.");
             }
         } else {
             sender.sendMessage("This command can only be used by players.");

@@ -1,8 +1,6 @@
 package hypersquare.hypersquare;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -20,9 +18,8 @@ import java.util.zip.ZipInputStream;
 public class DevSetup {
 
     public static void main(String[] args) {
-
-        if (args.length >= 1){
-            if (args[0].equalsIgnoreCase("devsetup")){
+        if (args.length >= 1) {
+            if (args[0].equalsIgnoreCase("devsetup")) {
                 System.out.println("Accepted Minecraft EULA");
                 devSetup(System.out::println);
                 return;
@@ -38,7 +35,7 @@ public class DevSetup {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         button.addActionListener(e -> {
             button.setEnabled(false);
-            new Thread(()->{
+            new Thread(() -> {
                 devSetup(button::setText);
                 try {
                     Thread.sleep(1000);
@@ -52,8 +49,7 @@ public class DevSetup {
 
     }
 
-    private static void devSetup(Consumer<String> statusMessage){
-
+    private static void devSetup(Consumer<String> statusMessage) {
         HttpClient client = HttpClient.newHttpClient();
         try {
             //Downloading server
@@ -105,12 +101,11 @@ public class DevSetup {
             statusMessage.accept("Downloading Schematics");
             request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/s10scv4bur1suumauw3hb/schematics.zip?rlkey=okhn1bnk2j2pyp5ad6muqwfgb&dl=1&raw=1")).build();
             byte[] schematics = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
-            Files.write(Path.of("debug.zip"),schematics);
             ByteArrayInputStream byteStream = new ByteArrayInputStream(schematics);
             ZipInputStream zipStream = new ZipInputStream(byteStream);
             ZipEntry zipEntry = zipStream.getNextEntry();
             Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
-            while (zipEntry != null){
+            while (zipEntry != null) {
                 System.out.println(zipEntry.getName());
                 Files.copy(zipStream, Path.of("plugins/FastAsyncWorldEdit/schematics/" + zipEntry.getName()));
                 zipEntry = zipStream.getNextEntry();

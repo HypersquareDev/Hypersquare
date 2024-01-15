@@ -10,10 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public class JoinCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             int plotID = Integer.parseInt(args[0]);
-            ChangeGameMode.playMode(player,plotID);
+            ChangeGameMode.playMode(player, plotID);
         } else {
             sender.sendMessage("This command can only be used by players.");
         }

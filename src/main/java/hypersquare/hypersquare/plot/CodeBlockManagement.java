@@ -3,10 +3,8 @@ package hypersquare.hypersquare.plot;
 import com.fastasyncworldedit.core.FaweAPI;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
@@ -16,18 +14,12 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BlockState;
-import com.sk89q.worldedit.world.block.BlockTypes;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Piston;
-import org.bukkit.block.sign.Side;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 
 public class CodeBlockManagement {
     @Deprecated
@@ -49,42 +41,28 @@ public class CodeBlockManagement {
             location.getBlock().setBlockData(pistonData);
         }
 
-        if (bracket.equals("none")) {
-        }
-
-        if (bracket.equals("stone")){
+        if (bracket.equals("stone")) {
             location.add(0, 0, 1).getBlock().setType(Material.STONE);
         }
     }
 
-    public static Location findCorrespBracket(Location location){
-            int i = 0;
-            while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
-                location.add(0,0,1);
-                if (location.getBlock().getType() == Material.PISTON) {
-                    Piston piston = (Piston) location.getBlock().getBlockData();
-                    if (piston.getFacing() == BlockFace.SOUTH)
-                        i--;
-                    if (piston.getFacing() == BlockFace.NORTH)
-                        i++;
-                    if (i == 0){
-                        return location;
-                    }
+    public static Location findCorrespBracket(Location location) {
+        int i = 0;
+        while (location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR || location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR) {
+            location.add(0, 0, 1);
+            if (location.getBlock().getType() == Material.PISTON) {
+                Piston piston = (Piston) location.getBlock().getBlockData();
+                if (piston.getFacing() == BlockFace.SOUTH)
+                    i--;
+                if (piston.getFacing() == BlockFace.NORTH)
+                    i++;
+                if (i == 0) {
+                    return location;
                 }
-
             }
-        return null;
-    }
-    public static Location findCodeEnd(Location location){
-        while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
-            location.add(0,0,1);
-        }
-        return location;
-    }
 
-    public static Location findCodelineStartLoc(Location location){
-        location.setZ(1);
-        return location;
+        }
+        return null;
     }
 
     public static Location findNextBracket(Location location){
@@ -95,16 +73,18 @@ public class CodeBlockManagement {
             }
 
         }
-
         return null;
-
     }
 
-
-
+    public static Location findCodeEnd(Location location) {
+        while (location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR || location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR) {
+            location.add(0, 0, 1);
+        }
+        return location;
+    }
 
     public static void moveCodeLine(Location copyLoc, int amount) {
-        Location endLoc = findCodeEnd(copyLoc.clone()).add(-1,1,0);
+        Location endLoc = findCodeEnd(copyLoc.clone()).add(-1, 1, 0);
         World world = FaweAPI.getWorld(copyLoc.getWorld().getName());
 
         Region region = new CuboidRegion(world, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ()), BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ()));
@@ -120,18 +100,13 @@ public class CodeBlockManagement {
             editSession.setBlocks(region, block);
         }
 
-
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
-                    .to(region.getMinimumPoint().add(0,0,amount))
+                    .to(region.getMinimumPoint().add(0, 0, amount))
                     .build();
 
             Operations.complete(operation);
         }
-
-
-
     }
-
 }

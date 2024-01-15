@@ -99,7 +99,7 @@ public class PlaytimeEventExecuter implements Listener {
 
     }
 
-    public static void Leave(Player player) {
+    public static void leave(Player player) {
         int plotID = Utilities.getPlotID(player.getWorld());
         PlotStats.updatePlayerTime(plotID,player.getUniqueId(),System.currentTimeMillis());
         if (Hypersquare.eventCache.get(plotID).containsValue("Leave")) {

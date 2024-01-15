@@ -1,18 +1,16 @@
 package hypersquare.hypersquare.dev.codefile;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.util.Utilities;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.zip.Deflater;
 

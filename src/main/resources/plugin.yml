@@ -5,54 +5,63 @@ api-version: 1.20
 commands:
   join:
     description: Join a plot
-    usage: /<command> plotID
+    usage: /join <plotID>
   dev:
     description: Go to dev on your current plot
-    usage: /<command>
+    usage: /dev
+    aliases:
+      - code
   locate:
     description: Find another player
-    usage: /<command> player
-    aliases: [find]
+    usage: /locate <player>
+    aliases:
+      - find
   spawn:
     description: Teleports to spawn
-    usage: /<command>
-    aliases: [s]
+    usage: /spawn
+    aliases:
+      - s
+      - leave
+      - lobby
   build:
     description: Go to build on your current plot
-    usage: /<command>
+    usage: /build
   play:
     description: Go to play on your current plot
-    usage: /<command>
+    usage: /play
   fs:
-    description: set your flightspeed
-    usage: /<command> speed
+    description: Set your flightspeed
+    usage: /fs <speed>
+    aliases:
+      - flyspeed
+      - flightspeed
   plot:
-    description: manage your plot
-    usage: /<command>
+    description: Manage your plot
+    usage: /plot <subcommand>
     aliases:
       - p
   editspawn:
-    description: edit spawn
-    usage: /<command>
+    description: Edit the spawn region
+    usage: /editspawn
     aliases:
       - ps
   fly:
-    description: sets flight on
-    usage: /<command>
+    description: Enable flight
+    usage: /fly
   dumplots:
     description: deletes all plots
-    usage: /<command>
+    usage: /dumplots
   giveplot:
     description: Give plots
-    usage: /<command>
+    usage: /giveplot <player> <type> <amount>
   text:
     description: Gives player a text item
-    usage: /<command> text
+    usage: /text <text>
     aliases:
       - txt
   debug:
     description: Debug code
-    usage: /<command>
+    usage: /debug
 
 depend:
   - NBTAPI

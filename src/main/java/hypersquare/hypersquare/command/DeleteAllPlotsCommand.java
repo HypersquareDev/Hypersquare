@@ -29,7 +29,7 @@ public class DeleteAllPlotsCommand implements CommandExecutor {
             if (player.hasPermission("hypersquare.dumplots")) {
                 Utilities.sendInfo(player, "Dumped all plots");
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                    player1.kick(Component.text("Kick from Hypersquare").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true)
+                    player1.kick(Component.text("Kick from Hypersquare\n").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true)
                             .append(Component.text("Reason: massive dump").color(NamedTextColor.RED))
                     );
                 }

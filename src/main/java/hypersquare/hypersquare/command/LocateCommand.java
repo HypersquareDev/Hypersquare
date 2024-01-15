@@ -29,7 +29,7 @@ public class LocateCommand implements CommandExecutor {
                 target = player;
             }
             if (target == null) {
-                player.sendMessage(Component.text("Player not found.").color(NamedTextColor.RED));
+                Utilities.sendError(player, "Player not found.");
                 return true;
             }
             String targetName = target.getName() + " is";

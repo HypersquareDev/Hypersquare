@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             if (!Hypersquare.mode.get(player).equals("at spawn")) {
                 int plotID = Utilities.getPlotID(player.getWorld());
                 ChangeGameMode.playMode(player, plotID);

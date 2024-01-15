@@ -9,7 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathListener implements Listener {
     @EventHandler
-    public void onDeath(PlayerDeathEvent event){
+    public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Hypersquare.lastDeathLoc.put(player, player.getWorld());
         Bukkit.getLogger().info(Hypersquare.lastDeathLoc.toString());

@@ -5,6 +5,7 @@ import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -42,8 +43,7 @@ public class DevEvents implements Listener {
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
-                sign.getSide(Side.FRONT).getLine(1);
-                switch (sign.getSide(Side.FRONT).getLine(0)) {
+                switch (PlainTextComponentSerializer.plainText().serialize(sign.getSide(Side.FRONT).line(0))) {
                     case ("PLAYER EVENT"): {
                         PlayerEventMenu.create().open(event.getPlayer());
                         break;

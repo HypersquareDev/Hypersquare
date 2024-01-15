@@ -1,14 +1,14 @@
 package hypersquare.hypersquare.plot;
 
 import com.fastasyncworldedit.core.FaweAPI;
-import com.infernalsuite.aswm.api.SlimePlugin;
-import com.infernalsuite.aswm.api.exceptions.*;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperty;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
-import com.mongodb.client.*;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
@@ -21,48 +21,31 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.codefile.CodeFile;
-import hypersquare.hypersquare.util.Utilities;
-import net.minecraft.world.level.storage.WorldData;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.NamespacedKey;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static hypersquare.hypersquare.Hypersquare.*;
-import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 
 public class PlotDatabase {
-    private static MongoClient mongoClient;
     private static MongoDatabase database;
-
     private static MongoCollection<Document> plotsCollection;
     private static MongoCollection<Document> additionalCollection;
 
-
-    public PlotDatabase() {
-        mongoClient = MongoClients.create(Hypersquare.DB_PASS);
-        database = mongoClient.getDatabase(DB_NAME);
+    public static void init() {
+        database = Hypersquare.mongoClient.getDatabase(DB_NAME);
         plotsCollection = database.getCollection("plots");
         additionalCollection = database.getCollection("additional_info");
         if (plotsCollection.countDocuments() == 0) {
-            createTemplates("plot_template_basic","basic_plot.schem");
-            createTemplates("plot_template_large","large_plot.schem");
-            createTemplates("plot_template_huge","huge_plot.schem");
-            createTemplates("plot_template_massive","massive_plot.schem");
-            createTemplates("plot_template_gigantic","gigantic_plot.schem");
+            createTemplates("plot_template_basic", "basic_plot.schem");
+            createTemplates("plot_template_large", "large_plot.schem");
+            createTemplates("plot_template_huge", "huge_plot.schem");
+            createTemplates("plot_template_massive", "massive_plot.schem");
+            createTemplates("plot_template_gigantic", "gigantic_plot.schem");
         }
     }
 
@@ -79,7 +62,7 @@ public class PlotDatabase {
             Hypersquare.slimePlugin.loadWorld(world);
             Clipboard clipboard;
 
-            File schematic = Path.of("plugins/FastAsyncWorldEdit/schematics/"+ schematicName).toFile();
+            File schematic = Path.of("plugins/FastAsyncWorldEdit/schematics/" + schematicName).toFile();
 
             ClipboardFormat format = ClipboardFormats.findByFile(schematic);
             try (ClipboardReader reader = format.getReader(new FileInputStream(schematic))) {
@@ -93,13 +76,13 @@ public class PlotDatabase {
                         .build();
                 Operations.complete(operation);
             }
-            Bukkit.unloadWorld(Bukkit.getWorld(world.getName()),true);
+            Bukkit.unloadWorld(Bukkit.getWorld(world.getName()), true);
             slimePlugin.loadWorld(world);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Document plotDocument = new Document(worldName,"true");
+        Document plotDocument = new Document(worldName, "true");
         plotsCollection.insertOne(plotDocument);
     }
 
@@ -122,15 +105,12 @@ public class PlotDatabase {
         List<Document> info = new ArrayList<>();
 
         Document query = new Document("owner", ownerUUID);
-        MongoCursor<Document> cursor = plotsCollection.find(query).iterator();
 
-        try {
+        try (MongoCursor<Document> cursor = plotsCollection.find(query).iterator()) {
             while (cursor.hasNext()) {
                 Document plotDocument = cursor.next();
                 info.add(plotDocument);
             }
-        } finally {
-            cursor.close();
         }
 
         return info;
@@ -287,7 +267,7 @@ public class PlotDatabase {
 
             for (String dev : devsArray) {
                 if (!dev.equals(playerID.toString())) {
-                    if (newDevsBuilder.length() > 0) {
+                    if (!newDevsBuilder.isEmpty()) {
                         newDevsBuilder.append(",");
                     }
                     newDevsBuilder.append(dev);

@@ -1,9 +1,11 @@
 package hypersquare.hypersquare.item;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.ItemBuilder;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
@@ -21,11 +23,10 @@ public enum CodeValues {
     TEXT(Material.BOOK,"<#7FD42A>Text", "<gray>Colors, and other tags like%n<gray><hover> are supported in default mode%n%n<gray>Used for bossbar, scoreboard,%n<gray>titles, messages, etc.%n%n<dark_gray>Legacy color codes: %l","txt"),
     STRING(Material.STRING,"<aqua>String", "No colors%nUsed for dict keys, UUIDs, etc.","string");
 
-    @Getter Material material;
-    @Getter final String name;
-    @Getter
-    String lore;
-    @Getter String id;
+    public final Material material;
+    public final String name;
+    public final String lore;
+    public final String id;
 
     CodeValues(Material material, String name, String lore,String id) {
         this.material = material;

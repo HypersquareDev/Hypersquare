@@ -23,7 +23,7 @@ import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 public class Plot {
 
     public static void createPlot(Player player, int plotID, SlimePlugin plugin, String ownerUUID, final String plotType) {
-        PlayerDatabase.addPlot(player.getUniqueId(),plotType.replace("plot_template_", ""));
+        PlayerDatabase.addPlot(player.getUniqueId(), plotType.replace("plot_template_", ""));
         Utilities.sendInfo(player, "Starting creation of new " + Utilities.capitalize(plotType.replace("plot_template_", "")) + " plot.");
         AtomicReference<SlimeWorld> cloned = new AtomicReference<>(null);
         String worldName = "hs." + plotID;
@@ -42,7 +42,7 @@ public class Plot {
             }
             try {
                 cloned.set(world.get().clone(worldName, file));
-            } catch (WorldAlreadyExistsException | IOException err) {
+            } catch (WorldAlreadyExistsException | IOException ignored) {
             }
             isThreadFinished.set(true); // Set the flag to indicate that the thread has finished
         });
@@ -61,17 +61,18 @@ public class Plot {
                         return;
                     }
 
-                    Bukkit.getWorld(worldName).setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-                    Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-                    Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-                    Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
-                    Bukkit.getWorld(worldName).setSpawnLocation(25, -55, 4);
+                    World w = Bukkit.getWorld(worldName);
+                    w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+                    w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+                    w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+                    w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+                    w.setSpawnLocation(25, -55, 4);
 
-                    PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
+                    PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
                     String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
-                    Bukkit.getWorld(worldName).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, capitalized);
+                    w.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, capitalized);
                     new CodeFile(Bukkit.getWorld(worldName)).setCode("[]");
-                    savePersistentData(Bukkit.getWorld(worldName), plugin);
+                    savePersistentData(w, plugin);
                     PlotManager.loadPlot(plotID);
                     ChangeGameMode.devMode(player, plotID);
                     Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
@@ -82,17 +83,17 @@ public class Plot {
     }
 
 
-        public static void loadPlot(int plotID, Player player) throws WorldLockedException, CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
+    public static void loadPlot(int plotID, Player player) throws WorldLockedException, CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
         SlimePlugin plugin = Hypersquare.slimePlugin;
         String worldName = "hs." + plotID;
         SlimeLoader file = plugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
         SlimeWorld test = plugin.getWorld(worldName);
         SlimeWorld world = null;
-        if (!plugin.getLoadedWorlds().contains(test)){
+        if (!plugin.getLoadedWorlds().contains(test)) {
 
-                world = plugin.loadWorld(file, worldName, false, properties);
-                plugin.loadWorld(world);
+            world = plugin.loadWorld(file, worldName, false, properties);
+            plugin.loadWorld(world);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -101,41 +102,31 @@ public class Plot {
                     }
 
                 }
-            }.runTaskTimer(Hypersquare.instance,1,100);
-            player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
+            }.runTaskTimer(Hypersquare.instance, 1, 100);
+            player.teleport(new Location(Bukkit.getWorld(worldName), 10, 0, 10));
             Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
-
-
-
         } else {
-            player.teleport(new Location(Bukkit.getWorld(worldName),10,0,10));
+            player.teleport(new Location(Bukkit.getWorld(worldName), 10, 0, 10));
 
         }
         loadRules(plotID);
-
     }
-    public static void loadRules(int plotID){
-        String worldName = "hs." + plotID;
-        Bukkit.getWorld(worldName).setTime(1000);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_MOB_SPAWNING, false);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
-        Bukkit.getWorld(worldName).setGameRule(GameRule.DO_FIRE_TICK, false);
 
-
+    public static void loadRules(int plotID) {
+        World w = Bukkit.getWorld("hs." + plotID);
+        w.setTime(1000);
+        w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        w.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+        w.setGameRule(GameRule.DO_FIRE_TICK, false);
     }
+
     public static void deletePlot(int plotID) throws UnknownWorldException, IOException {
         String worldName = "hs." + plotID;
         SlimeLoader file = Hypersquare.slimePlugin.getLoader("mongodb");
-        SlimePropertyMap properties = new SlimePropertyMap();
-
-        SlimeWorld world = null;
-        SlimeWorld cloned = null;
-        Bukkit.unloadWorld(Bukkit.getWorld(worldName),true);
+        Bukkit.unloadWorld(Bukkit.getWorld(worldName), true);
         file.deleteWorld(worldName);
     }
-
-
 }

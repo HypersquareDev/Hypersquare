@@ -8,9 +8,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerRespawnListener implements Listener {
     @EventHandler
-    public void onRespawn(PlayerRespawnEvent event){
+    public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         event.setRespawnLocation(Hypersquare.lastDeathLoc.get(player).getSpawnLocation());
-        Hypersquare.lastDeathLoc.remove(player.getName());
+        Hypersquare.lastDeathLoc.remove(player);
     }
 }

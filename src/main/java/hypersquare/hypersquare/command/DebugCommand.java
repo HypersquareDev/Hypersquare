@@ -13,17 +13,10 @@ import static hypersquare.hypersquare.Hypersquare.lpPlugin;
 public class DebugCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        Player player = (Player) commandSender;
-        User user = lpPlugin.getPlayerAdapter(Player.class).getUser(player);
-
-        if (args[0] == "on") {
-            return true;
-        } else if (args[0] == "off") {
-
-            return true;
+        if (commandSender instanceof Player player) {
+            CodeFile file = new CodeFile(player.getWorld());
+            player.sendMessage(file.getCodeJson().getAsString());
         }
-        CodeFile file = new CodeFile(player.getWorld());
-        player.sendMessage(file.getCodeJson().getAsString());
         return true;
     }
 }

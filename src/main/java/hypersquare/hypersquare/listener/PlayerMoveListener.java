@@ -6,15 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.io.IOException;
-
 public class PlayerMoveListener implements Listener {
 
     @EventHandler
-    public void playerMove(PlayerMoveEvent event) throws IOException {
+    public void playerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-
         RestrictMovement.movementCheck(player);
-
     }
 }

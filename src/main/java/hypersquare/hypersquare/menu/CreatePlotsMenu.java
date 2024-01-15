@@ -14,15 +14,14 @@ import java.util.HashMap;
 
 import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
 
-public class CreatePlotsMenu extends Gui{
+public class CreatePlotsMenu extends Gui {
     public CreatePlotsMenu(Player player) {
         super(player, "createPlot", "Choose a plot size", 2);
     }
+
     @Override
     public void onOpen(InventoryOpenEvent event) {
-
         HashMap<String, Integer> playerData = Hypersquare.localPlayerData.get(player.getUniqueId());
-
 
         int usedBasic = playerData.get("usedBasic");
         int maxBasic = playerData.get("maxBasic");
@@ -47,7 +46,6 @@ public class CreatePlotsMenu extends Gui{
         addItem(6, massive);
         addItem(8, gigantic);
 
-
         basic.onClick(e -> {
             e.setCancelled(true);
             if (usedBasic != maxBasic) {
@@ -56,8 +54,6 @@ public class CreatePlotsMenu extends Gui{
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
-
-
             }
         });
 
@@ -69,7 +65,6 @@ public class CreatePlotsMenu extends Gui{
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
-
             }
         });
 
@@ -81,7 +76,6 @@ public class CreatePlotsMenu extends Gui{
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
-
             }
         });
 
@@ -93,7 +87,6 @@ public class CreatePlotsMenu extends Gui{
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
-
             }
         });
 
@@ -105,9 +98,7 @@ public class CreatePlotsMenu extends Gui{
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
                 player.closeInventory();
-
             }
         });
-
     }
 }

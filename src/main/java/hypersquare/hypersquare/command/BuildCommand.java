@@ -11,13 +11,12 @@ import org.jetbrains.annotations.NotNull;
 public class BuildCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (plotID != 0) {
                 ChangeGameMode.buildMode(player, plotID);
             } else {
-                Utilities.sendError(player,"You must be on a plot!");
+                Utilities.sendError(player, "You must be on a plot!");
             }
         } else {
             sender.sendMessage("This command can only be used by players.");

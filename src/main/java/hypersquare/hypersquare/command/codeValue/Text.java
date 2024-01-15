@@ -23,7 +23,7 @@ public class Text implements CommandExecutor, Listener {
         if (sender instanceof Player player) {
             if (Hypersquare.mode.get(player).equalsIgnoreCase("coding")) {
                 StringBuilder value = new StringBuilder();
-                Boolean legacy = false;
+                boolean legacy = false;
                 if (args.length >= 1) {
                     for (int i = 0; i < args.length; i++) {
                         value.append(args[i]);
@@ -36,20 +36,18 @@ public class Text implements CommandExecutor, Listener {
 
                     if (finalValue.contains("--legacy")) {
                         legacy = true;
-                        finalValue = finalValue.replace("--legacy","").strip();
+                        finalValue = finalValue.replace("--legacy", "").strip();
                     }
 
 
-                    player.getInventory().addItem(CodeValues.TEXT.build(finalValue,legacy));
+                    player.getInventory().addItem(CodeValues.TEXT.build(finalValue, legacy));
                 } else {
-                    player.getInventory().addItem(CodeValues.TEXT.build(null,false));
+                    player.getInventory().addItem(CodeValues.TEXT.build(null, false));
                 }
 
             } else {
-                Utilities.sendError(player,"You can only use this command in dev mode.");
+                Utilities.sendError(player, "You can only use this command in dev mode.");
             }
-        } else {
-
         }
         return true;
     }
@@ -59,8 +57,8 @@ public class Text implements CommandExecutor, Listener {
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             System.out.println("coding");
             ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-            NamespacedKey key = new NamespacedKey(Hypersquare.instance,"varitem");
-            if (item.getItemMeta().getPersistentDataContainer().get(key,PersistentDataType.STRING) != null) {
+            NamespacedKey key = new NamespacedKey(Hypersquare.instance, "varitem");
+            if (item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING) != null) {
                 event.setCancelled(true);
                 boolean legacy = false;
                 Component message = event.message();
@@ -68,11 +66,11 @@ public class Text implements CommandExecutor, Listener {
                 System.out.println(finalValue);
                 if (finalValue.contains("--legacy")) {
                     legacy = true;
-                    finalValue = finalValue.replace("--legacy","").strip();
+                    finalValue = finalValue.replace("--legacy", "").strip();
                 }
 
 
-                event.getPlayer().getInventory().setItemInMainHand(CodeValues.TEXT.build(finalValue,legacy));
+                event.getPlayer().getInventory().setItemInMainHand(CodeValues.TEXT.build(finalValue, legacy));
             }
         }
     }

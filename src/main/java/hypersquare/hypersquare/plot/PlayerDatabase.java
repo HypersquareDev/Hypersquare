@@ -25,7 +25,7 @@ public class PlayerDatabase {
 
     public PlayerDatabase() {
         mongoClient = MongoClients.create(Hypersquare.DB_PASS);
-        database = mongoClient.getDatabase("chicken_plots");
+        database = mongoClient.getDatabase(Hypersquare.DB_NAME);
         playerCollection = database.getCollection("players");
     }
 

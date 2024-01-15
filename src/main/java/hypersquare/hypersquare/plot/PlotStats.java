@@ -22,7 +22,7 @@ public class PlotStats {
 
     public PlotStats() {
         mongoClient = MongoClients.create(Hypersquare.DB_PASS);
-        database = mongoClient.getDatabase("chicken_plots");
+        database = mongoClient.getDatabase(Hypersquare.DB_NAME);
         plotStats = database.getCollection("plot_stats");
     }
 

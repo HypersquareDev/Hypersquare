@@ -25,11 +25,13 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static String DB_PASS;
+    public static String DB_NAME;
     public static int lastUsedWorldNumber;
     private CommandManager commandManager;
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
@@ -53,6 +55,9 @@ public final class Hypersquare extends JavaPlugin {
 
     public static SlimePlugin slimePlugin;
 
+
+
+
     @Override
     public void onEnable() {
         instance = this;
@@ -66,6 +71,8 @@ public final class Hypersquare extends JavaPlugin {
         saveDefaultConfig();
         getConfig().addDefault("DB_PASS", "");
         DB_PASS = (String) getConfig().get("DB_PASS");
+        getConfig().addDefault("DB_NAME", "devdb");
+        DB_NAME = (String) getConfig().get("DB_NAME");
         PlotDatabase plotDatabase = new PlotDatabase();
         PlayerDatabase playerDatabase = new PlayerDatabase();
         PlotStats plotStats = new PlotStats();

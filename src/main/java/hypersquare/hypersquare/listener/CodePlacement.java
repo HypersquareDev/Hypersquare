@@ -246,6 +246,8 @@ public class CodePlacement implements Listener {
             return;
         }
 
+        if (event.getBlock().getType() == Material.STONE) return;
+
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);

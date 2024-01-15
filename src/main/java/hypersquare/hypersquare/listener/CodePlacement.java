@@ -113,7 +113,7 @@ public class CodePlacement implements Listener {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
             CodeBlocks codeblock = CodeBlocks.getByMaterial(event.getItemInHand().getType());
             boolean brackets = codeblock.hasBrackets();
-            boolean chest = codeblock.hasChest();
+            boolean barrel = codeblock.hasBarrel();
             boolean threadStarter = codeblock.isThreadStarter();
             String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
             new BukkitRunnable() {
@@ -158,14 +158,14 @@ public class CodePlacement implements Listener {
                         }
 
                         CodeBlockManagement.moveCodeLine(location.clone(), size);
-                        placeBlock(event.getItemInHand(), location, brackets, chest, name);
+                        placeBlock(event.getItemInHand(), location, brackets, barrel, name);
                     }
                 }
             }.runTaskLater(Hypersquare.instance, 2);
         }
     }
 
-    private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean chest, String name) {
+    private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean barrel, String name) {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
@@ -191,7 +191,7 @@ public class CodePlacement implements Listener {
 
                 Location stoneLocation = location.clone().add(0, 0, 1);
                 Location closeBracketLocation = location.clone().add(0, 0, 3);
-                Location chestLocation = location.add(0, 1, 0);
+                Location barrelLocation = location.add(0, 1, 0);
                 Location openBracketLocation = location.clone().add(0, -1, 1);
 
                 if (brackets) {
@@ -215,11 +215,11 @@ public class CodePlacement implements Listener {
                     }
                 }
 
-                if (chest) {
-                    chestLocation.getBlock().setType(Material.CHEST);
-                    BlockData chestBlockData = chestLocation.getBlock().getBlockData();
-                    ((Directional) chestBlockData).setFacing(BlockFace.WEST);
-                    chestLocation.getBlock().setBlockData(chestBlockData);
+                if (barrel) {
+                    barrelLocation.getBlock().setType(Material.BARREL);
+                    BlockData barrelBlockData = barrelLocation.getBlock().getBlockData();
+                    ((Directional) barrelBlockData).setFacing(BlockFace.WEST);
+                    barrelLocation.getBlock().setBlockData(barrelBlockData);
                 }
             }
         }.runTaskLater(Hypersquare.instance, 1);
@@ -276,7 +276,7 @@ public class CodePlacement implements Listener {
             }
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {
-                Location chestLoc = blockLoc.clone().add(0, 1, 0);
+                Location barrelLoc = blockLoc.clone().add(0, 1, 0);
                 Location stoneLoc = blockLoc.clone().add(0, 0, 1);
 
                 Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
@@ -286,7 +286,7 @@ public class CodePlacement implements Listener {
                     bracketLoc.getBlock().setType(Material.AIR);
                 }
                 stoneLoc.getBlock().setType(Material.AIR);
-                chestLoc.getBlock().setType(Material.AIR);
+                barrelLoc.getBlock().setType(Material.AIR);
 
                 if (bracketLoc != null) {
                     CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -2);

@@ -3,17 +3,15 @@ package hypersquare.hypersquare.plot;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +53,11 @@ public class CodeExecuter {
                             targets.add(defaultTarget);
                         }
                     }
-                    Chest chest = (Chest) startLoc.clone().add(0, 1, 0).getBlock().getState();
+                    Barrel barrel = (Barrel) startLoc.clone().add(0, 1, 0).getBlock().getState();
 
                     for (Action action : Actions.actions) {
                         if (action.getId().equals(signInfo.get(1).insertion())) {
-                            action.executeBlockAction(targets, chest);
+                            action.executeBlockAction(targets, barrel);
                         }
                     }
                 }

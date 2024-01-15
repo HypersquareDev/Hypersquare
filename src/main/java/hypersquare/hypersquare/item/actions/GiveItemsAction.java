@@ -3,7 +3,7 @@ package hypersquare.hypersquare.item.actions;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Barrel;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,7 +33,7 @@ public class GiveItemsAction implements Action {
     }
 
     @Override
-    public void executeBlockAction(List<Entity> targets, Chest chest) {
+    public void executeBlockAction(List<Entity> targets, Barrel barrel) {
         for (Entity entity : targets) {
             if (entity instanceof Player player) {
                 Utilities.sendRedInfo(player, "I know how much you wanna start coding, but our systems aren't done yet.");

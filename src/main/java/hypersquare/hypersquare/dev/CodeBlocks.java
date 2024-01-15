@@ -33,50 +33,50 @@ public enum CodeBlocks {
     @NotNull
     final String id;
     final boolean isThreadStarter;
-    final boolean hasChest;
+    final boolean hasBarrel;
     final boolean hasBrackets;
     public final boolean hasActions;
     @NotNull
     final String defaultAction;
 
-    CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets) {
+    CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets) {
         this.material = material;
         this.name = name;
         this.id = id;
-        this.hasChest = hasChest;
+        this.hasBarrel = hasBarrel;
         this.hasBrackets = hasBrackets;
         this.isThreadStarter = false;
         this.hasActions = true;
         this.defaultAction = "";
     }
 
-    CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets, boolean isThreadStarter) {
+    CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter) {
         this.material = material;
         this.name = name;
         this.id = id;
-        this.hasChest = hasChest;
+        this.hasBarrel = hasBarrel;
         this.hasBrackets = hasBrackets;
         this.isThreadStarter = isThreadStarter;
         this.hasActions = true;
         this.defaultAction = "";
     }
 
-    CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets, boolean isThreadStarter, boolean hasActions) {
+    CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter, boolean hasActions) {
         this.material = material;
         this.name = name;
         this.id = id;
-        this.hasChest = hasChest;
+        this.hasBarrel = hasBarrel;
         this.hasBrackets = hasBrackets;
         this.isThreadStarter = isThreadStarter;
         this.hasActions = hasActions;
         this.defaultAction = "";
     }
 
-    CodeBlocks(Material material, String name, String id, boolean hasChest, boolean hasBrackets, boolean isThreadStarter, boolean hasActions, String defaultAction) {
+    CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter, boolean hasActions, String defaultAction) {
         this.material = material;
         this.name = name;
         this.id = id;
-        this.hasChest = hasChest;
+        this.hasBarrel = hasBarrel;
         this.hasBrackets = hasBrackets;
         this.isThreadStarter = isThreadStarter;
         this.hasActions = hasActions;
@@ -88,7 +88,7 @@ public enum CodeBlocks {
         this.material = material;
         this.id = id;
         this.name = id;
-        this.hasChest = false;
+        this.hasBarrel = false;
         this.hasBrackets = false;
         this.isThreadStarter = false;
         this.hasActions = false;
@@ -138,8 +138,8 @@ public enum CodeBlocks {
         return isThreadStarter;
     }
 
-    public boolean hasChest() {
-        return hasChest;
+    public boolean hasBarrel() {
+        return hasBarrel;
     }
 
     public boolean hasBrackets() {

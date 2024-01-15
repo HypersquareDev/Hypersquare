@@ -54,9 +54,11 @@ public class CodePlacement implements Listener {
         } else {
             if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
                 Utilities.sendError(event.getPlayer(), "Invalid block placement");
+                event.setCancelled(true);
             } else {
                 if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
                     Utilities.sendError(event.getPlayer(), "Invalid block placement");
+                    event.setCancelled(true);
                 } else {
                     processPlace(event);
                 }
@@ -259,7 +261,7 @@ public class CodePlacement implements Listener {
 
             if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
                 Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());
-                BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() + 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
+                BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() - 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
                 BlockVector3 loc2 = BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY() + 1, endLoc.getBlockZ());
                 // Create the region based on the two locations
                 Region selection = new CuboidRegion(loc1, loc2);

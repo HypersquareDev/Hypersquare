@@ -28,7 +28,7 @@ public class DevEvents implements Listener {
             return;
         }
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (event.getClickedBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")){
+            if (event.getClickedBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")) {
                 event.setCancelled(true);
             }
             return;
@@ -43,12 +43,12 @@ public class DevEvents implements Listener {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 sign.getSide(Side.FRONT).getLine(1);
-                switch (sign.getSide(Side.FRONT).getLine(0)){
-                    case ("PLAYER EVENT") :{
+                switch (sign.getSide(Side.FRONT).getLine(0)) {
+                    case ("PLAYER EVENT"): {
                         PlayerEventMenu.create().open(event.getPlayer());
                         break;
                     }
-                    case ("PLAYER ACTION") :{
+                    case ("PLAYER ACTION"): {
                         PlayerActionMenu.create().open(event.getPlayer());
                         break;
                     }
@@ -61,18 +61,21 @@ public class DevEvents implements Listener {
         }
 
     }
+
     @EventHandler
-    public void onExplode(EntityExplodeEvent event){
+    public void onExplode(EntityExplodeEvent event) {
         event.setCancelled(true);
     }
+
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event){
+    public void onDamage(EntityDamageByEntityEvent event) {
         if (!Hypersquare.mode.get(event.getDamager()).equals("playing")) {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void onExplode(BlockExplodeEvent event){
+    public void onExplode(BlockExplodeEvent event) {
         event.setCancelled(true);
     }
 
@@ -91,46 +94,49 @@ public class DevEvents implements Listener {
         gigantic = new Location(location.getWorld(), 1024, -640, 1024);
         commonStart = new Location(location.getWorld(), 0, 255, 0);
     }
+
     @EventHandler
-    public void onSpread(BlockFromToEvent event){
+    public void onSpread(BlockFromToEvent event) {
         commonVars(event.getToBlock().getLocation());
-        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
+        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
+        if (plotType == null)
+            return;
+        switch (plotType) {
 
-        switch (plotType){
-
-            case "Basic" : {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,basic)) {
+            case "Basic": {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, basic)) {
                     event.setCancelled(true);
                 }
                 break;
             }
-            case "Large" : {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,large)) {
+            case "Large": {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, large)) {
                     event.setCancelled(true);
 
                 }
                 break;
             }
-            case "Huge" : {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,huge)) {
+            case "Huge": {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, huge)) {
                     event.setCancelled(true);
                 }
                 break;
             }
-            case "Massive" : {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,massive)) {
+            case "Massive": {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, massive)) {
                     event.setCancelled(true);
                 }
                 break;
             }
-            case "Gigantic" : {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(),commonStart,gigantic)) {
+            case "Gigantic": {
+                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, gigantic)) {
                     event.setCancelled(true);
                 }
                 break;
             }
         }
     }
+
     @EventHandler
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
         event.setCancelled(true);
@@ -145,8 +151,8 @@ public class DevEvents implements Listener {
     public void creatureSpawnEvent(CreatureSpawnEvent event) {
         if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.NATURAL ||
                 event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND
-        ){
-         event.setCancelled(true);
+        ) {
+            event.setCancelled(true);
         }
     }
 }

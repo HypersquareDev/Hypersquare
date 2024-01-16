@@ -3,7 +3,9 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -19,6 +21,7 @@ import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -271,6 +274,8 @@ public class CodePlacement implements Listener {
                 // Create an EditSession that auto-closes where we set all the blocks in the region to air
                 try (EditSession editSession = WorldEdit.getInstance().newEditSession(faweWorld)) {
                     editSession.setBlocks(selection, BukkitAdapter.asBlockState(new ItemStack(Material.AIR)));
+                } catch (WorldEditException e) {
+                    Bukkit.getLogger().warning("Failed to remove codeblock");
                 }
             }
 

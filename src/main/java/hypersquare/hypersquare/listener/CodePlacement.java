@@ -263,7 +263,8 @@ public class CodePlacement implements Listener {
                 PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
             }
 
-            if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
+            CodeBlocks codeblock = CodeBlocks.getByMaterial(block.getType());
+            if (codeblock != null && codeblock.isThreadStarter()) {
                 Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());
                 BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() - 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
                 BlockVector3 loc2 = BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY() + 1, endLoc.getBlockZ());

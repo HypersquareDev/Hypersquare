@@ -220,7 +220,7 @@ public class CodePlacement implements Listener {
                 if (barrel) {
                     barrelLocation.getBlock().setType(Material.BARREL);
                     BlockData barrelBlockData = barrelLocation.getBlock().getBlockData();
-                    ((Directional) barrelBlockData).setFacing(BlockFace.WEST);
+                    ((Directional) barrelBlockData).setFacing(BlockFace.UP);
                     barrelLocation.getBlock().setBlockData(barrelBlockData);
                 }
             }

@@ -113,6 +113,28 @@ public class DevSetup {
             zipStream.close();
             statusMessage.accept("Downloaded Schematics");
 
+            //Downloading worlds config
+            statusMessage.accept("Downloading worlds config");
+            request = HttpRequest.newBuilder(new URI("https://gist.githubusercontent.com/Chickensoup20/42fed7d04a195e70c824d66b9eb899aa/raw/25a6e92207b9ba8835dc354b2932e65300845239/worlds.yml")).build();
+            byte[] worlds = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
+            Path.of("plugins/SlimeWorldManager").toFile().mkdirs();
+            Files.write(Path.of("plugins/SlimeWorldManager/worlds.yml"), worlds);
+            statusMessage.accept("Downloaded worlds config");
+
+            //Downloading server icon
+            statusMessage.accept("Downloading server icon");
+            request = HttpRequest.newBuilder(new URI("https://i.imgur.com/9MJpprp.png")).build();
+            byte[] icon = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
+            Files.write(Path.of("server-icon.png"), icon);
+            statusMessage.accept("Downloaded server icon");
+
+            //Downloading server properties
+            statusMessage.accept("Downloading server properties");
+            request = HttpRequest.newBuilder(new URI("https://gist.githubusercontent.com/Chickensoup20/38b20c00ab9a0adc3c676c8950cfa4b0/raw/0c7a2368031e25696b613659f6909d5c1fbc26fc/server.properties")).build();
+            byte[] properties = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
+            Files.write(Path.of("server.properties"), properties);
+            statusMessage.accept("Downloaded server properties");
+
 
             statusMessage.accept("Done!");
         } catch (URISyntaxException | IOException | InterruptedException ex) {

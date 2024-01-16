@@ -15,7 +15,6 @@ import static hypersquare.hypersquare.Hypersquare.mm;
 
 public class ActionItem {
 
-    private ItemStack actionItem;
     String name;
     Material material;
     String[] description;
@@ -23,25 +22,27 @@ public class ActionItem {
     List<String[]> additionalInfo = List.of();
     boolean enchanted;
 
-    public ActionItem setMaterial(Material material){
+    public ActionItem setMaterial(Material material) {
         this.material = material;
         return this;
     }
-    public ActionItem setName(String name){
+
+    public ActionItem setName(String name) {
         this.name = name;
         return this;
     }
 
-    public ActionItem setDescription(String... lore){
+    public ActionItem setDescription(String... lore) {
         this.description = lore;
         return this;
     }
+
     public ActionItem setArguments(ActionArgument... arguments) {
         this.arguments = arguments;
         return this;
     }
 
-    public ActionItem addAdditionalInfo(String... info){
+    public ActionItem addAdditionalInfo(String... info) {
         List<String[]> infoList = new ArrayList<>(additionalInfo);
         info[0] = "<!italic><blue>⏵ <gray>" + info[0];
         infoList.add(info);
@@ -54,8 +55,8 @@ public class ActionItem {
         return this;
     }
 
-    public ItemStack build(){
-        actionItem = new ItemStack(material);
+    public ItemStack build() {
+        ItemStack actionItem = new ItemStack(material);
         ItemMeta meta = actionItem.getItemMeta();
         List<Component> lore = new ArrayList<>(List.of());
 
@@ -73,7 +74,7 @@ public class ActionItem {
         builder.append("%n<white>Chest Parameters:%n");
         if (arguments != null) {
             for (ActionArgument actionArgument : arguments) {
-                builder.append(mm.serialize(actionArgument.getType().getName(actionArgument.type)));
+                builder.append(mm.serialize(actionArgument.type.getName(actionArgument.type)));
                 builder.append(actionArgument.plural ? "(s)" : "");
                 builder.append(actionArgument.optional ? "*" : "");
                 builder.append(" <dark_gray>- <gray>").append(actionArgument.description).append("%n");
@@ -102,7 +103,7 @@ public class ActionItem {
         if (enchanted) meta.addEnchant(Enchantment.LURE, 1, true);
 
         meta.lore(lore);
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS,  ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         actionItem.setItemMeta(meta);
         return actionItem;
     }

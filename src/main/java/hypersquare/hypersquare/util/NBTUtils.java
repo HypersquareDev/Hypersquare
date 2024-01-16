@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.nbt.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.craftbukkit.v1_20_R2.persistence.CraftPersistentDataContainer;
+import org.bukkit.craftbukkit.v1_20_R3.persistence.CraftPersistentDataContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;

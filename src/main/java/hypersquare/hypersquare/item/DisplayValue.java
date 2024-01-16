@@ -18,12 +18,13 @@ public enum DisplayValue {
     DICTIONARY("<#idk>"),
     ANY("<#idk>");
 
-    String color;
+    private final String color;
+
     DisplayValue(String color) {
         this.color = color;
     }
 
     public Component getName(DisplayValue type) {
-        return mm.deserialize(color  + Utilities.capitalize(type.toString().toLowerCase()));
+        return mm.deserialize(color + Utilities.capitalize(type.toString().toLowerCase()));
     }
 }

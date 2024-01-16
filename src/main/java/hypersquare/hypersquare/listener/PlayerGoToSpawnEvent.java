@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class PlayerGoToSpawnEvent implements Listener {
 
     @EventHandler
-    public void damagePlayer(EntityDamageByEntityEvent event){
+    public void damagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager().getType() == EntityType.PLAYER) {
             Player player = (Player) event.getDamager();
             if (Hypersquare.mode.get(player).equals("at spawn")) {
@@ -23,38 +23,43 @@ public class PlayerGoToSpawnEvent implements Listener {
             }
         }
     }
+
     @EventHandler
-    public void looseFood(FoodLevelChangeEvent event){
+    public void looseFood(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
-        if (Hypersquare.mode.get(player).equals("at spawn")){
+        if (Hypersquare.mode.get(player).equals("at spawn")) {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void dropItem(PlayerDropItemEvent event){
+    public void dropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (Hypersquare.mode.get(player).equals("at spawn")){
+        if (Hypersquare.mode.get(player).equals("at spawn")) {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void Interaction(PlayerInteractEvent event){
+    public void Interaction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (Hypersquare.mode.get(player).equals("at spawn")){
+        if (Hypersquare.mode.get(player).equals("at spawn")) {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void Interaction(PlayerInteractEntityEvent event){
+    public void Interaction(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        if (Hypersquare.mode.get(player).equals("at spawn")){
+        if (Hypersquare.mode.get(player).equals("at spawn")) {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void Interaction(PlayerInteractAtEntityEvent event){
+    public void Interaction(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
-        if (Hypersquare.mode.get(player).equals("at spawn")){
+        if (Hypersquare.mode.get(player).equals("at spawn")) {
             event.setCancelled(true);
         }
     }

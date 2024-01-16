@@ -39,11 +39,15 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                                <!-- Dear future coder :) -->
-                    <!-- The directory bellow probably isn't yours. -->
-                    <!-- Unless you're updating some versions, try to not commit -->
-                     <!-- changes in this file. -->
-                    <outputDirectory>C:\Users\User\Desktop\servers\servers\3eb6e818-1b32-41fc-808c-3931e935efed\plugins</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>libs/</classpathPrefix>
+                            <mainClass>
+                                hypersquare.hypersquare.DevSetup
+                            </mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
 
@@ -128,14 +132,31 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.intellectualsites.bom</groupId>
+                <artifactId>bom-newest</artifactId>
+                <version>1.40</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.2-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -151,7 +172,7 @@
         <dependency>
             <groupId>com.infernalsuite.aswm</groupId>
             <artifactId>api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -175,6 +196,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.83</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fastasyncworldedit</groupId>
+            <artifactId>FastAsyncWorldEdit-Core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
@@ -229,7 +255,7 @@
         <dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
-            <version>1.20.2-SNAPSHOT</version>
+            <version>1.20.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

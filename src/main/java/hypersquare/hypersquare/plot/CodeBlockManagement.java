@@ -1,15 +1,25 @@
 package hypersquare.hypersquare.plot;
 
-import org.bukkit.*;
+import com.fastasyncworldedit.core.FaweAPI;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.world.block.BlockState;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Piston;
-import org.bukkit.block.sign.Side;
-
-import java.util.ArrayList;
 
 public class CodeBlockManagement {
     @Deprecated
@@ -31,45 +41,26 @@ public class CodeBlockManagement {
             location.getBlock().setBlockData(pistonData);
         }
 
-        if (bracket.equals("none")) {
-        }
-
-        if (bracket.equals("stone")){
+        if (bracket.equals("stone")) {
             location.add(0, 0, 1).getBlock().setType(Material.STONE);
         }
     }
 
-    public static Location findCorrespBracket(Location location){
-            int i = 0;
-            while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
-                location.add(0,0,1);
-                if (location.getBlock().getType() == Material.PISTON) {
-                    Piston piston = (Piston) location.getBlock().getBlockData();
-                    if (piston.getFacing() == BlockFace.SOUTH)
-                        i--;
-                    if (piston.getFacing() == BlockFace.NORTH)
-                        i++;
-                    if (i == 0){
-                        return location;
-                    }
+    public static Location findCorrespBracket(Location location) {
+        int i = 0;
+        while (location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR || location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR) {
+            location.add(0, 0, 1);
+            if (location.getBlock().getType() == Material.PISTON) {
+                Piston piston = (Piston) location.getBlock().getBlockData();
+                if (piston.getFacing() == BlockFace.SOUTH)
+                    i--;
+                if (piston.getFacing() == BlockFace.NORTH)
+                    i++;
+                if (i == 0) {
+                    return location;
                 }
-
             }
-        return null;
-    }
-    public static Location findCodeEnd(Location location){
-        while (location.clone().add(0,0,1).getBlock().getType() != Material.AIR || location.clone().add(0,0,2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
-            location.add(0,0,1);
-        }
-        return location;
-    }
 
-    public static Location findCodelineStartLoc(Location location){
-        while (location.clone().add(0,0,-1).getBlock().getType() != Material.AIR || location.clone().add(0,0,-2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR){
-            if (location.getBlock().getType() == Material.DIAMOND_BLOCK ||location.getBlock().getType() ==  Material.LAPIS_BLOCK ||location.getBlock().getType() ==  Material.EMERALD_BLOCK ||location.getBlock().getType() ==  Material.GOLD_BLOCK){
-                return location;
-            }
-            location.add(0,0,-1);
         }
         return null;
     }
@@ -82,55 +73,40 @@ public class CodeBlockManagement {
             }
 
         }
-
         return null;
-
     }
 
-
-
-
-    public static void moveCodeLine(Location location, int amount){
-
-        Location loc1 = location.clone().add(-1,0,0);
-        Location loc2 = findCodeEnd(location.clone()).add(0,1,0);
-        ArrayList clipboard = new ArrayList<ArrayList>();
-        for (Double x = loc1.getX(); x <= loc2.getX(); x++) {
-            for (Double y = loc1.getY(); y <= loc2.getY(); y++) {
-                for (Double z = loc1.getZ(); z <= loc2.getZ(); z++) {
-                    Location currentLoc = new Location(location.getWorld(), x.intValue(), y.intValue(), z.intValue());
-                    ArrayList blocks = new ArrayList();
-                    if (currentLoc.getBlock().getType() != Material.AIR) {
-                        blocks.add(currentLoc.clone().add(0, 0, amount));
-                        blocks.add(currentLoc.getBlock().getType());
-                        blocks.add(currentLoc.getBlock().getBlockData());
-                        if (currentLoc.getBlock().getState() instanceof Sign sign) {
-                            blocks.add(sign.getSide(Side.FRONT).getLines());
-                        }
-                        clipboard.add(blocks);
-                        currentLoc.getBlock().setType(Material.AIR);
-                    }
-                }
-            }
+    public static Location findCodeEnd(Location location) {
+        while (location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR || location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR) {
+            location.add(0, 0, 1);
         }
-        for (Object list : clipboard) {
-            ArrayList list1 = (ArrayList) list;
-            Location location1 = (Location) list1.get(0);
-            location1.getBlock().setType((Material) list1.get(1));
-            location1.getBlock().setBlockData((BlockData) list1.get(2));
-            if (list1.size() == 4) {
-                Sign sign = (Sign) location1.getBlock().getState();
-                sign.setEditable(true);
+        return location;
+    }
 
-                sign.update();
-                int i = 0;
-                for (String text : (String[]) list1.get(3)) {
-                    sign.getSide(Side.FRONT).setLine(i, text);
-                    i++;
-                }
-                sign.update();
-            }
+    public static void moveCodeLine(Location copyLoc, int amount) {
+        Location endLoc = findCodeEnd(copyLoc.clone()).add(-1, 1, 0);
+        World world = FaweAPI.getWorld(copyLoc.getWorld().getName());
+
+        Region region = new CuboidRegion(world, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ()), BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ()));
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+                    editSession, region, clipboard, region.getMinimumPoint());
+            Operations.complete(forwardExtentCopy);
         }
 
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            BlockState block = BukkitAdapter.adapt(Material.AIR.createBlockData());
+            editSession.setBlocks(region, block);
+        }
+
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            Operation operation = new ClipboardHolder(clipboard)
+                    .createPaste(editSession)
+                    .to(region.getMinimumPoint().add(0, 0, amount))
+                    .build();
+
+            Operations.complete(operation);
+        }
     }
 }

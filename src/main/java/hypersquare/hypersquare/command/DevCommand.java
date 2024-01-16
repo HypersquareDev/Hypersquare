@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class DevCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (plotID != 0) {
                 if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString())) {

@@ -1,22 +1,22 @@
-package hypersquare.hypersquare.dev.compiler;
+package hypersquare.hypersquare.dev.codefile;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.zip.Deflater;
 
 public class CodeFile {
-    World world;
-    Player player;
+    public World world;
+    public Player player;
 
     public CodeFile(World world) {
         this.world = world;
@@ -27,19 +27,22 @@ public class CodeFile {
         this.world = player.getWorld();
     }
 
-    public JSONObject getCodeJson() {
-        getCode();
-        JSONParser parser = new JSONParser();
-        try {
-            return (JSONObject) parser.parse(getCode());
-        } catch (ParseException e) {
-            e.printStackTrace(); // Something went wrong
+    public JsonArray getCodeJson() {
+        String code = getCode();
+
+        JsonArray array = JsonParser.parseString(code).getAsJsonArray();
+
+        if (!array.isJsonNull() && !array.isEmpty()) {
+            return array;
+        } else {
+            return new JsonArray();
         }
-        return null;
     }
 
     public String getCode() {
-        return world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
+        String code = world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
+        assert code != null;
+        return code;
     }
 
     public void setCode(String newCode) {

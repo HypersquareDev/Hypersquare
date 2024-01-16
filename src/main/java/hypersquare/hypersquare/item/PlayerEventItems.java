@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.item;
 
 import hypersquare.hypersquare.util.Utilities;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -78,17 +77,19 @@ public enum PlayerEventItems {
     MOB_KILL_PLAYER_EVENT(Material.BONE, "MobKillPlayer", "<dark_red>Mob Kill Player Event","<gray>Executes code when a%n<gray>mob kills a player.%n%n<dark_red>∅ <red>Cancellable", DEATH_EVENTS_CATEGORY),
     PLAYER_RESPAWN_EVENT(Material.OAK_SAPLING, "Respawn", "<dark_aqua>Player Respawn Event","<gray>Executes code when a%n<gray>player respawns.%n%n<dark_red>∅ <red>Cancellable", DEATH_EVENTS_CATEGORY);
 
-    @Getter final Material material;
-    @Getter String id = null;
-    @Getter final String name;
-    @Getter final String lore;
-    @Getter PlayerEventItems category = null;
-    @Getter int slot = 0;
+    public final Material material;
+    public final String id;
+    public final String name;
+    public final String lore;
+    public final PlayerEventItems category;
+    public final int slot;
     PlayerEventItems(Material material, String name, String lore, int slot) {
         this.material = material;
         this.name = name;
         this.lore = lore;
         this.slot = slot;
+        this.category = null;
+        this.id = null;
     }
 
     PlayerEventItems(Material material, String id, String name, String lore, PlayerEventItems category) {
@@ -97,6 +98,7 @@ public enum PlayerEventItems {
         this.name = name;
         this.lore = lore;
         this.category = category;
+        this.slot = 0;
     }
 
     public ItemStack build() {
@@ -106,7 +108,7 @@ public enum PlayerEventItems {
     public static ArrayList<PlayerEventItems> getEvents(PlayerEventItems category) {
         ArrayList<PlayerEventItems> actions = new ArrayList<>();
         for (PlayerEventItems playerEventItem : PlayerEventItems.values()) {
-            if (Objects.equals(playerEventItem.getCategory(), category)) {
+            if (Objects.equals(playerEventItem.category, category)) {
                 actions.add(playerEventItem);
             }
         }

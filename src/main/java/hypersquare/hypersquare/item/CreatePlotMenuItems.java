@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.item;
 
 import hypersquare.hypersquare.util.ItemBuilder;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -18,11 +17,11 @@ public enum CreatePlotMenuItems {
     MASSIVE_PLOT(Material.DIAMOND_BLOCK, "<#00E8FF>", "Massive Plot", "<gray>Size: 512x512%n<gray>You have used %s <gray>of your Massive plots.%n<green>Click to create!"),
     GIGANTIC_PLOT(Material.NETHERITE_BLOCK, "<#333232>", "Gigantic Plot", "<gray>Size: 1024x1024%n<gray>You have used %s <gray>of your Gigantic plots.%n<green>Click to create!");
 
-    @Getter Material material;
-    @Getter final String color;
-    @Getter final String name;
-    @Getter
-    String lore;
+    public final Material material;
+    public final String color;
+    public final String name;
+    public final String lore;
+
     CreatePlotMenuItems(Material material, String color, String name, String lore) {
         this.material = material;
         this.color = color;

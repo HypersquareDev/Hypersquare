@@ -23,15 +23,14 @@ public class PlayerEventMenu {
 
         // Loop through all categories
         for (PlayerEventItems playerEventItem : PlayerEventItems.values()) {
-            if (playerEventItem.getCategory() != null) continue; // Skip if not a category
-            int slot = playerEventItem.getSlot();
+            if (playerEventItem.category != null) continue; // Skip if not a category
+            int slot = playerEventItem.slot;
 
             // Clicking a category
             GuiItem item = ItemBuilder.from(playerEventItem.build()).asGuiItem(event -> {
                 event.setCancelled(true);
                 Player player = (Player) event.getWhoClicked();
                 Utilities.sendSecondaryMenuSound(player);
-
 
 
                 // Strip Color Codes
@@ -51,7 +50,7 @@ public class PlayerEventMenu {
                         event.setCancelled(true);
                         Utilities.sendSuccessClickMenuSound(player);
                         Block block = player.getTargetBlock(null, 5);
-                        Utilities.setAction(block, action.getId(), player);
+                        Utilities.setAction(block, action.id, player);
                     });
                     categoryGui.addItem(actionItem);
                 }

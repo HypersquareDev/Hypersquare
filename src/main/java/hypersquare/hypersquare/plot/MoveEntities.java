@@ -18,6 +18,7 @@ public class MoveEntities {
     public static Location massive = null;
     public static Location gigantic = null;
     public static Location commonStart = null;
+
     public static void commonVars(Location location) {
         basic = new Location(location.getWorld(), 64, -640, 64);
         large = new Location(location.getWorld(), 128, -640, 128);
@@ -34,18 +35,17 @@ public class MoveEntities {
 
                 assert plugin != null;
                 for (SlimeWorld world : plugin.getLoadedWorlds()) {
-                    if (Bukkit.getWorld(world.getName()) == null){
+                    if (Bukkit.getWorld(world.getName()) == null) {
                         return;
                     }
                     for (Entity entity : Bukkit.getWorld(world.getName()).getEntities()) {
-                        if (entity == null){
+                        if (entity == null) {
                             return;
                         }
-                        if (entity.getType() != EntityType.PLAYER){
+                        if (entity.getType() != EntityType.PLAYER) {
                             commonVars(entity.getLocation());
-                            int plotID = Utilities.getPlotID(entity.getWorld());
                             String plotType = (entity).getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
-                            if (plotType == null){
+                            if (plotType == null) {
                                 return;
                             }
 

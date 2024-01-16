@@ -1,14 +1,15 @@
 package hypersquare.hypersquare.dev;
+
 import org.bukkit.entity.Player;
 
 public class LoadItems {
-    public static void devInventory(Player player){
-        player.getInventory().setItem(0,  CodeItems.PLAYER_EVENT_ITEM);
-        player.getInventory().setItem(1,  CodeItems.IF_PLAYER_ITEM);
-        player.getInventory().setItem(2,  CodeItems.PLAYER_ACTION_ITEM);
-        player.getInventory().setItem(3,  CodeItems.CALL_FUNCTION_ITEM);
-        player.getInventory().setItem(4,  CodeItems.START_PROCESS_ITEM);
-        player.getInventory().setItem(9,  CodeItems.CONTROL_ITEM);
+    public static void devInventory(Player player) {
+        player.getInventory().setItem(0, CodeItems.PLAYER_EVENT_ITEM);
+        player.getInventory().setItem(1, CodeItems.IF_PLAYER_ITEM);
+        player.getInventory().setItem(2, CodeItems.PLAYER_ACTION_ITEM);
+        player.getInventory().setItem(3, CodeItems.CALL_FUNCTION_ITEM);
+        player.getInventory().setItem(4, CodeItems.START_PROCESS_ITEM);
+        player.getInventory().setItem(9, CodeItems.CONTROL_ITEM);
         player.getInventory().setItem(10, CodeItems.SELECT_OBJECT_ITEM);
         player.getInventory().setItem(11, CodeItems.REPEAT_ITEM);
         player.getInventory().setItem(12, CodeItems.ELSE_ITEM);

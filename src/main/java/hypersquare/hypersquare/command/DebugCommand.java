@@ -12,7 +12,7 @@ public class DebugCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (commandSender instanceof Player player) {
             CodeFile file = new CodeFile(player.getWorld());
-            player.sendMessage(file.getCodeData().toJson().getAsString());
+            player.sendMessage(file.getCodeData().toJson().toString());
         }
         return true;
     }

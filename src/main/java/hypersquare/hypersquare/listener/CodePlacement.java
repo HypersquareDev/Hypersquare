@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.listener;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -12,6 +13,7 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
@@ -141,12 +143,9 @@ public class CodePlacement implements Listener {
                             Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
                             return;
                         }
-                        JsonArray code = new CodeFile(event.getPlayer()).getCodeJson();
+                        CodeData code = new CodeFile(event.getPlayer()).getCodeData();
                         if (!threadStarter) {
-                            try {
-                                code.get(location.getBlockX() % 3);
-                            } catch (IndexOutOfBoundsException e) {
-                                // If we error while getting the codeblock, it means there is no thread starter.
+                            if (code.codelines.size() < location.getBlockX() % 3) {
                                 Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
                                 return;
                             }
@@ -169,7 +168,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, CodeFileHelper.getCodeblockIndex(location), code);
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, CodeFileHelper.getCodeblockIndex(location), code).toJson();
         code.setCode(codeJson.toString());
 
         if (name != null) { // Either invalid or empty codeblock
@@ -296,8 +295,8 @@ public class CodePlacement implements Listener {
                 }
             }
             CodeFile code = new CodeFile(blockLoc.getWorld());
-            JsonArray codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
-            code.setCode(codeJson.toString());
+            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+            code.setCode(codeJson.toJson().toString());
         }
     }
 }

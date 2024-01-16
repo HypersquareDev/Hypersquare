@@ -1,16 +1,14 @@
 package hypersquare.hypersquare.dev.codefile;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
+import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.util.BracketFinder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class CodeFileHelper {
     @NotNull
@@ -29,12 +27,11 @@ public class CodeFileHelper {
 
     public static int getCodelineListIndex(Location location, CodeFile codeFile) {
         int codelineIndex = getCodelineIndex(location);
-        JsonArray plotCode = codeFile.getCodeJson();
+        CodeData plotCode = codeFile.getCodeData();
 
-        List<JsonElement> plotCodeList = plotCode.asList();
-        for (JsonElement element : plotCodeList) {
-            if (element.getAsJsonObject().get("position").getAsInt() == codelineIndex) {
-                return plotCodeList.indexOf(element);
+        for (CodeLineData element : plotCode.codelines) {
+            if (element.position == codelineIndex) {
+                return plotCode.codelines.indexOf(element);
             }
         }
         return -1;
@@ -44,13 +41,13 @@ public class CodeFileHelper {
      * Set index to -1 for the codeblock to be appended instead of inserted.
      * @return
      */
-    public static JsonArray addCodeblock(Location location, String name, int index, CodeFile code) {
+    public static CodeData addCodeblock(Location location, String name, int index, CodeFile code) {
 
-        JsonArray plotCode = code.getCodeJson();
+        CodeData plotCode = code.getCodeData();
 
         int codelineIndex = getCodelineIndex(location);
 
-        JsonObject codeline = new JsonObject();
+        CodeLineData codeline = null;
 
         int position = getCodelineListIndex(location, code);
 
@@ -60,97 +57,72 @@ public class CodeFileHelper {
             Bukkit.broadcastMessage(BracketFinder.isInIfStatement(location) + " is in if");
         }
         if (codeblock.isThreadStarter()) {
-            JsonObject event = new JsonObject();
+            CodeLineData event = new CodeLineData();
             String type = CodeBlocks.getByName(name).id();
-            event.addProperty("type", type);
+            event.type = type;
             if (codeblock.hasActions) {
-                event.addProperty("event", type + "_empty");
+                event.event = type + "_empty";
             }
-            event.addProperty("position", codelineIndex);
-            event.add("actions", new JsonArray());
+            event.position = codelineIndex;
             codeline = event;
         } else {
             if(codeblock.hasBrackets()){
-                codeline = plotCode.get(position).getAsJsonObject();
-                JsonArray actions = codeline.get("actions").getAsJsonArray();
-                JsonObject action = new JsonObject();
-                action.addProperty("action", genEmptyCodeblock(name));
-                JsonArray array = new JsonArray();
-                action.add("actions",array);
+                codeline = plotCode.codelines.get(position);
+                CodeActionData action = new CodeActionData();
+                action.action = genEmptyCodeblock(name);
 
                 // Insert the element if the index is -1  or if the index is less than the size of the array
                 Bukkit.broadcast(Component.text("requested insert index: " + index));
-                if (index < actions.size() && index != -1) {
-                    JsonArray temp = new JsonArray();
-                    for (int i = 0; i < actions.size(); i++) {
-                        if (i == index) {
-                            temp.add(action);
-                        }
-                        temp.add(actions.get(i));
-                    }
-                    actions = temp;
+                if (index < codeline.actions.size() && index != -1) {
+                    codeline.actions.add(index, action);
                 } else {
-                    actions.add(action);
+                    codeline.actions.add(action);
                 }
-
-                codeline.add("actions", actions);
             } else {
-                codeline = plotCode.get(position).getAsJsonObject();
-                JsonArray actions = codeline.get("actions").getAsJsonArray();
-                JsonObject action = new JsonObject();
-                action.addProperty("action", genEmptyCodeblock(name));
+                codeline = plotCode.codelines.get(position);
+                CodeActionData action = new CodeActionData();
+                action.action = genEmptyCodeblock(name);
 
                 // Insert the element if the index is -1  or if the index is less than the size of the array
                 Bukkit.broadcast(Component.text("requested insert index: " + index));
-                if (index < actions.size() && index != -1) {
-                    JsonArray temp = new JsonArray();
-                    for (int i = 0; i < actions.size(); i++) {
-                        if (i == index) {
-                            temp.add(action);
-                        }
-                        temp.add(actions.get(i));
-                    }
-                    actions = temp;
+                if (index < codeline.actions.size() && index != -1) {
+                    codeline.actions.add(index, action);
                 } else {
-                    actions.add(action);
+                    codeline.actions.add(action);
                 }
-
-                codeline.add("actions", actions);
             }
         }
 
         if (position == -1) {
-            plotCode.add(codeline);
+            plotCode.codelines.add(codeline);
         } else {
-            plotCode.set(position, codeline);
+            plotCode.codelines.set(position, codeline);
         }
 
         Bukkit.broadcastMessage(plotCode.toString());
         return plotCode;
     }
 
-    public static JsonArray removeCodeBlock(Location location, CodeFile code) {
-        JsonArray plotCode = code.getCodeJson();
+    public static CodeData removeCodeBlock(Location location, CodeFile code) {
+        CodeData plotCode = code.getCodeData();
 
         int codeblockIndex = getCodeblockIndex(location);
 
         int position = getCodelineListIndex(location, code);
-        JsonObject codeline = plotCode.get(position).getAsJsonObject();
+        CodeLineData codeline = plotCode.codelines.get(position);
         Bukkit.broadcastMessage(codeblockIndex + "");
 
         if (codeblockIndex == -1) {
             // Is a thread starter (first codeblock)
-            plotCode.remove(codeline);
+            plotCode.codelines.remove(codeline);
         } else {
-            JsonArray actions = codeline.get("actions").getAsJsonArray();
-            actions.remove(codeblockIndex);
-            plotCode.set(position, codeline);
+            codeline.actions.remove(codeblockIndex);
         }
         Bukkit.broadcastMessage(plotCode + "");
         return plotCode;
     }
 
-    public static JsonArray updateAction(Location location, CodeFile code, String newAction) {
+    public static CodeData updateAction(Location location, CodeFile code, String newAction) {
         int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
 
@@ -159,24 +131,20 @@ public class CodeFileHelper {
         if (position == -1) {
             // We are somehow updating a non-existent codeline
             Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
-            return code.getCodeJson();
+            return code.getCodeData();
         }
 
-        JsonArray plotCode = code.getCodeJson();
-        JsonObject codeline = new JsonObject();
+        CodeData plotCode = code.getCodeData();
+        CodeLineData codeline = new CodeLineData();
 
-        if (!plotCode.isEmpty()) {
-            codeline = plotCode.get(position).getAsJsonObject();
+        if (!plotCode.codelines.isEmpty()) {
+            codeline = plotCode.codelines.get(position);
+        } else {
+            plotCode.codelines.set(position, codeline);
         }
-        JsonArray actions = codeline.get("actions").getAsJsonArray();
-        JsonObject action = actions.get(codeblockIndex).getAsJsonObject();
-        action.addProperty("action", newAction);
-
+        codeline.actions.get(codeblockIndex).action = newAction;
         // TODO: GET ARGS HERE!!!!!!!! (erm well set)
 
-        actions.set(codeblockIndex, action);
-        codeline.add("actions", actions);
-        plotCode.set(position, codeline);
         return plotCode;
     }
 

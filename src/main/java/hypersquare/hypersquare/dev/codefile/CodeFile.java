@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.codefile;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -27,15 +28,15 @@ public class CodeFile {
         this.world = player.getWorld();
     }
 
-    public JsonArray getCodeJson() {
+    public CodeData getCodeData() {
         String code = getCode();
 
         JsonArray array = JsonParser.parseString(code).getAsJsonArray();
 
         if (!array.isJsonNull() && !array.isEmpty()) {
-            return array;
+            return new CodeData(array);
         } else {
-            return new JsonArray();
+            return new CodeData(new JsonArray());
         }
     }
 

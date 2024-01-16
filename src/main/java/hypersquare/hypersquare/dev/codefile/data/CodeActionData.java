@@ -15,7 +15,7 @@ public class CodeActionData {
 
     public CodeActionData(JsonObject data) {
         action = data.get("action").getAsString();
-        if (!data.get("action").isJsonNull()) {
+        if (data.has("actions")) {
             for (JsonElement element : data.get("actions").getAsJsonArray()) {
                 actions.add(new CodeActionData(element.getAsJsonObject()));
             }

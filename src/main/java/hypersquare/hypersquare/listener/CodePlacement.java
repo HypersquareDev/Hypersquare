@@ -171,7 +171,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, CodeFileHelper.getCodeblockIndex(location), code).toJson();
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, code).toJson();
         code.setCode(codeJson.toString());
 
         if (name != null) { // Either invalid or empty codeblock

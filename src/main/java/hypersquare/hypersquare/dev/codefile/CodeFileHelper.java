@@ -66,30 +66,21 @@ public class CodeFileHelper {
             event.position = codelineIndex;
             codeline = event;
         } else {
+            codeline = plotCode.codelines.get(position);
+            CodeActionData action = new CodeActionData();
+            action.action = genEmptyCodeblock(name);
+
             if(codeblock.hasBrackets()){
-                codeline = plotCode.codelines.get(position);
-                CodeActionData action = new CodeActionData();
-                action.action = genEmptyCodeblock(name);
+                // Give the action an actions array
+                // Should I make another class for CodeBracketActionData
+            }
 
-                // Insert the element if the index is -1  or if the index is less than the size of the array
-                Bukkit.broadcast(Component.text("requested insert index: " + index));
-                if (index < codeline.actions.size() && index != -1) {
-                    codeline.actions.add(index, action);
-                } else {
-                    codeline.actions.add(action);
-                }
+            // Insert the element if the index is -1  or if the index is less than the size of the array
+            Bukkit.broadcast(Component.text("requested insert index: " + index));
+            if (index < codeline.actions.size() && index != -1) {
+                codeline.actions.add(index, action);
             } else {
-                codeline = plotCode.codelines.get(position);
-                CodeActionData action = new CodeActionData();
-                action.action = genEmptyCodeblock(name);
-
-                // Insert the element if the index is -1  or if the index is less than the size of the array
-                Bukkit.broadcast(Component.text("requested insert index: " + index));
-                if (index < codeline.actions.size() && index != -1) {
-                    codeline.actions.add(index, action);
-                } else {
-                    codeline.actions.add(action);
-                }
+                codeline.actions.add(action);
             }
         }
 

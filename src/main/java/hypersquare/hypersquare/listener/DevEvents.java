@@ -46,11 +46,11 @@ public class DevEvents implements Listener {
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 switch (PlainTextComponentSerializer.plainText().serialize(sign.getSide(Side.FRONT).line(0))) {
                     case ("PLAYER EVENT"): {
-                        PlayerEventMenu.create().open(event.getPlayer());
+                        PlayerEventMenu.open(event.getPlayer());
                         break;
                     }
                     case ("PLAYER ACTION"): {
-                        PlayerActionMenu.create().open(event.getPlayer());
+                        PlayerActionMenu.open(event.getPlayer());
                         break;
                     }
                 }

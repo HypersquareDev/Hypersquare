@@ -1,11 +1,10 @@
 package hypersquare.hypersquare.menu.codeblockmenus;
 
-import dev.triumphteam.gui.builder.item.ItemBuilder;
-import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.menu.system.Menu;
+import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -17,11 +16,8 @@ import java.util.regex.Pattern;
 import static hypersquare.hypersquare.Hypersquare.mm;
 
 public class PlayerActionMenu {
-    public static Gui create() {
-        Gui gui = Gui.gui()
-                .title(Component.text("Player Actions"))
-                .rows(5)
-                .create();
+    public static void open(Player player) {
+        Menu menu = new Menu(player, Component.text("Player Actions"), 5);
 
         // Loop through all categories
         for (PlayerActionItems playerActionItem : PlayerActionItems.values()) {
@@ -29,9 +25,7 @@ public class PlayerActionMenu {
             int slot = playerActionItem.slot;
 
             // Clicking a category
-            GuiItem item = ItemBuilder.from(playerActionItem.build()).asGuiItem(event -> {
-                event.setCancelled(true);
-                Player player = (Player) event.getWhoClicked();
+            MenuItem item = new MenuItem(playerActionItem.build()).onClick(() -> {
                 Utilities.sendSecondaryMenuSound(player);
 
                 if (PlayerActionItems.getActions(playerActionItem).isEmpty()) return; // In case there are no actions
@@ -41,16 +35,14 @@ public class PlayerActionMenu {
                 Matcher matcher = pattern.matcher(mm.serialize(playerActionItem.getName()));
 
                 // Create a new gui for the category
-                Gui categoryGui = Gui.gui()
-                        .title(mm.deserialize("Player Actions <dark_gray>> ").append(mm.deserialize(matcher.replaceAll(""))))
-                        .rows(5)
-                        .create();
-
+                Menu categoryGui = new Menu(player,
+                        Component.text("Player Action> " + matcher.replaceAll("")),
+                        5
+                );
                 // Loop through all actions in the category
                 for (Action action : Actions.actions) {
                     if (action.getCategory() != playerActionItem) continue;
-                    GuiItem actionItem = ItemBuilder.from(action.item()).asGuiItem(event2 -> {
-                        event.setCancelled(true);
+                    MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
                         Utilities.sendSuccessClickMenuSound(player);
                         Block block = player.getTargetBlock(null, 5);
                         Utilities.setAction(block, action.getId(), player);
@@ -59,12 +51,12 @@ public class PlayerActionMenu {
                 }
 
                 // Open the category GUI
-                categoryGui.open(player);
+                categoryGui.open();
             });
 
-            gui.setItem(slot, item);
+            menu.slot(slot, item);
         }
 
-        return gui;
+        menu.open();
     }
 }

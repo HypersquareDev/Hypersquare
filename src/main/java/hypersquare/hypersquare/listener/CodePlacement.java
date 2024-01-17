@@ -1,8 +1,11 @@
 package hypersquare.hypersquare.listener;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -12,11 +15,13 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -141,12 +146,9 @@ public class CodePlacement implements Listener {
                             Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
                             return;
                         }
-                        JsonArray code = new CodeFile(event.getPlayer()).getCodeJson();
+                        CodeData code = new CodeFile(event.getPlayer()).getCodeData();
                         if (!threadStarter) {
-                            try {
-                                code.get(location.getBlockX() % 3);
-                            } catch (IndexOutOfBoundsException e) {
-                                // If we error while getting the codeblock, it means there is no thread starter.
+                            if (code.codelines.size() < location.getBlockX() % 3) {
                                 Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
                                 return;
                             }
@@ -169,7 +171,7 @@ public class CodePlacement implements Listener {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, CodeFileHelper.getCodeblockIndex(location), code);
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, code).toJson();
         code.setCode(codeJson.toString());
 
         if (name != null) { // Either invalid or empty codeblock
@@ -218,7 +220,7 @@ public class CodePlacement implements Listener {
                 if (barrel) {
                     barrelLocation.getBlock().setType(Material.BARREL);
                     BlockData barrelBlockData = barrelLocation.getBlock().getBlockData();
-                    ((Directional) barrelBlockData).setFacing(BlockFace.WEST);
+                    ((Directional) barrelBlockData).setFacing(BlockFace.UP);
                     barrelLocation.getBlock().setBlockData(barrelBlockData);
                 }
             }
@@ -261,7 +263,8 @@ public class CodePlacement implements Listener {
                 PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
             }
 
-            if (CodeBlocks.getByMaterial(block.getType()).isThreadStarter()) {
+            CodeBlocks codeblock = CodeBlocks.getByMaterial(block.getType());
+            if (codeblock != null && codeblock.isThreadStarter()) {
                 Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());
                 BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() - 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
                 BlockVector3 loc2 = BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY() + 1, endLoc.getBlockZ());
@@ -272,6 +275,8 @@ public class CodePlacement implements Listener {
                 // Create an EditSession that auto-closes where we set all the blocks in the region to air
                 try (EditSession editSession = WorldEdit.getInstance().newEditSession(faweWorld)) {
                     editSession.setBlocks(selection, BukkitAdapter.asBlockState(new ItemStack(Material.AIR)));
+                } catch (WorldEditException e) {
+                    Bukkit.getLogger().warning("Failed to remove codeblock");
                 }
             }
 
@@ -296,8 +301,8 @@ public class CodePlacement implements Listener {
                 }
             }
             CodeFile code = new CodeFile(blockLoc.getWorld());
-            JsonArray codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
-            code.setCode(codeJson.toString());
+            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+            code.setCode(codeJson.toJson().toString());
         }
     }
 }

@@ -20,7 +20,7 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("play").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("play ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
@@ -36,7 +36,7 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("build").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("build ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
@@ -53,7 +53,7 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("code").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("code ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));

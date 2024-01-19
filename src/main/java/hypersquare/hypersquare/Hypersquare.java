@@ -8,12 +8,12 @@ import hypersquare.hypersquare.command.TabCompleter.PlotCommandsComplete;
 import hypersquare.hypersquare.command.codeValue.Text;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.listener.*;
+import hypersquare.hypersquare.menu.system.MenuListeners;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.PlotStats;
 import hypersquare.hypersquare.util.manager.CommandManager;
-import mc.obliviate.inventory.InventoryAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bson.Document;
@@ -82,6 +82,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new PlayerMoveListener(), this);
         pm.registerEvents(new PaperServerListPingListener(), this);
+        pm.registerEvents(new MenuListeners(), this);
 
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new DevEvents(), this);
@@ -89,7 +90,6 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new CodePlacement(), this);
 
         pm.registerEvents(new Text(), this);
-        new InventoryAPI(this).init();
 
         loadLastUsedWorldNumber();
         registerCommands(new CommandManager(this));

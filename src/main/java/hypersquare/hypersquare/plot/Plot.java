@@ -89,8 +89,11 @@ public class Plot {
 
     public static void deletePlot(int plotID) throws UnknownWorldException, IOException {
         String worldName = "hs." + plotID;
+        String codeWorldName = "hs.code." + plotID;
         SlimeLoader file = Hypersquare.slimePlugin.getLoader("mongodb");
         Bukkit.unloadWorld(Bukkit.getWorld(worldName), true);
+        Bukkit.unloadWorld(Bukkit.getWorld(codeWorldName), true);
         file.deleteWorld(worldName);
+        file.deleteWorld(codeWorldName);
     }
 }

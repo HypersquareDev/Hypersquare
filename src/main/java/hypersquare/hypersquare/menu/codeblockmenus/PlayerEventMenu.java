@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class PlayerEventMenu {
     public static Gui create() {
@@ -35,11 +35,11 @@ public class PlayerEventMenu {
 
                 // Strip Color Codes
                 Pattern pattern = Pattern.compile("<[^>]+?>");
-                Matcher matcher = pattern.matcher(mm.serialize(playerEventItem.getName()));
+                Matcher matcher = pattern.matcher(cleanMM.serialize(playerEventItem.getName()));
 
                 // Create a new gui for the category
                 Gui categoryGui = Gui.gui()
-                        .title(mm.deserialize("Player Events <dark_gray>> ").append(mm.deserialize(matcher.replaceAll(""))))
+                        .title(cleanMM.deserialize("Player Events <dark_gray>> ").append(cleanMM.deserialize(matcher.replaceAll(""))))
                         .rows(5)
                         .create();
 

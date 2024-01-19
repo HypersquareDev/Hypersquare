@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public enum PlayerEventItems {
     PLOT_AND_SERVER_EVENTS_CATEGORY(Material.COMMAND_BLOCK, "<gold>Plot and Server Events","<gray>Joining and leaving plots,%n<gray>plot commands", 10),
@@ -116,10 +116,10 @@ public enum PlayerEventItems {
     }
 
     public @NotNull Component getName() {
-        return mm.deserialize(name);
+        return cleanMM.deserialize(name);
     }
 
     public Component getLore() {
-        return mm.deserialize(lore.replace("%n", "\n"));
+        return cleanMM.deserialize(lore.replace("%n", "\n"));
     }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public enum PlayerActionItems {
     ITEM_MANAGEMENT_CATEGORY(Material.CHEST, "<gold>Item Management", "<gray>Giving, removing, setting%n<gray>and saving items", 1),
@@ -67,10 +67,10 @@ public enum PlayerActionItems {
     }
 
     public @NotNull Component getName() {
-        return mm.deserialize(name);
+        return cleanMM.deserialize(name);
     }
 
     public Component getLore() {
-        return mm.deserialize(lore.replace("%n", "\n"));
+        return cleanMM.deserialize(lore.replace("%n", "\n"));
     }
 }

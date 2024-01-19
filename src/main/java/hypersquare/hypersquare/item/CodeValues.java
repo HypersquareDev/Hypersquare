@@ -16,7 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public enum CodeValues {
 
@@ -40,7 +40,7 @@ public enum CodeValues {
         String[] parts = tempLore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {
-            list.add(mm.deserialize(part));
+            list.add(cleanMM.deserialize(part));
         }
 
 
@@ -72,7 +72,7 @@ public enum CodeValues {
                     .build();
         } else {
             return new ItemBuilder(material)
-                    .name(mm.deserialize(value))
+                    .name(cleanMM.deserialize(value))
                     .lore(list)
                     .hideFlags()
                     .setCustomTag(new NamespacedKey(Hypersquare.instance,"varitem"), jsonString)

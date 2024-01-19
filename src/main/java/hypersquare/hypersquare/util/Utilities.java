@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class Utilities {
     public static int getPlotID(World world) {
@@ -74,12 +74,12 @@ public class Utilities {
         }
 
 
-        int maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
+        int maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
 
         for (String s : strings) {
-            if (PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length() > maxLength) {
-                maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length();
-                ; // Update maxLength if a longer string is found
+            if (PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(s)).length() > maxLength) {
+                maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(s)).length();
+                // Update maxLength if a longer string is found
             }
         }
 
@@ -94,30 +94,15 @@ public class Utilities {
         recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
-    public static String convertToChatColor(String input) {
-        Pattern pattern = Pattern.compile("#[0-9A-Fa-f]{6}");
-        Matcher matcher = pattern.matcher(input);
-        StringBuilder formattedString = new StringBuilder();
-        int prevEnd = 0;
-        while (matcher.find()) {
-            String chatColor = TextColor.parseColor(matcher.group()).toString();
-            formattedString.append(input, prevEnd, matcher.start());
-            formattedString.append(chatColor);
-            prevEnd = matcher.end();
-        }
-        formattedString.append(input.substring(prevEnd));
-        return formattedString.toString();
-    }
-
     public static ItemStack formatItem(String lore, Material material, String name) {
         String[] parts = lore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {
-            list.add(mm.deserialize(part));
+            list.add(cleanMM.deserialize(part));
         }
 
         return new ItemBuilder(material)
-                .name(mm.deserialize(name))
+                .name(cleanMM.deserialize(name))
                 .lore(list)
                 .hideFlags()
                 .build();
@@ -129,16 +114,30 @@ public class Utilities {
     }
 
     public static void sendError(Player player, String message) {
-        player.sendMessage(mm.deserialize("<red>Error: <gray>" + message));
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
     }
 
-    public static void sendInfo(Player player, String message) {
-        player.sendMessage(mm.deserialize("<b><green>»</b> <gray>" + message));
+    public static void sendInfo(Player player, Component message) {
+        player.sendMessage(Component.text("»")
+                .color(NamedTextColor.GREEN)
+                .decoration(TextDecoration.BOLD, true)
+                .append(Component.text(" ")
+                        .color(NamedTextColor.GRAY)
+                        .decoration(TextDecoration.BOLD, false)
+                )
+                .append(message)
+        );
     }
-
-    public static void sendRedInfo(Player player, String message) {
-        player.sendMessage(mm.deserialize("<b><red>»</b> <gray>" + message));
+    public static void sendRedInfo(Player player, Component message) {
+        player.sendMessage(Component.text("»")
+                .color(NamedTextColor.RED)
+                .decoration(TextDecoration.BOLD, true)
+                .append(Component.text(" ")
+                        .color(NamedTextColor.GRAY)
+                        .decoration(TextDecoration.BOLD, false)
+                )
+                .append(message)
+        );
     }
 
     public static void sendOpenMenuSound(Player player) {

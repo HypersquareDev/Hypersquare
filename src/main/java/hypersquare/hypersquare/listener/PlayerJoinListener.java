@@ -3,7 +3,6 @@ package hypersquare.hypersquare.listener;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.PlayerDatabase;
-import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
@@ -12,7 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class PlayerJoinListener implements Listener {
     @EventHandler
@@ -36,7 +36,7 @@ public class PlayerJoinListener implements Listener {
                         .append(Component.text("◆").color(NamedTextColor.BLUE)));
         event.joinMessage(Component.text(player.getName() + " joined.").color(NamedTextColor.GRAY));
 
-        Utilities.sendInfo(player, Utilities.convertToChatColor("""
+        player.sendMessage(cleanMM.deserialize("""
                 #00CED1&lHypersquare public beta
                         
                 #00FFFFHey there,
@@ -54,13 +54,7 @@ public class PlayerJoinListener implements Listener {
                 #00FFFFThanks for being a part of our community. Let's make this server awesome together!
                 """));
 
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        event.quitMessage(Component.text(player.getName() + " left.").color(NamedTextColor.GRAY));
+        Hypersquare.cooldownMap.put(player.getUniqueId(), System.currentTimeMillis());
 
     }
-
 }

@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class MyPlotsMenu extends Gui {
     public MyPlotsMenu(Player player) {
@@ -43,10 +43,10 @@ public class MyPlotsMenu extends Gui {
             ItemStack plotItem = new ItemStack(Material.matchMaterial(plotDocument.getString("icon")));
             ItemMeta meta = plotItem.getItemMeta();
             if (Hypersquare.plotVersion == plotDocument.getInteger("version")) {
-                meta.displayName(mm.deserialize(plotDocument.getString("name")));
+                meta.displayName(cleanMM.deserialize(plotDocument.getString("name")));
             } else {
                 String name = plotDocument.getString("name");
-                meta.displayName(mm.deserialize(name + "<red>" + " (Out of date)"));
+                meta.displayName(cleanMM.deserialize(name + "<red>" + " (Out of date)"));
             }
             List<Component> lore = new ArrayList<>();
             lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + plotDocument.getString("size") + " Plot").decoration(TextDecoration.ITALIC, false));

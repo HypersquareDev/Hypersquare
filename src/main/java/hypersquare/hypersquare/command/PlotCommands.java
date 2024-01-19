@@ -67,6 +67,9 @@ public class PlotCommands implements CommandExecutor {
                         case "unclaim": {
                             if (player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
                                 World world = player.getWorld();
+                                if (world.getName().startsWith("hs.code.")) {
+                                    world = Bukkit.getWorld("hs." + Utilities.getPlotID(world));
+                                }
                                 PlayerDatabase.removePlot(player.getUniqueId(), world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING).toLowerCase());
                                 for (Player player1 : player.getWorld().getPlayers()) {
                                     ChangeGameMode.spawn(player1);

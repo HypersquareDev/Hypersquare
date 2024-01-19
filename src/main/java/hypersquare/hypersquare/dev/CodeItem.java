@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class CodeItem {
     private final Material material;
@@ -46,7 +46,7 @@ public class CodeItem {
     private void addSection(List<Component> lore, String header, String[] lines) {
         if (lines != null) {
             lore.add(Component.empty());
-            lore.add(mm.deserialize(header));
+            lore.add(cleanMM.deserialize(header));
 
             // Create a new entry in the list for each %n effectively creating a newline
             List<String> finalLines = new ArrayList<>(Arrays.asList(lines));
@@ -64,7 +64,7 @@ public class CodeItem {
             lines = finalLines.toArray(new String[0]);
 
             for (String line : lines) {
-                lore.add(mm.deserialize("<gray>" + line));
+                lore.add(cleanMM.deserialize("<gray>" + line));
             }
         }
     }
@@ -73,12 +73,12 @@ public class CodeItem {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(mm.deserialize(name).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        meta.displayName(cleanMM.deserialize(name).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         List<Component> lore = new ArrayList<>();
 
         // Treat %n as a newline
         for (String s : description) {
-            lore.add(mm.deserialize("<gray>" + s));
+            lore.add(cleanMM.deserialize("<gray>" + s));
         }
 
         // Examples and Additional Info share same function due to similar formatting

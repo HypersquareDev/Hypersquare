@@ -1,9 +1,7 @@
 package hypersquare.hypersquare.listener;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -24,7 +22,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -37,7 +34,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -49,7 +45,7 @@ public class CodePlacement implements Listener {
             if (!Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")) {
                 event.setCancelled(true);
             }
-            if (!blockInPlot(event.getBlockPlaced().getLocation())) {
+            if (blockOutsidePlot(event.getBlockPlaced().getLocation())) {
                 event.setCancelled(true);
             }
             return;
@@ -77,37 +73,9 @@ public class CodePlacement implements Listener {
         return type == Material.STONE || type == Material.PISTON || type == Material.STICKY_PISTON;
     }
 
-    public static boolean blockInPlot(Location location) {
-        String plotType = location.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
+    public static boolean blockOutsidePlot(Location location) {
         RestrictMovement.commonVars(location);
-        switch (plotType) {
-            case "Basic":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1, 0, -1))) {
-                    return false;
-                }
-                break;
-            case "Large":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1, 0, -1))) {
-                    return false;
-                }
-                break;
-            case "Huge":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1, 0, -1))) {
-                    return false;
-                }
-                break;
-            case "Massive":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1, 0, -1))) {
-                    return false;
-                }
-                break;
-            case "Gigantic":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1, 0, -1))) {
-                    return false;
-                }
-                break;
-        }
-        return true;
+        return !Utilities.locationWithin(location, new Location(location.getWorld(), -3, 0, 0), new Location(location.getWorld(), -108, 0, 256));
     }
 
 
@@ -121,47 +89,46 @@ public class CodePlacement implements Listener {
             boolean barrel = codeblock.hasBarrel();
             boolean threadStarter = codeblock.isThreadStarter();
             String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (event.getBlock().getLocation().getBlockX() < 0) {
-                        Block againstBlock = event.getBlockAgainst();
-                        Location location = event.getBlock().getLocation();
-                        Player player = event.getPlayer();
+                    Block againstBlock = event.getBlockAgainst();
+                    Location location = event.getBlock().getLocation();
+                    Player player = event.getPlayer();
 
-                        int size = brackets ? 3 : 2;
-                        if (checkIfValidAgainst(againstBlock)) {
-                            location = event.getBlockAgainst().getLocation().clone().add(0, 0, 1);
-                        }
-
-                        // Invalid placements
-                        if (location.getBlockY() % 6 != 0 ||            // Codeblock on top of codeblock
-                                location.getBlockX() % 3 != 0 ||        // Codelines not spaced 3 blocks apart
-                                (location.getBlockZ() + 1) % 2 != 0     // Codeblocks not spaced 2 blocks apart
-                        ) {
-                            Utilities.sendError(player, "Invalid block placement.");
-                            return;
-                        } else if (threadStarter && location.getBlockZ() != 1) {
-                            // Thread starter not at the very start
-                            Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
-                            return;
-                        }
-                        CodeData code = new CodeFile(event.getPlayer()).getCodeData();
-                        if (!threadStarter) {
-                            if (code.codelines.size() < location.getBlockX() % 3) {
-                                Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
-                                return;
-                            }
-                        }
-
-                        if (!blockInPlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0, 0, size))) {
-                            Utilities.sendError(player, "Your code has reached the end of the plot.");
-                            return;
-                        }
-
-                        CodeBlockManagement.moveCodeLine(location.clone(), size);
-                        placeBlock(event.getItemInHand(), location, brackets, barrel, name);
+                    int size = brackets ? 3 : 2;
+                    if (checkIfValidAgainst(againstBlock)) {
+                        location = event.getBlockAgainst().getLocation().clone().add(0, 0, 1);
                     }
+
+                    // Invalid placements
+                    if (location.getBlockY() % 6 != 0 ||            // Codeblock on top of codeblock
+                            location.getBlockX() % 3 != 0 ||        // Codelines not spaced 3 blocks apart
+                            (location.getBlockZ() + 1) % 2 != 0     // Codeblocks not spaced 2 blocks apart
+                    ) {
+                        Utilities.sendError(player, "Invalid block placement.");
+                        return;
+                    } else if (threadStarter && location.getBlockZ() != 1) {
+                        // Thread starter not at the very start
+                        Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
+                        return;
+                    }
+                    CodeData code = new CodeFile(event.getPlayer()).getCodeData();
+                    if (!threadStarter) {
+                        if (code.codelines.size() < location.getBlockX() % 3) {
+                            Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
+                            return;
+                        }
+                    }
+
+                    if (blockOutsidePlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0, 0, size))) {
+                        Utilities.sendError(player, "Your code has reached the end of the plot.");
+                        return;
+                    }
+
+                    CodeBlockManagement.moveCodeLine(location.clone(), size);
+                    placeBlock(event.getItemInHand(), location, brackets, barrel, name);
                 }
             }.runTaskLater(Hypersquare.instance, 2);
         }
@@ -238,10 +205,6 @@ public class CodePlacement implements Listener {
         }
         event.setCancelled(true);
 
-        if (event.getBlock().getLocation().getX() > -0.5) {
-            return;
-        }
-
         Location blockLoc = event.getBlock().getLocation();
 
         if (blockLoc.getY() < 0) {
@@ -259,25 +222,28 @@ public class CodePlacement implements Listener {
             }
             Block block = blockLoc.getBlock();
             Block signBlock = blockLoc.clone().add(-1, 0, 0).getBlock();
-            if (block.getType() == Material.DIAMOND_BLOCK) {
-                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
-            }
-
             CodeBlocks codeblock = CodeBlocks.getByMaterial(block.getType());
-            if (codeblock != null && codeblock.isThreadStarter()) {
+            if (codeblock == null) return; // Shouldn't ever happen
+
+            if (codeblock.isThreadStarter()) {
+                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+
+                // Purge the entire codeline
                 Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());
                 BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX() - 1, blockLoc.getBlockY(), blockLoc.getBlockZ());
                 BlockVector3 loc2 = BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY() + 1, endLoc.getBlockZ());
-                // Create the region based on the two locations
                 Region selection = new CuboidRegion(loc1, loc2);
-                // Create a FAWE world based on the world of the blockLoc
+
                 World faweWorld = BukkitAdapter.adapt(blockLoc.getWorld());
-                // Create an EditSession that auto-closes where we set all the blocks in the region to air
                 try (EditSession editSession = WorldEdit.getInstance().newEditSession(faweWorld)) {
                     editSession.setBlocks(selection, BukkitAdapter.asBlockState(new ItemStack(Material.AIR)));
                 } catch (WorldEditException e) {
-                    Bukkit.getLogger().warning("Failed to remove codeblock");
+                    Bukkit.getLogger().warning("Failed to remove codeline");
                 }
+            } else {
+                CodeFile code = new CodeFile(blockLoc.getWorld());
+                CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+                code.setCode(codeJson.toJson().toString());
             }
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {
@@ -300,9 +266,6 @@ public class CodePlacement implements Listener {
                     CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                 }
             }
-            CodeFile code = new CodeFile(blockLoc.getWorld());
-            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
-            code.setCode(codeJson.toJson().toString());
         }
     }
 }

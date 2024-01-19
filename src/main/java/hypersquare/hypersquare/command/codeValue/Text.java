@@ -55,7 +55,6 @@ public class Text implements CommandExecutor, Listener {
     @EventHandler
     public void Chat(AsyncChatEvent event) {
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            System.out.println("coding");
             ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
             NamespacedKey key = new NamespacedKey(Hypersquare.instance, "varitem");
             if (item.getItemMeta() != null && item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING) != null) {

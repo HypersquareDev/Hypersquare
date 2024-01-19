@@ -48,7 +48,7 @@ public class CreatePlotsMenu extends Gui {
 
         basic.onClick(e -> {
             e.setCancelled(true);
-            if (usedBasic != maxBasic) {
+            if (usedBasic < maxBasic) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_basic");
                 lastUsedWorldNumber++;
@@ -59,7 +59,7 @@ public class CreatePlotsMenu extends Gui {
 
         large.onClick(e -> {
             e.setCancelled(true);
-            if (usedLarge != maxLarge) {
+            if (usedLarge < maxLarge) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_large");
                 lastUsedWorldNumber++;
@@ -70,7 +70,7 @@ public class CreatePlotsMenu extends Gui {
 
         huge.onClick(e -> {
             e.setCancelled(true);
-            if (usedhuge != maxhuge) {
+            if (usedhuge < maxhuge) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_massive");
                 lastUsedWorldNumber++;
@@ -81,7 +81,7 @@ public class CreatePlotsMenu extends Gui {
 
         massive.onClick(e -> {
             e.setCancelled(true);
-            if (usedmassive != maxmassive) {
+            if (usedmassive < maxmassive) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_huge");
                 lastUsedWorldNumber++;
@@ -92,7 +92,7 @@ public class CreatePlotsMenu extends Gui {
 
         gigantic.onClick(e -> {
             e.setCancelled(true);
-            if (usedGigantic != maxGigantic) {
+            if (usedGigantic < maxGigantic) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_gigantic");
                 lastUsedWorldNumber++;

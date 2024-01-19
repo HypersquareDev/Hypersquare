@@ -43,8 +43,7 @@ public class CreatePlotsMenu {
                 .slot(6, massive)
                 .slot(8, gigantic);
 
-        basic.onClick(e -> {
-            e.setCancelled(true);
+        basic.onClick(() -> {
             if (usedBasic < maxBasic) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_basic");
@@ -54,8 +53,7 @@ public class CreatePlotsMenu {
             }
         });
 
-        large.onClick(e -> {
-            e.setCancelled(true);
+        large.onClick(() -> {
             if (usedLarge < maxLarge) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_large");
@@ -65,8 +63,7 @@ public class CreatePlotsMenu {
             }
         });
 
-        huge.onClick(e -> {
-            e.setCancelled(true);
+        huge.onClick(() -> {
             if (usedhuge < maxhuge) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_massive");
@@ -76,8 +73,7 @@ public class CreatePlotsMenu {
             }
         });
 
-        massive.onClick(e -> {
-            e.setCancelled(true);
+        massive.onClick(() -> {
             if (usedmassive < maxmassive) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_huge");
@@ -87,8 +83,7 @@ public class CreatePlotsMenu {
             }
         });
 
-        gigantic.onClick(e -> {
-            e.setCancelled(true);
+        gigantic.onClick(() -> {
             if (usedGigantic < maxGigantic) {
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_gigantic");

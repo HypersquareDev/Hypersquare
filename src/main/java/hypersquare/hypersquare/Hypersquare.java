@@ -46,8 +46,14 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
     public static int plotVersion = 4;
 
-    public static MiniMessage mm = MiniMessage.miniMessage();
+    public static MiniMessage cleanMM = MiniMessage.builder()
+            .tags(TagResolver.resolver(
+                    StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
+                    StandardTags.gradient(), StandardTags.hoverEvent(), StandardTags.rainbow(),
+                    StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
+            )).build();
 
+    public static MiniMessage fullMM = MiniMessage.miniMessage();
 
     public static Plugin instance;
     public static LuckPerms lpPlugin;

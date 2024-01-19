@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static hypersquare.hypersquare.Hypersquare.cleanMM;
+import static hypersquare.hypersquare.Hypersquare.fullMM;
 
 public class PlayerJoinListener implements Listener {
     @EventHandler
@@ -36,22 +36,20 @@ public class PlayerJoinListener implements Listener {
                         .append(Component.text("◆").color(NamedTextColor.BLUE)));
         event.joinMessage(Component.text(player.getName() + " joined.").color(NamedTextColor.GRAY));
 
-        player.sendMessage(cleanMM.deserialize("""
-                #00CED1&lHypersquare public beta
+        player.sendMessage(fullMM.deserialize("""
+                <#00CED1><b>Hypersquare public beta</b>
                         
-                #00FFFFHey there,
+                <#00FFFF>Hey there,
                         
-                #00CED1Welcome to our Beta Minecraft Server!
+                <#00CED1>Welcome to our Beta Minecraft Server!
                         
                 Just a quick heads-up:
                         
-                #87CEEB- Work in Progress: #FFFFFFNot all code blocks and events are in place yet. We're actively adding new features to enhance your experience.
+                <#87CEEB>- Work in Progress: <white>Not all code blocks and events are in place yet. We're actively adding new features to enhance your experience.
                         
-                #87CEEB- Report Bugs: #FFFFFFIf you spot any bugs, please let us know. Your input helps us improve! Join our #4169E1§lDiscord #FFFFFFfor bug reports: https://discord.gg/m6uHxSUyKX
-                        
-                #87CEEB- Server Lag: #FFFFFFWe're aware of lag issues due to budget constraints. We're doing our best to optimize performance.
-                        
-                #00FFFFThanks for being a part of our community. Let's make this server awesome together!
+                <#87CEEB>- Report Bugs: <white>If you spot any bugs, please let us know at our <click:open_url:'https://discord.gg/m6uHxSUyKX'><#4169E1><u><b>Discord</b><u></click>. Your input helps us improve!
+                                                
+                <#00FFFF>Thanks for being a part of our community. Let's make this server awesome together!
                 """));
 
         Hypersquare.cooldownMap.put(player.getUniqueId(), System.currentTimeMillis());

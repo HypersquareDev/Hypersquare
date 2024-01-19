@@ -240,11 +240,10 @@ public class CodePlacement implements Listener {
                 } catch (WorldEditException e) {
                     Bukkit.getLogger().warning("Failed to remove codeline");
                 }
-            } else {
-                CodeFile code = new CodeFile(blockLoc.getWorld());
-                CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
-                code.setCode(codeJson.toJson().toString());
             }
+            CodeFile code = new CodeFile(blockLoc.getWorld());
+            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+            code.setCode(codeJson.toJson().toString());
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {
                 Location barrelLoc = blockLoc.clone().add(0, 1, 0);

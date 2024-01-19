@@ -122,7 +122,7 @@ public class CodeFileHelper {
         }
 
         int pos = positions.get(positions.size() - 1);
-        CodeActionData prev = codeline.actions.remove(pos);
+        CodeActionData prev = parent.actions.remove(pos);
         for (CodeActionData action : prev.actions) {
             codeline.actions.add(pos, action);
         }

@@ -45,51 +45,51 @@ public class CreatePlotsMenu {
 
         basic.onClick(() -> {
             if (usedBasic < maxBasic) {
+                player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_basic");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
-                player.closeInventory();
             }
         });
 
         large.onClick(() -> {
             if (usedLarge < maxLarge) {
+                player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_large");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
-                player.closeInventory();
             }
         });
 
         huge.onClick(() -> {
             if (usedhuge < maxhuge) {
+                player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_massive");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
-                player.closeInventory();
             }
         });
 
         massive.onClick(() -> {
             if (usedmassive < maxmassive) {
+                player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_huge");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
-                player.closeInventory();
             }
         });
 
         gigantic.onClick(() -> {
             if (usedGigantic < maxGigantic) {
+                player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_gigantic");
                 lastUsedWorldNumber++;
                 PlotDatabase.setRecentPlotID(lastUsedWorldNumber);
-                player.closeInventory();
             }
         });
 

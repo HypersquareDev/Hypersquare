@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static String DB_PASS;
@@ -70,7 +71,7 @@ public final class Hypersquare extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Bukkit.getLogger().info("Hypersquare starting up...");
+        getLogger().info("Hypersquare starting up...");
         instance = this;
         // Register Dependencies
         slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager"); // Slime
@@ -118,13 +119,13 @@ public final class Hypersquare extends JavaPlugin {
             world.setKeepSpawnInMemory(false);
         }
 
-        Bukkit.getLogger().info("Hypersquare is ready!");
+        getLogger().info("Hypersquare is ready!");
     }
 
     @Override
     public void onDisable() {
         saveLastUsedWorldNumber();
-        Bukkit.getLogger().info("Byeee!!");
+        getLogger().info("Byeee!!");
     }
 
     public void registerCommands(CommandManager commandManager) {

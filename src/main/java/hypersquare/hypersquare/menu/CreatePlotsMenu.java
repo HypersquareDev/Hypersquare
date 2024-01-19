@@ -2,11 +2,11 @@ package hypersquare.hypersquare.menu;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.item.CreatePlotMenuItems;
+import hypersquare.hypersquare.menu.system.Menu;
+import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.plot.PlotDatabase;
-import mc.obliviate.inventory.Gui;
-import mc.obliviate.inventory.Icon;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
@@ -14,15 +14,12 @@ import java.util.HashMap;
 
 import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
 
-public class CreatePlotsMenu extends Gui {
-    public CreatePlotsMenu(Player player) {
-        super(player, "createPlot", "Choose a plot size", 2);
-    }
-
-    @Override
-    public void onOpen(InventoryOpenEvent event) {
+public class CreatePlotsMenu {
+    public static void open(Player player) {
         HashMap<String, Integer> playerData = Hypersquare.localPlayerData.get(player.getUniqueId());
 
+        Menu menu = new Menu(player, Component.text("Choose a plot size"), 1);
+        
         int usedBasic = playerData.get("usedBasic");
         int maxBasic = playerData.get("maxBasic");
         int usedLarge = playerData.get("usedLarge");
@@ -34,17 +31,17 @@ public class CreatePlotsMenu extends Gui {
         int usedGigantic = playerData.get("usedGigantic");
         int maxGigantic = playerData.get("maxGigantic");
 
-        Icon basic = new Icon(CreatePlotMenuItems.BASIC_PLOT.build(usedBasic, maxBasic));
-        Icon large = new Icon(CreatePlotMenuItems.LARGE_PLOT.build(usedLarge, maxLarge));
-        Icon huge = new Icon(CreatePlotMenuItems.HUGE_PLOT.build(usedhuge, maxhuge));
-        Icon massive = new Icon(CreatePlotMenuItems.MASSIVE_PLOT.build(usedmassive, maxmassive));
-        Icon gigantic = new Icon(CreatePlotMenuItems.GIGANTIC_PLOT.build(usedGigantic, maxGigantic));
+        MenuItem basic = new MenuItem(CreatePlotMenuItems.BASIC_PLOT.build(usedBasic, maxBasic));
+        MenuItem large = new MenuItem(CreatePlotMenuItems.LARGE_PLOT.build(usedLarge, maxLarge));
+        MenuItem huge = new MenuItem(CreatePlotMenuItems.HUGE_PLOT.build(usedhuge, maxhuge));
+        MenuItem massive = new MenuItem(CreatePlotMenuItems.MASSIVE_PLOT.build(usedmassive, maxmassive));
+        MenuItem gigantic = new MenuItem(CreatePlotMenuItems.GIGANTIC_PLOT.build(usedGigantic, maxGigantic));
 
-        addItem(0, basic);
-        addItem(2, large);
-        addItem(4, huge);
-        addItem(6, massive);
-        addItem(8, gigantic);
+        menu.slot(0, basic)
+                .slot(2, large)
+                .slot(4, huge)
+                .slot(6, massive)
+                .slot(8, gigantic);
 
         basic.onClick(e -> {
             e.setCancelled(true);
@@ -100,5 +97,7 @@ public class CreatePlotsMenu extends Gui {
                 player.closeInventory();
             }
         });
+
+        menu.open();
     }
 }

@@ -13,7 +13,7 @@ public class PlayerRightClickListener implements Listener {
     public void onRightClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             if (event.getItem() != null && event.getItem().getItemMeta().equals(MiscItems.MY_PLOTS.build().getItemMeta())) {
-                new MyPlotsMenu(event.getPlayer()).open();
+                MyPlotsMenu.open(event.getPlayer());
             }
         }
     }

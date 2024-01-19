@@ -1,93 +1,78 @@
 package hypersquare.hypersquare.menu;
 
+import hypersquare.hypersquare.menu.system.Menu;
+import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.plot.ChangeGameMode;
-import mc.obliviate.inventory.ComponentIcon;
-import mc.obliviate.inventory.Gui;
-import mc.obliviate.inventory.Icon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeModeMenu extends Gui {
-    private static ComponentIcon icon;
-    private static ComponentIcon play;
-    private static ComponentIcon build;
-    private static ComponentIcon addToFav;
-    private static ComponentIcon code;
-    private static int plotID = 0;
-
-    public ChangeModeMenu(Player player) {
-        super(player, "changeMenu", "Plot Information", 3);
-    }
-
-    public static void initItems(ComponentIcon plotIcon, int plotid) {
-        plotID = plotid;
-        icon = plotIcon;
-        play = new Icon(Material.DIAMOND).toComp();
-        play.setName(Component.text("Play").color(TextColor.fromHexString("#2AD4D4")));
+public class ChangeModeMenu {
+    public static void open(Player player, MenuItem plotIcon, int plotId) {
+        MenuItem play = new MenuItem(Material.DIAMOND);
+        play.name(Component.text("Play").color(TextColor.fromHexString("#2AD4D4")));
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("play").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("play ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
-        play.setLore(lore);
+        play.lore(lore);
 
-        build = new Icon(Material.GRASS_BLOCK).toComp();
-        build.setName(Component.text("Build").color(TextColor.fromHexString("#2AD4D4")));
+        play.onClick(() -> {
+            ChangeGameMode.playMode(player, plotId);
+        });
+
+        MenuItem build = new MenuItem(Material.GRASS_BLOCK);
+        build.name(Component.text("Build").color(TextColor.fromHexString("#2AD4D4")));
         lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("build").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("build ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
-        build.setLore(lore);
+        build.lore(lore);
 
-        code = new Icon(Material.COMMAND_BLOCK).toComp();
+        build.onClick(() -> {
+            ChangeGameMode.buildMode(player, plotId);
+        });
 
-        code.setName(Component.text("Code").color(TextColor.fromHexString("#2AD4D4")));
+        MenuItem code = new MenuItem(Material.COMMAND_BLOCK);
+
+        code.name(Component.text("Code").color(TextColor.fromHexString("#2AD4D4")));
         lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
         lore.add(Component.text("in ").color(NamedTextColor.GRAY)
-                .append(Component.text("code").color(TextColor.fromHexString("#2AD4D4")))
+                .append(Component.text("code ").color(TextColor.fromHexString("#2AD4D4")))
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
-        code.setLore(lore);
+        code.lore(lore);
 
-        addToFav = new Icon(Material.EMERALD).toComp();
+        code.onClick(() -> {
+            ChangeGameMode.devMode(player, plotId);
+        });
 
-        addToFav.setName(Component.text("Add to Favorites").color(NamedTextColor.GREEN));
-    }
+        MenuItem addToFav = new MenuItem(Material.EMERALD);
 
-    @Override
-    public void onOpen(InventoryOpenEvent event) {
-        {
-            addItem(4, icon);
-            addItem(10, play);
-            addItem(12, build);
-            addItem(14, code);
-            addItem(16, addToFav);
-            play.onClick(e -> {
-                ChangeGameMode.playMode(player, plotID);
-            });
-            build.onClick(e -> {
-                ChangeGameMode.buildMode(player, plotID);
-            });
-            code.onClick(e -> {
-                ChangeGameMode.devMode(player, plotID);
-            });
-        }
+        addToFav.name(Component.text("Add to Favorites").color(NamedTextColor.GREEN));
+
+        Menu menu = new Menu(player, Component.text("Plot Information"), 3)
+                .slot(4, plotIcon)
+                .slot(10, play)
+                .slot(12, build)
+                .slot(14, code)
+                .slot(16, addToFav);
+        menu.open();
     }
 }

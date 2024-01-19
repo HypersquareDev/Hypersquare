@@ -4,6 +4,8 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
+import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
@@ -12,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -20,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 public class DevEvents implements Listener {
@@ -161,5 +165,36 @@ public class DevEvents implements Listener {
     public void onDropItem(PlayerDropItemEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         event.setCancelled(true);
+    }
+    
+    @EventHandler
+    public void onSwapHands(PlayerSwapHandItemsEvent event) {
+        String playerMode = Hypersquare.mode.get(event.getPlayer());
+        if (!(playerMode.equals("coding") || playerMode.equals("building"))) return;
+
+        Player player = event.getPlayer();
+        if (Hypersquare.lastSwapHands.containsKey(player)) {
+
+            // Swapping hands twice in 1 second
+            if (System.currentTimeMillis() - Hypersquare.lastSwapHands.get(player) < 950
+                && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
+                String worldName = player.getWorld().getName();
+                int plotID = Integer.parseInt(worldName.startsWith("hs.code.")
+                        ? worldName.substring(8) : worldName.substring(3)
+                );
+                if (playerMode.equals("coding")) {
+                    Hypersquare.lastDevLocation.put(player, player.getLocation());
+                    ChangeGameMode.buildMode(player, plotID, true);
+                } else {
+                    Hypersquare.lastBuildLocation.put(player, player.getLocation());
+                    ChangeGameMode.devMode(player, plotID, true);
+                }
+                Hypersquare.lastSwapHands.remove(player);
+                Hypersquare.cooldownMap.put(player.getUniqueId(), System.currentTimeMillis());
+                return;
+            }
+        }
+        // Update last swap hands time
+        Hypersquare.lastSwapHands.put(player, System.currentTimeMillis());
     }
 }

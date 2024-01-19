@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public enum CreatePlotMenuItems {
     BASIC_PLOT(Material.POLISHED_ANDESITE, "<#7070FF>", "Basic Plot", "<gray>Size: 64x64%n<gray>You have used %s <gray>of your Basic plots.%n<green>Click to create!"),
@@ -34,11 +34,11 @@ public enum CreatePlotMenuItems {
         String[] parts = tempLore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {
-            list.add(mm.deserialize(part));
+            list.add(cleanMM.deserialize(part));
         }
 
         return new ItemBuilder(material)
-                .name(mm.deserialize(color + name))
+                .name(cleanMM.deserialize(color + name))
                 .lore(list)
                 .hideFlags()
                 .build();

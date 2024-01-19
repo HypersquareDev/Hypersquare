@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class ActionItem {
 
@@ -61,11 +61,11 @@ public class ActionItem {
         List<Component> lore = new ArrayList<>(List.of());
 
         //Name
-        meta.displayName(mm.deserialize("<!italic>" + name));
+        meta.displayName(cleanMM.deserialize("<!italic>" + name));
 
         // Description
         for (String part : description) {
-            lore.add(mm.deserialize("<!italic><gray>" + part));
+            lore.add(cleanMM.deserialize("<!italic><gray>" + part));
         }
 
         // Arguments
@@ -74,7 +74,7 @@ public class ActionItem {
         builder.append("%n<white>Chest Parameters:%n");
         if (arguments != null) {
             for (ActionArgument actionArgument : arguments) {
-                builder.append(mm.serialize(actionArgument.type.getName(actionArgument.type)));
+                builder.append(cleanMM.serialize(actionArgument.type.getName(actionArgument.type)));
                 builder.append(actionArgument.plural ? "(s)" : "");
                 builder.append(actionArgument.optional ? "*" : "");
                 builder.append(" <dark_gray>- <gray>").append(actionArgument.description).append("%n");
@@ -85,16 +85,16 @@ public class ActionItem {
 
         String[] parts = builderString.split("%n");
         for (String part : parts) {
-            lore.add(mm.deserialize("<!italic>" + part));
+            lore.add(cleanMM.deserialize("<!italic>" + part));
         }
 
         // Additional Info
         if (additionalInfo != null) {
             lore.add(Component.text(""));
-            lore.add(mm.deserialize("<!italic><blue>Additional info:"));
+            lore.add(cleanMM.deserialize("<!italic><blue>Additional info:"));
             for (String[] info : additionalInfo) {
                 for (String text : info) {
-                    lore.add(mm.deserialize("<!italic><gray>" + text));
+                    lore.add(cleanMM.deserialize("<!italic><gray>" + text));
                 }
             }
         }

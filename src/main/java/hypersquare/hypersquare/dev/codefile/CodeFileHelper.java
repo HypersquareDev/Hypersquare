@@ -22,7 +22,7 @@ public class CodeFileHelper {
         return name.toLowerCase().replace(" ", "_") + "_empty";
     }
 
-    private static int getCodelineIndex(Location location) {
+    private static int getCodelineWorldIndex(Location location) {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
 
@@ -31,11 +31,11 @@ public class CodeFileHelper {
     }
 
     public static int getCodelineListIndex(Location location, CodeFile codeFile) {
-        int codelineIndex = getCodelineIndex(location);
+        int position = getCodelineWorldIndex(location);
         CodeData plotCode = codeFile.getCodeData();
 
         for (CodeLineData element : plotCode.codelines) {
-            if (element.position == codelineIndex) {
+            if (element.position == position) {
                 return plotCode.codelines.indexOf(element);
             }
         }
@@ -57,11 +57,11 @@ public class CodeFileHelper {
             if (codeblock.hasActions) {
                 event.event = type + "_empty";
             }
-            event.position = getCodelineIndex(location);
+            event.position = getCodelineWorldIndex(location);
             plotCode.codelines.add(event);
             return plotCode;
         }
-        CodeLineData codeline = plotCode.codelines.get(getCodelineIndex(location));
+        CodeLineData codeline = plotCode.codelines.get(getCodelineListIndex(location, code));
 
         List<Integer> positions;
         try {
@@ -91,8 +91,8 @@ public class CodeFileHelper {
     public static CodeData removeCodeBlock(Location location, CodeFile code) {
         CodeData plotCode = code.getCodeData();
 
-        int codelineIndex = getCodelineIndex(location);
-        CodeLineData codeline = plotCode.codelines.get(codelineIndex);
+        int codelineListIndex = getCodelineListIndex(location, code);
+        CodeLineData codeline = plotCode.codelines.get(codelineListIndex);
 
         List<Integer> positions;
         try {
@@ -103,7 +103,7 @@ public class CodeFileHelper {
         }
 
         if (positions.isEmpty()) {
-            plotCode.codelines.remove(codelineIndex);
+            plotCode.codelines.remove(codelineListIndex);
             return plotCode;
         }
 
@@ -130,7 +130,6 @@ public class CodeFileHelper {
     }
 
     public static CodeData updateAction(Location location, CodeFile code, String newAction) {
-        int codelineIndex = getCodelineIndex(location);
         int codeblockIndex = getCodeblockIndex(location);
 
         int position = getCodelineListIndex(location, code);

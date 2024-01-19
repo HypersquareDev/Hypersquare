@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
+
 public class PlotCommands implements CommandExecutor {
 
     @Override
@@ -41,7 +43,7 @@ public class PlotCommands implements CommandExecutor {
                                         }
                                     }
                                     PlotDatabase.changePlotName(Utilities.getPlotID((player).getWorld()), String.valueOf(name).strip());
-                                    Utilities.sendInfo(player, "Successfully changed the plot name to " + String.valueOf(name).strip() + ".");
+                                    Utilities.sendInfo(player, Component.text("Successfully changed the plot name to " + String.valueOf(name).strip() + "."));
                                     PlotManager.loadPlot(plotID);
                                 } else {
                                     Utilities.sendError(player, "You cannot set the plot name to noting");
@@ -54,7 +56,7 @@ public class PlotCommands implements CommandExecutor {
                             if (player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
                                 if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     PlotDatabase.changePlotIcon(Utilities.getPlotID((player).getWorld()), (player).getInventory().getItemInMainHand().getType().toString());
-                                    Utilities.sendInfo(player, "Successfully changed the plot icon to " + Utilities.capitalize((player).getInventory().getItemInMainHand().getType().toString()) + ".");
+                                    Utilities.sendInfo(player, Component.text("Successfully changed the plot icon to " + Utilities.capitalize((player).getInventory().getItemInMainHand().getType().toString()) + "."));
                                 } else {
                                     Utilities.sendError(player, "You cannot set the plot's icon to nothing.");
                                 }
@@ -68,10 +70,10 @@ public class PlotCommands implements CommandExecutor {
                                 PlayerDatabase.removePlot(player.getUniqueId(), world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING).toLowerCase());
                                 for (Player player1 : player.getWorld().getPlayers()) {
                                     ChangeGameMode.spawn(player1);
-                                    Utilities.sendRedInfo(player1, "The plot that you were currently on was unclaimed.");
+                                    Utilities.sendRedInfo(player1, Component.text("The plot that you were currently on was unclaimed."));
                                 }
 
-                                Utilities.sendInfo(player, "Plot " + plotID + " has been unclaimed.");
+                                Utilities.sendInfo(player, Component.text("Plot " + plotID + " has been unclaimed."));
                                 PlotDatabase.deletePlot(plotID);
                                 try {
                                     Plot.deletePlot(plotID);
@@ -93,9 +95,9 @@ public class PlotCommands implements CommandExecutor {
                                                         Utilities.sendError(player, "That player is already a dev.");
                                                     } else {
                                                         PlotDatabase.addDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                                                        Utilities.sendInfo(player, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7now has dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID))));
+                                                        Utilities.sendInfo(player, cleanMM.deserialize(("<white>" + Bukkit.getOfflinePlayer(args[2]).getName() + "<reset><gray>now has dev permissions for <white>" + PlotDatabase.getPlotName(plotID)) + "<reset><gray>."));
                                                         if (Utilities.playerOnline(args[2])) {
-                                                            Utilities.sendInfo(Bukkit.getPlayer(args[2]), "You now have dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID)));
+                                                            Utilities.sendInfo(player, cleanMM.deserialize(("<white>" + Bukkit.getPlayer(args[2]).getName() + "<reset><gray>now has dev permissions for <white>" + PlotDatabase.getPlotName(plotID)) + "<reset><gray>."));
                                                         }
                                                     }
                                                 } else {
@@ -129,9 +131,9 @@ public class PlotCommands implements CommandExecutor {
                                                         Utilities.sendError(player, "That player is not a dev.");
                                                     } else {
                                                         PlotDatabase.removeDev(plotID, Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                                                        Utilities.sendInfo(player, ("&f" + Bukkit.getOfflinePlayer(args[2]).getName() + " &7no longer has dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID))));
+                                                        Utilities.sendInfo(player, cleanMM.deserialize("<white>" + Bukkit.getOfflinePlayer(args[2]).getName() + "<gray>no longer has dev permissions for " + PlotDatabase.getPlotName(plotID) + "<reset><gray>."));
                                                         if (Utilities.playerOnline(args[2])) {
-                                                            Utilities.sendRedInfo(Bukkit.getPlayer(args[2]), "You no longer have dev permissions for " + Utilities.convertToChatColor(PlotDatabase.getPlotName(plotID)));
+                                                            Utilities.sendRedInfo(Bukkit.getPlayer(args[2]), Component.text("You no longer have dev permissions for ").append(cleanMM.deserialize(PlotDatabase.getPlotName(plotID))));
                                                             if (Hypersquare.mode.get(Bukkit.getPlayer(args[2])).equals("coding")) {
                                                                 ChangeGameMode.spawn(Bukkit.getPlayer(args[2]));
                                                             }

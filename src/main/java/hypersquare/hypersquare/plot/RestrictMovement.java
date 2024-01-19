@@ -15,6 +15,8 @@ public class RestrictMovement {
     public static Location massive = null;
     public static Location gigantic = null;
     public static Location commonStart = null;
+    public static Location code = null;
+    public static Location codeStart = null;
 
     public static void commonVars(Location location) {
         basic = new Location(location.getWorld(), 64, -640, 64);
@@ -22,87 +24,55 @@ public class RestrictMovement {
         huge = new Location(location.getWorld(), 256, -640, 256);
         massive = new Location(location.getWorld(), 512, -640, 512);
         gigantic = new Location(location.getWorld(), 1024, -640, 1024);
-        commonStart = new Location(location.getWorld(), -20, 255, 0);
+        commonStart = new Location(location.getWorld(), 0, 255, 0);
+        code = new Location(location.getWorld(), -111, 0, 256);
+        codeStart = new Location(location.getWorld(), 1, 255, 0);
     }
 
 
-
-    public static void movementCheck(Player player){
+    public static void movementCheck(Player player) {
         if (Hypersquare.mode.get(player).equals("coding")) {
             commonVars(player.getLocation());
-            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
+            if (!Utilities.locationWithinIgnoreY(player.getLocation(), codeStart, code)) {
+                Utilities.moveEntityInsidePlot(player, codeStart, code);
+            }
+        }
+        if (Hypersquare.mode.get(player).equals("building") || Hypersquare.mode.get(player).equals("playing")) {
+            commonVars(player.getLocation());
+            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
 
-            switch (plotType){
-                case "Basic" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,basic)) {
+            switch (plotType) {
+                case "Basic": {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, basic)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, basic);
                     }
                     break;
                 }
-                case "Large" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,large)) {
+                case "Large": {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, large)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, large);
-
                     }
                     break;
                 }
-                case "Huge" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,huge)) {
+                case "Huge": {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, huge)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, huge);
                     }
                     break;
                 }
-                case "Massive" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,massive)) {
+                case "Massive": {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, massive)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, massive);
                     }
                     break;
                 }
-                case "Gigantic" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart,gigantic)) {
+                case "Gigantic": {
+                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, gigantic)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, gigantic);
                     }
                     break;
                 }
             }
         }
-        if (Hypersquare.mode.get(player).equals("building") || Hypersquare.mode.get(player).equals("playing")) {
-            commonVars(player.getLocation());
-            String plotType = player.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance,"plotType"), PersistentDataType.STRING);
-
-            switch (plotType){
-                case "Basic" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),basic)) {
-                        Utilities.moveEntityInsidePlot(player, commonStart.clone().add(20,0,0), basic);
-                    }
-                    break;
-                }
-                case "Large" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),large)) {
-                        Utilities.moveEntityInsidePlot(player, commonStart.clone().add(20,0,0), large);
-                    }
-                    break;
-                }
-                case "Huge" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),huge)) {
-                        Utilities.moveEntityInsidePlot(player, commonStart.clone().add(20,0,0), huge);
-                    }
-                    break;
-                }
-                case "Massive" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),massive)) {
-                        Utilities.moveEntityInsidePlot(player, commonStart.clone().add(20,0,0), massive);
-                    }
-                    break;
-                }
-                case "Gigantic" : {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(),commonStart.clone().add(20,0,0),gigantic)) {
-                        Utilities.moveEntityInsidePlot(player, commonStart.clone().add(20,0,0), gigantic);
-                    }
-                    break;
-                }
-            }
-        }
     }
-
 }

@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.command;
 
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,10 +14,10 @@ public class FlyCommand implements CommandExecutor {
         if (sender instanceof Player player) {
             if (player.getAllowFlight()) {
                 player.setAllowFlight(false);
-                Utilities.sendInfo(player, "Flight disabled.");
+                Utilities.sendInfo(player, Component.text("Flight disabled."));
             } else {
                 player.setAllowFlight(true);
-                Utilities.sendInfo(player, "Flight enabled.");
+                Utilities.sendInfo(player, Component.text("Flight enabled."));
             }
         } else {
             sender.sendMessage("This command can only be used by players.");

@@ -4,7 +4,7 @@ package hypersquare.hypersquare.item;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public enum DisplayValue {
     VARIABLE("<yellow>"),
@@ -25,6 +25,6 @@ public enum DisplayValue {
     }
 
     public Component getName(DisplayValue type) {
-        return mm.deserialize(color + Utilities.capitalize(type.toString().toLowerCase()));
+        return cleanMM.deserialize(color + Utilities.capitalize(type.toString().toLowerCase()));
     }
 }

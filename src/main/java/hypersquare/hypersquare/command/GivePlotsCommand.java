@@ -2,6 +2,7 @@ package hypersquare.hypersquare.command;
 
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,8 +22,8 @@ public class GivePlotsCommand implements CommandExecutor {
                         String plotsmessage = "plot";
                         if (Integer.parseInt(args[2]) > 1)
                             plotsmessage = "plots";
-                        Utilities.sendInfo(player, "Gave " + args[2] + " " + args[1] + " " + plotsmessage + " to " + target.getName());
-                        Utilities.sendInfo(target, "Recieved " + args[2] + " " + args[1] + " " + plotsmessage + " from " + sender.getName());
+                        Utilities.sendInfo(player, Component.text("Gave " + args[2] + " " + args[1] + " " + plotsmessage + " to " + target.getName()));
+                        Utilities.sendInfo(target, Component.text("Recieved " + args[2] + " " + args[1] + " " + plotsmessage + " from " + sender.getName()));
                     } else {
                         Utilities.sendError(player, "That player is not online.");
                     }

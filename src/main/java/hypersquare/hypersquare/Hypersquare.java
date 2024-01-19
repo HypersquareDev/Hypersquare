@@ -15,9 +15,12 @@ import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.PlotStats;
 import hypersquare.hypersquare.util.manager.CommandManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.luckperms.api.LuckPerms;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -36,7 +39,11 @@ public final class Hypersquare extends JavaPlugin {
     public static MongoClient mongoClient;
     public static int lastUsedWorldNumber;
     public static HashMap<Player, World> lastDeathLoc = new HashMap<>();
+    public static HashMap<Player, Long> lastSwapHands = new HashMap<>();
     public static HashMap<Player, List<Document>> plotData = new HashMap<>();
+
+    public static HashMap<Player, Location> lastDevLocation = new HashMap<>();
+    public static HashMap<Player, Location> lastBuildLocation = new HashMap<>();
 
     public static HashMap<Player, String> mode = new HashMap<>();
     public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
@@ -46,8 +53,14 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
     public static int plotVersion = 4;
 
-    public static MiniMessage mm = MiniMessage.miniMessage();
+    public static MiniMessage cleanMM = MiniMessage.builder()
+            .tags(TagResolver.resolver(
+                    StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
+                    StandardTags.gradient(), StandardTags.hoverEvent(), StandardTags.rainbow(),
+                    StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
+            )).build();
 
+    public static MiniMessage fullMM = MiniMessage.miniMessage();
 
     public static Plugin instance;
     public static LuckPerms lpPlugin;
@@ -57,6 +70,7 @@ public final class Hypersquare extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Bukkit.getLogger().info("Hypersquare starting up...");
         instance = this;
         // Register Dependencies
         slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager"); // Slime
@@ -86,8 +100,10 @@ public final class Hypersquare extends JavaPlugin {
 
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new DevEvents(), this);
+        pm.registerEvents(new PlayerQuitListener(), this);
         pm.registerEvents(new PlaytimeEventExecuter(), this);
         pm.registerEvents(new CodePlacement(), this);
+        pm.registerEvents(new WorldLoadListener(), this);
 
         pm.registerEvents(new Text(), this);
 
@@ -96,11 +112,19 @@ public final class Hypersquare extends JavaPlugin {
 
         CodeItems.register();
         MoveEntities.entityLoop();
+
+        // Make sure no world's spawn chunks are kept in memory
+        for (World world : Bukkit.getWorlds()) {
+            world.setKeepSpawnInMemory(false);
+        }
+
+        Bukkit.getLogger().info("Hypersquare is ready!");
     }
 
     @Override
     public void onDisable() {
         saveLastUsedWorldNumber();
+        Bukkit.getLogger().info("Byeee!!");
     }
 
     public void registerCommands(CommandManager commandManager) {

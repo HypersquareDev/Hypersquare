@@ -9,9 +9,9 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minecraft.network.chat.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -21,52 +21,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class Utilities {
     public static int getPlotID(World world) {
         String name = world.getName();
         if (name.contains("hs.")) {
             name = name.replace("hs.", "");
+            if (name.startsWith("code.")) name = name.substring(5);
             return Integer.parseInt(name);
         }
         return 0;
     }
-
-
-    public static String decode(String data) {
-        try {
-            // First, decode Base64
-            byte[] decodedBytes = Base64.getDecoder().decode(data);
-
-            // Then, decompress GZIP
-            InputStream inputStream = new ByteArrayInputStream(decodedBytes);
-            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = gzipInputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            return outputStream.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Handle the exception appropriately.
-            return null; // Or any other error handling mechanism you prefer.
-        }
-    }
-
 
     public static int findLengthOfLongestString(List<String> strings) {
         if (strings == null || strings.isEmpty()) {
@@ -74,12 +42,12 @@ public class Utilities {
         }
 
 
-        int maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
+        int maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
 
         for (String s : strings) {
-            if (PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length() > maxLength) {
-                maxLength = PlainTextComponentSerializer.plainText().serialize(mm.deserialize(s)).length();
-                ; // Update maxLength if a longer string is found
+            if (PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(s)).length() > maxLength) {
+                maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(s)).length();
+                // Update maxLength if a longer string is found
             }
         }
 
@@ -94,30 +62,15 @@ public class Utilities {
         recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
-    public static String convertToChatColor(String input) {
-        Pattern pattern = Pattern.compile("#[0-9A-Fa-f]{6}");
-        Matcher matcher = pattern.matcher(input);
-        StringBuilder formattedString = new StringBuilder();
-        int prevEnd = 0;
-        while (matcher.find()) {
-            String chatColor = TextColor.parseColor(matcher.group()).toString();
-            formattedString.append(input, prevEnd, matcher.start());
-            formattedString.append(chatColor);
-            prevEnd = matcher.end();
-        }
-        formattedString.append(input.substring(prevEnd));
-        return formattedString.toString();
-    }
-
     public static ItemStack formatItem(String lore, Material material, String name) {
         String[] parts = lore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {
-            list.add(mm.deserialize(part));
+            list.add(cleanMM.deserialize(part));
         }
 
         return new ItemBuilder(material)
-                .name(mm.deserialize(name))
+                .name(cleanMM.deserialize(name))
                 .lore(list)
                 .hideFlags()
                 .build();
@@ -129,16 +82,31 @@ public class Utilities {
     }
 
     public static void sendError(Player player, String message) {
-        player.sendMessage(mm.deserialize("<red>Error: <gray>" + message));
+        player.sendMessage(cleanMM.deserialize("<red>Error: <gray>" + message));
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
     }
 
-    public static void sendInfo(Player player, String message) {
-        player.sendMessage(mm.deserialize("<b><green>»</b> <gray>" + message));
+    public static void sendInfo(Player player, Component message) {
+        player.sendMessage(Component.text("»")
+                .color(NamedTextColor.GREEN)
+                .decoration(TextDecoration.BOLD, true)
+                .append(Component.text(" ")
+                        .color(NamedTextColor.GRAY)
+                        .decoration(TextDecoration.BOLD, false)
+                        .append(message)
+                )
+        );
     }
-
-    public static void sendRedInfo(Player player, String message) {
-        player.sendMessage(mm.deserialize("<b><red>»</b> <gray>" + message));
+    public static void sendRedInfo(Player player, Component message) {
+        player.sendMessage(Component.text("»")
+                .color(NamedTextColor.RED)
+                .decoration(TextDecoration.BOLD, true)
+                .append(Component.text(" ")
+                        .color(NamedTextColor.GRAY)
+                        .decoration(TextDecoration.BOLD, false)
+                        .append(message)
+                )
+        );
     }
 
     public static void sendOpenMenuSound(Player player) {
@@ -177,19 +145,29 @@ public class Utilities {
                 targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
     }
 
-    public static void moveEntityInsidePlot(Entity entity, Location minLoc, Location maxLoc) {
-        entity.teleport(new Location(entity.getWorld(),
-                Math.max(entity.getLocation().getX(), minLoc.getX()),
-                entity.getLocation().getY(),
-                Math.max(entity.getLocation().getZ(), minLoc.getZ()),
-                entity.getLocation().getYaw(),
-                entity.getLocation().getPitch()));
-        entity.teleport(new Location(entity.getWorld(),
-                Math.min(entity.getLocation().getX(), maxLoc.getX()),
-                entity.getLocation().getY(),
-                Math.min(entity.getLocation().getZ(), maxLoc.getZ()),
-                entity.getLocation().getYaw(),
-                entity.getLocation().getPitch()));
+    public static void moveEntityInsidePlot(Entity entity, Location locA, Location locB) {
+        Location entityLocation = entity.getLocation();
+
+        double minX = Math.min(locA.getX(), locB.getX());
+        double minY = Math.min(locA.getY(), locB.getY());
+        double minZ = Math.min(locA.getZ(), locB.getZ());
+        double maxX = Math.max(locA.getX(), locB.getX());
+        double maxY = Math.max(locA.getY(), locB.getY());
+        double maxZ = Math.max(locA.getZ(), locB.getZ());
+
+        // Check if the entity is even outside the boundaries
+        if (entityLocation.getX() < minX || entityLocation.getX() > maxX ||
+                entityLocation.getY() < minY || entityLocation.getY() > maxY ||
+                entityLocation.getZ() < minZ || entityLocation.getZ() > maxZ) {
+
+            // Calculate a location that is within the boundaries
+            double tpX = clamp(entityLocation.getX(), minX, maxX);
+            double tpY = clamp(entityLocation.getY(), minY, maxY);
+            double tpZ = clamp(entityLocation.getZ(), minZ, maxZ);
+
+            Location tpLocation = new Location(entity.getWorld(), tpX, tpY, tpZ, entityLocation.getYaw(), entityLocation.getPitch());
+            entity.teleport(tpLocation);
+        }
     }
 
     public static Location parseLocation(String input, World world) {
@@ -210,19 +188,24 @@ public class Utilities {
         }
     }
 
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
 
-    public static void savePersistentData(World world, SlimePlugin plugin) {
-        SlimeWorld slimeWorld = plugin.getWorld(world.getName());
+    private static CompoundTag getChunkData(SlimeWorld slimeWorld) {
         if (slimeWorld == null) {
-            return;
+            return null;
         }
 
         CompoundMap extraData = slimeWorld.getExtraData().getValue();
         Optional<CompoundTag> optionalChunkData = extraData.getOrDefault("worldData", new CompoundTag("worldData", new CompoundMap())).getAsCompoundTag();
-        if (optionalChunkData.isEmpty()) {
-            return;
-        }
-        CompoundTag chunkData = optionalChunkData.get();
+        return optionalChunkData.orElse(null);
+    }
+
+    public static void savePersistentData(World world, SlimePlugin plugin) {
+        SlimeWorld slimeWorld = plugin.getWorld(world.getName());
+        CompoundTag chunkData = getChunkData(slimeWorld);
+        if(chunkData == null) return;
         CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
         chunkData.getValue().put("worldData", new CompoundTag("worldData", compoundMap));
         slimeWorld.getExtraData().getValue().put("worldData", chunkData);
@@ -230,20 +213,11 @@ public class Utilities {
 
     public static void getWorldDataFromSlimeWorlds(World world) {
         SlimeWorld slimeWorld = Hypersquare.slimePlugin.getWorld(world.getName());
-        if (slimeWorld == null) {
-            return;
-        }
-
-        CompoundMap extraData = slimeWorld.getExtraData().getValue();
-        Optional<CompoundTag> optionalChunkData = extraData.getOrDefault("worldData", new CompoundTag("worldData", new CompoundMap())).getAsCompoundTag();
-        if (optionalChunkData.isEmpty()) {
-            return;
-        }
-        CompoundTag chunkData = optionalChunkData.get();
+        CompoundTag chunkData = getChunkData(slimeWorld);
+        if (chunkData == null) return;
         String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypersquare:plottype").getAsString();
         world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, pType1);
     }
-
 
     public static String randomHSVHex(float minHue, float maxHue, float saturation, float value) {
         Random random = new Random();
@@ -289,13 +263,13 @@ public class Utilities {
         );
     }
 
-    public static void resetPlayerStats(Player player) {
+    public static void resetPlayerStats(Player player, boolean clearInventory) {
         player.setHealth(20);
         player.setHealthScale(20);
         player.setTotalExperience(0);
         player.setFreezeTicks(0);
         player.setFoodLevel(20);
-        player.getInventory().clear();
+        if (clearInventory) player.getInventory().clear();
         player.getActivePotionEffects().clear();
         player.setSaturation(20);
         player.closeInventory();
@@ -306,13 +280,17 @@ public class Utilities {
         player.setGameMode(GameMode.SURVIVAL);
     }
 
+    public static void resetPlayerStats(Player player) {
+        resetPlayerStats(player, true);
+    }
+
     public static void setAction(Block block, String id, Player player) {
         if (block.getType() == Material.OAK_WALL_SIGN) {
             Sign sign = (Sign) block.getState();
             sign.getSide(Side.FRONT).line(1, Component.text(id));
             sign.update();
             int plotID = Utilities.getPlotID(player.getWorld());
-            HashMap<String, String> map = new HashMap<String, String>();
+            HashMap<String, String> map = new HashMap<>();
             map.put(LocationToString(block.getLocation().add(1, 0, 0)), id);
             PlotDatabase.addEvents(plotID, map);
             PlotDatabase.updateEventsCache(plotID);

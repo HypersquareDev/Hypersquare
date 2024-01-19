@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static hypersquare.hypersquare.Hypersquare.mm;
+import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class PlayerActionMenu {
     public static void open(Player player) {
@@ -32,13 +32,14 @@ public class PlayerActionMenu {
 
                 // Strip Color Codes
                 Pattern pattern = Pattern.compile("<[^>]+?>");
-                Matcher matcher = pattern.matcher(mm.serialize(playerActionItem.getName()));
+                Matcher matcher = pattern.matcher(cleanMM.serialize(playerActionItem.getName()));
 
                 // Create a new gui for the category
                 Menu categoryGui = new Menu(player,
-                        Component.text("Player Action> " + matcher.replaceAll("")),
+                        Component.text("Player Action > " + matcher.replaceAll("")),
                         5
                 );
+
                 // Loop through all actions in the category
                 for (Action action : Actions.actions) {
                     if (action.getCategory() != playerActionItem) continue;

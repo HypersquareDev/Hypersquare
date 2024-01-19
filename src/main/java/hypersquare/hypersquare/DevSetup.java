@@ -1,7 +1,6 @@
 package hypersquare.hypersquare;
 
 import javax.swing.*;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -12,8 +11,6 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class DevSetup {
 
@@ -96,22 +93,6 @@ public class DevSetup {
             //Creating bat file
             Files.writeString(Path.of("start.bat"), "java -jar server.jar --nogui");
             Files.writeString(Path.of("eula.txt"), "eula=true");
-
-            //Downloading schematics
-            statusMessage.accept("Downloading Schematics");
-            request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/s10scv4bur1suumauw3hb/schematics.zip?rlkey=okhn1bnk2j2pyp5ad6muqwfgb&dl=1&raw=1")).build();
-            byte[] schematics = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
-            ByteArrayInputStream byteStream = new ByteArrayInputStream(schematics);
-            ZipInputStream zipStream = new ZipInputStream(byteStream);
-            ZipEntry zipEntry = zipStream.getNextEntry();
-            Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
-            while (zipEntry != null) {
-                System.out.println(zipEntry.getName());
-                Files.copy(zipStream, Path.of("plugins/FastAsyncWorldEdit/schematics/" + zipEntry.getName()));
-                zipEntry = zipStream.getNextEntry();
-            }
-            zipStream.close();
-            statusMessage.accept("Downloaded Schematics");
 
             //Downloading worlds config
             statusMessage.accept("Downloading worlds config");

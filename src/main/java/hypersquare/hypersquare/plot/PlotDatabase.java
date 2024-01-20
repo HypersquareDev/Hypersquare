@@ -69,7 +69,7 @@ public class PlotDatabase {
             if (!Files.exists(Path.of(schematicsPath + schematicName))) {
                 try {
                     HttpClient client = HttpClient.newHttpClient();
-                    HttpRequest request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/jgm83fwpn1t4ujqd05jxp/schematics-2.zip?rlkey=1qshvlj6orjzkqix53bewgotp&dl=1")).build();
+                    HttpRequest request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/va3kne1vo7x1nc5qi2jd4/schematics.zip?rlkey=s2ze6j7jf1y9h8ofafakhmffm&dl=1")).build();
                     byte[] schematics = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
                     ByteArrayInputStream byteStream = new ByteArrayInputStream(schematics);
                     ZipInputStream zipStream = new ZipInputStream(byteStream);
@@ -115,7 +115,7 @@ public class PlotDatabase {
 
                 Bukkit.getWorld(world.getName()).save();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return;
             }
             if (templatesCollection.countDocuments(templateDoc) == 0) {
                 templatesCollection.insertOne(templateDoc);

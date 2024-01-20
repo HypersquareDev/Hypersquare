@@ -2,6 +2,8 @@ package hypersquare.hypersquare.item;
 
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -11,15 +13,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hypersquare.hypersquare.Hypersquare.cleanMM;
-
 public class ActionItem {
 
-    String name;
+    Component name;
     Material material;
-    String[] description;
-    ActionArgument[] arguments;
-    List<String[]> additionalInfo = List.of();
+    Component[] description;
+    Action.ActionParameter[] params;
+    List<Component[]> additionalInfo = List.of();
     boolean enchanted;
 
     public ActionItem setMaterial(Material material) {
@@ -27,24 +27,33 @@ public class ActionItem {
         return this;
     }
 
-    public ActionItem setName(String name) {
+    public ActionItem setName(Component name) {
         this.name = name;
         return this;
     }
 
-    public ActionItem setDescription(String... lore) {
+    public ActionItem setDescription(Component... lore) {
         this.description = lore;
         return this;
     }
 
-    public ActionItem setArguments(ActionArgument... arguments) {
-        this.arguments = arguments;
+    public ActionItem setParameters(Action.ActionParameter... params) {
+        this.params = params;
         return this;
     }
 
-    public ActionItem addAdditionalInfo(String... info) {
-        List<String[]> infoList = new ArrayList<>(additionalInfo);
-        info[0] = "<!italic><blue>⏵ <gray>" + info[0];
+    public ActionItem addAdditionalInfo(Component... info) {
+        List<Component[]> infoList = new ArrayList<>(additionalInfo);
+        info[0] = Component.text("⏵")
+                .color(NamedTextColor.BLUE)
+                .append(Component.text(" ")
+                        .color(NamedTextColor.GRAY)
+                        .append(info[0]
+                                .color(NamedTextColor.GRAY)));
+        for (int i = 1; i < info.length; i++) {
+            info[i] = info[i].color(NamedTextColor.GRAY)
+                    .decoration(TextDecoration.ITALIC, false);
+        }
         infoList.add(info);
         this.additionalInfo = infoList;
         return this;
@@ -61,40 +70,34 @@ public class ActionItem {
         List<Component> lore = new ArrayList<>(List.of());
 
         //Name
-        meta.displayName(cleanMM.deserialize("<!italic>" + name));
+        meta.displayName(name.decoration(TextDecoration.ITALIC, false));
 
         // Description
-        for (String part : description) {
-            lore.add(cleanMM.deserialize("<!italic><gray>" + part));
+        for (Component part : description) {
+            lore.add(part.color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         }
 
         // Arguments
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("%n<white>Chest Parameters:%n");
-        if (arguments != null) {
-            for (ActionArgument actionArgument : arguments) {
-                builder.append(cleanMM.serialize(actionArgument.type.getName(actionArgument.type)));
-                builder.append(actionArgument.plural ? "(s)" : "");
-                builder.append(actionArgument.optional ? "*" : "");
-                builder.append(" <dark_gray>- <gray>").append(actionArgument.description).append("%n");
+        Component paramComp = Component.text("Chest Parameters")
+                .color(NamedTextColor.WHITE)
+                .decoration(TextDecoration.ITALIC, false);
+        if (params != null) {
+            for (Action.ActionParameter actionParameter : params) {
+                paramComp = paramComp.append(actionParameter.type().getName());
+                paramComp = paramComp.append(Component.text(actionParameter.plural() ? "(s)" : ""));
+                paramComp = paramComp.append(Component.text(actionParameter.optional() ? "*" : "").color(NamedTextColor.GRAY));
+                paramComp = paramComp.append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(actionParameter.description().color(NamedTextColor.GRAY)).appendNewline();
             }
-        } else
-            builder.append("<dark_gray>None");
-        String builderString = String.valueOf(builder);
+        } else paramComp = paramComp.append(Component.text("None").color(NamedTextColor.DARK_GRAY));
 
-        String[] parts = builderString.split("%n");
-        for (String part : parts) {
-            lore.add(cleanMM.deserialize("<!italic>" + part));
-        }
 
         // Additional Info
         if (additionalInfo != null) {
-            lore.add(Component.text(""));
-            lore.add(cleanMM.deserialize("<!italic><blue>Additional info:"));
-            for (String[] info : additionalInfo) {
-                for (String text : info) {
-                    lore.add(cleanMM.deserialize("<!italic><gray>" + text));
+            lore.add(Component.text("").decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("Additional Info").color(NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
+            for (Component[] info : additionalInfo) {
+                for (Component text : info) {
+                    lore.add(text.decoration(TextDecoration.ITALIC, false));
                 }
             }
         }

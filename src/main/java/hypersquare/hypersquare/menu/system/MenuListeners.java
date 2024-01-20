@@ -1,7 +1,5 @@
 package hypersquare.hypersquare.menu.system;
 
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,12 +14,10 @@ public class MenuListeners implements Listener {
         if (event.getWhoClicked() instanceof Player player) {
             if (!Menu.openMenus.containsKey(player)) return;
 
-            Bukkit.broadcast(Component.text("Click action: " + event.getAction().name()));
-
             switch (event.getAction()) {
                 case PICKUP_ALL, PICKUP_ONE, PICKUP_SOME, PICKUP_HALF -> {
                     event.setCancelled(true);
-                    Menu.openMenus.get(player).performClick(event.getSlot());
+                    Menu.openMenus.get(player).performClick(event);
                 }
                 default -> event.setCancelled(true);
             }

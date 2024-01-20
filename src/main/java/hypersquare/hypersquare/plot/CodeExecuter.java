@@ -56,7 +56,7 @@ public class CodeExecuter {
                     Barrel barrel = (Barrel) startLoc.clone().add(0, 1, 0).getBlock().getState();
 
                     for (Action action : Actions.actions) {
-                        if (action.getId().equals(signInfo.get(1).insertion())) {
+                        if (action.getSignName().equals(signInfo.get(1).insertion())) {
                             action.executeBlockAction(targets, barrel);
                         }
                     }

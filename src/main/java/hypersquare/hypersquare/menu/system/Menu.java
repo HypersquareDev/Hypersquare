@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,18 +15,15 @@ public class Menu {
 
     public static final HashMap<Player, Menu> openMenus = new HashMap<>();
     private final Inventory inventory;
-    private final HashMap<Integer, MenuItem> items = new HashMap<>();
-    private final Player player;
+    protected final HashMap<Integer, MenuItem> items = new HashMap<>();
 
     /**
      * Creates a new menu
-     * @param player Player to create menu for
      * @param title Inventory title
      * @param rows Amount of rows (1-6)
      */
-    public Menu(Player player, Component title, int rows) {
-        inventory = Bukkit.createInventory(player, rows * 9, title);
-        this.player = player;
+    public Menu(Component title, int rows) {
+        inventory = Bukkit.createInventory(null, rows * 9, title);
     }
 
     /**
@@ -80,17 +78,17 @@ public class Menu {
 
     /**
      * Runs the click event for the item in the specified slot
-     * @param slot Slot to click
+     * @param event The event that caused this.
      */
-    public void performClick(int slot) {
-        if (!items.containsKey(slot)) return;
-        items.get(slot).performClick();
+    public void performClick(InventoryClickEvent event) {
+        if (!items.containsKey(event.getSlot())) return;
+        items.get(event.getSlot()).performClick();
     }
 
     /**
      * Opens the menu for the player
      */
-    public void open() {
+    public void open(Player player) {
         player.openInventory(inventory);
         openMenus.put(player, this);
     }

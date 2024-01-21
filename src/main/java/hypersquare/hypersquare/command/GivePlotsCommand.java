@@ -1,41 +1,50 @@
 package hypersquare.hypersquare.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class GivePlotsCommand implements CommandExecutor {
+import java.util.List;
+
+public class GivePlotsCommand implements HyperCommand {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            if (player.hasPermission("hypersquare.giveplots")) {
-                if (args.length >= 3) {
-                    Player target = Bukkit.getPlayer(args[0]);
-                    if (target != null) {
-                        PlayerDatabase.increaseMaxPlots(target.getUniqueId(), args[1], Integer.parseInt(args[2]));
-                        String plotsmessage = "plot";
-                        if (Integer.parseInt(args[2]) > 1)
-                            plotsmessage = "plots";
-                        Utilities.sendInfo(player, Component.text("Gave " + args[2] + " " + args[1] + " " + plotsmessage + " to " + target.getName()));
-                        Utilities.sendInfo(target, Component.text("Recieved " + args[2] + " " + args[1] + " " + plotsmessage + " from " + sender.getName()));
-                    } else {
-                        Utilities.sendError(player, "That player is not online.");
-                    }
-                } else {
-                    Utilities.sendUsageError(player, "/giveplot [Player] [Type] [Amount]");
-                }
-            } else {
-                Utilities.sendError(player, "You do not have permission to execute this command.");
-            }
-        } else {
-            sender.sendMessage("This command can only be used by players.");
+    public void register(CommandDispatcher<CommandSourceStack> cd) {
+        for (String plotSize : List.of("basic", "large")) {
+            cd.register(literal("giveplots").then(argument("player", EntityArgument.player())
+                    .then(literal(plotSize).then(argument("amount", IntegerArgumentType.integer())
+                            .executes(ctx -> {
+                                int amount = ctx.getArgument("amount", Integer.class);
+                                Player target;
+                                try {
+                                    target = EntityArgument.getPlayer(ctx, "player").getBukkitEntity();
+                                } catch (Exception e) {
+                                    Utilities.sendError(ctx.getSource().getBukkitSender(), "That player is not online.");
+                                    return DONE;
+                                }
+
+                                if (!ctx.getSource().getBukkitSender().hasPermission("hypersquare.giveplots")) {
+                                    Utilities.sendError(ctx.getSource().getBukkitSender(), "");
+                                    return DONE;
+                                }
+
+                                PlayerDatabase.increaseMaxPlots(target.getUniqueId(), plotSize, amount);
+                                String plotsmessage = "plot";
+                                if (amount != 1) plotsmessage = "plots";
+                                Utilities.sendInfo(ctx.getSource().getBukkitSender(), Component.text("Gave " + amount + " " + plotSize + " " + plotsmessage + " to " + target.getName()));
+                                Utilities.sendInfo(target, Component.text("Recieved " + amount + " " + plotSize + " " + plotsmessage + " from " + ctx.getSource().getBukkitSender().getName()));
+
+                                return DONE;
+                            })
+                    ))
+            ).executes(ctx -> {
+                Utilities.sendUsageError(ctx.getSource().getBukkitSender(), "Usage: /giveplot <player> <type> <amount>");
+                return DONE;
+            }));
         }
-        return true;
     }
 }

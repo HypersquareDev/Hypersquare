@@ -1,25 +1,27 @@
 package hypersquare.hypersquare.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class EditSpawn implements CommandExecutor {
+public class EditSpawn implements HyperCommand {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            if (player.hasPermission("hypersquare.editspawn")) {
-                ChangeGameMode.editSpawn(player);
+    public void register(CommandDispatcher<CommandSourceStack> cd) {
+        cd.register(literal("editspawn").executes(ctx -> {
+            CommandSender sender = ctx.getSource().getBukkitSender();
+            if (sender instanceof Player player) {
+                if (player.hasPermission("hypersquare.editspawn")) {
+                    ChangeGameMode.editSpawn(player);
+                } else {
+                    Utilities.sendError(player, "You do not have permission to execute this command.");
+                }
             } else {
-                Utilities.sendError(player, "You do not have permission to execute this command.");
+                sender.sendMessage("This command can only be used by players.");
             }
-        } else {
-            sender.sendMessage("This command can only be used by players.");
-        }
-        return true;
+            return DONE;
+        }));
     }
 }

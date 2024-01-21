@@ -1,8 +1,7 @@
 package hypersquare.hypersquare.util.manager;
 
 import com.mojang.brigadier.CommandDispatcher;
-import hypersquare.hypersquare.command.FlyCommand;
-import hypersquare.hypersquare.command.HyperCommand;
+import hypersquare.hypersquare.command.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.Bukkit;
@@ -14,7 +13,19 @@ public class CommandManager {
 
     public static void registerCommands() {
         register(
-                new FlyCommand()
+                new FlyCommand(),
+                new BuildCommand(),
+                new DebugCommand(),
+                new DeleteAllPlotsCommand(),
+                new DevCommand(),
+                new EditSpawn(),
+                new FlightSpeedCommand(),
+                new GivePlotsCommand(),
+                new JoinCommand(),
+                new LocateCommand(),
+                new PlayCommand(),
+                new SpawnCommand(),
+                new PlotCommands()
         );
     }
 

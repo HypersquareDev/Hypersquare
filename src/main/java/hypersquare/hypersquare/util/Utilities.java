@@ -16,6 +16,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -54,12 +55,12 @@ public class Utilities {
         return maxLength;
     }
 
-    public static void sendMultiMiniMessage(Player recipient, List<String> messages) {
+    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {
         int size = findLengthOfLongestString(messages);
         String before = "<#AAAAFF><strikethrough>" + " ".repeat((int) (size * 1.5)) + "<#AAAAFF>";
         String message = String.join("<newline><reset>", messages);
         message = before + "<newline><reset>" + message + "<newline>" + before;
-        recipient.sendMessage(MiniMessage.miniMessage().deserialize(message));
+        recipient.sendMessage(cleanMM.deserialize(message));
     }
 
     public static ItemStack formatItem(String lore, Material material, String name) {
@@ -81,13 +82,15 @@ public class Utilities {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public static void sendError(Player player, String message) {
-        player.sendMessage(cleanMM.deserialize("<red>Error: <gray>" + message));
-        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
+    public static void sendError(CommandSender sender, String message) {
+        sender.sendMessage(cleanMM.deserialize("<red>Error: <gray>" + message));
+        if (sender instanceof Player player) {
+            player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
+        }
     }
 
-    public static void sendInfo(Player player, Component message) {
-        player.sendMessage(Component.text("»")
+    public static void sendInfo(CommandSender sender, Component message) {
+        sender.sendMessage(Component.text("»")
                 .color(NamedTextColor.GREEN)
                 .decoration(TextDecoration.BOLD, true)
                 .append(Component.text(" ")
@@ -256,8 +259,8 @@ public class Utilities {
         return Bukkit.getPlayerExact(player) != null;
     }
 
-    public static void sendUsageError(Player player, String usage) {
-        player.sendMessage(Component.text("Usage: ")
+    public static void sendUsageError(CommandSender sender, String usage) {
+        sender.sendMessage(Component.text("Usage: ")
                 .color(NamedTextColor.DARK_AQUA)
                 .append(Component.text(usage).color(NamedTextColor.GRAY))
         );

@@ -63,6 +63,7 @@ public class ChangeGameMode {
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                  WorldLockedException ignored) {
             Utilities.sendRedInfo(player, Component.text("Error loading plot. Please try again later."));
+            return;
         }
         PlotManager.loadPlot(plotID);
         if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))

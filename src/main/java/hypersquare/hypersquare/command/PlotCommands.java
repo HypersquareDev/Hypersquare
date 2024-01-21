@@ -49,6 +49,10 @@ public class PlotCommands implements HyperCommand {
     private int listDevs(CommandContext<CommandSourceStack> ctx) {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
             int plotID = Utilities.getPlotID(player.getWorld());
+            if (!player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
+                Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
+                return DONE;
+            }
             StringBuilder devs = new StringBuilder("&a");
             for (String name : PlotDatabase.getPlotDevs(plotID)) {
                 devs.append(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName()).append(", ");
@@ -66,10 +70,14 @@ public class PlotCommands implements HyperCommand {
 
     private int addDev(CommandContext<CommandSourceStack> ctx) {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
+            int plotID = Utilities.getPlotID(player.getWorld());
+            if (!player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
+                Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
+                return DONE;
+            }
             String recipient = ctx.getArgument("player", String.class);
             if (!ctx.getArgument("player", String.class).equalsIgnoreCase(player.getName())) {
                 if (Bukkit.getOfflinePlayer(recipient).hasPlayedBefore()) {
-                    int plotID = Utilities.getPlotID(player.getWorld());
                     if (PlotDatabase.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(recipient).getUniqueId().toString())) {
                         Utilities.sendError(player, "That player is already a dev.");
                     } else {

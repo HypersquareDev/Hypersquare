@@ -1,10 +1,8 @@
 package hypersquare.hypersquare.item;
 
-import lombok.Getter;
-
 public class ActionArgument {
 
-    @Getter DisplayValue type;
+    DisplayValue type;
     String description;
     boolean plural = false;
     boolean optional = false;

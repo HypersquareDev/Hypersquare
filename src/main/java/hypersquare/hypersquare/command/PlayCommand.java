@@ -1,25 +1,27 @@
 package hypersquare.hypersquare.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class PlayCommand implements CommandExecutor {
+public class PlayCommand implements HyperCommand {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            if (!Hypersquare.mode.get(player).equals("at spawn")) {
-                int plotID = Utilities.getPlotID(player.getWorld());
-                ChangeGameMode.playMode(player, plotID);
+    public void register(CommandDispatcher<CommandSourceStack> cd) {
+        cd.register(literal("play").executes(ctx -> {
+            CommandSender sender = ctx.getSource().getBukkitSender();
+            if (sender instanceof Player player) {
+                if (!Hypersquare.mode.get(player).equals("at spawn")) {
+                    int plotID = Utilities.getPlotID(player.getWorld());
+                    ChangeGameMode.playMode(player, plotID);
+                }
+            } else {
+                sender.sendMessage("This command can only be used by players.");
             }
-        } else {
-            sender.sendMessage("This command can only be used by players.");
-        }
-        return true;
+            return DONE;
+        }));
     }
 }

@@ -2,16 +2,14 @@ package hypersquare.hypersquare.listener;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
+import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
+import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
-import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.util.Utilities;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
@@ -24,6 +22,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataType;
 
 public class DevEvents implements Listener {
@@ -82,6 +81,43 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onExplode(BlockExplodeEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onRClick(PlayerInteractEvent event) {
+        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")
+            && !Hypersquare.mode.get(event.getPlayer()).equals("building")) return;
+
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (event.getItem() != null && event.getItem().isSimilar(CodeItems.BLOCKS_SHORTCUT)) {
+                event.setCancelled(true);
+
+                Utilities.sendOpenMenuSound(event.getPlayer());
+                Inventory inv = Bukkit.createInventory(null, 27, Component.text("Code Blocks"));
+                //First row
+                inv.setItem(0, CodeItems.PLAYER_EVENT_ITEM);
+                inv.setItem(1, CodeItems.IF_PLAYER_ITEM);
+                inv.setItem(2, CodeItems.PLAYER_ACTION_ITEM);
+                inv.setItem(3, CodeItems.CALL_FUNCTION_ITEM);
+                inv.setItem(4, CodeItems.START_PROCESS_ITEM);
+                inv.setItem(5, CodeItems.ENTITY_EVENT_ITEM);
+                inv.setItem(6, CodeItems.IF_ENTITY_ITEM);
+                //Second row
+                inv.setItem(9, CodeItems.CONTROL_ITEM);
+                inv.setItem(10, CodeItems.SELECT_OBJECT_ITEM);
+                inv.setItem(11, CodeItems.REPEAT_ITEM);
+                inv.setItem(12, CodeItems.ELSE_ITEM);
+                inv.setItem(18, CodeItems.SET_VARIABLE_ITEM);
+                //Third row
+                inv.setItem(19, CodeItems.IF_VARIABLE_ITEM);
+                inv.setItem(20, CodeItems.GAME_ACTION_ITEM);
+                inv.setItem(21, CodeItems.IF_GAME_ITEM);
+                inv.setItem(22, CodeItems.ENTITY_ACTION_ITEM);
+                inv.setItem(23, CodeItems.FUNCTION_ITEM);
+                inv.setItem(24, CodeItems.PROCESS_ITEM);
+                event.getPlayer().openInventory(inv);
+            }
+        }
     }
 
     public static Location basic = null;

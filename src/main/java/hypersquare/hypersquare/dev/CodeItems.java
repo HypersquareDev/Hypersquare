@@ -23,6 +23,7 @@ public class CodeItems {
     public static ItemStack SELECT_OBJECT_ITEM;
     public static ItemStack REPEAT_ITEM;
     public static ItemStack ELSE_ITEM;
+    public static ItemStack BLOCKS_SHORTCUT;
 
     public static void register() {
         PLAYER_EVENT_ITEM = new CodeItem(Material.DIAMOND_BLOCK)
@@ -225,6 +226,12 @@ public class CodeItems {
                         "if the condition directly before it",
                         "was not met. Else must be placed directly",
                         "after any If block's closing bracket.")
+                .build();
+
+        BLOCKS_SHORTCUT = new CodeItem(Material.DIAMOND)
+                .name("<aqua>Code Blocks")
+                .description("Right click to access a menu",
+                        "containing all code blocks.")
                 .build();
     }
 }

@@ -1,37 +1,38 @@
 package hypersquare.hypersquare.util.manager;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.mojang.brigadier.CommandDispatcher;
+import hypersquare.hypersquare.command.FlyCommand;
+import hypersquare.hypersquare.command.HyperCommand;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.dedicated.DedicatedServer;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
 
-public class CommandManager implements CommandExecutor {
+public class CommandManager {
 
-    private final Map<String, CommandExecutor> commands = new HashMap<>();
-    private final JavaPlugin plugin;
-
-    public CommandManager(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public static void registerCommands() {
+        register(
+                new FlyCommand()
+        );
     }
 
-    public void registerCommand(String label, CommandExecutor executor) {
-        commands.put(label, executor);
-        plugin.getCommand(label).setExecutor(this);
-
+    private static CommandDispatcher<CommandSourceStack> getDispatcher() {
+        try {
+            Field f = CraftServer.class.getDeclaredField("console");
+            f.setAccessible(true);
+            DedicatedServer nmsServer = (DedicatedServer) f.get(Bukkit.getServer());
+            return nmsServer.vanillaCommandDispatcher.getDispatcher();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        CommandExecutor executor = commands.get(label.toLowerCase());
-
-        if (executor != null) {
-            return executor.onCommand(sender, command, label, args);
-        } else {
-            sender.sendMessage("Command not found.");
-            return false;
+    private static void register(HyperCommand... cmds) {
+        CommandDispatcher<CommandSourceStack> cd = getDispatcher();
+        for (HyperCommand cmd : cmds) {
+            cmd.register(cd);
         }
     }
 }

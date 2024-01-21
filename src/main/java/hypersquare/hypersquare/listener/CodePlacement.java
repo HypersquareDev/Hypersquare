@@ -241,8 +241,11 @@ public class CodePlacement implements Listener {
                     Bukkit.getLogger().warning("Failed to remove codeline");
                 }
             }
+
+            boolean breakAll = event.getPlayer().isSneaking();
+
             CodeFile code = new CodeFile(blockLoc.getWorld());
-            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code);
+            CodeData codeJson = CodeFileHelper.removeCodeBlock(blockLoc.clone(), code, breakAll);
             code.setCode(codeJson.toJson().toString());
 
             if (signBlock.getType() == Material.OAK_WALL_SIGN) {
@@ -254,13 +257,29 @@ public class CodePlacement implements Listener {
                 block.setType(Material.AIR);
                 if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
                     bracketLoc.getBlock().setType(Material.AIR);
+                    if (breakAll) {
+                        BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX(), blockLoc.getBlockY(), blockLoc.getBlockZ());
+                        BlockVector3 loc2 = BlockVector3.at(bracketLoc.getBlockX() - 1, bracketLoc.getBlockY() + 1, bracketLoc.getBlockZ());
+                        Region selection = new CuboidRegion(loc1, loc2);
+
+                        World faweWorld = BukkitAdapter.adapt(blockLoc.getWorld());
+                        try (EditSession session = WorldEdit.getInstance().newEditSession(faweWorld)) {
+                            session.setBlocks(selection, BukkitAdapter.asBlockType(Material.AIR));
+                        } catch (WorldEditException e) {
+                            Bukkit.getLogger().warning("Failed to remove if contents");
+                        }
+                    }
                 }
                 stoneLoc.getBlock().setType(Material.AIR);
                 barrelLoc.getBlock().setType(Material.AIR);
 
                 if (bracketLoc != null) {
-                    CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -2);
-                    CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                    if (breakAll) {
+                        CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), blockLoc.getBlockZ() - bracketLoc.getBlockZ() - 1);
+                    } else {
+                        CodeBlockManagement.moveCodeLine(bracketLoc.clone().add(0, 0, 1), -2);
+                        CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
+                    }
                 } else {
                     CodeBlockManagement.moveCodeLine(blockLoc.clone().add(0, 0, 2), -2);
                 }

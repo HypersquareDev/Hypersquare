@@ -80,7 +80,7 @@ public class DevSetup {
 
             //Downloading fawe plugin
             statusMessage.accept("Downloading worldedit");
-            request = HttpRequest.newBuilder(new URI("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.8.5-SNAPSHOT-641.jar")).build();
+            request = HttpRequest.newBuilder(new URI("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.8.5-SNAPSHOT-643.jar")).build();
             byte[] fawe = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
             Files.write(Path.of("plugins/fawe.jar"), fawe);
             statusMessage.accept("Downloaded worldedit");

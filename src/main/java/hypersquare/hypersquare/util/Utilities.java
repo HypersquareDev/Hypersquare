@@ -57,6 +57,10 @@ public class Utilities {
 
     public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {
         int size = findLengthOfLongestString(messages);
+        size = (int) (size * 1.5);
+        if (size > 50){
+            size = 50;
+        }
         String before = "<#AAAAFF><strikethrough>" + " ".repeat((int) (size * 1.5)) + "<#AAAAFF>";
         String message = String.join("<newline><reset>", messages);
         message = before + "<newline><reset>" + message + "<newline>" + before;

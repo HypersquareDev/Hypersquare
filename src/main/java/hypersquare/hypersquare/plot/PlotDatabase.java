@@ -159,6 +159,15 @@ public class PlotDatabase {
         plotsCollection.updateOne(filter, update);
     }
 
+    public static String getPlotSize(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("size");
+        }
+        return null;
+    }
+
     public static int getRecentPlotID() {
         Document filter = new Document(); // an empty filter to get all documents
         Document result = additionalCollection.find(filter).first();
@@ -207,6 +216,17 @@ public class PlotDatabase {
             return result.getInteger("node", -1);
         }
         return -1;
+    }
+
+    public static String getPlotIcon(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            return result.getString("icon");
+        }
+
+        return null;
     }
 
     public static String getPlotOwner(int plotID) {

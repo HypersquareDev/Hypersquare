@@ -10,12 +10,19 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.WorldUtilities;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -23,6 +30,41 @@ import java.util.concurrent.atomic.AtomicReference;
 import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 
 public class Plot {
+
+    public static ItemStack getPlotItem(int plotID){
+        org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
+        ItemMeta meta = plotItem.getItemMeta();
+        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
+            meta.displayName(Hypersquare.fullMM.deserialize(PlotDatabase.getPlotName(plotID)));
+        } else {
+            String name = PlotDatabase.getPlotName(plotID);
+            meta.displayName(Hypersquare.fullMM.deserialize(name + "<red>" + " (Out of date)"));
+        }
+        List<Component> lore = new ArrayList<>();
+        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot").decoration(TextDecoration.ITALIC,false));
+        lore.add(MiniMessage.miniMessage().deserialize(""));
+        lore.add(MiniMessage.miniMessage().deserialize(""));
+        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotID).decoration(TextDecoration.ITALIC,false));
+        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)){
+            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC,false));
+        } else {
+            Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC,false);
+            lore.add(aa);
+        }
+
+        meta.lore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        meta.setDisplayName(ChatColor.RESET + meta.getDisplayName());
+        plotItem.setItemMeta(meta);
+        return plotItem;
+    }
 
     public static void createPlot(Player player, int plotID, SlimePlugin plugin, String ownerUUID, final String plotType) {
         PlayerDatabase.addPlot(player.getUniqueId(), plotType.replace("plot_template_", ""));

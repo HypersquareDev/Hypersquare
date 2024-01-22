@@ -25,7 +25,8 @@ public class CommandManager {
                 new LocateCommand(),
                 new PlayCommand(),
                 new SpawnCommand(),
-                new PlotCommands()
+                new PlotCommands(),
+                new ValueCommands()
         );
     }
 

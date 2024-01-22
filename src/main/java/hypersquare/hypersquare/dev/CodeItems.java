@@ -24,6 +24,7 @@ public class CodeItems {
     public static ItemStack REPEAT_ITEM;
     public static ItemStack ELSE_ITEM;
     public static ItemStack BLOCKS_SHORTCUT;
+    public static ItemStack VALUES_INGOT;
 
     public static void register() {
         PLAYER_EVENT_ITEM = new CodeItem(Material.DIAMOND_BLOCK)
@@ -232,6 +233,12 @@ public class CodeItems {
                 .name("<aqua>Code Blocks")
                 .description("Right click to access a menu",
                         "containing all code blocks.")
+                .build();
+
+        VALUES_INGOT = new CodeItem(Material.IRON_INGOT)
+                .name("<white>Values")
+                .description("Right click to access a menu",
+                        "containing all values.")
                 .build();
     }
 }

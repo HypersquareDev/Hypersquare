@@ -74,7 +74,7 @@ public class PlotCommands implements HyperCommand {
                         Utilities.sendError(player, "That player is already a dev.");
                     } else {
                         PlotDatabase.addDev(plotID, Bukkit.getOfflinePlayer(recipient).getUniqueId());
-                        Utilities.sendInfo(player, cleanMM.deserialize(("<white>" + Bukkit.getOfflinePlayer(recipient).getName() + "<reset><gray>now has dev permissions for <white>" + PlotDatabase.getPlotName(plotID)) + "<reset><gray>."));
+                        Utilities.sendInfo(player, (Hypersquare.fullMM.deserialize("<reset>" + Bukkit.getOfflinePlayer(recipient).getName() + " <gray>now has dev permissions for " + PlotDatabase.getPlotName(plotID))));
                         if (Utilities.playerOnline(recipient)) {
                             Utilities.sendInfo(player, cleanMM.deserialize(("<white>" + Bukkit.getPlayer(recipient).getName() + "<reset><gray>now has dev permissions for <white>" + PlotDatabase.getPlotName(plotID)) + "<reset><gray>."));
                         }

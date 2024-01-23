@@ -3,26 +3,23 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.codefile.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
-import hypersquare.hypersquare.dev.Actions;
-import hypersquare.hypersquare.dev.codefile.CodeFile;
-import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
-import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.codefile.data.CodeData;
-import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
@@ -45,8 +42,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.List;
 
 public class DevEvents implements Listener {
 
@@ -92,7 +87,7 @@ public class DevEvents implements Listener {
                 if (action == null) {
                     throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
                 }
-                action.actionMenu().open(event.getPlayer(), event.getClickedBlock().getLocation().subtract(0, 1, 0));
+                action.actionMenu(actionData).open(event.getPlayer(), event.getClickedBlock().getLocation().subtract(0, 1, 0));
             }
         }
 
@@ -123,7 +118,7 @@ public class DevEvents implements Listener {
         if (!Hypersquare.mode.get(player).equals("coding")
             && !Hypersquare.mode.get(player).equals("building")) return;
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR) {
             ItemStack eventItem = event.getItem();
             if (eventItem == null) return;
 
@@ -258,30 +253,23 @@ public class DevEvents implements Listener {
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) return;
 
-        ItemMeta meta = item.getItemMeta();
-        NamespacedKey namespace = new NamespacedKey(Hypersquare.pluginName, "varitem");
-        String data = meta.getPersistentDataContainer().get(namespace, PersistentDataType.STRING);
-        if (data == null) return;
-        JsonObject json;
-        try {
-            json = JsonParser.parseString(data).getAsJsonObject();
-        } catch (Exception ignored) { return; }
+        JsonObject json = CodeValues.getVarItemData(item);
+        if (json == null) return;
 
         //noinspection rawtypes
-        for (CodeValue value : CodeValues.values()) {
-            if (!value.isType(json)) continue;
-            event.setCancelled(true);
-            String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
-            Object v;
-            try {
-                v = value.fromString(raw, value.fromItem(item));
-            } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
-                Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
-                return;
-            }
-            @SuppressWarnings("unchecked") ItemStack newItem = value.getItem(v);
-            event.getPlayer().getInventory().setItemInMainHand(newItem);
+        CodeValues value = CodeValues.getType(json);
+        if (value == null) return;
+        event.setCancelled(true);
+        String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
+        Object v;
+        try {
+            v = value.fromString(raw, value.fromItem(item));
+        } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
+            Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
+            return;
         }
+        ItemStack newItem = value.getItem(v);
+        event.getPlayer().getInventory().setItemInMainHand(newItem);
     }
 
     @EventHandler

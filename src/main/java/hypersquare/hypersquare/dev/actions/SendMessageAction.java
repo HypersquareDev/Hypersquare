@@ -1,10 +1,14 @@
 package hypersquare.hypersquare.dev.actions;
 
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.item.ActionItem;
 import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.item.PlayerActionItems;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
 import org.bukkit.block.Barrel;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -46,11 +50,18 @@ public class SendMessageAction implements Action {
 
     @Override
     public ItemStack item() {
-        return null;
+        return new ActionItem()
+                .setMaterial(Material.OAK_SIGN)
+                .setName(Component.text("Send Message").color(NamedTextColor.GREEN))
+                .setDescription(Component.text("Sends the player all of the"),
+                        Component.text("messages in the barrel"))
+                .setParameters(parameters())
+                .build();
     }
 
     @Override
-    public ActionMenu actionMenu() {
-        return null;
+    public ActionMenu actionMenu(CodeActionData data) {
+        return new ActionMenu(this, 4, data)
+                .parameter("messages", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
     }
 }

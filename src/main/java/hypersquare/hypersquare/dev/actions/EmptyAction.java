@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.actions;
 
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.item.PlayerActionItems;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
@@ -44,7 +45,7 @@ public class EmptyAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu() {
-        return new ActionMenu(this, 3);
+    public ActionMenu actionMenu(CodeActionData data) {
+        return new ActionMenu(this, 3, data);
     }
 }

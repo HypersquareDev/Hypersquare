@@ -39,6 +39,11 @@ public class MenuItem {
         return this;
     }
 
+    public MenuItem material(Material mat) {
+        item.setType(mat);
+        return this;
+    }
+
     public MenuItem onClick(Runnable onClick) {
         clickHandler = onClick;
         return this;

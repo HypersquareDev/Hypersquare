@@ -12,7 +12,7 @@ import java.util.Map;
 public class CodeActionData {
     public String action;
     public List<CodeActionData> actions = new ArrayList<>();
-    public HashMap<String, List<CodeValueData>> arguments = new HashMap<>();
+    public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
 
     public CodeActionData() {
     }
@@ -26,9 +26,9 @@ public class CodeActionData {
         }
         if (data.has("arguments")) {
             for (Map.Entry<String, JsonElement> argument : data.get("arguments").getAsJsonObject().entrySet()) {
-                List<CodeValueData> values = new ArrayList<>();
+                List<JsonObject> values = new ArrayList<>();
                 for (JsonElement value : argument.getValue().getAsJsonArray()) {
-                    values.add(new CodeValueData(value.getAsJsonObject()));
+                    values.add(value.getAsJsonObject());
                 }
                 arguments.put(argument.getKey(), values);
             }
@@ -47,11 +47,11 @@ public class CodeActionData {
         }
         if (!arguments.isEmpty()) {
             JsonObject obj = new JsonObject();
-            for (Map.Entry<String, List<CodeValueData>> entry : arguments.entrySet()) {
+            for (Map.Entry<String, List<JsonObject>> entry : arguments.entrySet()) {
                 JsonArray values = new JsonArray();
 
-                for (CodeValueData value : entry.getValue()) {
-                    values.add(value.toJson());
+                for (JsonObject value : entry.getValue()) {
+                    values.add(value);
                 }
 
                 obj.add(entry.getKey(), values);

@@ -92,4 +92,7 @@ public class Menu {
         player.openInventory(inventory);
         openMenus.put(player, this);
     }
+
+    public void shiftClick(InventoryClickEvent event) {
+    }
 }

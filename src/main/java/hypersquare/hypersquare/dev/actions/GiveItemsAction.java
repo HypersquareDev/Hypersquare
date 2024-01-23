@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.actions;
 
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.util.Utilities;
@@ -29,8 +30,8 @@ public class GiveItemsAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu() {
-        return new ActionMenu(this, 4)
+    public ActionMenu actionMenu(CodeActionData data) {
+        return new ActionMenu(this, 4, data)
                 .parameter("items", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
                 .parameter("multiplier", 35);
     }

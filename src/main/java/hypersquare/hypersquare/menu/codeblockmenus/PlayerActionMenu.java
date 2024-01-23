@@ -30,8 +30,6 @@ public class PlayerActionMenu {
             MenuItem item = new MenuItem(playerActionItem.build()).onClick(() -> {
                 Utilities.sendSecondaryMenuSound(player);
 
-                if (PlayerActionItems.getActions(playerActionItem).isEmpty()) return; // In case there are no actions
-
                 // Strip Color Codes
                 Pattern pattern = Pattern.compile("<[^>]+?>");
                 Matcher matcher = pattern.matcher(cleanMM.serialize(playerActionItem.getName()));

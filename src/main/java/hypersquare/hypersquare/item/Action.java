@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.item;
 
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -24,7 +25,7 @@ public interface Action {
 
     ItemStack item();
 
-    ActionMenu actionMenu();
+    ActionMenu actionMenu(CodeActionData data);
 
     default ActionParameter getParameter(String id) {
         for (ActionParameter param : parameters()) {

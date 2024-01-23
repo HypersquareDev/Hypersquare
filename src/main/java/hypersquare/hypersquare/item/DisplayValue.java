@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.item;
 
 
-import hypersquare.hypersquare.command.codeValue.Text;
+import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -9,24 +9,23 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 
 import java.util.HashMap;
-
-import static hypersquare.hypersquare.Hypersquare.cleanMM;
+import java.util.function.Function;
 
 public enum DisplayValue {
-    NUMBER(NamedTextColor.RED),
-    ITEM(NamedTextColor.GOLD),
-    BLOCK(NamedTextColor.GOLD),
-    SPAWN_EGG(NamedTextColor.GOLD),
-    ANY(TextColor.color(255, 212, 127)),
-    VARIABLE(NamedTextColor.YELLOW),
-    TEXT(TextColor.color(127, 212, 42)),
-    LIST(NamedTextColor.DARK_GREEN),
-    VECTOR(TextColor.color(42, 255, 170)),
-    STRING(NamedTextColor.AQUA),
-    DICTIONARY(TextColor.color(85, 170, 255)),
-    SOUND(NamedTextColor.BLUE),
-    PARTICLE(TextColor.color(170, 85, 255)),
-    POTION(TextColor.color(255, 85, 127)),
+    NUMBER(NamedTextColor.RED, v -> v == CodeValues.NUMBER),
+    ITEM(NamedTextColor.GOLD, v -> false),
+    BLOCK(NamedTextColor.GOLD, v -> false),
+    SPAWN_EGG(NamedTextColor.GOLD, v -> false),
+    ANY(TextColor.color(255, 212, 127), v -> true),
+    VARIABLE(NamedTextColor.YELLOW, v -> false),
+    TEXT(TextColor.color(127, 212, 42), v -> v == CodeValues.TEXT),
+    LIST(NamedTextColor.DARK_GREEN, v -> false),
+    VECTOR(TextColor.color(42, 255, 170), v -> false),
+    STRING(NamedTextColor.AQUA, v -> v == CodeValues.STRING),
+    DICTIONARY(TextColor.color(85, 170, 255), v -> false),
+    SOUND(NamedTextColor.BLUE, v -> false),
+    PARTICLE(TextColor.color(170, 85, 255), v -> false),
+    POTION(TextColor.color(255, 85, 127), v -> false),
     ;
 
     public static HashMap<DisplayValue, Material> menuPaneColor = new HashMap<>() {{
@@ -47,12 +46,18 @@ public enum DisplayValue {
     }};
 
     private final TextColor color;
+    private final Function<CodeValues, Boolean> isValid;
 
-    DisplayValue(TextColor color) {
+    DisplayValue(TextColor color, Function<CodeValues, Boolean> isValid) {
         this.color = color;
+        this.isValid = isValid;
     }
 
     public Component getName() {
         return Component.text(Utilities.capitalize(toString().toLowerCase())).color(color);
+    }
+
+    public boolean isValid(CodeValues v) {
+        return isValid.apply(v);
     }
 }

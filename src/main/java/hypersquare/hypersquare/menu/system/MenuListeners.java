@@ -15,9 +15,14 @@ public class MenuListeners implements Listener {
             if (!Menu.openMenus.containsKey(player)) return;
 
             switch (event.getAction()) {
-                case PICKUP_ALL, PICKUP_ONE, PICKUP_SOME, PICKUP_HALF -> {
+                case PICKUP_ALL, PICKUP_ONE, PICKUP_SOME, PICKUP_HALF, PLACE_ALL, SWAP_WITH_CURSOR -> {
+                    if (event.getClickedInventory() == event.getWhoClicked().getInventory()) return;
                     event.setCancelled(true);
                     Menu.openMenus.get(player).performClick(event);
+                }
+                case MOVE_TO_OTHER_INVENTORY -> {
+                    event.setCancelled(true);
+                    Menu.openMenus.get(player).shiftClick(event);
                 }
                 default -> event.setCancelled(true);
             }

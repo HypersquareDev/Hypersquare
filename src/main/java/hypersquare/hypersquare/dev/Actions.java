@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.actions.EmptyAction;
+import hypersquare.hypersquare.dev.actions.SendMessageAction;
 import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.dev.actions.GiveItemsAction;
 
@@ -10,7 +11,8 @@ import java.util.Objects;
 public class Actions {
     public static List<Action> actions = List.of(
             new EmptyAction(),
-            new GiveItemsAction()
+            new GiveItemsAction(),
+            new SendMessageAction()
     );
 
     public static Action getAction(String id) {

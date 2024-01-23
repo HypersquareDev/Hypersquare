@@ -1,9 +1,9 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.dev.actions.EmptyAction;
-import hypersquare.hypersquare.dev.actions.SendMessageAction;
+import hypersquare.hypersquare.dev.action.EmptyAction;
+import hypersquare.hypersquare.dev.action.player.SendMessageAction;
 import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.dev.actions.GiveItemsAction;
+import hypersquare.hypersquare.dev.action.player.GiveItemsAction;
 
 import java.util.List;
 import java.util.Objects;

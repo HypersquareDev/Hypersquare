@@ -19,7 +19,6 @@ public enum PlayerEventItems {
     DAMAGE_EVENTS_CATEGORY(Material.IRON_SWORD, "<red>Damage Events","<gray>Getting damaged,%n<gray>shooting a bow", 31),
     DEATH_EVENTS_CATEGORY(Material.SKELETON_SKULL, "<dark_red>Death Events","<gray>Dying, and respawning", 34),
 
-    PLAYER_JOIN_GAME_EVENT(Material.POTATO, "Join", "<green>Player Join Game Event","<gray>Executes code when a%n<gray>player joins the plot.", PLOT_AND_SERVER_EVENTS_CATEGORY),
     PLAYER_REJOIN_EVENT(Material.PLAYER_HEAD, "Rejoin", "<yellow>Player Rejoin","<gray>Executes code when the player%n<gray>re-enters the world with the%n<gray>/play command.%n%n<dark_red>∅ <red>Cancellable", PLOT_AND_SERVER_EVENTS_CATEGORY),
     PLAYER_LEAVE_GAME_EVENT(Material.POISONOUS_POTATO, "Leave", "<green>Player Leave Game Event","<gray>Executes code when a%n<gray>player leaves the plot.", PLOT_AND_SERVER_EVENTS_CATEGORY),
     PLAYER_COMMAND_EVENT(Material.COMMAND_BLOCK, "Command", "<green>Player Command Event","<gray>Executes code when a player%n<gray>types a command on the plot.", PLOT_AND_SERVER_EVENTS_CATEGORY),

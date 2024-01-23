@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.actions;
+package hypersquare.hypersquare.dev.action.player;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.Action;
@@ -30,7 +30,7 @@ public class SendMessageAction implements Action {
 
     @Override
     public String getId() {
-        return "send_message";
+        return "player_action_send_message";
     }
 
     @Override

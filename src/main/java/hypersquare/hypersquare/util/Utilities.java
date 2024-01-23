@@ -25,6 +25,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
+import static hypersquare.hypersquare.Hypersquare.fullMM;
 
 public class Utilities {
     public static int getPlotID(World world) {
@@ -55,7 +56,7 @@ public class Utilities {
         return maxLength;
     }
 
-    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {
+    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages, boolean full) {
         int size = findLengthOfLongestString(messages);
         size = (int) (size * 1.5);
         if (size > 50){
@@ -64,8 +65,12 @@ public class Utilities {
         String before = "<#AAAAFF><strikethrough>" + " ".repeat((int) (size * 1.5)) + "<#AAAAFF>";
         String message = String.join("<newline><reset>", messages);
         message = before + "<newline><reset>" + message + "<newline>" + before;
-        recipient.sendMessage(cleanMM.deserialize(message));
+        recipient.sendMessage((full ? fullMM : cleanMM).deserialize(message));
     }
+
+    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {{
+        sendMultiMiniMessage(recipient, messages, false);
+    }}
 
     public static ItemStack formatItem(String lore, Material material, String name) {
         String[] parts = lore.split("%n");

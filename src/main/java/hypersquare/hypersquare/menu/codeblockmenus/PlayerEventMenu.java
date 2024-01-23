@@ -1,5 +1,12 @@
 package hypersquare.hypersquare.menu.codeblockmenus;
 
+import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.Events;
+import hypersquare.hypersquare.dev.codefile.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
+import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.item.PlayerEventItems;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
@@ -35,10 +42,12 @@ public class PlayerEventMenu {
                 Menu categoryGui = new Menu(Component.text("Player Events > " + matcher.replaceAll("")), 5);
 
                 // Loop through all actions in the category
-                for (PlayerEventItems action : PlayerEventItems.getEvents(playerEventItem)) {
-                    MenuItem actionItem = new MenuItem(action.build()).onClick(() -> {
+                for (Event event : Events.events) {
+                    if (event.getCategory() != playerEventItem || event.getId() == null) continue;
+                    MenuItem actionItem = new MenuItem(event.item()).onClick(() -> {
                         Utilities.sendSuccessClickMenuSound(player);
-                        Utilities.setAction(targetLocation.getBlock(), action.id, player);
+                        Utilities.setAction(targetLocation.getBlock(), event.getSignName(), player);
+                        CodeFileHelper.updateEvent(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), event, CodeBlocks.DIAMOND_BLOCK);
                     });
                     categoryGui.addItem(actionItem);
                 }

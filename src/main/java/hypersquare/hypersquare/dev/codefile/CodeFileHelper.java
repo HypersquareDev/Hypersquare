@@ -4,6 +4,8 @@ import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
+import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class CodeFileHelper {
     @NotNull
@@ -127,11 +130,12 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData updateAction(Location location, CodeFile code, String newAction) {
+    public static CodeData updateAction(Location location, CodeFile code, Action newAction, CodeBlocks codeblock) {
         CodeData plotCode = code.getCodeData();
-        int position = getCodelineListIndex(location, plotCode);
+        if (codeblock.isThreadStarter()) return plotCode; // Someone called the wrong method lol
+        int codelineListIndex = getCodelineListIndex(location, plotCode);
 
-        if (position == -1) {
+        if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
             Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
@@ -141,10 +145,11 @@ public class CodeFileHelper {
         CodeLineData codeline = new CodeLineData();
 
         if (!plotCode.codelines.isEmpty()) {
-            codeline = plotCode.codelines.get(position);
+            codeline = plotCode.codelines.get(codelineListIndex);
         } else {
-            plotCode.codelines.set(position, codeline);
+            plotCode.codelines.set(codelineListIndex, codeline);
         }
+
 
         List<Integer> positions;
         try {
@@ -159,9 +164,35 @@ public class CodeFileHelper {
         for (int i = 1; i < positions.size(); i++) {
             actionJson = actionJson.actions.get(positions.get(i));
         }
-        actionJson.action = newAction;
+        actionJson.action = newAction.getId();
         actionJson.arguments = new HashMap<>();
 
+        code.setCode(plotCode.toJson().toString());
+        return plotCode;
+    }
+
+    public static CodeData updateEvent(Location location, CodeFile code, Event newEvent, CodeBlocks codeblock) {
+        CodeData plotCode = code.getCodeData();
+        if (codeblock != CodeBlocks.DIAMOND_BLOCK && codeblock != CodeBlocks.GOLD_BLOCK) return plotCode; // Someone called the wrong method lol
+        int codelineListIndex = getCodelineListIndex(location, plotCode);
+
+        if (codelineListIndex == -1) {
+            // We are updating a non-existent codeline (got deleted by another player)
+            // Logging just in case for debug purposes
+            Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
+            return code.getCodeData();
+        }
+
+        CodeLineData codeline = new CodeLineData();
+
+        if (!plotCode.codelines.isEmpty()) {
+            codeline = plotCode.codelines.get(codelineListIndex);
+        } else {
+            plotCode.codelines.set(codelineListIndex, codeline);
+        }
+
+        codeline.event = newEvent.getId();
+        plotCode.codelines.set(codelineListIndex, codeline);
         code.setCode(plotCode.toJson().toString());
         return plotCode;
     }

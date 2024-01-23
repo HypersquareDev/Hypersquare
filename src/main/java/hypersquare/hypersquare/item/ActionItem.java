@@ -92,7 +92,7 @@ public class ActionItem {
 
 
         // Additional Info
-        if (additionalInfo != null) {
+        if (!additionalInfo.isEmpty()) {
             lore.add(Component.text("").decoration(TextDecoration.ITALIC, false));
             lore.add(Component.text("Additional Info").color(NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
             for (Component[] info : additionalInfo) {

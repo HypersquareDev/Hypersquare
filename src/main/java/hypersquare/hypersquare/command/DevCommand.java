@@ -1,18 +1,25 @@
 package hypersquare.hypersquare.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.PlotDatabase;
-import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.util.Utilities;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class DevCommand implements CommandExecutor {
+public class DevCommand implements HyperCommand {
+
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public void register(CommandDispatcher<CommandSourceStack> cd) {
+        cd.register(literal("dev").executes(this::run));
+        cd.register(literal("code").executes(this::run));
+    }
+
+    private int run(CommandContext<CommandSourceStack> ctx) {
+        CommandSender sender = ctx.getSource().getBukkitSender();
         if (sender instanceof Player player) {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (plotID != 0) {
@@ -27,6 +34,8 @@ public class DevCommand implements CommandExecutor {
         } else {
             sender.sendMessage("This command can only be used by players.");
         }
-        return true;
+        return DONE;
     }
+
+
 }

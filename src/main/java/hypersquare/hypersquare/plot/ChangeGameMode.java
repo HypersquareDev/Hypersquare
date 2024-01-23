@@ -5,7 +5,7 @@ import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
 import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.LoadItems;
+import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.item.MiscItems;
 import hypersquare.hypersquare.listener.PlaytimeEventExecuter;
 import hypersquare.hypersquare.util.Utilities;
@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -34,7 +35,11 @@ public class ChangeGameMode {
             PlaytimeEventExecuter.leave(player);
         Utilities.resetPlayerStats(player, !keepState);
         Bukkit.getWorld(worldName).setTime(1000);
-        if (!keepState) LoadItems.devInventory(player);
+        if (!keepState) {
+            Inventory inv = player.getInventory();
+            inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
+            inv.setItem(8, CodeItems.VALUES_INGOT);
+        }
         player.setGameMode(GameMode.CREATIVE);
         player.setFlying(true);
         Hypersquare.mode.put(player, "coding");
@@ -63,6 +68,7 @@ public class ChangeGameMode {
         } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                  WorldLockedException ignored) {
             Utilities.sendRedInfo(player, Component.text("Error loading plot. Please try again later."));
+            return;
         }
         PlotManager.loadPlot(plotID);
         if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))

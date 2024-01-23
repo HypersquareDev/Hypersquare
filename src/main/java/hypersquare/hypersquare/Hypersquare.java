@@ -3,9 +3,6 @@ package hypersquare.hypersquare;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import hypersquare.hypersquare.command.*;
-import hypersquare.hypersquare.command.TabCompleter.PlotCommandsComplete;
-import hypersquare.hypersquare.command.codeValue.Text;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.menu.system.MenuListeners;
@@ -32,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static String DB_PASS;
@@ -61,11 +57,12 @@ public final class Hypersquare extends JavaPlugin {
                     StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
             )).build();
 
+
+    public static String pluginName = "hypersquare";
     public static MiniMessage fullMM = MiniMessage.miniMessage();
 
     public static Plugin instance;
     public static LuckPerms lpPlugin;
-
     public static SlimePlugin slimePlugin;
 
 
@@ -106,10 +103,8 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new CodePlacement(), this);
         pm.registerEvents(new WorldLoadListener(), this);
 
-        pm.registerEvents(new Text(), this);
-
         loadLastUsedWorldNumber();
-        registerCommands(new CommandManager(this));
+        CommandManager.registerCommands();
 
         CodeItems.register();
         MoveEntities.entityLoop();
@@ -127,32 +122,6 @@ public final class Hypersquare extends JavaPlugin {
         saveLastUsedWorldNumber();
         getLogger().info("Byeee!!");
     }
-
-    public void registerCommands(CommandManager commandManager) {
-        commandManager.registerCommand("join", new JoinCommand());
-        commandManager.registerCommand("dev", new DevCommand());
-        commandManager.registerCommand("locate", new LocateCommand());
-        commandManager.registerCommand("find", new LocateCommand());
-        commandManager.registerCommand("spawn", new SpawnCommand());
-        commandManager.registerCommand("s", new SpawnCommand());
-        commandManager.registerCommand("build", new BuildCommand());
-        commandManager.registerCommand("play", new PlayCommand());
-        commandManager.registerCommand("fs", new FlightSpeedCommand());
-        commandManager.registerCommand("plot", new PlotCommands());
-        commandManager.registerCommand("p", new PlotCommands());
-        commandManager.registerCommand("editspawn", new EditSpawn());
-        commandManager.registerCommand("fly", new FlyCommand());
-        commandManager.registerCommand("dumplots", new DeleteAllPlotsCommand());
-        commandManager.registerCommand("giveplot", new GivePlotsCommand());
-        commandManager.registerCommand("text", new Text());
-        commandManager.registerCommand("txt", new Text());
-        commandManager.registerCommand("debug", new DebugCommand());
-
-        //Tab Completers
-        getCommand("plot").setTabCompleter(new PlotCommandsComplete());
-        getCommand("p").setTabCompleter(new PlotCommandsComplete());
-    }
-
 
     private void loadLastUsedWorldNumber() {
         // Load the last used world number from the configuration file

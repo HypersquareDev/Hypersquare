@@ -86,7 +86,7 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData removeCodeBlock(Location location, CodeFile code) {
+    public static CodeData removeCodeBlock(Location location, CodeFile code, boolean breakAll) {
         CodeData plotCode = code.getCodeData();
 
         int codelineListIndex = getCodelineListIndex(location, plotCode);
@@ -108,7 +108,7 @@ public class CodeFileHelper {
         if (positions.size() == 1) {
             int pos = positions.get(0);
             CodeActionData prev = codeline.actions.remove(pos);
-            for (CodeActionData action : prev.actions) {
+            if (!breakAll) for (CodeActionData action : prev.actions) {
                 codeline.actions.add(pos, action);
             }
             return plotCode;
@@ -121,8 +121,8 @@ public class CodeFileHelper {
 
         int pos = positions.get(positions.size() - 1);
         CodeActionData prev = parent.actions.remove(pos);
-        for (CodeActionData action : prev.actions) {
-            codeline.actions.add(pos, action);
+        if (!breakAll) for (CodeActionData action : prev.actions) {
+            parent.actions.add(pos, action);
         }
         return plotCode;
     }

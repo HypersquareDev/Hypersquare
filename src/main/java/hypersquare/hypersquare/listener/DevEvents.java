@@ -1,6 +1,15 @@
 package hypersquare.hypersquare.listener;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.value.CodeValue;
+import hypersquare.hypersquare.dev.value.CodeValues;
+import hypersquare.hypersquare.dev.value.impl.NumberValue;
+import hypersquare.hypersquare.dev.value.impl.StringValue;
+import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
@@ -12,12 +21,11 @@ import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
@@ -33,6 +41,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
@@ -104,6 +115,59 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onExplode(BlockExplodeEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onRClick(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (!Hypersquare.mode.get(player).equals("coding")
+            && !Hypersquare.mode.get(player).equals("building")) return;
+
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            ItemStack eventItem = event.getItem();
+            if (eventItem == null) return;
+
+            if (eventItem.isSimilar(CodeItems.BLOCKS_SHORTCUT)) {
+                event.setCancelled(true);
+
+                Utilities.sendOpenMenuSound(player);
+                Inventory inv = Bukkit.createInventory(null, 27, Component.text("Code Blocks"));
+                //First row
+                inv.setItem(0, CodeItems.PLAYER_EVENT_ITEM);
+                inv.setItem(1, CodeItems.IF_PLAYER_ITEM);
+                inv.setItem(2, CodeItems.PLAYER_ACTION_ITEM);
+                inv.setItem(3, CodeItems.CALL_FUNCTION_ITEM);
+                inv.setItem(4, CodeItems.START_PROCESS_ITEM);
+                inv.setItem(5, CodeItems.ENTITY_EVENT_ITEM);
+                inv.setItem(6, CodeItems.IF_ENTITY_ITEM);
+                //Second row
+                inv.setItem(9, CodeItems.CONTROL_ITEM);
+                inv.setItem(10, CodeItems.SELECT_OBJECT_ITEM);
+                inv.setItem(11, CodeItems.REPEAT_ITEM);
+                inv.setItem(12, CodeItems.ELSE_ITEM);
+                inv.setItem(18, CodeItems.SET_VARIABLE_ITEM);
+                //Third row
+                inv.setItem(19, CodeItems.IF_VARIABLE_ITEM);
+                inv.setItem(20, CodeItems.GAME_ACTION_ITEM);
+                inv.setItem(21, CodeItems.IF_GAME_ITEM);
+                inv.setItem(22, CodeItems.ENTITY_ACTION_ITEM);
+                inv.setItem(23, CodeItems.FUNCTION_ITEM);
+                inv.setItem(24, CodeItems.PROCESS_ITEM);
+                player.openInventory(inv);
+            }
+            if (eventItem.isSimilar(CodeItems.VALUES_INGOT)) {
+                event.setCancelled(true);
+
+                Utilities.sendOpenMenuSound(player);
+                Inventory inv = Bukkit.createInventory(null, 18, Component.text("Code Values"));
+
+                inv.setItem(0, new StringValue().emptyValue());
+                inv.setItem(1, new TextValue().emptyValue());
+                inv.setItem(2, new NumberValue().emptyValue());
+
+                player.openInventory(inv);
+            }
+        }
     }
 
     public static Location basic = null;
@@ -187,6 +251,37 @@ public class DevEvents implements Listener {
     public void onDropItem(PlayerDropItemEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         event.setCancelled(true);
+    }
+@EventHandler
+    public void onChat(AsyncChatEvent event) {
+        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
+        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+        if (item.getType() == Material.AIR) return;
+
+        ItemMeta meta = item.getItemMeta();
+        NamespacedKey namespace = new NamespacedKey(Hypersquare.pluginName, "varitem");
+        String data = meta.getPersistentDataContainer().get(namespace, PersistentDataType.STRING);
+        if (data == null) return;
+        JsonObject json;
+        try {
+            json = JsonParser.parseString(data).getAsJsonObject();
+        } catch (Exception ignored) { return; }
+
+        //noinspection rawtypes
+        for (CodeValue value : CodeValues.values()) {
+            if (!value.isType(json)) continue;
+            event.setCancelled(true);
+            String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
+            Object v;
+            try {
+                v = value.fromString(raw, value.fromItem(item));
+            } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
+                Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
+                return;
+            }
+            @SuppressWarnings("unchecked") ItemStack newItem = value.getItem(v);
+            event.getPlayer().getInventory().setItemInMainHand(newItem);
+        }
     }
 
     @EventHandler

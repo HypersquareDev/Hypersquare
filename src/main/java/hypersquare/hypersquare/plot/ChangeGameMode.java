@@ -37,7 +37,8 @@ public class ChangeGameMode {
         Bukkit.getWorld(worldName).setTime(1000);
         if (!keepState) {
             Inventory inv = player.getInventory();
-            inv.setItem(8, CodeItems.BLOCKS_SHORTCUT);
+            inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
+            inv.setItem(8, CodeItems.VALUES_INGOT);
         }
         player.setGameMode(GameMode.CREATIVE);
         player.setFlying(true);

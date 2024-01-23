@@ -3,7 +3,6 @@ package hypersquare.hypersquare;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import hypersquare.hypersquare.command.codeValue.Text;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.menu.system.MenuListeners;
@@ -58,11 +57,12 @@ public final class Hypersquare extends JavaPlugin {
                     StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
             )).build();
 
+
+    public static String pluginName = "hypersquare";
     public static MiniMessage fullMM = MiniMessage.miniMessage();
 
     public static Plugin instance;
     public static LuckPerms lpPlugin;
-
     public static SlimePlugin slimePlugin;
 
 
@@ -102,8 +102,6 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlaytimeEventExecuter(), this);
         pm.registerEvents(new CodePlacement(), this);
         pm.registerEvents(new WorldLoadListener(), this);
-
-        pm.registerEvents(new Text(), this);
 
         loadLastUsedWorldNumber();
         CommandManager.registerCommands();

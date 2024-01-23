@@ -52,6 +52,9 @@ public class Plot {
             lore.add(aa);
         }
 
+        // Make sure absolutely nothing is italic
+        lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
+
         meta.lore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.actions;
+package hypersquare.hypersquare.dev.action.player;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.*;
@@ -58,7 +58,7 @@ public class GiveItemsAction implements Action {
     }
 
     public String getId() {
-        return "give_items";
+        return "player_action_give_items";
     }
     public String getSignName() {
         return "GiveItems";

@@ -25,9 +25,8 @@ public class MenuParameter extends MenuItem {
 
        *Optional
      */
-    private static final Component optionalDesc = Component.newline()
-                    .append(Component.text("*Optional")
-                    .color(NamedTextColor.GRAY));
+    private static final Component optionalDesc = Component.text("*Optional")
+                                                    .color(NamedTextColor.GRAY);
     private final int slotId;
     private final Action.ActionParameter p;
 
@@ -45,7 +44,10 @@ public class MenuParameter extends MenuItem {
         name(typeName.decoration(TextDecoration.ITALIC, false));
         List<Component> lore = new ArrayList<>();
         lore.add(p.description().color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        if (p.optional()) lore.add(optionalDesc);
+        if (p.optional()) {
+            lore.add(Component.empty());
+            lore.add(optionalDesc);
+        }
         lore(lore);
 
         if (current.size() > slotId) {

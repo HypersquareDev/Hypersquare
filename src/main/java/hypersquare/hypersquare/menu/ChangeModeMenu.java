@@ -3,9 +3,11 @@ package hypersquare.hypersquare.menu;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -15,7 +17,7 @@ import java.util.List;
 public class ChangeModeMenu {
     public static void open(Player player, MenuItem plotIcon, int plotId) {
         MenuItem play = new MenuItem(Material.DIAMOND);
-        play.name(Component.text("Play").color(TextColor.fromHexString("#2AD4D4")));
+        play.name(BasicComponent.create("Play").color(TextColor.fromHexString("#2AD4D4")));
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
@@ -24,6 +26,7 @@ public class ChangeModeMenu {
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
+        lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         play.lore(lore);
 
         play.onClick(() -> {
@@ -31,7 +34,7 @@ public class ChangeModeMenu {
         });
 
         MenuItem build = new MenuItem(Material.GRASS_BLOCK);
-        build.name(Component.text("Build").color(TextColor.fromHexString("#2AD4D4")));
+        build.name(BasicComponent.create("Build").color(TextColor.fromHexString("#2AD4D4")));
         lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
@@ -40,6 +43,7 @@ public class ChangeModeMenu {
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
+        lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         build.lore(lore);
 
         build.onClick(() -> {
@@ -48,7 +52,7 @@ public class ChangeModeMenu {
 
         MenuItem code = new MenuItem(Material.COMMAND_BLOCK);
 
-        code.name(Component.text("Code").color(TextColor.fromHexString("#2AD4D4")));
+        code.name(BasicComponent.create("Code").color(TextColor.fromHexString("#2AD4D4")));
         lore = new ArrayList<>();
         lore.add(Component.text(""));
         lore.add(Component.text("Click to enter your plot").color(NamedTextColor.GRAY));
@@ -57,6 +61,7 @@ public class ChangeModeMenu {
                 .append(Component.text("mode").color(NamedTextColor.GRAY))
         );
         lore.add(Component.text(""));
+        lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         code.lore(lore);
 
         code.onClick(() -> {

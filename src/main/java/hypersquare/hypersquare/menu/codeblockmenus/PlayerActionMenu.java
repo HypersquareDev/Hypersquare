@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.menu.codeblockmenus;
 
 import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.item.Action;
@@ -43,7 +44,7 @@ public class PlayerActionMenu {
                     MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
                         Utilities.sendSuccessClickMenuSound(player);
                         Utilities.setAction(targetLocation.getBlock(), action.getSignName(), player);
-                        CodeFileHelper.updateAction(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), action.getId());
+                        CodeFileHelper.updateAction(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), action, CodeBlocks.COBBLESTONE);
                     });
                     categoryGui.addItem(actionItem);
                 }

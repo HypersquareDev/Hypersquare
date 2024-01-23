@@ -1,11 +1,10 @@
 package hypersquare.hypersquare.item;
 
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,36 +12,29 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionItem {
-
+public class EventItem {
     Component name;
     Material material;
     Component[] description;
-    Action.ActionParameter[] params;
     List<Component[]> additionalInfo = List.of();
-    boolean enchanted;
+    boolean cancelable;
 
-    public ActionItem setMaterial(Material material) {
+    public EventItem setMaterial(Material material) {
         this.material = material;
         return this;
     }
 
-    public ActionItem setName(Component name) {
+    public EventItem setName(Component name) {
         this.name = name;
         return this;
     }
 
-    public ActionItem setDescription(Component... lore) {
+    public EventItem setDescription(Component... lore) {
         this.description = lore;
         return this;
     }
 
-    public ActionItem setParameters(Action.ActionParameter... params) {
-        this.params = params;
-        return this;
-    }
-
-    public ActionItem addAdditionalInfo(Component... info) {
+    public EventItem addAdditionalInfo(Component... info) {
         List<Component[]> infoList = new ArrayList<>(additionalInfo);
         info[0] = Component.text("⏵")
                 .color(NamedTextColor.BLUE)
@@ -59,37 +51,23 @@ public class ActionItem {
         return this;
     }
 
-    public ActionItem setEnchanted(boolean enchanted) {
-        this.enchanted = enchanted;
+    public EventItem setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
         return this;
     }
 
-    public ItemStack build() {
-        ItemStack actionItem = new ItemStack(material);
-        ItemMeta meta = actionItem.getItemMeta();
+    public ItemStack build () {
+        ItemStack eventItem = new ItemStack(material);
+        ItemMeta meta = eventItem.getItemMeta();
         List<Component> lore = new ArrayList<>(List.of());
 
-        //Name
+        // Name
         meta.displayName(name.decoration(TextDecoration.ITALIC, false));
 
         // Description
         for (Component part : description) {
             lore.add(part.color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         }
-
-        // Arguments
-        Component paramComp = Component.text("Chest Parameters")
-                .color(NamedTextColor.WHITE)
-                .decoration(TextDecoration.ITALIC, false);
-        if (params != null) {
-            for (Action.ActionParameter actionParameter : params) {
-                paramComp = paramComp.append(actionParameter.type().getName());
-                paramComp = paramComp.append(Component.text(actionParameter.plural() ? "(s)" : ""));
-                paramComp = paramComp.append(Component.text(actionParameter.optional() ? "*" : "").color(NamedTextColor.GRAY));
-                paramComp = paramComp.append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(actionParameter.description().color(NamedTextColor.GRAY)).appendNewline();
-            }
-        } else paramComp = paramComp.append(Component.text("None").color(NamedTextColor.DARK_GRAY));
-
 
         // Additional Info
         if (!additionalInfo.isEmpty()) {
@@ -102,12 +80,22 @@ public class ActionItem {
             }
         }
 
-        // Enchanted
-        if (enchanted) meta.addEnchant(Enchantment.LURE, 1, true);
+        // Cancelable
+        if (cancelable) {
+            lore.add(Component.newline()
+                        .decoration(TextDecoration.ITALIC, false)
+                    .append(Component.text("∅")
+                            .color(TextColor.color(0xCC1010))
+                    )
+                    .append(Component.text(" Cancelable")
+                            .color(TextColor.color(0xFF3D3D))
+                    )
+            );
+        }
 
         meta.lore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-        actionItem.setItemMeta(meta);
-        return actionItem;
+        eventItem.setItemMeta(meta);
+        return eventItem;
     }
 }

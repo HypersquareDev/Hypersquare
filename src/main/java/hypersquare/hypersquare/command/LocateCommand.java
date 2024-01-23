@@ -56,7 +56,7 @@ public class LocateCommand implements HyperCommand {
             messages.add(color2 + cmd + "→ " + "<white>" + plotName + " <dark_gray>[" + color + plotID + "<dark_gray>]");
             messages.add(color2 + cmd + "→ " + color + "Owner: <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName());
             messages.add(color2 + cmd + "→ " + color + "Server: <white>Node " + PlotManager.getPlotNode(plotID));
-            Utilities.sendMultiMiniMessage(self, messages);
+            Utilities.sendMultiMiniMessage(self, messages, true);
         }
     }
 }

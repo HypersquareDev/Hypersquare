@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.actions;
+package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.Action;

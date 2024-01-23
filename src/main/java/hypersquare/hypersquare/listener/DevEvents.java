@@ -80,13 +80,15 @@ public class DevEvents implements Listener {
 
                 CodeActionData actionData = CodeFileHelper.getActionAt(event.getClickedBlock().getLocation().subtract(0, 1, 0), codeData);
                 if (actionData == null) {
-                    Utilities.sendRedInfo(event.getPlayer(), Component.text("An error occurred while scanning your plot code"));
+                    Utilities.sendRedInfo(event.getPlayer(), Component.text("Couldn't find this action in the plot (corrupted plot?)"));
                     return;
                 }
                 Action action = Actions.getAction(actionData.action);
                 if (action == null) {
+                    Utilities.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
                     throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
                 }
+                event.getPlayer().playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_BARREL_OPEN, 0.75f, 1);
                 action.actionMenu(actionData).open(event.getPlayer(), event.getClickedBlock().getLocation().subtract(0, 1, 0));
             }
         }

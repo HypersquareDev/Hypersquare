@@ -2,21 +2,23 @@ package hypersquare.hypersquare.menu.system;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class MenuItem {
     public final ItemStack item;
-    private Runnable clickHandler;
+    private @Nullable Runnable clickHandler;
 
     public MenuItem(Material mat) {
-        item = new ItemStack(Material.STONE);
-        item.setType(mat);
+        item = new ItemStack(mat);
+
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.text(""));
+
+        item.setItemMeta(meta);
     }
 
     public MenuItem(ItemStack item) {
@@ -34,6 +36,11 @@ public class MenuItem {
         ItemMeta meta = item.getItemMeta();
         meta.lore(lore);
         item.setItemMeta(meta);
+        return this;
+    }
+
+    public MenuItem material(Material mat) {
+        item.setType(mat);
         return this;
     }
 

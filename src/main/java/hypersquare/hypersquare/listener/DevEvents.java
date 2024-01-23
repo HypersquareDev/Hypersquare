@@ -3,13 +3,18 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.codefile.CodeFile;
+import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
+import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
+import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
 import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
@@ -23,7 +28,10 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -48,29 +56,38 @@ public class DevEvents implements Listener {
             }
             return;
         }
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
 
-            if (event.getClickedBlock().getLocation().getX() > -0) {
-                return;
-            }
+            if (event.getClickedBlock().getLocation().getX() > -0) return;
 
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 switch (PlainTextComponentSerializer.plainText().serialize(sign.getSide(Side.FRONT).line(0))) {
                     case ("PLAYER EVENT"): {
-                        PlayerEventMenu.open(event.getPlayer());
+                        PlayerEventMenu.open(event.getPlayer(), event.getClickedBlock().getLocation());
                         break;
                     }
                     case ("PLAYER ACTION"): {
-                        PlayerActionMenu.open(event.getPlayer());
+                        PlayerActionMenu.open(event.getPlayer(), event.getClickedBlock().getLocation());
                         break;
                     }
                 }
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
-            } else {
-                if (event.getItem() != null && CodeBlocks.getByMaterial(event.getItem().getType()) == null)
-                    event.setCancelled(true);
+            } else if (event.getClickedBlock().getType() == Material.BARREL) {
+                event.setCancelled(true);
+                CodeData codeData = new CodeFile(event.getPlayer()).getCodeData();
+
+                CodeActionData actionData = CodeFileHelper.getActionAt(event.getClickedBlock().getLocation().subtract(0, 1, 0), codeData);
+                if (actionData == null) {
+                    Utilities.sendRedInfo(event.getPlayer(), Component.text("An error occurred while scanning your plot code"));
+                    return;
+                }
+                Action action = Actions.getAction(actionData.action);
+                if (action == null) {
+                    throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
+                }
+                action.actionMenu(actionData).open(event.getPlayer(), event.getClickedBlock().getLocation().subtract(0, 1, 0));
             }
         }
 
@@ -83,8 +100,10 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (!Hypersquare.mode.get(event.getDamager()).equals("playing")) {
-            event.setCancelled(true);
+        if (event.getDamager() instanceof Player player) {
+            if (!Hypersquare.mode.get(player).equals("playing")) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -99,7 +118,7 @@ public class DevEvents implements Listener {
         if (!Hypersquare.mode.get(player).equals("coding")
             && !Hypersquare.mode.get(player).equals("building")) return;
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR) {
             ItemStack eventItem = event.getItem();
             if (eventItem == null) return;
 
@@ -136,7 +155,7 @@ public class DevEvents implements Listener {
 
                 Utilities.sendOpenMenuSound(player);
                 Inventory inv = Bukkit.createInventory(null, 18, Component.text("Code Values"));
-                
+
                 inv.setItem(0, new StringValue().emptyValue());
                 inv.setItem(1, new TextValue().emptyValue());
                 inv.setItem(2, new NumberValue().emptyValue());
@@ -228,39 +247,31 @@ public class DevEvents implements Listener {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         event.setCancelled(true);
     }
-
-    @EventHandler
+@EventHandler
     public void onChat(AsyncChatEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) return;
 
-        ItemMeta meta = item.getItemMeta();
-        NamespacedKey namespace = new NamespacedKey(Hypersquare.pluginName, "varitem");
-        String data = meta.getPersistentDataContainer().get(namespace, PersistentDataType.STRING);
-        if (data == null) return;
-        JsonObject json;
-        try {
-            json = JsonParser.parseString(data).getAsJsonObject();
-        } catch (Exception ignored) { return; }
+        JsonObject json = CodeValues.getVarItemData(item);
+        if (json == null) return;
 
         //noinspection rawtypes
-        for (CodeValue value : CodeValues.values()) {
-            if (!value.isType(json)) continue;
-            event.setCancelled(true);
-            String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
-            Object v;
-            try {
-                v = value.fromString(raw, value.fromItem(item));
-            } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
-                Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
-                return;
-            }
-            @SuppressWarnings("unchecked") ItemStack newItem = value.getItem(v);
-            event.getPlayer().getInventory().setItemInMainHand(newItem);
+        CodeValues value = CodeValues.getType(json);
+        if (value == null) return;
+        event.setCancelled(true);
+        String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
+        Object v;
+        try {
+            v = value.fromString(raw, value.fromItem(item));
+        } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
+            Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
+            return;
         }
+        ItemStack newItem = value.getItem(v);
+        event.getPlayer().getInventory().setItemInMainHand(newItem);
     }
-    
+
     @EventHandler
     public void onSwapHands(PlayerSwapHandItemsEvent event) {
         String playerMode = Hypersquare.mode.get(event.getPlayer());
@@ -271,7 +282,7 @@ public class DevEvents implements Listener {
 
             // Swapping hands twice in 1 second
             if (System.currentTimeMillis() - Hypersquare.lastSwapHands.get(player) < 950
-                && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
+                    && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
                 String worldName = player.getWorld().getName();
                 int plotID = Integer.parseInt(worldName.startsWith("hs.code.")
                         ? worldName.substring(8) : worldName.substring(3)

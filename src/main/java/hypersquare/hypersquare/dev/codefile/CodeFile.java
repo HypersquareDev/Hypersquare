@@ -30,14 +30,10 @@ public class CodeFile {
 
     public CodeData getCodeData() {
         String code = getCode();
-
         JsonArray array = JsonParser.parseString(code).getAsJsonArray();
 
-        if (!array.isJsonNull() && !array.isEmpty()) {
-            return new CodeData(array);
-        } else {
-            return new CodeData(new JsonArray());
-        }
+        if (!array.isJsonNull() && !array.isEmpty()) return new CodeData(array);
+            else return new CodeData(new JsonArray());
     }
 
     public String getCode() {

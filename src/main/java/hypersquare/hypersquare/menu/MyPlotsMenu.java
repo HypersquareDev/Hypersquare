@@ -25,7 +25,7 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 public class MyPlotsMenu {
 
     public static void open(Player player) {
-        Menu menu = new Menu(player, Component.text("My Plots"), 2);
+        Menu menu = new Menu(Component.text("My Plots"), 2);
 
         menu.slot(menu.getSize() - 1, new MenuItem(MiscItems.CLAIM_PLOT.build()).onClick(() -> {
             CreatePlotsMenu.open(player);
@@ -54,6 +54,6 @@ public class MyPlotsMenu {
             i++;
         }
 
-        menu.open();
+        menu.open(player);
     }
 }

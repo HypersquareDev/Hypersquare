@@ -1,12 +1,17 @@
 package hypersquare.hypersquare.dev.value;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -80,5 +85,24 @@ public enum CodeValues implements CodeValue {
     @Override
     public ItemStack getItem(Object value) {
         return v.getItem(value);
+    }
+
+    public static CodeValues getType(JsonObject obj) {
+        for (CodeValues v : CodeValues.values()) {
+            if (v.isType(obj)) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public static JsonObject getVarItemData(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return null;
+        String data = meta.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.pluginName, "varitem"), PersistentDataType.STRING);
+        if (data == null) return null;
+        try {
+            return JsonParser.parseString(data).getAsJsonObject();
+        } catch (Exception ignored) { return null; }
     }
 }

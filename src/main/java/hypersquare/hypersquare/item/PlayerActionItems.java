@@ -22,10 +22,7 @@ public enum PlayerActionItems {
     WORLD_CATEGORY(Material.SPECTRAL_ARROW, "<red>World", "<gray>Targeted world actions%n<gray>and actions that change%n<gray>the world's appearance", 25),
     VISUAL_EFFECTS_CATEGORY(Material.WHITE_DYE, "<#aa55ff>Visual Effects", "<gray>Displaying short visual%n<gray>effects and particles%n<gray>to the target", 38),
     APPEARANCE_CATEGORY(Material.PLAYER_HEAD, "<yellow>Appearance", "<gray>Actions that affect the%n<gray>target's appearance, such%n<gray>as disguises", 40),
-    MISCELLANEOUS_CATEGORY(Material.BEDROCK, "<dark_purple>Miscellaneous", "<gray>Actions that do not belong%n<gray>in other categories", 42),
-
-    GIVE_ITEMS_ACTION(Material.CHEST, "GiveItems", "<gold>Give Items", "<gray>Gives a player all of the%n<gray>items in the chest.", PlayerActionItems.ITEM_MANAGEMENT_CATEGORY);
-
+    MISCELLANEOUS_CATEGORY(Material.BEDROCK, "<dark_purple>Miscellaneous", "<gray>Actions that do not belong%n<gray>in other categories", 42);
 
     public final Material material;
     public final String id;

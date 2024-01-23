@@ -67,12 +67,12 @@ public class ChangeModeMenu {
 
         addToFav.name(Component.text("Add to Favorites").color(NamedTextColor.GREEN));
 
-        Menu menu = new Menu(player, Component.text("Plot Information"), 3)
+        Menu menu = new Menu(Component.text("Plot Information"), 3)
                 .slot(4, plotIcon)
                 .slot(10, play)
                 .slot(12, build)
                 .slot(14, code)
                 .slot(16, addToFav);
-        menu.open();
+        menu.open(player);
     }
 }

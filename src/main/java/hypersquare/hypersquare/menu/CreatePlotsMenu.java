@@ -8,7 +8,6 @@ import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import java.util.HashMap;
 
@@ -18,7 +17,7 @@ public class CreatePlotsMenu {
     public static void open(Player player) {
         HashMap<String, Integer> playerData = Hypersquare.localPlayerData.get(player.getUniqueId());
 
-        Menu menu = new Menu(player, Component.text("Choose a plot size"), 1);
+        Menu menu = new Menu(Component.text("Choose a plot size"), 1);
         
         int usedBasic = playerData.get("usedBasic");
         int maxBasic = playerData.get("maxBasic");
@@ -93,6 +92,6 @@ public class CreatePlotsMenu {
             }
         });
 
-        menu.open();
+        menu.open(player);
     }
 }

@@ -1,11 +1,9 @@
-package hypersquare.hypersquare.menu.codeblockmenus;
+package hypersquare.hypersquare.menu.codeblockmenu;
 
-import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.Events;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
-import hypersquare.hypersquare.item.Action;
 import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.item.PlayerEventItems;
 import hypersquare.hypersquare.menu.system.Menu;
@@ -13,7 +11,6 @@ import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
@@ -42,7 +39,7 @@ public class PlayerEventMenu {
                 Menu categoryGui = new Menu(Component.text("Player Events > " + matcher.replaceAll("")), 5);
 
                 // Loop through all actions in the category
-                for (Event event : Events.events) {
+                for (Event event : Events.values()) {
                     if (event.getCategory() != playerEventItem || event.getId() == null) continue;
                     MenuItem actionItem = new MenuItem(event.item()).onClick(() -> {
                         Utilities.sendSuccessClickMenuSound(player);

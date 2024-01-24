@@ -1,20 +1,44 @@
 package hypersquare.hypersquare.dev.action.player;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.play.ActionArguments;
+import hypersquare.hypersquare.play.CodeSelection;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
-import org.bukkit.block.Barrel;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class GiveItemsAction implements Action {
+public class PlayerGiveItemsAction implements Action {
+
+    @Override
+    public void execute(CodeSelection selection, ActionArguments args) {
+        List<ItemStack> items = new ArrayList<>();
+        double multiplier = args.getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
+        for (ItemStack item : args.<ItemStack>all("items")) {
+            int amount = (int) (item.getAmount() * multiplier);
+            int max = item.getMaxStackSize();
+            item.setAmount(max);
+            while (amount > max && items.size() < 100) {
+                items.add(item.clone());
+                amount -= max;
+            }
+            item.setAmount(amount);
+            items.add(item);
+        }
+        
+        for (Player p : selection.players()) {
+            for (ItemStack item : items) {
+                p.getInventory().addItem(item);
+            }
+        }
+    }
 
     public ItemStack item() {
         return new ActionItem()
@@ -34,15 +58,6 @@ public class GiveItemsAction implements Action {
         return new ActionMenu(this, 4, data)
                 .parameter("items", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
                 .parameter("multiplier", 35);
-    }
-
-    @Override
-    public void executeBlockAction(List<Entity> targets, Barrel barrel) {
-        for (Entity entity : targets) {
-            if (entity instanceof Player player) {
-                Utilities.sendRedInfo(player, Component.text("I know how much you wanna start coding, but our systems aren't done yet."));
-            }
-        }
     }
 
     @Override

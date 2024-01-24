@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.menu.codeblockmenus;
+package hypersquare.hypersquare.menu.codeblockmenu;
 
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
@@ -39,7 +39,7 @@ public class PlayerActionMenu {
                 Menu categoryGui = new Menu(Component.text("Player Action > " + matcher.replaceAll("")), 5);
 
                 // Loop through all actions in the category
-                for (Action action : Actions.actions) {
+                for (Action action : Actions.values()) {
                     if (action.getCategory() != playerActionItem || action.getId() == null) continue;
                     MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
                         Utilities.sendSuccessClickMenuSound(player);

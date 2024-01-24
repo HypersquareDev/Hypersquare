@@ -8,7 +8,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class JoinEvent implements Event {
+public class PlayerJoinEvent implements Event {
 
     public ItemStack item() {
         return new EventItem()
@@ -16,9 +16,9 @@ public class JoinEvent implements Event {
                 .setName(Component.text("Player Join Game Event").color(NamedTextColor.GREEN))
                 .setDescription(Component.text("Executes code when a player"),
                                 Component.text("joins the plot."))
-                .addAdditionalInfo(Component.text("This event does not run when"),
-                                   Component.text("a player rejoins the plot."),
-                                   Component.text("(i.e. /play)"))
+                .addAdditionalInfo(Component.text("This event runs even"),
+                                   Component.text("when a player rejoins the"),
+                                   Component.text("plot. (i.e. /play)"))
                 .build();
     }
 

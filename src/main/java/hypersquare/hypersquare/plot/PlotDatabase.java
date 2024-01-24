@@ -76,7 +76,7 @@ public class PlotDatabase {
                     ZipEntry zipEntry = zipStream.getNextEntry();
                     Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
                     while (zipEntry != null) {
-                        System.out.println(zipEntry.getName());
+
                         Files.copy(zipStream, Path.of(schematicsPath + zipEntry.getName()));
                         zipEntry = zipStream.getNextEntry();
                     }

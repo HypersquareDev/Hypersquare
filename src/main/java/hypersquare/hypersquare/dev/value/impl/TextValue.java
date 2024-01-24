@@ -3,10 +3,10 @@ package hypersquare.hypersquare.dev.value.impl;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValue;
+import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
@@ -14,13 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
-public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
+public class TextValue implements CodeValue<TextValue.HSTextComp, Component> {
     @Override
     public Component getName() {
-        return Component.text("Text").color(TextColor.color(0x7FD42A));
+        return Component.text("Text").color(DisplayValue.TEXT.color);
     }
 
     @Override
@@ -34,13 +32,13 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
     }
 
     @Override
-    public TxtComponent defaultValue() {
-        return new TxtComponent(false,"");
+    public HSTextComp defaultValue() {
+        return new HSTextComp(false,"");
     }
 
     @Override
     public List<Component> getDescription() {
-        return List.of (
+        return List.of(
                 BasicComponent.gray("Text with extra formatting via"),
                 Hypersquare.cleanMM.deserialize("<!italic><white>MiniMessage</white> <gray>tags such as <white>\\<color></white>."),
                 BasicComponent.gray("Recommended for text displayed"),
@@ -58,7 +56,7 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
     }
 
     @Override
-    public JsonObject getVarItemData(TxtComponent type) {
+    public JsonObject getVarItemData(HSTextComp type) {
         JsonObject obj = new JsonObject();
         obj.addProperty("legacy", type.isLegacy);
         obj.addProperty("value", type.value);
@@ -66,12 +64,12 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
     }
 
     @Override
-    public TxtComponent fromJson(JsonObject obj) {
-        return new TxtComponent(obj.get("legacy").getAsBoolean(), obj.get("value").getAsString());
+    public HSTextComp fromJson(JsonObject obj) {
+        return new HSTextComp(obj.get("legacy").getAsBoolean(), obj.get("value").getAsString());
     }
 
     @Override
-    public TxtComponent fromString(String data, TxtComponent previous) {
+    public HSTextComp fromString(String data, HSTextComp previous) {
         boolean isLegacy = previous != null && previous.isLegacy;
 
         data = data.trim();
@@ -89,16 +87,16 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
         }
         data = data.trim();
 
-        return new TxtComponent(isLegacy, data);
+        return new HSTextComp(isLegacy, data);
     }
 
     @Override
-    public Component getValueName(TxtComponent comp) {
+    public Component getValueName(HSTextComp comp) {
         return BasicComponent.create(comp.value);
     }
 
     @Override
-    public Component realValue(TxtComponent value) {
+    public Component realValue(HSTextComp value) {
         if (!value.isLegacy) {
             return Hypersquare.fullMM.deserialize(value.value)
                     .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
@@ -110,7 +108,7 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
     }
 
     @Override
-    public ItemStack getItem(TxtComponent comp) {
+    public ItemStack getItem(HSTextComp comp) {
         ItemStack item = CodeValue.super.getItem(comp);
         ItemMeta meta = item.getItemMeta();
 
@@ -129,9 +127,8 @@ public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
 
         meta.lore(lore);
         item.setItemMeta(meta);
-        System.out.println(lore+"\n"+item);
         return item;
     }
 
-    public record TxtComponent(boolean isLegacy, String value) {}
+    public record HSTextComp(boolean isLegacy, String value) {}
 }

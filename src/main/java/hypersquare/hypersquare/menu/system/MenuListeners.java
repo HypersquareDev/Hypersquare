@@ -24,6 +24,10 @@ public class MenuListeners implements Listener {
                     event.setCancelled(true);
                     Menu.openMenus.get(player).shiftClick(event);
                 }
+                case CLONE_STACK -> {
+                    event.setCancelled(true);
+                    Menu.openMenus.get(player).middleClick(event);
+                }
                 default -> event.setCancelled(true);
             }
         }

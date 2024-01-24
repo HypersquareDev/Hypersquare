@@ -95,4 +95,7 @@ public class Menu {
 
     public void shiftClick(InventoryClickEvent event) {
     }
+
+    public void middleClick(InventoryClickEvent event) {
+    }
 }

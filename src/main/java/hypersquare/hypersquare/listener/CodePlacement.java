@@ -85,6 +85,7 @@ public class CodePlacement implements Listener {
         if (cooldown <= System.currentTimeMillis()) {
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
             CodeBlocks codeblock = CodeBlocks.getByMaterial(event.getItemInHand().getType());
+            if (codeblock == null) return; // Player placed a block that is not a codeblockor speaking english
             boolean brackets = codeblock.hasBrackets();
             boolean barrel = codeblock.hasBarrel();
             boolean threadStarter = codeblock.isThreadStarter();

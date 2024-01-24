@@ -50,12 +50,11 @@ public class ActionMenu extends Menu {
             CodeActionData action = CodeFileHelper.getActionAt(block, data);
             if (action == null) return;
             if (p.getItemOnCursor().isEmpty()) {
-                p.setItemOnCursor(param.reset(action));
+                p.setItemOnCursor(param.getValue(action, true));
                 slot(event.getSlot(), param.updated(action));
                 file.setCode(data.toJson().toString());
                 return;
             }
-            if (!param.isValid(p.getItemOnCursor())) return;
             p.setItemOnCursor(param.replaceValue(action, p.getItemOnCursor()));
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
@@ -94,9 +93,25 @@ public class ActionMenu extends Menu {
                 }
             }
         } else if (items.get(event.getSlot()) instanceof MenuParameter param) {
-            p.getInventory().addItem(param.reset(action));
+            p.getInventory().addItem(param.getValue(action, true));
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
+        }
+    }
+
+    @Override
+    public void middleClick(InventoryClickEvent event) {
+        HumanEntity player = event.getWhoClicked();
+        CodeFile file = new CodeFile(block.getWorld());
+        CodeData data = file.getCodeData();
+        CodeActionData action = CodeFileHelper.getActionAt(block, data);
+        if (action == null) return;
+        if (event.getClickedInventory() == player.getInventory()) {
+            event.setCancelled(false);
+        } else if (items.get(event.getSlot()) instanceof MenuParameter param) {
+            ItemStack item = param.getValue(action, false);
+            item.setAmount(64);
+            player.setItemOnCursor(item);
         }
     }
 }

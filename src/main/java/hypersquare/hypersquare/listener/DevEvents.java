@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.listener;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeItems;
@@ -9,14 +8,13 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
-import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.menu.codeblockmenus.PlayerActionMenu;
-import hypersquare.hypersquare.menu.codeblockmenus.PlayerEventMenu;
+import hypersquare.hypersquare.menu.codeblockmenu.PlayerActionMenu;
+import hypersquare.hypersquare.menu.codeblockmenu.PlayerEventMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -40,7 +38,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public class DevEvents implements Listener {

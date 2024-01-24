@@ -6,6 +6,7 @@ import hypersquare.hypersquare.Hypersquare;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -15,14 +16,24 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @param <T> HS Class type
+ * @param <S> Java Class type
+ */
 public interface CodeValue<T, S> {
     Component getName();
     Material getMaterial();
     String getTypeId();
     List<Component> getDescription();
     List<Component> getHowToSet();
-
     JsonObject getVarItemData(T type);
+    Component getValueName(T value);
+
+    T fromJson(JsonObject obj);
+    T defaultValue();
+    T fromString(String data, T previous);
+    S realValue(T value);
+
     default boolean isType(JsonObject d) {
         try {
             return d.get("type").getAsString().equals(getTypeId());
@@ -30,11 +41,19 @@ public interface CodeValue<T, S> {
             return false;
         }
     }
-    T fromJson(JsonObject obj);
-    T defaultValue();
-    T fromString(String data, T previous);
-    Component getValueName(T value);
-    S realValue(T value);
+    default T coerce(JsonObject obj) {
+        CodeValues hsVal = CodeValues.getType(obj);
+        if (hsVal == null) return null;
+        try {
+            Object val = hsVal.realValue(hsVal.fromJson(obj));
+            if (val instanceof Component c) {
+                val = PlainTextComponentSerializer.plainText().serialize(c);
+            }
+            return fromString(String.valueOf(val), null);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
 
     default ItemStack getItem(T value) {
         ItemStack item = new ItemStack(getMaterial());

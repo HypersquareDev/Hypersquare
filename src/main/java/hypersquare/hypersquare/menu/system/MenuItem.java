@@ -52,4 +52,8 @@ public class MenuItem {
     public void performClick() {
         if (clickHandler != null) clickHandler.run();
     }
+
+    public void amount(int amount) {
+        item.setAmount(amount);
+    }
 }

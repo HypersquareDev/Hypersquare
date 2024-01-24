@@ -50,12 +50,6 @@ public class DevEvents implements Listener {
         if (event.getClickedBlock() == null) {
             return;
         }
-        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (event.getClickedBlock().getLocation().getBlockX() < 0 && !Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")) {
-                event.setCancelled(true);
-            }
-            return;
-        }
         if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
 
             if (event.getClickedBlock().getLocation().getX() > -0) return;

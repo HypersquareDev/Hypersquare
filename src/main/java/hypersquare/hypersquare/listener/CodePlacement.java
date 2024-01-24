@@ -41,31 +41,12 @@ import java.util.Objects;
 public class CodePlacement implements Listener {
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (!Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")) {
-                event.setCancelled(true);
-            }
-            if (blockOutsidePlot(event.getBlockPlaced().getLocation())) {
-                event.setCancelled(true);
-            }
-            return;
-        }
-        if (event.getBlock().getLocation().add(1, 0, 0).getX() > 0) {
+        if (Hypersquare.mode.get(event.getPlayer()).equals("building"))
+            if (!blockOutsidePlot(event.getBlockPlaced().getLocation()))
+                return;
+        if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             processPlace(event);
-        } else {
-            if (event.getBlock().getLocation().add(1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-                Utilities.sendError(event.getPlayer(), "Invalid block placement");
-                event.setCancelled(true);
-            } else {
-                if (event.getBlock().getLocation().add(-1, 0, 0).getBlock().getType() != Material.AIR && !checkIfValidAgainst(event.getBlockAgainst())) {
-                    Utilities.sendError(event.getPlayer(), "Invalid block placement");
-                    event.setCancelled(true);
-                } else {
-                    processPlace(event);
-                }
-            }
         }
-
     }
 
     private static boolean checkIfValidAgainst(Block againstLocation) {

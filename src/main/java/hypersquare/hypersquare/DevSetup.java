@@ -71,13 +71,6 @@ public class DevSetup {
             Files.write(Path.of("plugins/luckperms.jar"), luckperms);
             statusMessage.accept("Downloaded luckperms plugin");
 
-            //Downloading nbt api plugin
-            statusMessage.accept("Downloading nbt api plugin");
-            request = HttpRequest.newBuilder(new URI("https://cdn.modrinth.com/data/nfGCP9fk/versions/fiPNOHqu/item-nbt-api-plugin-2.12.2.jar")).build();
-            byte[] nbtapi = client.send(request, HttpResponse.BodyHandlers.ofByteArray()).body();
-            Files.write(Path.of("plugins/nbtapi.jar"), nbtapi);
-            statusMessage.accept("Downloaded nbt api plugin");
-
             //Downloading fawe plugin
             statusMessage.accept("Downloading worldedit");
             request = HttpRequest.newBuilder(new URI("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.8.5-SNAPSHOT-643.jar")).build();

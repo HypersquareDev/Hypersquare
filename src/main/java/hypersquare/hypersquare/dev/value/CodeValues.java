@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.value;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.value.impl.ItemValue;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
@@ -19,7 +20,8 @@ import java.util.List;
 public enum CodeValues implements CodeValue {
     NUMBER(new NumberValue()),
     STRING(new StringValue()),
-    TEXT(new TextValue())
+    TEXT(new TextValue()),
+    ITEM(new ItemValue()),
     ;
 
     private final CodeValue v;
@@ -28,13 +30,8 @@ public enum CodeValues implements CodeValue {
     }
 
     @Override
-    public Component getValueName(Object value) {
-        return v.getValueName(value);
-    }
-
-    @Override
-    public Object realValue(Object val) {
-        return v.realValue(val);
+    public Component getName() {
+        return v.getName();
     }
 
     @Override
@@ -54,12 +51,17 @@ public enum CodeValues implements CodeValue {
 
     @Override
     public List<Component> getHowToSet() {
-        return v.getHowToSet();
+        return null;
     }
 
     @Override
     public JsonObject getVarItemData(Object type) {
         return v.getVarItemData(type);
+    }
+
+    @Override
+    public Component getValueName(Object value) {
+        return v.getValueName(value);
     }
 
     @Override
@@ -78,20 +80,13 @@ public enum CodeValues implements CodeValue {
     }
 
     @Override
-    public Component getName() {
-        return v.getName();
-    }
-
-    @Override
-    public ItemStack getItem(Object value) {
-        return v.getItem(value);
+    public Object realValue(Object value) {
+        return v.realValue(value);
     }
 
     public static CodeValues getType(JsonObject obj) {
         for (CodeValues v : CodeValues.values()) {
-            if (v.isType(obj)) {
-                return v;
-            }
+            if (v.isType(obj)) return v;
         }
         return null;
     }
@@ -104,5 +99,15 @@ public enum CodeValues implements CodeValue {
         try {
             return JsonParser.parseString(data).getAsJsonObject();
         } catch (Exception ignored) { return null; }
+    }
+
+    @Override
+    public ItemStack getItem(Object value) {
+        return v.getItem(value);
+    }
+
+    @Override
+    public Object fromItem(ItemStack item) {
+        return v.fromItem(item);
     }
 }

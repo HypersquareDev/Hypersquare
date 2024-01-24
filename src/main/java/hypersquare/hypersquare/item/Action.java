@@ -2,19 +2,16 @@ package hypersquare.hypersquare.item;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.play.ActionArguments;
+import hypersquare.hypersquare.play.CodeSelection;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.block.Barrel;
-import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
 
 public interface Action {
-
-    void executeBlockAction(List<Entity> targets, Barrel barrel);
-
     ActionParameter[] parameters();
     String getId();
     String getSignName();
@@ -33,6 +30,8 @@ public interface Action {
         }
         return null;
     }
+
+    void execute(CodeSelection selection, ActionArguments args);
 
     record ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, String id) {
         public ActionParameter(DisplayValue type, Component description, String id) {

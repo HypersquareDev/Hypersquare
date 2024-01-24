@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.value.impl;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValue;
+import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,7 +15,7 @@ import java.util.List;
 public class StringValue implements CodeValue<String, String> {
     @Override
     public Component getName() {
-        return Component.text("String").color(NamedTextColor.AQUA);
+        return Component.text("String").color(DisplayValue.STRING.color);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
+import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,7 +17,7 @@ public class NumberValue implements CodeValue<Long, DecimalNumber> {
 
     @Override
     public Component getName() {
-        return Component.text("Number").color(NamedTextColor.RED);
+        return Component.text("Number").color(DisplayValue.NUMBER.color);
     }
 
     @Override

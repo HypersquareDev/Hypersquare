@@ -29,7 +29,6 @@ public class ValueCommands implements HyperCommand {
                             try {
                                 @SuppressWarnings("unchecked")
                                 ItemStack item = value.getItem(value.fromString(v, null));
-
                                 player.getInventory().addItem(item);
                             } catch (Exception ignored) {
                                 Utilities.sendError(player, "Invalid input: '" + v + "'");

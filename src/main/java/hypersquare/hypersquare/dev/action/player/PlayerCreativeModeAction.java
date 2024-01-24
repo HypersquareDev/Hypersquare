@@ -6,62 +6,63 @@ import hypersquare.hypersquare.item.ActionItem;
 import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.item.PlayerActionItems;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.play.ActionArguments;
+import hypersquare.hypersquare.play.CodeSelection;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Barrel;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+public class PlayerCreativeModeAction implements Action {
 
-public class SendMessageAction implements Action {
     @Override
-    public void executeBlockAction(List<Entity> targets, Barrel barrel) {
-
+    public void execute(CodeSelection selection, ActionArguments args) {
+          for (Player p : selection.players()) {
+              p.setGameMode(GameMode.CREATIVE);
+          }
     }
 
     @Override
     public ActionParameter[] parameters() {
-        return new ActionParameter[] {
-                new ActionParameter(DisplayValue.TEXT, true, false, Component.text("The message(s) to send."), "messages")
-        };
+        return new ActionParameter[]{};
     }
 
     @Override
     public String getId() {
-        return "player_action_send_message";
+        return "player_action_creative_mode";
     }
 
     @Override
     public String getSignName() {
-        return "SendMessage";
+        return "CreativeMode";
     }
 
     @Override
     public String getName() {
-        return "Send Message";
+        return "Set to Creative Mode";
     }
 
     @Override
     public PlayerActionItems getCategory() {
-        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
+        return PlayerActionItems.SETTINGS_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.OAK_SIGN)
-                .setName(Component.text("Send Message").color(NamedTextColor.GREEN))
-                .setDescription(Component.text("Sends the player all of the"),
-                        Component.text("messages in the barrel"))
+                .setMaterial(Material.GRASS_BLOCK)
+                .setName(Component.text("Set to Creative Mode").color(TextColor.color(0xAAFF55)))
+                .setDescription(Component.text("Sets a player's game"),
+                        Component.text("mode to Creative."))
                 .setParameters(parameters())
                 .build();
     }
 
     @Override
     public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 4, data)
-                .parameter("messages", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
+        return new ActionMenu(this, 3, data);
     }
 }

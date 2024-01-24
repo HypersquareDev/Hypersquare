@@ -21,7 +21,7 @@ public class PlayerGiveItemsAction implements Action {
     public void execute(CodeSelection selection, ActionArguments args) {
         List<ItemStack> items = new ArrayList<>();
         double multiplier = args.getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
-        for (ItemStack item : args.<ItemStack>all("items")) {
+        for (ItemStack item : args.<ItemStack>allNonNull("items")) {
             int amount = (int) (item.getAmount() * multiplier);
             int max = item.getMaxStackSize();
             item.setAmount(max);

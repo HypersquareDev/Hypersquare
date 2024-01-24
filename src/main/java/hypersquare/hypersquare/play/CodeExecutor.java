@@ -53,8 +53,8 @@ public class CodeExecutor {
                     for (JsonObject arg : args) {
                         CodeValues t = CodeValues.getType(arg);
                         if (t == null) {
-                            CodeError.sendError(plotId, CodeErrorType.INVALID_PARAM);
-                            break eval;
+                            values.add(null);
+                            continue;
                         }
                         values.add(t.realValue(t.fromJson(arg)));
                     }

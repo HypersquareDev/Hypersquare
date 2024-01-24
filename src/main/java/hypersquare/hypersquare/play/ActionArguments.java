@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.play;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,8 +18,16 @@ public class ActionArguments {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> all(String id) {
+    public <T> List<T> allNullable(String id) {
         return (List<T>) values.get(id);
+    }
+
+    public <T> List<T> allNonNull(String id) {
+        List<T> ret = new ArrayList<>();
+        for (T o : this.<T>allNullable(id)) {
+            if (o != null) ret.add(o);
+        }
+        return ret;
     }
 
     public boolean has(String id) {

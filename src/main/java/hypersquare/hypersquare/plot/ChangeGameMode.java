@@ -34,7 +34,7 @@ public class ChangeGameMode {
         }
 
         if (Hypersquare.mode.get(player).equals("playing")) {
-            //todo trigger leave event
+            CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player, !keepState);
         Bukkit.getWorld(worldName).setTime(1000);
@@ -74,6 +74,16 @@ public class ChangeGameMode {
             return;
         }
 
+        int oldPlotID = Utilities.getPlotID(player.getWorld());
+        String oldMode = Hypersquare.mode.get(player);
+
+        if (oldPlotID == plotID && oldMode.equals("playing")) {
+            CodeExecutor.trigger(plotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+            //todo trigger rejoin event for current plot
+        } else if (oldMode.equals("playing")) {
+            CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+        }
+
         String ownerName;
         try { // Edge case where the owner of the plot is not in the database
             ownerName = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
@@ -84,9 +94,6 @@ public class ChangeGameMode {
         Utilities.sendInfo(player, cleanMM.deserialize("Joined game: <white>" + PlotManager.getPlotName(plotID) + " <gray>by <reset>" + ownerName));
         PlotManager.loadPlot(plotID);
 
-        int oldPlotID = Utilities.getPlotID(player.getWorld());
-        String oldMode = Hypersquare.mode.get(player);
-
         Utilities.resetPlayerStats(player);
         PlotDatabase.updateEventsCache(plotID);
         player.closeInventory();
@@ -96,13 +103,6 @@ public class ChangeGameMode {
 
         Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
 
-
-        if (oldPlotID == plotID && oldMode.equals("playing")) {
-            //todo trigger leave event for old plot
-            //todo trigger rejoin event for current plot
-        } else if (oldMode.equals("playing")) {
-            //todo trigger leave event for old plot
-        }
         CodeExecutor.trigger(plotID, Events.getEvent("player_event_join"), new CodeSelection(player));
 
     }
@@ -115,7 +115,7 @@ public class ChangeGameMode {
         }
         String worldName = "hs." + plotID;
         if (Hypersquare.mode.get(player).equals("playing")) {
-            //TODO trigger leave event
+            CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player, !keepState);
         player.closeInventory();
@@ -147,7 +147,7 @@ public class ChangeGameMode {
 
     public static void spawn(Player player) {
         if (Hypersquare.mode.get(player).equals("playing")) {
-            //todo trigger leave event
+            CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player);
         player.getInventory().clear();

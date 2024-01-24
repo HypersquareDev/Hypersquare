@@ -82,7 +82,8 @@ public class EventItem {
 
         // Cancelable
         if (cancelable) {
-            lore.add(Component.newline()
+            lore.add(Component.empty());
+            lore.add(Component.empty()
                         .decoration(TextDecoration.ITALIC, false)
                     .append(Component.text("∅")
                             .color(TextColor.color(0xCC1010))

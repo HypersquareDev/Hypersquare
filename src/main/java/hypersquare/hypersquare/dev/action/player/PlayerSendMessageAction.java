@@ -19,7 +19,7 @@ public class PlayerSendMessageAction implements Action {
     @Override
     public void execute(CodeSelection selection, ActionArguments args) {
         for (Player p : selection.players()) {
-            for (Component c : args.<Component>all("messages")) {
+            for (Component c : args.<Component>allNonNull("messages")) {
                 p.sendMessage(c);
             }
         }

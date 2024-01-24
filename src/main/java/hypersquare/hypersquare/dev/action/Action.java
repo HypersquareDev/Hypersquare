@@ -1,9 +1,12 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.item.ActionMenuItem;
+import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +21,7 @@ public interface Action {
 
     String getName();
 
-    PlayerActionItems getCategory();
+    ActionMenuItem getCategory();
 
     ItemStack item();
 
@@ -31,7 +34,7 @@ public interface Action {
         return null;
     }
 
-    void execute(CodeSelection selection, ActionArguments args);
+    void execute(ExecutionContext ctx);
 
     record ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, String id) {
         public ActionParameter(DisplayValue type, Component description, String id) {

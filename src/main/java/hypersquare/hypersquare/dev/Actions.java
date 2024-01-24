@@ -1,15 +1,17 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.action.EmptyAction;
+import hypersquare.hypersquare.dev.action.player.IfPlayerHolding;
 import hypersquare.hypersquare.dev.action.player.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.action.player.PlayerSendMessageAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.player.PlayerGiveItemsAction;
-import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -20,7 +22,8 @@ public enum Actions implements Action {
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
 
-    PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction())
+    PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
+    IF_PLAYER_HOLDING(new IfPlayerHolding()),
     ;
 
     final Action a;
@@ -56,7 +59,7 @@ public enum Actions implements Action {
     }
 
     @Override
-    public PlayerActionItems getCategory() {
+    public ActionMenuItem getCategory() {
         return a.getCategory();
     }
 
@@ -71,7 +74,7 @@ public enum Actions implements Action {
     }
 
     @Override
-    public void execute(CodeSelection selection, ActionArguments args) {
-        a.execute(selection, args);
+    public void execute(ExecutionContext ctx) {
+        a.execute(ctx);
     }
 }

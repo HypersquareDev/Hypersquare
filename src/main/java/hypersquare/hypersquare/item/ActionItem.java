@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.item;
 
 
+import hypersquare.hypersquare.dev.action.Action;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

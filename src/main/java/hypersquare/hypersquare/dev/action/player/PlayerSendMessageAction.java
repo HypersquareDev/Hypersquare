@@ -1,13 +1,12 @@
 package hypersquare.hypersquare.dev.action.player;
 
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.item.ActionItem;
-import hypersquare.hypersquare.item.DisplayValue;
-import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -17,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerSendMessageAction implements Action {
 
     @Override
-    public void execute(CodeSelection selection, ActionArguments args) {
-        for (Player p : selection.players()) {
-            for (Component c : args.<Component>allNonNull("messages")) {
+    public void execute(ExecutionContext ctx) {
+        for (Player p : ctx.selection().players()) {
+            for (Component c : ctx.args().<Component>allNonNull("messages")) {
                 p.sendMessage(c);
             }
         }
@@ -48,7 +47,7 @@ public class PlayerSendMessageAction implements Action {
     }
 
     @Override
-    public PlayerActionItems getCategory() {
+    public ActionMenuItem getCategory() {
         return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
     }
 

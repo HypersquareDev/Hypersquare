@@ -1,15 +1,13 @@
 package hypersquare.hypersquare.dev.action.player;
 
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.item.ActionItem;
-import hypersquare.hypersquare.item.DisplayValue;
-import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -19,10 +17,10 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerCreativeModeAction implements Action {
 
     @Override
-    public void execute(CodeSelection selection, ActionArguments args) {
-          for (Player p : selection.players()) {
-              p.setGameMode(GameMode.CREATIVE);
-          }
+    public void execute(ExecutionContext ctx) {
+        for (Player p : ctx.selection().players()) {
+            p.setGameMode(GameMode.CREATIVE);
+        }
     }
 
     @Override
@@ -46,7 +44,7 @@ public class PlayerCreativeModeAction implements Action {
     }
 
     @Override
-    public PlayerActionItems getCategory() {
+    public ActionMenuItem getCategory() {
         return PlayerActionItems.SETTINGS_CATEGORY;
     }
 

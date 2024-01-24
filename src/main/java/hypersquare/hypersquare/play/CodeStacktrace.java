@@ -30,6 +30,10 @@ public class CodeStacktrace {
         frames.remove(frames.size() - 1);
     }
 
+    public void pushFrame(Frame frame) {
+        frames.add(frame);
+    }
+
     public static class Frame {
         public int position = 0;
         public final List<CodeActionData> actions;

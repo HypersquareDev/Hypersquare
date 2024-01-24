@@ -4,7 +4,7 @@ import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
-import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import org.bukkit.Bukkit;
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class CodeFileHelper {
     @NotNull
@@ -130,9 +129,8 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData updateAction(Location location, CodeFile code, Action newAction, CodeBlocks codeblock) {
+    public static CodeData updateAction(Location location, CodeFile code, Action newAction) {
         CodeData plotCode = code.getCodeData();
-        if (codeblock.isThreadStarter()) return plotCode; // Someone called the wrong method lol
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
         if (codelineListIndex == -1) {
@@ -171,9 +169,8 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData updateEvent(Location location, CodeFile code, Event newEvent, CodeBlocks codeblock) {
+    public static CodeData updateEvent(Location location, CodeFile code, Event newEvent) {
         CodeData plotCode = code.getCodeData();
-        if (codeblock != CodeBlocks.DIAMOND_BLOCK && codeblock != CodeBlocks.GOLD_BLOCK) return plotCode; // Someone called the wrong method lol
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
         if (codelineListIndex == -1) {

@@ -7,7 +7,7 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.item.Action;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.Event;
 
 import java.util.ArrayList;
@@ -60,7 +60,9 @@ public class CodeExecutor {
                     }
                     arguments.put(param.id(), values);
                 }
-                action.execute(frame.selection, new ActionArguments(arguments));
+                action.execute(new ExecutionContext(
+                        frame.selection, new ActionArguments(arguments), trace, data.actions
+                ));
             }
         } catch (Exception err) {
             err.printStackTrace();

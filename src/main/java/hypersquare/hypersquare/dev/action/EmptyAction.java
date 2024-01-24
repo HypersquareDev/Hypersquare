@@ -1,16 +1,12 @@
 package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
-import org.bukkit.block.Barrel;
-import org.bukkit.entity.Entity;
+import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 public class EmptyAction implements Action {
     @Override
@@ -34,7 +30,7 @@ public class EmptyAction implements Action {
     }
 
     @Override
-    public PlayerActionItems getCategory() {
+    public ActionMenuItem getCategory() {
         return null;
     }
 
@@ -49,7 +45,7 @@ public class EmptyAction implements Action {
     }
 
     @Override
-    public void execute(CodeSelection selection, ActionArguments args) {
+    public void execute(ExecutionContext ctx) {
 
     }
 }

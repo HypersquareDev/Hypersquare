@@ -1,11 +1,13 @@
 package hypersquare.hypersquare.dev.action.player;
 
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -18,10 +20,10 @@ import java.util.List;
 public class PlayerGiveItemsAction implements Action {
 
     @Override
-    public void execute(CodeSelection selection, ActionArguments args) {
+    public void execute(ExecutionContext ctx) {
         List<ItemStack> items = new ArrayList<>();
-        double multiplier = args.getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
-        for (ItemStack item : args.<ItemStack>allNonNull("items")) {
+        double multiplier = ctx.args().getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
+        for (ItemStack item : ctx.args().<ItemStack>allNonNull("items")) {
             int amount = (int) (item.getAmount() * multiplier);
             int max = item.getMaxStackSize();
             item.setAmount(max);
@@ -33,7 +35,7 @@ public class PlayerGiveItemsAction implements Action {
             items.add(item);
         }
         
-        for (Player p : selection.players()) {
+        for (Player p : ctx.selection().players()) {
             for (ItemStack item : items) {
                 p.getInventory().addItem(item);
             }
@@ -84,7 +86,8 @@ public class PlayerGiveItemsAction implements Action {
         return "Give Items";
     }
 
-    public PlayerActionItems getCategory() {
+    @Override
+    public ActionMenuItem getCategory() {
         return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
     }
 }

@@ -63,4 +63,7 @@ public class CodeSelection {
         return filtered;
     }
 
+    public List<Entity> all() {
+        return selection;
+    }
 }

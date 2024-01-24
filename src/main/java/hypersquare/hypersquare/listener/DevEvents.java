@@ -12,9 +12,11 @@ import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
-import hypersquare.hypersquare.item.Action;
-import hypersquare.hypersquare.menu.codeblockmenu.PlayerActionMenu;
-import hypersquare.hypersquare.menu.codeblockmenu.PlayerEventMenu;
+import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.item.IfPlayerItems;
+import hypersquare.hypersquare.item.PlayerActionItems;
+import hypersquare.hypersquare.item.PlayerEventItems;
+import hypersquare.hypersquare.menu.CodeblockMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -61,12 +63,28 @@ public class DevEvents implements Listener {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 switch (PlainTextComponentSerializer.plainText().serialize(sign.getSide(Side.FRONT).line(0))) {
-                    case ("PLAYER EVENT"): {
-                        PlayerEventMenu.open(event.getPlayer(), event.getClickedBlock().getLocation());
+                    case "PLAYER EVENT": {
+                        CodeblockMenu.open(
+                                event.getPlayer(), event.getClickedBlock().getLocation(),
+                                "Player Event Categories", "Events", 5,
+                                PlayerEventItems.values(), false
+                        );
                         break;
                     }
-                    case ("PLAYER ACTION"): {
-                        PlayerActionMenu.open(event.getPlayer(), event.getClickedBlock().getLocation());
+                    case "PLAYER ACTION": {
+                        CodeblockMenu.open(
+                                event.getPlayer(), event.getClickedBlock().getLocation(),
+                                "Player Action Categories", "Events", 5,
+                                PlayerActionItems.values(), true
+                        );
+                        break;
+                    }
+                    case "IF PLAYER": {
+                        CodeblockMenu.open(
+                                event.getPlayer(), event.getClickedBlock().getLocation(),
+                                "If Player Categories", "Conditions", 3,
+                                IfPlayerItems.values(), true
+                        );
                         break;
                     }
                 }
@@ -246,7 +264,7 @@ public class DevEvents implements Listener {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         event.setCancelled(true);
     }
-@EventHandler
+    @EventHandler
     public void onChat(AsyncChatEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();

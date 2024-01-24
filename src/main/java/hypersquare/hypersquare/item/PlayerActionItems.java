@@ -6,12 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
-public enum PlayerActionItems {
+public enum PlayerActionItems implements ActionMenuItem {
     ITEM_MANAGEMENT_CATEGORY(Material.CHEST, "<gold>Item Management", "<gray>Giving, removing, setting%n<gray>and saving items", 1),
     PLAYER_ACTION_COMMUNICATION(Material.JUNGLE_SIGN, "<red>Communication", "<gray>Displaying text and%n<gray>playing sounds", 3),
     INVENTORY_MENUS_CATEGORY(Material.ITEM_FRAME, "<yellow>Inventory Menus", "<gray>Display and modification%n<gray>of item menus", 5),
@@ -25,10 +22,8 @@ public enum PlayerActionItems {
     MISCELLANEOUS_CATEGORY(Material.BEDROCK, "<dark_purple>Miscellaneous", "<gray>Actions that do not belong%n<gray>in other categories", 42);
 
     public final Material material;
-    public final String id;
     public final String name;
     public final String lore;
-    public final PlayerActionItems category;
     public final int slot;
 
     PlayerActionItems(Material material, String name, String lore, int slot) {
@@ -36,31 +31,15 @@ public enum PlayerActionItems {
         this.name = name;
         this.lore = lore;
         this.slot = slot;
-        this.category = null;
-        this.id = "";
-    }
-
-    PlayerActionItems(Material material, String id, String name, String lore, PlayerActionItems category) {
-        this.material = material;
-        this.id = id;
-        this.name = name;
-        this.lore = lore;
-        this.category = category;
-        this.slot = 0;
     }
 
     public ItemStack build() {
         return Utilities.formatItem(lore, material, name);
     }
 
-    public static ArrayList<PlayerActionItems> getActions(PlayerActionItems category) {
-        ArrayList<PlayerActionItems> actions = new ArrayList<>();
-        for (PlayerActionItems playerActionItem : PlayerActionItems.values()) {
-            if (Objects.equals(playerActionItem.category, category)) {
-                actions.add(playerActionItem);
-            }
-        }
-        return actions;
+    @Override
+    public int getSlot() {
+        return slot;
     }
 
     public @NotNull Component getName() {

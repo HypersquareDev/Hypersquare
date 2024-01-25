@@ -196,7 +196,7 @@ public class PlotDatabase {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
         if (result != null) {
-            return cleanMM.deserialize(result.getString("name"));
+            return minimalMM.deserialize(result.getString("name"));
         }
         return null;
     }

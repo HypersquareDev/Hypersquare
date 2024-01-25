@@ -4,6 +4,7 @@ import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.action.player.IfPlayerHolding;
 import hypersquare.hypersquare.dev.action.player.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.action.player.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.action.var.AssignVariableAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.player.PlayerGiveItemsAction;
@@ -24,6 +25,7 @@ public enum Actions implements Action {
 
     PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+    ASSIGN_VARIABLE(new AssignVariableAction())
     ;
 
     final Action a;

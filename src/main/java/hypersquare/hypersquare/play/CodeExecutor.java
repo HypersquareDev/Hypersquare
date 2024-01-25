@@ -2,15 +2,13 @@ package hypersquare.hypersquare.play;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
-import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.Event;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,27 +40,21 @@ public class CodeExecutor {
                     CodeError.sendError(plotId, CodeErrorType.INVALID_ACT);
                     break;
                 }
-                HashMap<String, List<Object>> arguments = new HashMap<>();
+                HashMap<String, List<JsonObject>> arguments = new HashMap<>();
                 for (Action.ActionParameter param : action.parameters()) {
                     List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
                     if (args.isEmpty() && !param.optional()) {
                         CodeError.sendError(plotId, CodeErrorType.MISSING_PARAM);
                         break eval;
                     }
-                    List<Object> values = new ArrayList<>();
-                    for (JsonObject arg : args) {
-                        CodeValues t = CodeValues.getType(arg);
-                        if (t == null) {
-                            values.add(null);
-                            continue;
-                        }
-                        values.add(t.realValue(t.fromJson(arg)));
-                    }
-                    arguments.put(param.id(), values);
+                    arguments.put(param.id(), args);
                 }
-                action.execute(new ExecutionContext(
-                        frame.selection, new ActionArguments(arguments), trace, data.actions
-                ));
+                ActionArguments args = new ActionArguments(arguments);
+                ExecutionContext ctx = new ExecutionContext(
+                        frame.selection, args, trace, data.actions, action
+                );
+                args.bind(ctx);
+                action.execute(ctx);
             }
         } catch (Exception err) {
             err.printStackTrace();

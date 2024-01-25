@@ -33,7 +33,7 @@ public interface CodeValue<T, S> {
     T defaultValue();
     T fromString(String data, T previous);
     S realValue(T value);
-
+    JsonObject serialize(Object obj);
     default boolean isType(JsonObject d) {
         try {
             return d.get("type").getAsString().equals(getTypeId());
@@ -41,6 +41,7 @@ public interface CodeValue<T, S> {
             return false;
         }
     }
+
     default T coerce(JsonObject obj) {
         CodeValues hsVal = CodeValues.getType(obj);
         if (hsVal == null) return null;

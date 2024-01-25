@@ -13,9 +13,11 @@ import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.item.IfPlayerItems;
 import hypersquare.hypersquare.item.PlayerActionItems;
 import hypersquare.hypersquare.item.PlayerEventItems;
+import hypersquare.hypersquare.item.SetVariableItems;
 import hypersquare.hypersquare.menu.CodeblockMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
@@ -66,7 +68,7 @@ public class DevEvents implements Listener {
                     case "PLAYER EVENT": {
                         CodeblockMenu.open(
                                 event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "Player Event Categories", "Events", 5,
+                                "Player Event", "Events", 5,
                                 PlayerEventItems.values(), false
                         );
                         break;
@@ -74,7 +76,7 @@ public class DevEvents implements Listener {
                     case "PLAYER ACTION": {
                         CodeblockMenu.open(
                                 event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "Player Action Categories", "Events", 5,
+                                "Player Action", "Events", 5,
                                 PlayerActionItems.values(), true
                         );
                         break;
@@ -82,8 +84,16 @@ public class DevEvents implements Listener {
                     case "IF PLAYER": {
                         CodeblockMenu.open(
                                 event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "If Player Categories", "Conditions", 3,
+                                "If Player", "Conditions", 3,
                                 IfPlayerItems.values(), true
+                        );
+                        break;
+                    }
+                    case "SET VARIABLE": {
+                        CodeblockMenu.open(
+                                event.getPlayer(), event.getClickedBlock().getLocation(),
+                                "Set Variable", "Variables", 5,
+                                SetVariableItems.values(), true
                         );
                         break;
                     }
@@ -176,6 +186,7 @@ public class DevEvents implements Listener {
                 inv.setItem(0, new StringValue().emptyValue());
                 inv.setItem(1, new TextValue().emptyValue());
                 inv.setItem(2, new NumberValue().emptyValue());
+                inv.setItem(3, new VariableValue().emptyValue());
 
                 player.openInventory(inv);
             }

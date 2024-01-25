@@ -79,4 +79,12 @@ public class StringValue implements CodeValue<String, String> {
     public String realValue(String value) {
         return value;
     }
+
+    @Override
+    public JsonObject serialize(Object obj) {
+        if (obj instanceof String str) {
+            return getVarItemData(str);
+        }
+        return null;
+    }
 }

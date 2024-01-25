@@ -1,8 +1,12 @@
 package hypersquare.hypersquare.plot;
 
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import static hypersquare.hypersquare.Hypersquare.loadedPlots;
+import static hypersquare.hypersquare.Hypersquare.minimalMM;
 
 public class PlotManager {
 
@@ -25,7 +29,7 @@ public class PlotManager {
     public static String getPlotName(int plotID) {
         List<Object> plotData = getPlotData(plotID);
         if (plotData != null && !plotData.isEmpty()) {
-            return (String) plotData.get(0);
+            return minimalMM.serialize(minimalMM.deserialize((String) plotData.get(0)));
         }
         return null;
     }

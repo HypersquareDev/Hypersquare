@@ -57,6 +57,13 @@ public final class Hypersquare extends JavaPlugin {
                     StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
             )).build();
 
+    public static MiniMessage minimalMM = MiniMessage.builder()
+            .tags(TagResolver.resolver(
+                    StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
+                    StandardTags.gradient(), StandardTags.rainbow(),
+                    StandardTags.transition(), StandardTags.reset()
+            )).build();
+
 
     public static String pluginName = "hypersquare";
     public static MiniMessage fullMM = MiniMessage.miniMessage();

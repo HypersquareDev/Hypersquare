@@ -35,9 +35,9 @@ public class Plot {
         org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
         if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
-            meta.displayName(Hypersquare.fullMM.deserialize(PlotDatabase.getPlotName(plotID)));
+            meta.displayName(PlotDatabase.getPlotName(plotID));
         } else {
-            String name = PlotDatabase.getPlotName(plotID);
+            Component name = PlotDatabase.getPlotName(plotID);
             meta.displayName(Hypersquare.fullMM.deserialize(name + "<red>" + " (Out of date)"));
         }
         List<Component> lore = new ArrayList<>();

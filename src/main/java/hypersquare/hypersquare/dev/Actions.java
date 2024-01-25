@@ -1,16 +1,14 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.action.EmptyAction;
-import hypersquare.hypersquare.dev.action.player.IfPlayerHolding;
-import hypersquare.hypersquare.dev.action.player.PlayerCreativeModeAction;
-import hypersquare.hypersquare.dev.action.player.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.code.player.conditional.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.dev.action.player.PlayerGiveItemsAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 

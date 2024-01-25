@@ -1,8 +1,8 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.dev.event.player.PlayerJoinEvent;
-import hypersquare.hypersquare.dev.event.player.PlayerLeaveEvent;
-import hypersquare.hypersquare.dev.event.player.PlayerRightClickEvent;
+import hypersquare.hypersquare.dev.code.player.event.PlayerJoinEvent;
+import hypersquare.hypersquare.dev.code.player.event.PlayerLeaveEvent;
+import hypersquare.hypersquare.dev.code.player.event.PlayerRightClickEvent;
 import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.item.PlayerEventItems;
 import org.bukkit.inventory.ItemStack;

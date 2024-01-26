@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.event.player;
+package hypersquare.hypersquare.dev.code.player.event;
 
 import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.item.EventItem;
@@ -22,7 +22,11 @@ public class PlayerRightClickEvent implements Event {
     }
 
     public String getId() {
-        return "player_event_right_click";
+        return "right_click";
+    }
+    @Override
+    public String getCodeblockId() {
+        return "player_event";
     }
 
     public String getSignName() {

@@ -15,9 +15,14 @@ import java.util.List;
 public class CodeExecutor {
 
     public static void trigger(int plotId, Event event, CodeSelection selection) {
+        if (event == null) {
+            CodeError.sendError(plotId, CodeErrorType.INVALID_EVENT);
+            return;
+        }
+
         CodeData data = new CodeFile(plotId).getCodeData();
         for (CodeLineData line : data.codelines) {
-            if (!line.event.equals(event.getId())) continue;
+            if (!(line.event.equals(event.getId()) && line.type.equals(event.getCodeblockId()))) continue;
 
             CodeStacktrace trace = new CodeStacktrace(plotId, new CodeStacktrace.Frame(line.actions, selection));
             continueEval(plotId, trace);
@@ -35,7 +40,7 @@ public class CodeExecutor {
                     return;
                 }
 
-                Action action = Actions.getAction(data.action);
+                Action action = Actions.getAction(data.action, data.codeblock);
                 if (action == null) {
                     CodeError.sendError(plotId, CodeErrorType.INVALID_ACT);
                     break;

@@ -1,12 +1,11 @@
-package hypersquare.hypersquare.dev.action.player;
+package hypersquare.hypersquare.dev.code.player.action;
 
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -75,8 +74,14 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getId() {
-        return "player_action_give_items";
+        return "give_items";
     }
+
+    @Override
+    public String getCodeblockId() {
+        return "player_action";
+    }
+
     public String getSignName() {
         return "GiveItems";
     }

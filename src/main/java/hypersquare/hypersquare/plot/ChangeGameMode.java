@@ -103,7 +103,7 @@ public class ChangeGameMode {
 
         Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
 
-        CodeExecutor.trigger(plotID, Events.getEvent("player_event_join"), new CodeSelection(player));
+        CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
 
     }
 

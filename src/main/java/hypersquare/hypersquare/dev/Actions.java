@@ -1,17 +1,15 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.action.EmptyAction;
-import hypersquare.hypersquare.dev.action.player.IfPlayerHolding;
-import hypersquare.hypersquare.dev.action.player.PlayerCreativeModeAction;
-import hypersquare.hypersquare.dev.action.player.PlayerSendMessageAction;
-import hypersquare.hypersquare.dev.action.var.AssignVariableAction;
+import hypersquare.hypersquare.dev.code.player.conditional.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.dev.action.player.PlayerGiveItemsAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,9 +31,11 @@ public enum Actions implements Action {
         this.a = a;
     }
 
-    public static Action getAction(String id) {
+    public static Action getAction(String id, String codeblockId) {
+        if (id == null || codeblockId == null || id.equals("empty")) return Actions.EMPTY;
+
         for (Action action : values()) {
-            if (Objects.equals(action.getId(), id)) return action;
+            if (Objects.equals(action.getCodeblockId(), codeblockId) && Objects.equals(action.getId(), id)) return action;
         }
         return null;
     }
@@ -48,6 +48,11 @@ public enum Actions implements Action {
     @Override
     public String getId() {
         return a.getId();
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return a.getCodeblockId();
     }
 
     @Override

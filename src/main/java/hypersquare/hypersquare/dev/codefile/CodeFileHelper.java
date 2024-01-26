@@ -12,19 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Piston;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CodeFileHelper {
-    @NotNull
-    private static String genEmptyCodeblock(String name) {
-        // PLAYER ACTION => player_action_empty
-        return name.toLowerCase().replace(" ", "_") + "_empty";
-    }
-
     private static int getCodelineWorldIndex(Location location) {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
@@ -45,18 +38,14 @@ public class CodeFileHelper {
     /**
      * Set index to -1 for the codeblock to be appended instead of inserted.
      */
-    public static CodeData addCodeblock(Location location, String name, CodeFile code) {
+    public static CodeData addCodeblock(Location location, CodeBlocks codeblock, CodeFile code) {
 
         CodeData plotCode = code.getCodeData();
-        CodeBlocks codeblock = CodeBlocks.getByName(name);
 
         if (codeblock.isThreadStarter()) {
             CodeLineData event = new CodeLineData();
-            String type = CodeBlocks.getByName(name).id();
-            event.type = type;
-            if (codeblock.hasActions) {
-                event.event = type + "_empty";
-            }
+            event.type = codeblock.id();
+            event.event = "empty";
             event.position = getCodelineWorldIndex(location);
             plotCode.codelines.add(event);
             return plotCode;
@@ -72,7 +61,8 @@ public class CodeFileHelper {
         }
 
         CodeActionData action = new CodeActionData();
-        action.action = genEmptyCodeblock(name);
+        action.codeblock = codeblock.id();
+        action.action = "empty";
 
         if (positions.size() == 1) {
             codeline.actions.add(positions.get(0), action);

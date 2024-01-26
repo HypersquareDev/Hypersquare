@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.action.player;
+package hypersquare.hypersquare.dev.code.player.conditional;
 
 import hypersquare.hypersquare.dev.action.IfAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -25,7 +25,12 @@ public class IfPlayerHolding implements IfAction {
 
     @Override
     public String getId() {
-        return "if_player_is_holding";
+        return "is_holding";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "if_player";
     }
 
     @Override

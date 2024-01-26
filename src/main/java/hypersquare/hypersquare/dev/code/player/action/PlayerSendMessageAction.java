@@ -1,11 +1,9 @@
-package hypersquare.hypersquare.dev.action.player;
+package hypersquare.hypersquare.dev.code.player.action;
 
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.*;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -33,7 +31,12 @@ public class PlayerSendMessageAction implements Action {
 
     @Override
     public String getId() {
-        return "player_action_send_message";
+        return "send_message";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "player_action";
     }
 
     @Override

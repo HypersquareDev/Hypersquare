@@ -3,8 +3,6 @@ package hypersquare.hypersquare.dev.action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,7 +14,12 @@ public class EmptyAction implements Action {
 
     @Override
     public String getId() {
-        return null;
+        return "empty";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "";
     }
 
     @Override

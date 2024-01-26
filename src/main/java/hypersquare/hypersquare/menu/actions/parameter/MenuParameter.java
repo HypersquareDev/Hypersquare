@@ -77,7 +77,7 @@ public class MenuParameter extends MenuItem {
     public boolean isValid(ItemStack item) {
         if (item == null) return false;
         JsonObject data = CodeValues.getVarItemData(item);
-        if (data == null) return p.type().isValid(null, item);
+        if (data == null) return p.type().isValid(CodeValues.ITEM, item);
         CodeValues v = CodeValues.getType(data);
         if (v == CodeValues.VARIABLE) return true;
         return p.type().isValid(v, item);

@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 
 public enum DisplayValue {
     NUMBER(CodeValues.NUMBER, NamedTextColor.RED, (v, t) -> v == CodeValues.NUMBER),
-    ITEM(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> true),
+    ITEM(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM),
     BLOCK(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().isBlock()),
     SPAWN_EGG(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().getKey().getKey().endsWith("_spawn_egg")),
     ANY(null, TextColor.color(255, 212, 127), (v, t) -> true),

@@ -15,20 +15,20 @@ import java.util.HashMap;
 import java.util.function.BiFunction;
 
 public enum DisplayValue {
-    NUMBER(CodeValues.NUMBER, NamedTextColor.RED, (v, t) -> v == CodeValues.NUMBER),
-    ITEM(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM),
+    NUMBER(CodeValues.NUMBER, NamedTextColor.RED, (v, _) -> v == CodeValues.NUMBER),
+    ITEM(CodeValues.ITEM, NamedTextColor.GOLD, (v, _) -> v == CodeValues.ITEM),
     BLOCK(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().isBlock()),
     SPAWN_EGG(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().getKey().getKey().endsWith("_spawn_egg")),
-    ANY(null, TextColor.color(255, 212, 127), (v, t) -> true),
-    VARIABLE(CodeValues.VARIABLE, NamedTextColor.YELLOW, (v, t) -> v == CodeValues.VARIABLE),
-    TEXT(CodeValues.TEXT, TextColor.color(127, 212, 42), (v, t) -> v == CodeValues.TEXT),
-    LIST(null, NamedTextColor.DARK_GREEN, (v, t) -> false),
-    VECTOR(null, TextColor.color(42, 255, 170), (v, t) -> false),
-    STRING(null, NamedTextColor.AQUA, (v, t) -> v == CodeValues.STRING),
-    DICTIONARY(null, TextColor.color(85, 170, 255), (v, t) -> false),
-    SOUND(null, NamedTextColor.BLUE, (v, t) -> false),
-    PARTICLE(null, TextColor.color(170, 85, 255), (v, t) -> false),
-    POTION(null, TextColor.color(255, 85, 127), (v, t) -> false),
+    ANY(null, TextColor.color(255, 212, 127), (_, _) -> true),
+    VARIABLE(CodeValues.VARIABLE, NamedTextColor.YELLOW, (v, _) -> v == CodeValues.VARIABLE),
+    TEXT(CodeValues.TEXT, TextColor.color(127, 212, 42), (v, _) -> v == CodeValues.TEXT),
+    LIST(null, NamedTextColor.DARK_GREEN, (_, _) -> false),
+    VECTOR(null, TextColor.color(42, 255, 170), (_, _) -> false),
+    STRING(null, NamedTextColor.AQUA, (v, _) -> v == CodeValues.STRING),
+    DICTIONARY(null, TextColor.color(85, 170, 255), (_, _) -> false),
+    SOUND(null, NamedTextColor.BLUE, (_, _) -> false),
+    PARTICLE(null, TextColor.color(170, 85, 255), (_, _) -> false),
+    POTION(null, TextColor.color(255, 85, 127), (_, _) -> false),
     ;
 
     public static final HashMap<DisplayValue, Material> menuPaneColor = new HashMap<>() {{

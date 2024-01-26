@@ -115,7 +115,7 @@ public class CodePlacement implements Listener {
                     }
                     CodeData code = new CodeFile(event.getPlayer()).getCodeData();
                     if (!threadStarter) {
-                        if (code.codelines.size() < location.getBlockX() % 3) {
+                        if (CodeFileHelper.getCodelineListIndex(location.clone(), code) == -1) {
                             Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
                             return;
                         }

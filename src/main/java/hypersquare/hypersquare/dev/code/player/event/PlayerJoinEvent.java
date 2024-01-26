@@ -23,7 +23,11 @@ public class PlayerJoinEvent implements Event {
     }
 
     public String getId() {
-        return "player_event_join";
+        return "join";
+    }
+    @Override
+    public String getCodeblockId() {
+        return "player_event";
     }
 
     public String getSignName() {

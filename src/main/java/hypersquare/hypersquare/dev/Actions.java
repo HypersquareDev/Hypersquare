@@ -29,9 +29,11 @@ public enum Actions implements Action {
         this.a = a;
     }
 
-    public static Action getAction(String id) {
+    public static Action getAction(String id, String codeblockId) {
+        if (id == null || codeblockId == null || id.equals("empty")) return Actions.EMPTY;
+
         for (Action action : values()) {
-            if (Objects.equals(action.getId(), id)) return action;
+            if (Objects.equals(action.getCodeblockId(), codeblockId) && Objects.equals(action.getId(), id)) return action;
         }
         return null;
     }
@@ -44,6 +46,11 @@ public enum Actions implements Action {
     @Override
     public String getId() {
         return a.getId();
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return a.getCodeblockId();
     }
 
     @Override

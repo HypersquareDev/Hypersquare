@@ -14,7 +14,12 @@ public class EmptyAction implements Action {
 
     @Override
     public String getId() {
-        return null;
+        return "empty";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "";
     }
 
     @Override

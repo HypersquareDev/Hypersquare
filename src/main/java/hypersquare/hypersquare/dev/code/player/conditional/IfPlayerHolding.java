@@ -25,7 +25,12 @@ public class IfPlayerHolding implements IfAction {
 
     @Override
     public String getId() {
-        return "if_player_is_holding";
+        return "is_holding";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "if_player";
     }
 
     @Override

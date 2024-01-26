@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
@@ -73,8 +74,14 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getId() {
-        return "player_action_give_items";
+        return "give_items";
     }
+
+    @Override
+    public String getCodeblockId() {
+        return "player_action";
+    }
+
     public String getSignName() {
         return "GiveItems";
     }

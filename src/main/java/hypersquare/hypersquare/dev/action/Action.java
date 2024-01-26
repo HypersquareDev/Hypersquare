@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.action;
 
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.ActionMenuItem;
 import hypersquare.hypersquare.item.DisplayValue;
@@ -15,6 +16,7 @@ import java.util.Objects;
 public interface Action {
     ActionParameter[] parameters();
     String getId();
+    String getCodeblockId();
     String getSignName();
 
     String getName();

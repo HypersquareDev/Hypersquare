@@ -12,6 +12,8 @@ public class CodeError {
         for (String uuid : PlotDatabase.getPlotDevs(plotId)) {
             Player player = Bukkit.getPlayer(UUID.fromString(uuid));
             if (player == null || Utilities.getPlotID(player.getWorld()) != plotId) continue;
+            // TODO: Nicer message styling
+            // TODO: Add location to error messages (clicking message to tp as well)
             Utilities.sendError(player, type.message);
         }
     }

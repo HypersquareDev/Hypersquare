@@ -8,6 +8,7 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
+import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
@@ -24,7 +25,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Sign;
-import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,32 +62,41 @@ public class DevEvents implements Listener {
             if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
                 event.setCancelled(true);
                 Sign sign = (Sign) event.getClickedBlock().getState();
-                switch (PlainTextComponentSerializer.plainText().serialize(sign.getSide(Side.FRONT).line(0))) {
-                    case "PLAYER EVENT": {
-                        CodeblockMenu.open(
-                                event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "Player Event Categories", "Events", 5,
-                                PlayerEventItems.values(), false
-                        );
-                        break;
+
+                CodeFile codeFile = new CodeFile(event.getPlayer());
+                int listIndex = CodeFileHelper.getCodelineListIndex(sign.getLocation().clone().add(1, 0, 0), codeFile.getCodeData());
+                int codeblockIndex = CodeFileHelper.getCodeblockIndex(sign.getLocation().clone().add(1, 0, 0));
+                CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
+                // Index -1 is always the thread starter
+                if (codeblockIndex == -1) switch (line.type) {
+                        case "player_event": {
+                            CodeblockMenu.open(
+                                    event.getPlayer(), event.getClickedBlock().getLocation(),
+                                    "Player Event", "Events", 5,
+                                    PlayerEventItems.values(), false
+                            );
+                            break;
+                        }
                     }
-                    case "PLAYER ACTION": {
-                        CodeblockMenu.open(
-                                event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "Player Action Categories", "Events", 5,
-                                PlayerActionItems.values(), true
-                        );
-                        break;
+                else switch (line.actions.get(codeblockIndex).codeblock) {
+                        case "player_action": {
+                            CodeblockMenu.open(
+                                    event.getPlayer(), event.getClickedBlock().getLocation(),
+                                    "Player Action", "Actions", 5,
+                                    PlayerActionItems.values(), true
+                            );
+                            break;
+                        }
+                        case "if_player": {
+                            CodeblockMenu.open(
+                                    event.getPlayer(), event.getClickedBlock().getLocation(),
+                                    "If Player", "Conditions", 3,
+                                    IfPlayerItems.values(), true
+                            );
+                            break;
+                        }
                     }
-                    case "IF PLAYER": {
-                        CodeblockMenu.open(
-                                event.getPlayer(), event.getClickedBlock().getLocation(),
-                                "If Player Categories", "Conditions", 3,
-                                IfPlayerItems.values(), true
-                        );
-                        break;
-                    }
-                }
+
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else if (event.getClickedBlock().getType() == Material.BARREL) {
                 event.setCancelled(true);
@@ -98,7 +107,7 @@ public class DevEvents implements Listener {
                     Utilities.sendRedInfo(event.getPlayer(), Component.text("Couldn't find this action in the plot (corrupted plot?)"));
                     return;
                 }
-                Action action = Actions.getAction(actionData.action);
+                Action action = Actions.getAction(actionData.action, actionData.codeblock);
                 if (action == null) {
                     Utilities.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
                     throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");

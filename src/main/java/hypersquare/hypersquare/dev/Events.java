@@ -33,6 +33,11 @@ public enum Events implements Event {
     }
 
     @Override
+    public String getCodeblockId() {
+        return v.getCodeblockId();
+    }
+
+    @Override
     public String getSignName() {
         return v.getSignName();
     }

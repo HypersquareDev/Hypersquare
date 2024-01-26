@@ -20,7 +20,11 @@ public class PlayerLeaveEvent implements Event {
     }
 
     public String getId() {
-        return "player_event_leave";
+        return "leave";
+    }
+    @Override
+    public String getCodeblockId() {
+        return "player_event";
     }
 
     public String getSignName() {

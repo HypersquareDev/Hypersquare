@@ -31,7 +31,12 @@ public class PlayerSendMessageAction implements Action {
 
     @Override
     public String getId() {
-        return "player_action_send_message";
+        return "send_message";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "player_action";
     }
 
     @Override

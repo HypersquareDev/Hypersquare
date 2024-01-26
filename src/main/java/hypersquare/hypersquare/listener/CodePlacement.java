@@ -89,8 +89,6 @@ public class CodePlacement implements Listener {
             boolean brackets = codeblock.hasBrackets();
             boolean barrel = codeblock.hasBarrel();
             boolean threadStarter = codeblock.isThreadStarter();
-            String name = CodeBlocks.getByMaterial(event.getItemInHand().getType()).getName();
-
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -129,26 +127,26 @@ public class CodePlacement implements Listener {
                     }
 
                     CodeBlockManagement.moveCodeLine(location.clone(), size);
-                    placeBlock(event.getItemInHand(), location, brackets, barrel, name);
+                    placeBlock(event.getItemInHand(), location, brackets, barrel, codeblock);
                 }
             }.runTaskLater(Hypersquare.instance, 2);
         }
     }
 
-    private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean barrel, String name) {
+    private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean barrel, CodeBlocks codeblock) {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
-        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), name, code).toJson();
+        JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), codeblock, code).toJson();
         code.setCode(codeJson.toString());
 
-        if (name != null) { // Either invalid or empty codeblock
+        if (!codeblock.name().isEmpty()) { // Either invalid or empty codeblock
             signLocation.getBlock().setType(Material.OAK_WALL_SIGN);
             BlockData blockData = signLocation.getBlock().getBlockData();
             ((Directional) blockData).setFacing(BlockFace.WEST);
             Sign sign = (Sign) signLocation.getBlock().getState();
             sign.setWaxed(true);
-            sign.getSide(Side.FRONT).line(0, Component.text(name));
+            sign.getSide(Side.FRONT).line(0, Component.text(codeblock.getName()));
             sign.update();
             signLocation.getBlock().setBlockData(blockData);
         }
@@ -179,7 +177,7 @@ public class CodePlacement implements Listener {
                     closeBracketLocation.getBlock().setBlockData(pistonData);
                 } else {
                     // Stone Separator, skip if empty codeblock
-                    if (!Objects.equals(name, "empty")) stoneLocation.getBlock().setType(Material.STONE);
+                    if (!Objects.equals(codeblock.id(), "empty")) stoneLocation.getBlock().setType(Material.STONE);
                     if (stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.PISTON || stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.STICKY_PISTON) {
                         CodeBlockManagement.moveCodeLine(stoneLocation.clone().add(0, 0, 1), 1);
                     }

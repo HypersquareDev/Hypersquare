@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.condition;
 
+import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.action.IfAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.ActionItem;
@@ -21,6 +22,11 @@ public class IfPlayerHolding implements IfAction {
         return new ActionParameter[] {
                 new ActionParameter(DisplayValue.ITEM, true, true, Component.text("Item to check for."), "item")
         };
+    }
+
+    @Override
+    public ActionTag[] tags() {
+        return new ActionTag[] {};
     }
 
     @Override

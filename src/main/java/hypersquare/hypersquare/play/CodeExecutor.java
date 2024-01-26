@@ -32,12 +32,13 @@ public class CodeExecutor {
     private static void continueEval(int plotId, CodeStacktrace trace) {
         try {
             eval: while (true) {
+                if (trace.isDone()) break;
                 CodeStacktrace.Frame frame = trace.next();
                 if (frame == null) break;
                 CodeActionData data = frame.next();
                 if (data == null) {
                     trace.popFrame();
-                    return;
+                    continue;
                 }
 
                 Action action = Actions.getAction(data.action, data.codeblock);
@@ -56,7 +57,7 @@ public class CodeExecutor {
                 }
                 ActionArguments args = new ActionArguments(arguments);
                 ExecutionContext ctx = new ExecutionContext(
-                        frame.selection, args, trace, data.actions, action
+                        frame.selection, args, trace, data.actions, action, data
                 );
                 args.bind(ctx);
                 action.execute(ctx);

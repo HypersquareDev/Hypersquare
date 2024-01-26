@@ -6,8 +6,8 @@ import hypersquare.hypersquare.dev.value.impl.VariableValue;
 
 public class CodeVariable {
 
-    private final String name;
-    private final VariableValue.Scope scope;
+    public final String name;
+    public final VariableValue.Scope scope;
     private ExecutionContext ctx;
     public CodeVariable(String name, VariableValue.Scope scope) {
         this.name = name;

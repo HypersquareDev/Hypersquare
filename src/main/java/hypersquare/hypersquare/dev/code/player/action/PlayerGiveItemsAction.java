@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
+import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -71,6 +72,11 @@ public class PlayerGiveItemsAction implements Action {
                         DisplayValue.NUMBER, false, true, Component.text("Amount to multiply by"), "multiplier"
                 )
         };
+    }
+
+    @Override
+    public ActionTag[] tags() {
+        return new ActionTag[] {};
     }
 
     public String getId() {

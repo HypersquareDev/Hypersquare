@@ -1,20 +1,27 @@
 package hypersquare.hypersquare.menu.actions;
 
+import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.dev.value.CodeValues;
+import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
+import hypersquare.hypersquare.menu.actions.tag.MenuTag;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
+import hypersquare.hypersquare.play.CodeVariable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import oshi.util.tuples.Pair;
 
 public class ActionMenu extends Menu {
 
@@ -40,6 +47,11 @@ public class ActionMenu extends Menu {
         return this;
     }
 
+    public ActionMenu tag(String id, int slot) {
+        this.slot(slot, new MenuTag(action.getTag(id), data));
+        return this;
+    }
+
     @Override
     public void performClick(InventoryClickEvent event) {
         if (!items.containsKey(event.getSlot())) return;
@@ -58,6 +70,48 @@ public class ActionMenu extends Menu {
             p.setItemOnCursor(param.replaceValue(action, p.getItemOnCursor()));
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
+            return;
+        }
+        if (items.get(event.getSlot()) instanceof MenuTag tag) {
+            CodeFile file = new CodeFile(block.getWorld());
+            CodeData codeData = file.getCodeData();
+            CodeActionData action = CodeFileHelper.getActionAt(block, codeData);
+            if (action == null) return;
+
+            VariableValue.HSVar varValue = action.tags.getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
+            JsonObject itemData = CodeValues.getVarItemData(event.getWhoClicked().getItemOnCursor());
+
+            int direction = event.isRightClick() ? -1 : 1;
+
+            if (CodeValues.VARIABLE.isType(itemData)) {
+                varValue = (VariableValue.HSVar) CodeValues.VARIABLE.fromItem(event.getWhoClicked().getItemOnCursor());
+                direction = 0;
+
+                ItemStack item = event.getWhoClicked().getItemOnCursor();
+                item.setAmount(item.getAmount() - 1);
+
+                event.getWhoClicked().setItemOnCursor(item);
+            }
+
+            int position = -1;
+            for (int i = 0; i < tag.tag.options().length; i++) {
+                if (tag.tag.options()[i] == MenuTag.currentOption(tag.tag, action)) {
+                    position = i;
+                    break;
+                }
+            }
+            if (position == -1) throw new IllegalStateException(); //TODO Add error message
+            position += direction;
+            position = (position + tag.tag.options().length) % tag.tag.options().length;
+
+            action.tags.put(tag.tag.id(), new Pair<>(
+                    tag.tag.options()[position].id().name(),
+                    varValue
+            ));
+            file.setCode(codeData.toJson().toString());
+            slot(event.getSlot(), new MenuTag(tag.tag, action));
+            Player player = (Player) event.getWhoClicked();
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1.5f);
         }
     }
 
@@ -97,6 +151,20 @@ public class ActionMenu extends Menu {
             if (item != null) p.getInventory().addItem(item);
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
+        } else if (items.get(event.getSlot()) instanceof MenuTag tag) {
+            VariableValue.HSVar varValue = action.tags.getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
+            if (varValue == null) return;
+
+            p.setItemOnCursor(CodeValues.VARIABLE.getItem(varValue));
+
+            action.tags.put(tag.tag.id(), new Pair<>(
+                    action.tags.getOrDefault(tag.tag.id(), new Pair<>(tag.tag.defaultOption().name(), null)).getA(),
+                    null
+            ));
+            file.setCode(data.toJson().toString());
+            slot(event.getSlot(), new MenuTag(tag.tag, action));
+            Player player = (Player) event.getWhoClicked();
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1.5f);
         }
     }
 

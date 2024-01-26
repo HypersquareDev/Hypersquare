@@ -3,6 +3,10 @@ package hypersquare.hypersquare.dev.codefile.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.dev.value.CodeValues;
+import hypersquare.hypersquare.dev.value.impl.VariableValue;
+import hypersquare.hypersquare.play.CodeVariable;
+import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +18,7 @@ public class CodeActionData {
     public String codeblock;
     public List<CodeActionData> actions = new ArrayList<>();
     public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
+    public HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
 
     public CodeActionData() {
     }
@@ -34,6 +39,17 @@ public class CodeActionData {
                     values.add(value.getAsJsonObject());
                 }
                 arguments.put(argument.getKey(), values);
+            }
+        }
+        if (data.has("tags")) {
+            for (Map.Entry<String, JsonElement> tag : data.get("tags").getAsJsonObject().entrySet()) {
+                JsonObject obj = tag.getValue().getAsJsonObject();
+                VariableValue.HSVar var = null;
+                if (obj.has("var")) {
+                    var = (VariableValue.HSVar) CodeValues.VARIABLE.fromJson(obj.get("var").getAsJsonObject());
+                }
+
+                tags.put(tag.getKey(), new Pair<>(obj.get("value").getAsString(), var));
             }
         }
     }
@@ -61,6 +77,18 @@ public class CodeActionData {
                 obj.add(entry.getKey(), values);
             }
             data.add("arguments", obj);
+        }
+        if (!tags.isEmpty()) {
+            JsonObject obj = new JsonObject();
+
+            for (Map.Entry<String, Pair<String, VariableValue.HSVar>> entry : tags.entrySet()) {
+                JsonObject tag = new JsonObject();
+                tag.addProperty("value", entry.getValue().getA());
+                if (entry.getValue().getB() != null) tag.add("var", CodeValues.VARIABLE.getVarItemData(entry.getValue().getB()));
+                obj.add(entry.getKey(), tag);
+            }
+
+            data.add("tags", obj);
         }
         return data;
     }

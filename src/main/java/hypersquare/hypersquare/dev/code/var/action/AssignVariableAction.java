@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.var.action;
 
+import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.ActionItem;
@@ -46,6 +47,11 @@ public class AssignVariableAction implements Action {
     @Override
     public ActionMenuItem getCategory() {
         return SetVariableItems.GENERAL;
+    }
+
+    @Override
+    public ActionTag[] tags() {
+        return new ActionTag[] {};
     }
 
     @Override

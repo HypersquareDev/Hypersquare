@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
+import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -25,6 +26,11 @@ public class PlayerCreativeModeAction implements Action {
     @Override
     public ActionParameter[] parameters() {
         return new ActionParameter[]{};
+    }
+
+    @Override
+    public ActionTag[] tags() {
+        return new ActionTag[] {};
     }
 
     @Override

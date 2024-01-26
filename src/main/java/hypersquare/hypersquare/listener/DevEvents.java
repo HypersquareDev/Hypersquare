@@ -67,10 +67,10 @@ public class DevEvents implements Listener {
 
                 CodeFile codeFile = new CodeFile(event.getPlayer());
                 int listIndex = CodeFileHelper.getCodelineListIndex(sign.getLocation().clone().add(1, 0, 0), codeFile.getCodeData());
-                int codeblockIndex = CodeFileHelper.getCodeblockIndex(sign.getLocation().clone().add(1, 0, 0));
+                CodeActionData actionData = CodeFileHelper.getActionAt(sign.getLocation().clone().add(1, 0, 0), codeFile.getCodeData());
                 CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
-                // Index -1 is always the thread starter
-                if (codeblockIndex == -1) switch (line.type) {
+                // null means it's the thread starter
+                if (actionData == null) switch (line.type) {
                         case "player_event": {
                             CodeblockMenu.open(
                                     event.getPlayer(), event.getClickedBlock().getLocation(),
@@ -80,7 +80,7 @@ public class DevEvents implements Listener {
                             break;
                         }
                     }
-                else switch (line.actions.get(codeblockIndex).codeblock) {
+                else switch (actionData.codeblock) {
                         case "player_action": {
                             CodeblockMenu.open(
                                     event.getPlayer(), event.getClickedBlock().getLocation(),

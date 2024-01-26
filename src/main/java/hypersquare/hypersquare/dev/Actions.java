@@ -46,6 +46,11 @@ public enum Actions implements Action {
     }
 
     @Override
+    public ActionTag[] tags() {
+        return a.tags();
+    }
+
+    @Override
     public String getId() {
         return a.getId();
     }

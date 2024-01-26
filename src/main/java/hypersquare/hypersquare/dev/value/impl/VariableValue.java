@@ -7,6 +7,7 @@ import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -120,13 +121,15 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
     public record HSVar(String name, Scope scope) {
     }
     public enum Scope {
-        THREAD(NamedTextColor.AQUA),
+        THREAD(NamedTextColor.AQUA, "T"),
         ;
 
-        public final NamedTextColor color;
+        public final TextColor color;
+        public final String letter;
 
-        Scope(NamedTextColor color) {
+        Scope(TextColor color, String letter) {
             this.color = color;
+            this.letter = letter;
         }
     }
 }

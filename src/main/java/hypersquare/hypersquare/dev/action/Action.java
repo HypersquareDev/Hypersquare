@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.action;
 
+import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.ActionMenuItem;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 public interface Action {
     ActionParameter[] parameters();
+    ActionTag[] tags();
     String getId();
     String getCodeblockId();
     String getSignName();
@@ -34,7 +36,15 @@ public interface Action {
         return null;
     }
 
+    default ActionTag getTag(String id) {
+        for (ActionTag tag : tags()) {
+            if (tag.id().equals(id)) return tag;
+        }
+        return null;
+    }
+
     void execute(ExecutionContext ctx);
+
 
     record ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, String id) {
         public ActionParameter(DisplayValue type, Component description, String id) {

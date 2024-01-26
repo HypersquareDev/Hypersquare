@@ -178,13 +178,11 @@ public class CodePlacement implements Listener {
     @EventHandler
     public void onPlayerBreakBlock(BlockBreakEvent event) {
 
-        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
-            if (!Hypersquare.mode.get(event.getPlayer()).equals("editing spawn")) {
-                event.setCancelled(true);
-            }
-            return;
-        }
+
+        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding"))
+                return;
         event.setCancelled(true);
+
 
         Location blockLoc = event.getBlock().getLocation();
 

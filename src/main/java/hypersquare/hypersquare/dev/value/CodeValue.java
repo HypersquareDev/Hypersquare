@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.value;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -15,6 +16,8 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @param <T> HS Class type
@@ -47,6 +50,13 @@ public interface CodeValue<T, S> {
         if (hsVal == null) return null;
         try {
             Object val = hsVal.realValue(hsVal.fromJson(obj));
+            if (val instanceof ItemStack item) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) val = meta.displayName();
+                if (val == null) {
+                    val = Utilities.capitalizeAll(item.getType().name().toLowerCase().replace("_", " "));
+                }
+            }
             if (val instanceof Component c) {
                 val = PlainTextComponentSerializer.plainText().serialize(c);
             }

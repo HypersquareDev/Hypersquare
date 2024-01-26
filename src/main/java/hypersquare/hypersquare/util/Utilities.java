@@ -23,11 +23,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
 import static hypersquare.hypersquare.Hypersquare.fullMM;
 
 public class Utilities {
+
+    private static final Pattern firstWordLetter = Pattern.compile("\\b\\w");
+
     public static int getPlotID(World world) {
         String name = world.getName();
         if (name.contains("hs.")) {
@@ -89,6 +94,16 @@ public class Utilities {
     public static String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public static String capitalizeAll(String text) {
+        Matcher m = firstWordLetter.matcher(text);
+        StringBuilder sb = new StringBuilder();
+        while (m.find()) {
+            m.appendReplacement(sb, m.group().toUpperCase());
+        }
+        m.appendTail(sb);
+        return sb.toString();
     }
 
     public static void sendError(CommandSender sender, String message) {

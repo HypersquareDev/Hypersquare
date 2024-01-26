@@ -16,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-import java.util.function.Function;
 
 public class ItemValue implements CodeValue<ItemStack, ItemStack> {
 
@@ -85,7 +84,7 @@ public class ItemValue implements CodeValue<ItemStack, ItemStack> {
 
     @Override
     public ItemStack fromString(String data, ItemStack previous) {
-        Material mat = Material.getMaterial(data);
+        Material mat = Material.matchMaterial(data);
         if (mat == null && previous != null) return previous;
         if (mat == null) throw new RuntimeException("Not an item!");
         return new ItemStack(mat);

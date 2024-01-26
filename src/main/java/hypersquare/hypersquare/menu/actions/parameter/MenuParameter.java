@@ -2,6 +2,7 @@ package hypersquare.hypersquare.menu.actions.parameter;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.dev.action.Action;
@@ -94,15 +95,6 @@ public class MenuParameter extends MenuItem {
 
         if (v == null) return oldItem;
         if (!p.type().isValid(v, newItem) && p.type().codeVal != null && v != CodeValues.VARIABLE) {
-            if (data == null) {
-                Component name = newItem.getItemMeta().displayName();
-                if (name == null) return newItem;
-                data = CodeValues.TEXT.getVarItemData(new TextValue.HSTextComp(
-                    false, PlainTextComponentSerializer.plainText().serialize(name)
-                ));
-                data.addProperty("type", CodeValues.TEXT.getTypeId());
-            }
-
             v = p.type().codeVal;
             if (CodeValues.getType(data) != v) {
                 Object newVal = v.coerce(data);

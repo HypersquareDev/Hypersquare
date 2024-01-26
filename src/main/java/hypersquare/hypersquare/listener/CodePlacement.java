@@ -22,6 +22,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -34,6 +35,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -41,9 +43,13 @@ import java.util.Objects;
 public class CodePlacement implements Listener {
     @EventHandler
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        if (Hypersquare.mode.get(event.getPlayer()).equals("building"))
-            if (!blockOutsidePlot(event.getBlockPlaced().getLocation()))
+        if (Hypersquare.mode.get(event.getPlayer()).equals("building") || Hypersquare.mode.get(event.getPlayer()).equals("playing")) {
+            if (blockInPlot(event.getBlockPlaced().getLocation())) {
                 return;
+            } else {
+                event.setCancelled(true);
+            }
+        }
         if (Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             processPlace(event);
         }
@@ -57,6 +63,39 @@ public class CodePlacement implements Listener {
     public static boolean blockOutsidePlot(Location location) {
         RestrictMovement.commonVars(location);
         return !Utilities.locationWithin(location, new Location(location.getWorld(), -3, 0, 0), new Location(location.getWorld(), -108, 0, 256));
+    }
+
+    public static boolean blockInPlot(Location location) {
+        String plotType = location.getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
+        RestrictMovement.commonVars(location);
+        switch (plotType) {
+            case "Basic":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1, 0, -1))) {
+                    return false;
+                }
+                break;
+            case "Large":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1, 0, -1))) {
+                    return false;
+                }
+                break;
+            case "Huge":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1, 0, -1))) {
+                    return false;
+                }
+                break;
+            case "Massive":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1, 0, -1))) {
+                    return false;
+                }
+                break;
+            case "Gigantic":
+                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1, 0, -1))) {
+                    return false;
+                }
+                break;
+        }
+        return true;
     }
 
 
@@ -179,8 +218,13 @@ public class CodePlacement implements Listener {
     public void onPlayerBreakBlock(BlockBreakEvent event) {
 
 
-        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding"))
-                return;
+        if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
+            if (Hypersquare.mode.get(event.getPlayer()).equals("building") || Hypersquare.mode.get(event.getPlayer()).equals("playing")) {
+                if (!blockInPlot(event.getBlock().getLocation()))
+                    event.setCancelled(true);
+            }
+            return;
+        }
         event.setCancelled(true);
 
 

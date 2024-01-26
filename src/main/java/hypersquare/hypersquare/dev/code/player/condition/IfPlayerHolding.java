@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.code.player.conditional;
+package hypersquare.hypersquare.dev.code.player.condition;
 
 import hypersquare.hypersquare.dev.action.IfAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;

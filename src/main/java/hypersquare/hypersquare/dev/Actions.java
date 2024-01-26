@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.action.EmptyAction;
-import hypersquare.hypersquare.dev.code.player.conditional.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -31,7 +32,7 @@ import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 
 public class Plot {
 
-    public static ItemStack getPlotItem(int plotID){
+    public static ItemStack getPlotItem(int plotID) {
         org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
         if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
@@ -41,14 +42,14 @@ public class Plot {
             meta.displayName(Hypersquare.fullMM.deserialize(name + "<red>" + " (Out of date)"));
         }
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot").decoration(TextDecoration.ITALIC,false));
+        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot").decoration(TextDecoration.ITALIC, false));
         lore.add(MiniMessage.miniMessage().deserialize(""));
         lore.add(MiniMessage.miniMessage().deserialize(""));
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotID).decoration(TextDecoration.ITALIC,false));
-        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)){
-            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC,false));
+        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotID).decoration(TextDecoration.ITALIC, false));
+        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
+            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false));
         } else {
-            Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC,false);
+            Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false);
             lore.add(aa);
         }
 
@@ -96,29 +97,68 @@ public class Plot {
     }
 
 
-    public static void loadPlot(int plotID, Player player) throws WorldLockedException, CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
-        SlimePlugin plugin = Hypersquare.slimePlugin;
+    public static void loadPlot(int plotID, Player player, Runnable callback) {
         String worldName = "hs." + plotID;
         String codeWorldName = "hs.code." + plotID;
-        SlimeLoader file = plugin.getLoader("mongodb");
-        SlimePropertyMap properties = new SlimePropertyMap();
-        SlimeWorld buildTest = plugin.getWorld(worldName);
-        SlimeWorld codeTest = plugin.getWorld(codeWorldName);
-        // Load both dev and build worlds
-        if (!plugin.getLoadedWorlds().contains(buildTest)) {
-            SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
-            plugin.loadWorld(world);
-            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
-        }
-        if (!plugin.getLoadedWorlds().contains(codeTest)) {
-            SlimeWorld world = plugin.loadWorld(file, codeWorldName, false, properties);
-            plugin.loadWorld(world);
-            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
-        }
-        // Configure worlds
-        loadRules(worldName);
-        loadRules(codeWorldName);
+        player.closeInventory();
+        Utilities.sendInfo(player,Component.text("Loading plot please wait..."));
+        new Thread(() -> {
+            SlimePlugin plugin = Hypersquare.slimePlugin;
+            SlimeLoader file = plugin.getLoader("mongodb");
+            SlimePropertyMap properties = new SlimePropertyMap();
+            SlimeWorld buildTest = plugin.getWorld(worldName);
+            SlimeWorld codeTest = plugin.getWorld(codeWorldName);
+            try {
+                // Load both dev and build worlds
+                if (!plugin.getLoadedWorlds().contains(buildTest)) {
+                    SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            // Configure worlds
+                            try {
+                                plugin.loadWorld(world);
+                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
+                        }
+                    }.runTask(Hypersquare.instance);
+
+                }
+                if (!plugin.getLoadedWorlds().contains(codeTest)) {
+                    SlimeWorld world = plugin.loadWorld(file, codeWorldName, false, properties);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            // Configure worlds
+                            try {
+                                plugin.loadWorld(world);
+                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
+                        }
+                    }.runTask(Hypersquare.instance);
+                }
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldLockedException e) {
+                Utilities.sendError(player, "Error loading plot. Please try again later.");
+                throw new RuntimeException(e);
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    // Configure worlds
+                    loadRules(worldName);
+                    loadRules(codeWorldName);
+                    callback.run();
+                }
+            }.runTask(Hypersquare.instance);
+        }).start();
     }
+
+
 
     public static void loadRules(String worldName) {
         World w = Bukkit.getWorld(worldName);

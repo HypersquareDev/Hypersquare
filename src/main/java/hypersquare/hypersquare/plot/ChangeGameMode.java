@@ -25,36 +25,33 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID, boolean keepState) {
         String worldName = "hs.code." + plotID;
-        try {
-            Plot.loadPlot(plotID, player);
-        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                 WorldLockedException ignored) {
-        }
+        Plot.loadPlot(plotID, player,() ->{
+            if (Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.leave(player);
+            Utilities.resetPlayerStats(player, !keepState);
+            Bukkit.getWorld(worldName).setTime(1000);
+            if (!keepState) {
+                Inventory inv = player.getInventory();
+                inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
+                inv.setItem(8, CodeItems.VALUES_INGOT);
+            }
+            player.setGameMode(GameMode.CREATIVE);
+            player.setFlying(true);
+            Hypersquare.mode.put(player, "coding");
 
-        if (Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.leave(player);
-        Utilities.resetPlayerStats(player, !keepState);
-        Bukkit.getWorld(worldName).setTime(1000);
-        if (!keepState) {
-            Inventory inv = player.getInventory();
-            inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
-            inv.setItem(8, CodeItems.VALUES_INGOT);
-        }
-        player.setGameMode(GameMode.CREATIVE);
-        player.setFlying(true);
-        Hypersquare.mode.put(player, "coding");
+            if (keepState && Hypersquare.lastDevLocation.containsKey(player)
+                    && Hypersquare.lastDevLocation.get(player).getWorld().getName().equals(worldName)) {
+                player.teleport(Hypersquare.lastDevLocation.get(player));
+            } else {
+                player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
+            }
 
-        if (keepState && Hypersquare.lastDevLocation.containsKey(player)
-                && Hypersquare.lastDevLocation.get(player).getWorld().getName().equals(worldName)) {
-            player.teleport(Hypersquare.lastDevLocation.get(player));
-        } else {
-            player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
-        }
+            Utilities.sendInfo(player, Component.text("You are now in dev mode."));
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
+        });
 
-        Utilities.sendInfo(player, Component.text("You are now in dev mode."));
-        Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-        PlotDatabase.updateLocalData(plotID);
-        PlotManager.loadPlot(plotID);
     }
 
     public static void devMode(Player player, int plotID) {
@@ -63,63 +60,55 @@ public class ChangeGameMode {
 
     public static void playMode(Player player, int plotID) {
         String worldName = "hs." + plotID;
-        try {
-            Plot.loadPlot(plotID, player);
-        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                 WorldLockedException ignored) {
-            Utilities.sendRedInfo(player, Component.text("Error loading plot. Please try again later."));
-            return;
-        }
-        PlotManager.loadPlot(plotID);
-        if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.Rejoin(player);
-        if (Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.leave(player);
-        Utilities.resetPlayerStats(player);
-        PlotDatabase.updateEventsCache(plotID);
-        player.closeInventory();
-        player.setGameMode(GameMode.SURVIVAL);
-        player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
-        Hypersquare.mode.put(player, "playing");
-        String ownerName;
-        try { // Edge case where the owner of the plot is not in the database
-            ownerName = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
-        } catch (NullPointerException e) {
-            ownerName = "Unknown"; // This should never happen!
-        }
-        Utilities.sendInfo(player, cleanMM.deserialize("Joined game: <white>" + PlotManager.getPlotName(plotID) + " <gray>by <reset>" + ownerName));
-        Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-        PlotDatabase.updateLocalData(plotID);
-        PlotManager.loadPlot(plotID);
-        PlaytimeEventExecuter.Join(player);
-        PlotStats.addPlayer(plotID, player);
+        Plot.loadPlot(plotID, player,() ->{
+            PlotManager.loadPlot(plotID);
+            if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.Rejoin(player);
+            if (Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.leave(player);
+            Utilities.resetPlayerStats(player);
+            PlotDatabase.updateEventsCache(plotID);
+            player.closeInventory();
+            player.setGameMode(GameMode.SURVIVAL);
+            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            Hypersquare.mode.put(player, "playing");
+            String ownerName;
+            try { // Edge case where the owner of the plot is not in the database
+                ownerName = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
+            } catch (NullPointerException e) {
+                ownerName = "Unknown"; // This should never happen!
+            }
+            Utilities.sendInfo(player, cleanMM.deserialize("Joined game: <white>" + PlotManager.getPlotName(plotID) + " <gray>by <reset>" + ownerName));
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
+            PlaytimeEventExecuter.Join(player);
+            PlotStats.addPlayer(plotID, player);
+        });
     }
 
     public static void buildMode(Player player, int plotID, boolean keepState) {
-        try {
-            Plot.loadPlot(plotID, player);
-        } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                 WorldLockedException ignored) {
-        }
-        String worldName = "hs." + plotID;
-        if (Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.leave(player);
-        Utilities.resetPlayerStats(player, !keepState);
-        player.closeInventory();
-        player.setGameMode(GameMode.CREATIVE);
-        player.setFlying(true);
-        Hypersquare.mode.put(player, "building");
-        Utilities.sendInfo(player, Component.text("You are now in build mode."));
-        Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-        PlotDatabase.updateLocalData(plotID);
-        PlotManager.loadPlot(plotID);
+        Plot.loadPlot(plotID, player,() -> {
+            String worldName = "hs." + plotID;
+            if (Hypersquare.mode.get(player).equals("playing"))
+                PlaytimeEventExecuter.leave(player);
+            Utilities.resetPlayerStats(player, !keepState);
+            player.closeInventory();
+            player.setGameMode(GameMode.CREATIVE);
+            player.setFlying(true);
+            Hypersquare.mode.put(player, "building");
+            Utilities.sendInfo(player, Component.text("You are now in build mode."));
+            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+            PlotDatabase.updateLocalData(plotID);
+            PlotManager.loadPlot(plotID);
 
-        if (keepState && Hypersquare.lastBuildLocation.containsKey(player)
-                && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
-            player.teleport(Hypersquare.lastBuildLocation.get(player));
-        } else {
-            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
-        }
+            if (keepState && Hypersquare.lastBuildLocation.containsKey(player)
+                    && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
+                player.teleport(Hypersquare.lastBuildLocation.get(player));
+            } else {
+                player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            }
+        });
     }
 
     public static void buildMode(Player player, int plotId) {

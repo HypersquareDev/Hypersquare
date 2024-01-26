@@ -100,6 +100,8 @@ public class Plot {
     public static void loadPlot(int plotID, Player player, Runnable callback) {
         String worldName = "hs." + plotID;
         String codeWorldName = "hs.code." + plotID;
+        player.closeInventory();
+        Utilities.sendInfo(player,Component.text("Loading plot please wait..."));
         new Thread(() -> {
             SlimePlugin plugin = Hypersquare.slimePlugin;
             SlimeLoader file = plugin.getLoader("mongodb");

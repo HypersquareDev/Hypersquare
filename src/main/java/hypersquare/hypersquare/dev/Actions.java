@@ -4,7 +4,7 @@ import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.code.player.conditional.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
-import hypersquare.hypersquare.dev.code.variable.action.AssignVariableAction;
+import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;

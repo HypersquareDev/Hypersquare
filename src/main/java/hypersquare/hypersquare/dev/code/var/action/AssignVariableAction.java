@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.action.var;
+package hypersquare.hypersquare.dev.code.var.action;
 
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -25,7 +25,12 @@ public class AssignVariableAction implements Action {
 
     @Override
     public String getId() {
-        return "set_var_assign";
+        return "assign";
+    }
+
+    @Override
+    public String getCodeblockId() {
+        return "set_variable";
     }
 
     @Override

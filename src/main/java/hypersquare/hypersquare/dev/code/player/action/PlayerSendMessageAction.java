@@ -16,6 +16,11 @@ public class PlayerSendMessageAction implements Action {
     @Override
     public void execute(ExecutionContext ctx) {
         for (Player p : ctx.selection().players()) {
+            if (ctx.args().allNonNull("messages").isEmpty() || ctx.args().allNonNull("messages") == null) {
+                p.sendMessage(Component.empty());
+                return;
+            }
+            
             for (Component c : ctx.args().<Component>allNonNull("messages")) {
                 p.sendMessage(c);
             }
@@ -25,7 +30,7 @@ public class PlayerSendMessageAction implements Action {
     @Override
     public ActionParameter[] parameters() {
         return new ActionParameter[] {
-                new ActionParameter(DisplayValue.TEXT, true, false, Component.text("The message(s) to send."), "messages")
+                new ActionParameter(DisplayValue.TEXT, true, true, Component.text("The message(s) to send."), "messages")
         };
     }
 

@@ -16,6 +16,7 @@ public class ValueCommands implements HyperCommand {
         register(cd, CodeValues.STRING, "string", "str");
         register(cd, CodeValues.TEXT, "text", "txt");
         register(cd, CodeValues.NUMBER, "number", "num");
+        register(cd, CodeValues.VARIABLE, "variable", "var");
     }
 
     private void register(CommandDispatcher<CommandSourceStack> cd, CodeValues value, String... cmds) {

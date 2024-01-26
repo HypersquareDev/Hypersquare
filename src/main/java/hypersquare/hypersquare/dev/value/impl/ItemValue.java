@@ -102,6 +102,12 @@ public class ItemValue implements CodeValue<ItemStack, ItemStack> {
     }
 
     @Override
+    public JsonObject serialize(Object obj) {
+        if (obj instanceof ItemStack item) return getVarItemData(item);
+        return null;
+    }
+
+    @Override
     public ItemStack getItem(ItemStack value) {
         return value;
     }

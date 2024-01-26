@@ -14,9 +14,11 @@ import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.dev.value.impl.StringValue;
 import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.item.IfPlayerItems;
 import hypersquare.hypersquare.item.PlayerActionItems;
 import hypersquare.hypersquare.item.PlayerEventItems;
+import hypersquare.hypersquare.item.SetVariableItems;
 import hypersquare.hypersquare.menu.CodeblockMenu;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
@@ -95,8 +97,15 @@ public class DevEvents implements Listener {
                             );
                             break;
                         }
+                        case "set_variable": {
+                            CodeblockMenu.open(
+                                    event.getPlayer(), event.getClickedBlock().getLocation(),
+                                    "Set Variable", "Variables", 5,
+                                    SetVariableItems.values(), true
+                            );
+                            break;
+                        }
                     }
-
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else if (event.getClickedBlock().getType() == Material.BARREL) {
                 event.setCancelled(true);
@@ -185,6 +194,7 @@ public class DevEvents implements Listener {
                 inv.setItem(0, new StringValue().emptyValue());
                 inv.setItem(1, new TextValue().emptyValue());
                 inv.setItem(2, new NumberValue().emptyValue());
+                inv.setItem(3, new VariableValue().emptyValue());
 
                 player.openInventory(inv);
             }

@@ -3,10 +3,7 @@ package hypersquare.hypersquare.dev.value;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.value.impl.ItemValue;
-import hypersquare.hypersquare.dev.value.impl.NumberValue;
-import hypersquare.hypersquare.dev.value.impl.StringValue;
-import hypersquare.hypersquare.dev.value.impl.TextValue;
+import hypersquare.hypersquare.dev.value.impl.*;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,11 +19,23 @@ public enum CodeValues implements CodeValue {
     STRING(new StringValue()),
     TEXT(new TextValue()),
     ITEM(new ItemValue()),
+    VARIABLE(new VariableValue())
     ;
 
     private final CodeValue v;
     CodeValues(CodeValue v) {
         this.v = v;
+    }
+
+    public static JsonObject toJson(Object obj) {
+        for (CodeValues v : CodeValues.values()) {
+            JsonObject result = v.serialize(obj);
+            if (result != null) {
+                result.addProperty("type", v.getTypeId());
+                return result;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -109,5 +118,10 @@ public enum CodeValues implements CodeValue {
     @Override
     public Object fromItem(ItemStack item) {
         return v.fromItem(item);
+    }
+
+    @Override
+    public JsonObject serialize(Object obj) {
+        return v.serialize(obj);
     }
 }

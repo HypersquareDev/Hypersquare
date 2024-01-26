@@ -108,6 +108,13 @@ public class TextValue implements CodeValue<TextValue.HSTextComp, Component> {
     }
 
     @Override
+    public JsonObject serialize(Object obj) {
+        if (obj instanceof HSTextComp comp) return getVarItemData(comp);
+        if (obj instanceof Component comp) return getVarItemData(new HSTextComp(false, Hypersquare.fullMM.serialize(comp)));
+        return null;
+    }
+
+    @Override
     public ItemStack getItem(HSTextComp comp) {
         ItemStack item = CodeValue.super.getItem(comp);
         ItemMeta meta = item.getItemMeta();

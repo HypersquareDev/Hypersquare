@@ -93,7 +93,8 @@ public class ActionMenu extends Menu {
                 }
             }
         } else if (items.get(event.getSlot()) instanceof MenuParameter param) {
-            p.getInventory().addItem(param.getValue(action, true));
+            ItemStack item = param.getValue(action, true);
+            if (item != null) p.getInventory().addItem(item);
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
         }

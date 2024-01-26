@@ -79,6 +79,7 @@ public class MenuParameter extends MenuItem {
         JsonObject data = CodeValues.getVarItemData(item);
         if (data == null) return p.type().isValid(null, item);
         CodeValues v = CodeValues.getType(data);
+        if (v == CodeValues.VARIABLE) return true;
         return p.type().isValid(v, item);
     }
 
@@ -92,7 +93,7 @@ public class MenuParameter extends MenuItem {
             else v = CodeValues.getType(data);
 
         if (v == null) return oldItem;
-        if (!p.type().isValid(v, newItem) && p.type().codeVal != null) {
+        if (!p.type().isValid(v, newItem) && p.type().codeVal != null && v != CodeValues.VARIABLE) {
             if (data == null) {
                 Component name = newItem.getItemMeta().displayName();
                 if (name == null) return newItem;

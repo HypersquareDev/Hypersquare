@@ -89,4 +89,16 @@ public class NumberValue implements CodeValue<Long, DecimalNumber> {
     public DecimalNumber realValue(Long value) {
         return new DecimalNumber(0, value);
     }
+
+    @Override
+    public JsonObject serialize(Object obj) {
+        if (obj instanceof Double d) return getVarItemData(new DecimalNumber(d).rawData());
+        if (obj instanceof Float f) return getVarItemData(new DecimalNumber(f).rawData());
+        if (obj instanceof Long l) return getVarItemData(new DecimalNumber(l).rawData());
+        if (obj instanceof Integer i) return getVarItemData(new DecimalNumber(i).rawData());
+        if (obj instanceof Short s) return getVarItemData(new DecimalNumber(s).rawData());
+        if (obj instanceof Byte b) return getVarItemData(new DecimalNumber(b).rawData());
+        if (obj instanceof DecimalNumber d) return getVarItemData(d.rawData());
+        return null;
+    }
 }

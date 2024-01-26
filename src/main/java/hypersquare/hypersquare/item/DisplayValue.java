@@ -20,7 +20,7 @@ public enum DisplayValue {
     BLOCK(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().isBlock()),
     SPAWN_EGG(CodeValues.ITEM, NamedTextColor.GOLD, (v, t) -> v == CodeValues.ITEM && t.getType().getKey().getKey().endsWith("_spawn_egg")),
     ANY(null, TextColor.color(255, 212, 127), (v, t) -> true),
-    VARIABLE(null, NamedTextColor.YELLOW, (v, t) -> false),
+    VARIABLE(CodeValues.VARIABLE, NamedTextColor.YELLOW, (v, t) -> v == CodeValues.VARIABLE),
     TEXT(CodeValues.TEXT, TextColor.color(127, 212, 42), (v, t) -> v == CodeValues.TEXT),
     LIST(null, NamedTextColor.DARK_GREEN, (v, t) -> false),
     VECTOR(null, TextColor.color(42, 255, 170), (v, t) -> false),

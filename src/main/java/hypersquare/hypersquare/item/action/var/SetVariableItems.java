@@ -21,10 +21,10 @@ public enum SetVariableItems implements ActionMenuItem {
     LIST_MANIPULATION(Material.ENDER_CHEST, DisplayValue.LIST.color, "List Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>lists", 23),
     DICTIONARY_MANIPULATION(Material.CHEST_MINECART, DisplayValue.DICTIONARY.color, "Dictionary Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>dictionaries", 25),
 
-    WORLD_ACTIONS(Material.SPECTRAL_ARROW, DisplayValue.NUMBER.color, "<red>World Actions", "<gray>Actions that get%n<gray>info from the%n<gray>world", 36),
-    PARTICLE_MANIPULATION(Material.WHITE_DYE, DisplayValue.PARTICLE.color, "Particle Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>particles", 38),
-    VECTOR_MANIPULATION(Material.PRISMARINE_SHARD, DisplayValue.VECTOR.color, "Vector Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>vectors", 40),
-    MISCELLANEOUS_ACTIONS(Material.BEDROCK, DisplayValue.POTION.color, "Miscellaneous Actions", "<gray>Actions that do not%n<gray>belong is other%n<gray>categories", 42),
+    WORLD_ACTIONS(Material.SPECTRAL_ARROW, DisplayValue.NUMBER.color, "<red>World Actions", "<gray>Actions that get%n<gray>info from the%n<gray>world", 37),
+    PARTICLE_MANIPULATION(Material.WHITE_DYE, DisplayValue.PARTICLE.color, "Particle Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>particles", 39),
+    VECTOR_MANIPULATION(Material.PRISMARINE_SHARD, DisplayValue.VECTOR.color, "Vector Manipulation", "<gray>Actions for the%n<gray>manipulation of%n<gray>vectors", 41),
+    MISCELLANEOUS_ACTIONS(Material.BEDROCK, DisplayValue.POTION.color, "Miscellaneous Actions", "<gray>Actions that do not%n<gray>belong is other%n<gray>categories", 43),
     ;
 
     public final Material material;

@@ -1,13 +1,9 @@
 package hypersquare.hypersquare.plot;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.item.MiscItems;
-import hypersquare.hypersquare.listener.PlaytimeEventExecuter;
+import hypersquare.hypersquare.listener.PlaytimeEventExecutor;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -16,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,7 +22,7 @@ public class ChangeGameMode {
         String worldName = "hs.code." + plotID;
         Plot.loadPlot(plotID, player,() ->{
             if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.leave(player);
+                PlaytimeEventExecutor.leave(player);
             Utilities.resetPlayerStats(player, !keepState);
             Bukkit.getWorld(worldName).setTime(1000);
             if (!keepState) {
@@ -63,9 +58,9 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID, player,() ->{
             PlotManager.loadPlot(plotID);
             if (Utilities.getPlotID(player.getWorld()) == plotID && Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.Rejoin(player);
+                PlaytimeEventExecutor.Rejoin(player);
             if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.leave(player);
+                PlaytimeEventExecutor.leave(player);
             Utilities.resetPlayerStats(player);
             PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
@@ -82,7 +77,7 @@ public class ChangeGameMode {
             Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
             PlotDatabase.updateLocalData(plotID);
             PlotManager.loadPlot(plotID);
-            PlaytimeEventExecuter.Join(player);
+            PlaytimeEventExecutor.Join(player);
             PlotStats.addPlayer(plotID, player);
         });
     }
@@ -91,7 +86,7 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID, player,() -> {
             String worldName = "hs." + plotID;
             if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.leave(player);
+                PlaytimeEventExecutor.leave(player);
             Utilities.resetPlayerStats(player, !keepState);
             player.closeInventory();
             player.setGameMode(GameMode.CREATIVE);
@@ -123,7 +118,7 @@ public class ChangeGameMode {
 
     public static void spawn(Player player) {
         if (Hypersquare.mode.get(player).equals("playing"))
-            PlaytimeEventExecuter.leave(player);
+            PlaytimeEventExecutor.leave(player);
         Utilities.resetPlayerStats(player);
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);

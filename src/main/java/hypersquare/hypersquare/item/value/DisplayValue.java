@@ -21,6 +21,7 @@ public enum DisplayValue {
     ANY(null, TextColor.color(255, 212, 127), (_, _) -> true),
     VARIABLE(CodeValues.VARIABLE, NamedTextColor.YELLOW, (v, _) -> v == CodeValues.VARIABLE),
     TEXT(CodeValues.TEXT, TextColor.color(127, 212, 42), (v, _) -> v == CodeValues.TEXT),
+    LOCATION(null, NamedTextColor.GREEN, (_, _) -> false),
     LIST(null, NamedTextColor.DARK_GREEN, (_, _) -> false),
     VECTOR(null, TextColor.color(42, 255, 170), (_, _) -> false),
     STRING(null, NamedTextColor.AQUA, (v, _) -> v == CodeValues.STRING),

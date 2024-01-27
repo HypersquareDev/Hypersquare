@@ -46,7 +46,7 @@ public class AssignVariableAction implements Action {
 
     @Override
     public ActionMenuItem getCategory() {
-        return SetVariableItems.GENERAL;
+        return SetVariableItems.VARIABLE_SETTING;
     }
 
     @Override

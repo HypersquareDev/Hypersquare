@@ -11,10 +11,7 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.dev.value.impl.NumberValue;
-import hypersquare.hypersquare.dev.value.impl.StringValue;
-import hypersquare.hypersquare.dev.value.impl.TextValue;
-import hypersquare.hypersquare.dev.value.impl.VariableValue;
+import hypersquare.hypersquare.dev.value.impl.*;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.action.player.IfPlayerItems;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
@@ -193,6 +190,8 @@ public class DevEvents implements Listener {
                 inv.setItem(2, new NumberValue().emptyValue());
                 inv.setItem(3, new VariableValue().emptyValue());
 
+                inv.setItem(9, new NullValue().emptyValue());
+
                 player.openInventory(inv);
             }
         }
@@ -297,7 +296,7 @@ public class DevEvents implements Listener {
         Object v;
         try {
             v = value.fromString(raw, value.fromItem(item));
-        } catch (Exception ignored) { // i want to show the exception message as a hint but red said no >:(
+        } catch (Exception ignored) {
             Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
             return;
         }

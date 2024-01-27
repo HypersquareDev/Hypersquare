@@ -25,6 +25,7 @@ public enum DisplayValue {
     LIST(null, NamedTextColor.DARK_GREEN, (_, _) -> false),
     VECTOR(null, TextColor.color(42, 255, 170), (_, _) -> false),
     STRING(null, NamedTextColor.AQUA, (v, _) -> v == CodeValues.STRING),
+    NULL(CodeValues.NULL, TextColor.color(0x57B7CC), (v, _) -> v == CodeValues.NULL),
     DICTIONARY(null, TextColor.color(85, 170, 255), (_, _) -> false),
     SOUND(null, NamedTextColor.BLUE, (_, _) -> false),
     PARTICLE(null, TextColor.color(170, 85, 255), (_, _) -> false),

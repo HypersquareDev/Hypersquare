@@ -15,6 +15,7 @@ import java.util.List;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public enum CodeValues implements CodeValue {
+    NULL(new NullValue()),
     NUMBER(new NumberValue()),
     STRING(new StringValue()),
     TEXT(new TextValue()),

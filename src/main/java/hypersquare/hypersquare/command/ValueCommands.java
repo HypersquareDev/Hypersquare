@@ -13,6 +13,7 @@ public class ValueCommands implements HyperCommand {
 
     @Override
     public void register(CommandDispatcher<CommandSourceStack> cd) {
+        register(cd, CodeValues.NULL, "null", "nul");
         register(cd, CodeValues.STRING, "string", "str");
         register(cd, CodeValues.TEXT, "text", "txt");
         register(cd, CodeValues.NUMBER, "number", "num");

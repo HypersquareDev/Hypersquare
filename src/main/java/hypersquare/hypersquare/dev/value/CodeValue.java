@@ -110,10 +110,12 @@ public interface CodeValue<T, S> {
         List<Component> lore = new ArrayList<>(List.of());
         lore.addAll(getDescription());
 
-        lore.add(Component.empty());
-        lore.add(Component.text("How to set:").color(TextColor.color(0xF56EE6)).decoration(TextDecoration.ITALIC, false));
+        if (!getHowToSet().isEmpty()) {
+            lore.add(Component.empty());
+            lore.add(Component.text("How to set:").color(TextColor.color(0xF56EE6)).decoration(TextDecoration.ITALIC, false));
 
-        lore.addAll(getHowToSet());
+            lore.addAll(getHowToSet());
+        }
 
         meta.lore(lore);
 

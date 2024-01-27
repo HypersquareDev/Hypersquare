@@ -69,11 +69,12 @@ public class ChangeGameMode {
 
             if (oldPlotID == plotID && oldMode.equals("playing")) {
                 CodeExecutor.trigger(plotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
-                //todo trigger rejoin event for current plot
+                CodeExecutor.trigger(plotID, Events.PLAYER_REJOIN_EVENT, new CodeSelection(player));
             } else if (oldMode.equals("playing")) {
                 CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
-          
+            CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
+
             Utilities.resetPlayerStats(player);
             PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();

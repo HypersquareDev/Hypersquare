@@ -8,19 +8,23 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerLeaveEvent implements Event {
+public class PlayerRejoinEvent implements Event {
 
     public ItemStack item() {
         return new EventItem()
-                .setMaterial(Material.POISONOUS_POTATO)
-                .setName(Component.text("Player Leave Game Event").color(NamedTextColor.RED))
+                .setMaterial(Material.PLAYER_HEAD)
+                .setName(Component.text("Player Rejoin Game Event").color(NamedTextColor.YELLOW))
                 .setDescription(Component.text("Executes code when a player"),
-                                Component.text("leaves the plot."))
+                                Component.text("rejoins the plot using /play"))
+                .addAdditionalInfo(Component.text("This event is triggered"),
+                                   Component.text("before the join event, and"),
+                                   Component.text("after the leave event."))
+                .setCancelable(true)
                 .build();
     }
 
     public String getId() {
-        return "leave";
+        return "rejoin";
     }
     @Override
     public String getCodeblockId() {
@@ -28,11 +32,11 @@ public class PlayerLeaveEvent implements Event {
     }
 
     public String getSignName() {
-        return "Leave";
+        return "Rejoin";
     }
 
     public String getName() {
-        return "Player Leave Game Event";
+        return "Player Rejoin Game Event";
     }
 
     @Override

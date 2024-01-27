@@ -2,6 +2,7 @@ package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.code.player.event.PlayerJoinEvent;
 import hypersquare.hypersquare.dev.code.player.event.PlayerLeaveEvent;
+import hypersquare.hypersquare.dev.code.player.event.PlayerRejoinEvent;
 import hypersquare.hypersquare.dev.code.player.event.PlayerRightClickEvent;
 import hypersquare.hypersquare.item.Event;
 import hypersquare.hypersquare.item.PlayerEventItems;
@@ -12,6 +13,7 @@ import java.util.Objects;
 public enum Events implements Event {
     PLAYER_JOIN_EVENT(new PlayerJoinEvent()),
     PLAYER_LEAVE_EVENT(new PlayerLeaveEvent()),
+    PLAYER_REJOIN_EVENT(new PlayerRejoinEvent()),
     PLAYER_RIGHT_CLICK(new PlayerRightClickEvent())
     ;
 

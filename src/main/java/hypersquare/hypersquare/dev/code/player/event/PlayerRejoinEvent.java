@@ -19,7 +19,7 @@ public class PlayerRejoinEvent implements Event {
                 .addAdditionalInfo(Component.text("This event is triggered"),
                                    Component.text("before the join event, and"),
                                    Component.text("after the leave event."))
-                .setCancelable(true)
+                .setCancellable(true)
                 .build();
     }
 

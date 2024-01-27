@@ -17,7 +17,7 @@ public class PlayerRightClickEvent implements Event {
                         Component.text("Executes code when a player"),
                         Component.text("right clicks while looking at a"),
                         Component.text("block or holding an item."))
-                .setCancelable(true)
+                .setCancellable(true)
                 .build();
     }
 

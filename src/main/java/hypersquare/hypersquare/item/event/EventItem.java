@@ -17,7 +17,7 @@ public class EventItem {
     Material material;
     Component[] description;
     List<Component[]> additionalInfo = List.of();
-    boolean cancelable;
+    boolean cancellable;
 
     public EventItem setMaterial(Material material) {
         this.material = material;
@@ -51,8 +51,8 @@ public class EventItem {
         return this;
     }
 
-    public EventItem setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
+    public EventItem setCancellable(boolean cancellable) {
+        this.cancellable = cancellable;
         return this;
     }
 
@@ -80,15 +80,15 @@ public class EventItem {
             }
         }
 
-        // Cancelable
-        if (cancelable) {
+        // Cancellable
+        if (cancellable) {
             lore.add(Component.empty());
             lore.add(Component.empty()
                         .decoration(TextDecoration.ITALIC, false)
                     .append(Component.text("∅")
                             .color(TextColor.color(0xCC1010))
                     )
-                    .append(Component.text(" Cancelable")
+                    .append(Component.text(" Cancellable")
                             .color(TextColor.color(0xFF3D3D))
                     )
             );

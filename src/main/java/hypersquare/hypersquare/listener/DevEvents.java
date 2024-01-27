@@ -18,6 +18,8 @@ import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import hypersquare.hypersquare.item.action.var.SetVariableItems;
 import hypersquare.hypersquare.menu.CodeblockMenu;
+import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -28,10 +30,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -120,6 +119,38 @@ public class DevEvents implements Listener {
             }
         }
 
+    }
+
+    @EventHandler
+    public void onBreakBlock(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Location brokenLocation = event.getBlock().getLocation();
+        Material brokenMaterial = event.getBlock().getType();
+        if (brokenMaterial == Material.BARREL) {
+            ItemStack mainHandItem = player.getInventory().getItemInMainHand();
+            if (mainHandItem.getType() == Material.AIR) return;
+            CodeFile file = new CodeFile(player);
+            CodeData data = file.getCodeData();
+            CodeActionData actionData = CodeFileHelper.getActionAt(brokenLocation.subtract(0, 1, 0), data);
+            if (actionData == null) return;
+            Action action = Actions.getByData(actionData);;
+            if (action == null) return;
+            ActionMenu menu = action.actionMenu(actionData);
+            for (int i = 0; i < menu.getSize(); i++) {
+                if (!menu.items.containsKey(i)) continue;
+                if (menu.items.get(i) instanceof MenuParameter param) {
+                    if (!param.isEmpty(actionData)) continue;
+                    if (!param.isValid(mainHandItem)) continue;
+                    param.replaceValue(actionData, mainHandItem);
+                    file.setCode(data.toJson().toString());
+
+                    mainHandItem.setAmount(mainHandItem.getAmount() - 1);
+                    player.getInventory().setItemInMainHand(mainHandItem);
+                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
+                    return;
+                }
+            }
+        }
     }
 
     @EventHandler

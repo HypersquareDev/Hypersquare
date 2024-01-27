@@ -15,7 +15,7 @@ public class Menu {
 
     public static final HashMap<Player, Menu> openMenus = new HashMap<>();
     private final Inventory inventory;
-    protected final HashMap<Integer, MenuItem> items = new HashMap<>();
+    public final HashMap<Integer, MenuItem> items = new HashMap<>();
 
     /**
      * Creates a new menu

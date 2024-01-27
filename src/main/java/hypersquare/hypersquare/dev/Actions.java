@@ -40,6 +40,13 @@ public enum Actions implements Action {
         return null;
     }
 
+    public static Action getByData(CodeActionData data) {
+        for (Action action : Actions.values()) {
+            if (Objects.equals(action.getId(), data.action) && Objects.equals(action.getCodeblockId(), data.codeblock)) return action;
+        }
+        return null;
+    }
+
     @Override
     public ActionParameter[] parameters() {
         return a.parameters();

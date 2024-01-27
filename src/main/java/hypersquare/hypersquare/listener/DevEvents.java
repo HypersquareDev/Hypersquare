@@ -3,6 +3,7 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
@@ -40,6 +41,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -51,17 +53,18 @@ public class DevEvents implements Listener {
         if (event.getClickedBlock() == null) {
             return;
         }
-        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK && event.getHand() == EquipmentSlot.HAND) {
 
             if (event.getClickedBlock().getLocation().getX() > -0) return;
 
-            if (event.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
+            Material clickedMaterial = event.getClickedBlock().getType();
+            if (clickedMaterial == Material.OAK_WALL_SIGN || CodeBlocks.getByMaterial(clickedMaterial) != null) {
                 event.setCancelled(true);
-                Sign sign = (Sign) event.getClickedBlock().getState();
+                Location codeblockLocation = clickedMaterial == Material.OAK_WALL_SIGN ? event.getClickedBlock().getLocation().clone().add(1, 0, 0) : event.getClickedBlock().getLocation();
 
                 CodeFile codeFile = new CodeFile(event.getPlayer());
-                int listIndex = CodeFileHelper.getCodelineListIndex(sign.getLocation().clone().add(1, 0, 0), codeFile.getCodeData());
-                CodeActionData actionData = CodeFileHelper.getActionAt(sign.getLocation().clone().add(1, 0, 0), codeFile.getCodeData());
+                int listIndex = CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData());
+                CodeActionData actionData = CodeFileHelper.getActionAt(codeblockLocation, codeFile.getCodeData());
                 CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
                 // null means it's the thread starter
                 if (actionData == null) switch (line.type) {

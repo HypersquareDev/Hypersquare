@@ -73,13 +73,13 @@ public class ChangeGameMode {
             } else if (oldMode.equals("playing")) {
                 CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
-            CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
 
             Utilities.resetPlayerStats(player);
             PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
             player.setGameMode(GameMode.SURVIVAL);
             player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
             Hypersquare.mode.put(player, "playing");
             String ownerName;
             try { // Edge case where the owner of the plot is not in the database

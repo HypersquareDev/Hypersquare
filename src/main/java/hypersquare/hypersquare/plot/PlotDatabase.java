@@ -21,8 +21,10 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import hypersquare.hypersquare.Hypersquare;
+import net.kyori.adventure.text.Component;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,7 +36,6 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -191,11 +192,11 @@ public class PlotDatabase {
         plotsCollection.updateOne(filter, update);
     }
 
-    public static String getPlotName(int plotID) {
+    public static Component getPlotName(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
         if (result != null) {
-            return result.getString("name");
+            return minimalMM.deserialize(result.getString("name"));
         }
         return null;
     }

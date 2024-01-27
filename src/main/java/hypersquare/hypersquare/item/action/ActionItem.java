@@ -90,15 +90,20 @@ public class ActionItem {
         lore.add(Component.text("Barrel Parameters:")
                 .color(NamedTextColor.WHITE)
                 .decoration(TextDecoration.ITALIC, false));
+        boolean hasOptional = false;
         if (params != null) {
             for (Action.ActionParameter actionParameter : params) {
                 Component paramComp = actionParameter.type().getName();
                 paramComp = paramComp.append(Component.text(actionParameter.plural() ? "(s)" : ""));
-                paramComp = paramComp.append(Component.text(actionParameter.optional() ? "*" : "").color(NamedTextColor.GRAY));
+                if (actionParameter.optional()) {
+                    hasOptional = true;
+                    paramComp = paramComp.append(Component.text("*").color(NamedTextColor.GRAY));
+                }
                 paramComp = paramComp.append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(actionParameter.description().color(NamedTextColor.GRAY));
                 lore.add(paramComp.decoration(TextDecoration.ITALIC, false));
             }
         }
+
         // Tags
         // 1 Tag | 2 Tags
         if (tags != 0) {
@@ -123,6 +128,12 @@ public class ActionItem {
                     lore.add(text.decoration(TextDecoration.ITALIC, false));
                 }
             }
+        }
+
+        // *Optional
+        if (hasOptional) {
+            lore.add(Component.empty());
+            lore.add(Component.text("*Optional").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true));
         }
 
         // Enchanted

@@ -4,8 +4,8 @@ import hypersquare.hypersquare.dev.code.player.event.PlayerJoinEvent;
 import hypersquare.hypersquare.dev.code.player.event.PlayerLeaveEvent;
 import hypersquare.hypersquare.dev.code.player.event.PlayerRejoinEvent;
 import hypersquare.hypersquare.dev.code.player.event.PlayerRightClickEvent;
-import hypersquare.hypersquare.item.Event;
-import hypersquare.hypersquare.item.PlayerEventItems;
+import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;

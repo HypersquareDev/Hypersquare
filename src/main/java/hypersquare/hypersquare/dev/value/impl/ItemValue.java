@@ -2,7 +2,7 @@ package hypersquare.hypersquare.dev.value.impl;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.value.CodeValue;
-import hypersquare.hypersquare.item.DisplayValue;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import net.kyori.adventure.text.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;

@@ -1,8 +1,8 @@
 package hypersquare.hypersquare.dev.code.player.event;
 
-import hypersquare.hypersquare.item.Event;
-import hypersquare.hypersquare.item.EventItem;
-import hypersquare.hypersquare.item.PlayerEventItems;
+import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.item.event.EventItem;
+import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;

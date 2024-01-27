@@ -8,7 +8,7 @@ import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
-import hypersquare.hypersquare.item.ActionMenuItem;
+import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;

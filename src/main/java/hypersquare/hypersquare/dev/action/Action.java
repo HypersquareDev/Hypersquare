@@ -1,10 +1,9 @@
 package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.ActionTag;
-import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.ActionMenuItem;
-import hypersquare.hypersquare.item.DisplayValue;
+import hypersquare.hypersquare.item.action.ActionMenuItem;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ExecutionContext;
 import net.kyori.adventure.text.Component;

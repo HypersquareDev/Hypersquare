@@ -5,7 +5,7 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.item.Event;
+import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

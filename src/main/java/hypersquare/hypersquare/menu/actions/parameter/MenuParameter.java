@@ -2,16 +2,13 @@ package hypersquare.hypersquare.menu.actions.parameter;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.dev.value.impl.TextValue;
 import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.item.DisplayValue;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

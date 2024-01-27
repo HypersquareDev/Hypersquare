@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.item.event;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

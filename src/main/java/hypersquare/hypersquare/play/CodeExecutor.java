@@ -7,7 +7,7 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
-import hypersquare.hypersquare.item.Event;
+import hypersquare.hypersquare.item.event.Event;
 
 import java.util.HashMap;
 import java.util.List;

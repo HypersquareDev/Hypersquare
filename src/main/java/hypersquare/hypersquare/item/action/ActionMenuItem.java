@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.item.action;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;

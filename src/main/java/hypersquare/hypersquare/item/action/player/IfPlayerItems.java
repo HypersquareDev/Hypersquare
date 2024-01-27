@@ -1,5 +1,6 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.item.action.player;
 
+import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;

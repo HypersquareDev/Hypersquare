@@ -2,7 +2,7 @@ package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.item.ActionMenuItem;
+import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.play.ExecutionContext;
 import org.bukkit.inventory.ItemStack;

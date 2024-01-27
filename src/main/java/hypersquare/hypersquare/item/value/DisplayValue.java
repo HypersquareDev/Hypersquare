@@ -1,8 +1,7 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.item.value;
 
 
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.dev.value.impl.ItemValue;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

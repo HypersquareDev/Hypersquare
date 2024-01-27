@@ -39,7 +39,7 @@ public class NullValue implements CodeValue<String, String> {
         return List.of(
                 BasicComponent.gray("Represents a null value."),
                 BasicComponent.gray("Typically used as a"),
-                BasicComponent.gray("non-existant value."),
+                BasicComponent.gray("non-existent value."),
                 BasicComponent.gray("Returned by failed variable"),
                 BasicComponent.gray("actions.")
         );

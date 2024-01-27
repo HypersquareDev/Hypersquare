@@ -24,33 +24,37 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID, boolean keepState) {
-        String worldName = "hs.code." + plotID;
-        Plot.loadPlot(plotID, player,() ->{
-            if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.leave(player);
-            Utilities.resetPlayerStats(player, !keepState);
-            Bukkit.getWorld(worldName).setTime(1000);
-            if (!keepState) {
-                Inventory inv = player.getInventory();
-                inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
-                inv.setItem(8, CodeItems.VALUES_INGOT);
-            }
-            player.setGameMode(GameMode.CREATIVE);
-            player.setFlying(true);
-            Hypersquare.mode.put(player, "coding");
+        if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.developers")) {
+            String worldName = "hs.code." + plotID;
+            Plot.loadPlot(plotID, player, () -> {
+                if (Hypersquare.mode.get(player).equals("playing"))
+                    PlaytimeEventExecuter.leave(player);
+                Utilities.resetPlayerStats(player, !keepState);
+                Bukkit.getWorld(worldName).setTime(1000);
+                if (!keepState) {
+                    Inventory inv = player.getInventory();
+                    inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
+                    inv.setItem(8, CodeItems.VALUES_INGOT);
+                }
+                player.setGameMode(GameMode.CREATIVE);
+                player.setFlying(true);
+                Hypersquare.mode.put(player, "coding");
 
-            if (keepState && Hypersquare.lastDevLocation.containsKey(player)
-                    && Hypersquare.lastDevLocation.get(player).getWorld().getName().equals(worldName)) {
-                player.teleport(Hypersquare.lastDevLocation.get(player));
-            } else {
-                player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
-            }
+                if (keepState && Hypersquare.lastDevLocation.containsKey(player)
+                        && Hypersquare.lastDevLocation.get(player).getWorld().getName().equals(worldName)) {
+                    player.teleport(Hypersquare.lastDevLocation.get(player));
+                } else {
+                    player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
+                }
 
-            Utilities.sendInfo(player, Component.text("You are now in dev mode."));
-            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-            PlotDatabase.updateLocalData(plotID);
-            PlotManager.loadPlot(plotID);
-        });
+                Utilities.sendInfo(player, Component.text("You are now in dev mode."));
+                Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                PlotDatabase.updateLocalData(plotID);
+                PlotManager.loadPlot(plotID);
+            });
+        } else {
+            Utilities.sendError(player,"You do not have dev permissions for this plot.");
+        }
 
     }
 
@@ -88,27 +92,32 @@ public class ChangeGameMode {
     }
 
     public static void buildMode(Player player, int plotID, boolean keepState) {
-        Plot.loadPlot(plotID, player,() -> {
-            String worldName = "hs." + plotID;
-            if (Hypersquare.mode.get(player).equals("playing"))
-                PlaytimeEventExecuter.leave(player);
-            Utilities.resetPlayerStats(player, !keepState);
-            player.closeInventory();
-            player.setGameMode(GameMode.CREATIVE);
-            player.setFlying(true);
-            Hypersquare.mode.put(player, "building");
-            Utilities.sendInfo(player, Component.text("You are now in build mode."));
-            Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-            PlotDatabase.updateLocalData(plotID);
-            PlotManager.loadPlot(plotID);
+        if (PlotDatabase.getRawBuilders(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.builders")) {
 
-            if (keepState && Hypersquare.lastBuildLocation.containsKey(player)
-                    && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
-                player.teleport(Hypersquare.lastBuildLocation.get(player));
-            } else {
-                player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
-            }
-        });
+            Plot.loadPlot(plotID, player, () -> {
+                String worldName = "hs." + plotID;
+                if (Hypersquare.mode.get(player).equals("playing"))
+                    PlaytimeEventExecuter.leave(player);
+                Utilities.resetPlayerStats(player, !keepState);
+                player.closeInventory();
+                player.setGameMode(GameMode.CREATIVE);
+                player.setFlying(true);
+                Hypersquare.mode.put(player, "building");
+                Utilities.sendInfo(player, Component.text("You are now in build mode."));
+                Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                PlotDatabase.updateLocalData(plotID);
+                PlotManager.loadPlot(plotID);
+
+                if (keepState && Hypersquare.lastBuildLocation.containsKey(player)
+                        && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
+                    player.teleport(Hypersquare.lastBuildLocation.get(player));
+                } else {
+                    player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+                }
+            });
+        }else {
+            Utilities.sendError(player,"You do not have build permissions for this plot");
+        }
     }
 
     public static void buildMode(Player player, int plotId) {

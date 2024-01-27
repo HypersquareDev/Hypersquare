@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.item;
+package hypersquare.hypersquare.item.action;
 
 
 import hypersquare.hypersquare.dev.action.Action;
@@ -20,6 +20,7 @@ public class ActionItem {
     Material material;
     Component[] description;
     Action.ActionParameter[] params;
+    int tags;
     List<Component[]> additionalInfo = List.of();
     boolean enchanted;
 
@@ -40,6 +41,11 @@ public class ActionItem {
 
     public ActionItem setParameters(Action.ActionParameter... params) {
         this.params = params;
+        return this;
+    }
+
+    public ActionItem setTagAmount(int tags) {
+        this.tags = tags;
         return this;
     }
 
@@ -79,22 +85,38 @@ public class ActionItem {
         }
 
         // Arguments
-        Component paramComp = Component.text("Chest Parameters")
+        // Type - Description(s)*
+        lore.add(Component.empty());
+        lore.add(Component.text("Barrel Parameters:")
                 .color(NamedTextColor.WHITE)
-                .decoration(TextDecoration.ITALIC, false);
+                .decoration(TextDecoration.ITALIC, false));
         if (params != null) {
             for (Action.ActionParameter actionParameter : params) {
-                paramComp = paramComp.append(actionParameter.type().getName());
+                Component paramComp = actionParameter.type().getName();
                 paramComp = paramComp.append(Component.text(actionParameter.plural() ? "(s)" : ""));
                 paramComp = paramComp.append(Component.text(actionParameter.optional() ? "*" : "").color(NamedTextColor.GRAY));
-                paramComp = paramComp.append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(actionParameter.description().color(NamedTextColor.GRAY)).appendNewline();
+                paramComp = paramComp.append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(actionParameter.description().color(NamedTextColor.GRAY));
+                lore.add(paramComp.decoration(TextDecoration.ITALIC, false));
             }
-        } else paramComp = paramComp.append(Component.text("None").color(NamedTextColor.DARK_GRAY));
+        }
+        // Tags
+        // 1 Tag | 2 Tags
+        if (tags != 0) {
+            lore.add(Component.text("# ").decoration(TextDecoration.ITALIC, false)
+                    .color(NamedTextColor.DARK_AQUA)
+                    .append(Component.text(tags)
+                            .color(NamedTextColor.GRAY)
+                            .append(Component.text(" Tag" + (tags == 1 ? "" : "s"))
+                            )
+                    )
+            );
+        }
 
+        if (params == null & tags == 0) lore.add(Component.text("None").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
 
         // Additional Info
         if (!additionalInfo.isEmpty()) {
-            lore.add(Component.text("").decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.empty());
             lore.add(Component.text("Additional Info").color(NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
             for (Component[] info : additionalInfo) {
                 for (Component text : info) {

@@ -99,6 +99,7 @@ public class PlayerSendMessageAction implements Action {
                 .setDescription(Component.text("Sends the player all of the"),
                         Component.text("messages in the barrel"))
                 .setParameters(parameters())
+                .setTagAmount(tags().length)
                 .build();
     }
 

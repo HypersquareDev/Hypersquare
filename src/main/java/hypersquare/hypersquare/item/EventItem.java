@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.item;
 
+import hypersquare.hypersquare.util.color.Color;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -85,10 +86,10 @@ public class EventItem {
             lore.add(Component.newline()
                         .decoration(TextDecoration.ITALIC, false)
                     .append(Component.text("∅")
-                            .color(TextColor.color(0xCC1010))
+                            .color(Color.RED_DARK.color())
                     )
                     .append(Component.text(" Cancelable")
-                            .color(TextColor.color(0xFF3D3D))
+                            .color(Color.RED.color())
                     )
             );
         }

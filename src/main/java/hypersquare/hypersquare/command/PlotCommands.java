@@ -6,8 +6,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.*;
-import hypersquare.hypersquare.util.Colors;
+import hypersquare.hypersquare.util.color.Color;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.color.HSColor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.commands.CommandSourceStack;
@@ -95,11 +96,11 @@ public class PlotCommands implements HyperCommand {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (Hypersquare.mode.get(player).equals("coding")) {
                 List<String> messages = new ArrayList<>();
-                messages.add(Colors.PRIMARY_INFO + "Plot stats for:");
+                messages.add(HSColor.PRIMARY_INFO + "Plot stats for:");
                 messages.add("");
-                messages.add(Colors.DECORATION + "→ <reset>" + PlotManager.getPlotName(plotID) + "<reset>" + Colors.PRIMARY_INFO + " by <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName() + " <dark_gray>[" + Colors.PRIMARY_INFO + plotID + "<dark_gray>]");
-                messages.add(Colors.DECORATION + "→ " + Colors.SECONDARY_INFO + "Total unique joins: <white>" + PlotStats.getTotalUniquePlayers(plotID));
-                messages.add(Colors.DECORATION + "→ " + Colors.SECONDARY_INFO + "Total playtime: <white>" + PlotStats.calculateTotalTimePlayed(plotID));
+                messages.add(HSColor.DECORATION + "→ <reset>" + PlotManager.getPlotName(plotID) + "<reset>" + HSColor.PRIMARY_INFO + " by <white>" + Bukkit.getOfflinePlayer(UUID.fromString(PlotManager.getPlotOwner(plotID))).getName() + " <dark_gray>[" + HSColor.PRIMARY_INFO + plotID + "<dark_gray>]");
+                messages.add(HSColor.DECORATION + "→ " + HSColor.SECONDARY_INFO + "Total unique joins: <white>" + PlotStats.getTotalUniquePlayers(plotID));
+                messages.add(HSColor.DECORATION + "→ " + HSColor.SECONDARY_INFO + "Total playtime: <white>" + PlotStats.calculateTotalTimePlayed(plotID));
 
                 Utilities.sendMultiMiniMessage(player, messages);
             }

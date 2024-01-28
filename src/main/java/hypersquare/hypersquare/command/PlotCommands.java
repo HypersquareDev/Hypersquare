@@ -14,7 +14,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.ServerOperator;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.IOException;
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
-import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class PlotCommands implements HyperCommand {
     @Override

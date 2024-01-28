@@ -2,6 +2,7 @@ package hypersquare.hypersquare.dev.codefile;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.util.Utilities;
@@ -42,13 +43,13 @@ public class CodeFile {
     }
 
     public String getCode() {
-        String code = world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING);
+        String code = world.getPersistentDataContainer().get(HSKeys.CODE, PersistentDataType.STRING);
         assert code != null;
         return code;
     }
 
     public void setCode(String newCode) {
-        world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "code"), PersistentDataType.STRING, newCode);
+        world.getPersistentDataContainer().set(HSKeys.CODE, PersistentDataType.STRING, newCode);
         Utilities.savePersistentData(world, Hypersquare.slimePlugin);
     }
 

@@ -8,12 +8,17 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.util.Utilities;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class CodeExecutor {
 
+    public static void trigger(Player player, Event event, CodeSelection selection) {
+        trigger(Utilities.getPlotID(player.getWorld()), event, selection);
+    }
     public static void trigger(int plotId, Event event, CodeSelection selection) {
         if (event == null) {
             CodeError.sendError(plotId, CodeErrorType.INVALID_EVENT);

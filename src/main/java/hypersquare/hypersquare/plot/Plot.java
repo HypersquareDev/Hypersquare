@@ -5,6 +5,7 @@ import com.infernalsuite.aswm.api.exceptions.*;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.util.Utilities;
@@ -24,9 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 
@@ -35,7 +33,7 @@ public class Plot {
     public static ItemStack getPlotItem(int plotID) {
         org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
-        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
+        if (Hypersquare.PLOT_VERSION == PlotDatabase.getPlotVersion(plotID)) {
             meta.displayName(PlotDatabase.getPlotName(plotID));
         } else {
             Component name = PlotDatabase.getPlotName(plotID);
@@ -46,7 +44,7 @@ public class Plot {
         lore.add(MiniMessage.miniMessage().deserialize(""));
         lore.add(MiniMessage.miniMessage().deserialize(""));
         lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotID).decoration(TextDecoration.ITALIC, false));
-        if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
+        if (Hypersquare.PLOT_VERSION == PlotDatabase.getPlotVersion(plotID)) {
             lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false));
         } else {
             Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false);
@@ -77,7 +75,7 @@ public class Plot {
         WorldUtilities.cloneWorld(plotType, worldName, (buildWorld) -> {
             World w = Bukkit.getWorld(worldName);
             String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
-            w.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, capitalized);
+            w.getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, capitalized);
             w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
             w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
@@ -85,8 +83,8 @@ public class Plot {
             w.setSpawnLocation(25, -55, 4);
 
             WorldUtilities.cloneWorld("dev_template", "hs.code." + plotID, (codeWorld) -> {
-                PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
-                Bukkit.getWorld("hs.code." + plotID).getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, "Code");
+                PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.PLOT_VERSION);
+                Bukkit.getWorld("hs.code." + plotID).getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, "Code");
                 new CodeFile(Bukkit.getWorld("hs.code." + plotID)).setCode("[]");
                 savePersistentData(w, plugin);
                 PlotManager.loadPlot(plotID);

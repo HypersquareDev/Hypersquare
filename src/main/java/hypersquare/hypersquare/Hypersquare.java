@@ -18,6 +18,7 @@ import net.luckperms.api.LuckPerms;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -27,7 +28,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public final class Hypersquare extends JavaPlugin {
@@ -43,12 +43,12 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Player, Location> lastBuildLocation = new HashMap<>();
 
     public static HashMap<Player, String> mode = new HashMap<>();
-    public static Map<Integer, List<Object>> loadedPlots = new HashMap<>();
+    public static HashMap<Integer, List<Object>> loadedPlots = new HashMap<>();
 
-    public static Map<Integer, HashMap<String, String>> eventCache = new HashMap<>();
+    public static HashMap<Integer, HashMap<String, String>> eventCache = new HashMap<>();
     public static HashMap<UUID, HashMap<String, Integer>> localPlayerData = new HashMap<>();
     public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
-    public static int plotVersion = 4;
+    public final static int PLOT_VERSION = 4;
 
     public static MiniMessage cleanMM = MiniMessage.builder()
             .tags(TagResolver.resolver(

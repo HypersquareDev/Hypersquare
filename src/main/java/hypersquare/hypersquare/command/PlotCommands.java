@@ -4,6 +4,7 @@ import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.util.Colors;
@@ -122,7 +123,7 @@ public class PlotCommands implements HyperCommand {
                 if (world.getName().startsWith("hs.code.")) {
                     world = Bukkit.getWorld("hs." + Utilities.getPlotID(world));
                 }
-                PlayerDatabase.removePlot(player.getUniqueId(), world.getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING).toLowerCase());
+                PlayerDatabase.removePlot(player.getUniqueId(), world.getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING).toLowerCase());
                 for (Player player1 : player.getWorld().getPlayers()) {
                     ChangeGameMode.spawn(player1);
                     Utilities.sendRedInfo(player1, Component.text("The plot that you were currently on was unclaimed."));

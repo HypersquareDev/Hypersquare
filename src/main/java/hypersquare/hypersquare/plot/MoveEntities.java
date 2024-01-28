@@ -2,6 +2,7 @@ package hypersquare.hypersquare.plot;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ public class MoveEntities {
                         }
                         if (entity.getType() != EntityType.PLAYER) {
                             commonVars(entity.getLocation());
-                            String plotType = (entity).getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
+                            String plotType = (entity).getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
                             if (plotType == null) {
                                 return;
                             }

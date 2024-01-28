@@ -1,9 +1,6 @@
 package hypersquare.hypersquare.dev;
 
-import hypersquare.hypersquare.dev.code.player.event.PlayerJoinEvent;
-import hypersquare.hypersquare.dev.code.player.event.PlayerLeaveEvent;
-import hypersquare.hypersquare.dev.code.player.event.PlayerRejoinEvent;
-import hypersquare.hypersquare.dev.code.player.event.PlayerRightClickEvent;
+import hypersquare.hypersquare.dev.code.player.event.*;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +11,8 @@ public enum Events implements Event {
     PLAYER_JOIN_EVENT(new PlayerJoinEvent()),
     PLAYER_LEAVE_EVENT(new PlayerLeaveEvent()),
     PLAYER_REJOIN_EVENT(new PlayerRejoinEvent()),
-    PLAYER_RIGHT_CLICK(new PlayerRightClickEvent())
+    PLAYER_RIGHT_CLICK(new PlayerRightClickEvent()),
+    PLAYER_DROP_ITEM(new PlayerDropItemEvent()),
     ;
 
     final Event v;
@@ -42,11 +40,6 @@ public enum Events implements Event {
     @Override
     public String getSignName() {
         return v.getSignName();
-    }
-
-    @Override
-    public String getName() {
-        return v.getName();
     }
 
     @Override

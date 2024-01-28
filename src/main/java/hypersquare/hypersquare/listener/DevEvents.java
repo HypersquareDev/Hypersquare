@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.listener;
 
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
@@ -247,7 +248,7 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onSpread(BlockFromToEvent event) {
         commonVars(event.getToBlock().getLocation());
-        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING);
+        String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
         if (plotType == null)
             return;
         switch (plotType) {

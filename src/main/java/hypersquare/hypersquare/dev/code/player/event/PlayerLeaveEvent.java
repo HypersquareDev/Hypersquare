@@ -19,20 +19,19 @@ public class PlayerLeaveEvent implements Event {
                 .build();
     }
 
+    @Override
     public String getId() {
         return "leave";
     }
+
     @Override
     public String getCodeblockId() {
         return "player_event";
     }
 
+    @Override
     public String getSignName() {
         return "Leave";
-    }
-
-    public String getName() {
-        return "Player Leave Game Event";
     }
 
     @Override

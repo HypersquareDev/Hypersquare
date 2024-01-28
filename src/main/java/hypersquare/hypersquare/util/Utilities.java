@@ -5,6 +5,7 @@ import com.flowpowered.nbt.CompoundTag;
 import com.google.gson.JsonParser;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
+import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
@@ -243,7 +244,7 @@ public class Utilities {
         CompoundTag chunkData = getChunkData(slimeWorld);
         if (chunkData == null) return;
         String pType1 = JsonParser.parseString(NBTUtils.Converter.convertTag(chunkData.getValue().get("worldData")).getAsString()).getAsJsonObject().get("hypersquare:plottype").getAsString();
-        world.getPersistentDataContainer().set(new NamespacedKey(Hypersquare.instance, "plotType"), PersistentDataType.STRING, pType1);
+        world.getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, pType1);
     }
 
     public static String randomHSVHex(float minHue, float maxHue, float saturation, float value) {

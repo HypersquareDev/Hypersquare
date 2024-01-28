@@ -22,20 +22,19 @@ public class PlayerJoinEvent implements Event {
                 .build();
     }
 
+    @Override
     public String getId() {
         return "join";
     }
+
     @Override
     public String getCodeblockId() {
         return "player_event";
     }
 
+    @Override
     public String getSignName() {
         return "Join";
-    }
-
-    public String getName() {
-        return "Player Join Game Event";
     }
 
     @Override

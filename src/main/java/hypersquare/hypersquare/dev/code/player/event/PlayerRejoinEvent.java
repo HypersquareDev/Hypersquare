@@ -22,20 +22,19 @@ public class PlayerRejoinEvent implements Event {
                 .build();
     }
 
+    @Override
     public String getId() {
         return "rejoin";
     }
+
     @Override
     public String getCodeblockId() {
         return "player_event";
     }
 
+    @Override
     public String getSignName() {
         return "Rejoin";
-    }
-
-    public String getName() {
-        return "Player Rejoin Game Event";
     }
 
     @Override

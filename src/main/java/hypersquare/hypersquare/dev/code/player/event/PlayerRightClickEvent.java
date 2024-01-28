@@ -21,20 +21,19 @@ public class PlayerRightClickEvent implements Event {
                 .build();
     }
 
+    @Override
     public String getId() {
         return "right_click";
     }
+
     @Override
     public String getCodeblockId() {
         return "player_event";
     }
 
+    @Override
     public String getSignName() {
         return "RightClick";
-    }
-
-    public String getName() {
-        return "Player Right Click Event";
     }
 
     @Override

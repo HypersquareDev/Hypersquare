@@ -32,14 +32,16 @@ public class ActionArguments {
     public <T> List<T> allNullable(String id) {
         List<T> ret = new ArrayList<>();
         for (JsonObject o : values.get(id)) {
-            ret.add(getAs(o, ctx.action().getParameter(id).type().codeVal));
+            T v = getAs(o, ctx.action().getParameter(id).type().codeVal);
+            if (v == null) continue;
+            ret.add(v);
         }
         return ret;
     }
 
     public <T> T single(String id) {
-        return values.get(id).getFirst() == null ? null
-                : (T) getAs(values.get(id).getFirst(), ctx.action().getParameter(id).type().codeVal);
+        return values.get(id).getFirst() == null ? null :
+                getAs(values.get(id).getFirst(), ctx.action().getParameter(id).type().codeVal);
     }
 
     public boolean has(String id) {
@@ -55,14 +57,11 @@ public class ActionArguments {
         if (CodeValues.VARIABLE.isType(o)) {
             CodeVariable var = (CodeVariable) CodeValues.VARIABLE.realValue(CodeValues.VARIABLE.fromJson(o));
             var.bind(ctx);
-            if (target != null && target.getTypeId().equals(CodeValues.VARIABLE.getTypeId())) {
-                return (T) var;
-            }
+            if (target != null && target.getTypeId().equals(CodeValues.VARIABLE.getTypeId())) return (T) var;
             return var.get(target);
         }
-        if (target == null) {
-            target = CodeValues.getType(o);
-        }
+        if (target == null) target = CodeValues.getType(o);
+        if (target == null) return null;
         if (!target.isType(o)) {
             T ret = (T) target.realValue(target.coerce(o));
             if (ret instanceof CodeVariable v) v.bind(ctx);

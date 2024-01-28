@@ -19,7 +19,6 @@ public class PlayModeListener implements Listener {
     public void playerInteractListener(PlayerInteractEvent event) {
         if (cannotExecute(event.getPlayer())) return;
         if (event.getPlayer().getGameMode() == GameMode.ADVENTURE) return;
-
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             CodeExecutor.trigger(getPlayerPlotId(event.getPlayer()), Events.PLAYER_RIGHT_CLICK, new CodeSelection(event.getPlayer()));
         }
@@ -30,7 +29,6 @@ public class PlayModeListener implements Listener {
         if (cannotExecute(event.getPlayer())) return;
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         if (event.getAnimationType() == PlayerAnimationType.OFF_ARM_SWING) return;
-
         CodeExecutor.trigger(getPlayerPlotId(event.getPlayer()), Events.PLAYER_RIGHT_CLICK, new CodeSelection(event.getPlayer()));
     }
 

@@ -14,10 +14,6 @@ import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.*;
 import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.item.action.player.IfPlayerItems;
-import hypersquare.hypersquare.item.action.player.PlayerActionItems;
-import hypersquare.hypersquare.item.action.player.PlayerEventItems;
-import hypersquare.hypersquare.item.action.var.SetVariableItems;
 import hypersquare.hypersquare.menu.CodeblockMenu;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
@@ -27,7 +23,6 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,46 +55,14 @@ public class DevEvents implements Listener {
                 Location codeblockLocation = clickedMaterial == Material.OAK_WALL_SIGN ? event.getClickedBlock().getLocation().clone().add(1, 0, 0) : event.getClickedBlock().getLocation();
 
                 CodeFile codeFile = new CodeFile(event.getPlayer());
-                int listIndex = CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData());
                 CodeActionData actionData = CodeFileHelper.getActionAt(codeblockLocation, codeFile.getCodeData());
-                CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
-                // null means it's the thread starter
-                if (actionData == null) switch (line.type) {
-                        case "player_event": {
-                            CodeblockMenu.open(
-                                    event.getPlayer(), event.getClickedBlock().getLocation(),
-                                    "Player Event", "Events", 5,
-                                    PlayerEventItems.values(), false
-                            );
-                            break;
-                        }
-                    }
-                else switch (actionData.codeblock) {
-                        case "player_action": {
-                            CodeblockMenu.open(
-                                    event.getPlayer(), event.getClickedBlock().getLocation(),
-                                    "Player Action", "Actions", 5,
-                                    PlayerActionItems.values(), true
-                            );
-                            break;
-                        }
-                        case "if_player": {
-                            CodeblockMenu.open(
-                                    event.getPlayer(), event.getClickedBlock().getLocation(),
-                                    "If Player", "Conditions", 3,
-                                    IfPlayerItems.values(), true
-                            );
-                            break;
-                        }
-                        case "set_variable": {
-                            CodeblockMenu.open(
-                                    event.getPlayer(), event.getClickedBlock().getLocation(),
-                                    "Set Variable", "Variables", 5,
-                                    SetVariableItems.values(), true
-                            );
-                            break;
-                        }
-                    }
+                String id;
+                if (actionData == null) {
+                    int listIndex = CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData());
+                    CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
+                    id = line.type;
+                } else id = actionData.codeblock;
+                CodeblockMenu.open(id, event.getPlayer(), event.getClickedBlock().getLocation());
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else if (event.getClickedBlock().getType() == Material.BARREL) {
                 event.setCancelled(true);
@@ -134,7 +97,7 @@ public class DevEvents implements Listener {
             CodeData data = file.getCodeData();
             CodeActionData actionData = CodeFileHelper.getActionAt(brokenLocation.subtract(0, 1, 0), data);
             if (actionData == null) return;
-            Action action = Actions.getByData(actionData);;
+            Action action = Actions.getByData(actionData);
             if (action == null) return;
             ActionMenu menu = action.actionMenu(actionData);
             for (int i = 0; i < menu.getSize(); i++) {
@@ -254,32 +217,32 @@ public class DevEvents implements Listener {
         switch (plotType) {
 
             case "Basic": {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, basic)) {
+                if (Utilities.notWithinLocation(event.getToBlock().getLocation(), commonStart, basic)) {
                     event.setCancelled(true);
                 }
                 break;
             }
             case "Large": {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, large)) {
+                if (Utilities.notWithinLocation(event.getToBlock().getLocation(), commonStart, large)) {
                     event.setCancelled(true);
 
                 }
                 break;
             }
             case "Huge": {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, huge)) {
+                if (Utilities.notWithinLocation(event.getToBlock().getLocation(), commonStart, huge)) {
                     event.setCancelled(true);
                 }
                 break;
             }
             case "Massive": {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, massive)) {
+                if (Utilities.notWithinLocation(event.getToBlock().getLocation(), commonStart, massive)) {
                     event.setCancelled(true);
                 }
                 break;
             }
             case "Gigantic": {
-                if (!Utilities.locationWithin(event.getToBlock().getLocation(), commonStart, gigantic)) {
+                if (Utilities.notWithinLocation(event.getToBlock().getLocation(), commonStart, gigantic)) {
                     event.setCancelled(true);
                 }
                 break;
@@ -320,7 +283,6 @@ public class DevEvents implements Listener {
         JsonObject json = CodeValues.getVarItemData(item);
         if (json == null) return;
 
-        //noinspection rawtypes
         CodeValues value = CodeValues.getType(json);
         if (value == null) return;
         event.setCancelled(true);

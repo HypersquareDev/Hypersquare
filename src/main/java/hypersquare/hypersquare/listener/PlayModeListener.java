@@ -4,14 +4,11 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Events;
 import hypersquare.hypersquare.play.CodeExecutor;
 import hypersquare.hypersquare.play.CodeSelection;
-import hypersquare.hypersquare.util.Utilities;
-import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 

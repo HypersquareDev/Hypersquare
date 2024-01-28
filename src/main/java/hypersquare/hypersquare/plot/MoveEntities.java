@@ -7,7 +7,7 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.persistence.PersistentDataType;
@@ -31,59 +31,51 @@ public class MoveEntities {
 
     public static void entityLoop() {
         SlimePlugin plugin = Hypersquare.slimePlugin;
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.instance, new Runnable() {
-            public void run() {
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Hypersquare.instance, () -> {
+            assert plugin != null;
+            for (SlimeWorld world : plugin.getLoadedWorlds()) {
+                World bukkitWorld = Bukkit.getWorld(world.getName());
+                if (bukkitWorld == null) return;
+                for (Entity entity : bukkitWorld.getEntities()) {
+                    if (entity == null) return;
+                    if (entity.getType() != EntityType.PLAYER) {
+                        commonVars(entity.getLocation());
+                        String plotType = (entity).getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
+                        if (plotType == null) return;
 
-                assert plugin != null;
-                for (SlimeWorld world : plugin.getLoadedWorlds()) {
-                    if (Bukkit.getWorld(world.getName()) == null) {
-                        return;
-                    }
-                    for (Entity entity : Bukkit.getWorld(world.getName()).getEntities()) {
-                        if (entity == null) {
-                            return;
-                        }
-                        if (entity.getType() != EntityType.PLAYER) {
-                            commonVars(entity.getLocation());
-                            String plotType = (entity).getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
-                            if (plotType == null) {
-                                return;
+                        switch (plotType) {
+
+                            case "Basic": {
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), basic)) {
+                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), basic);
+                                }
+                                break;
+                            }
+                            case "Large": {
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), large)) {
+                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), large);
+                                }
+                                break;
+                            }
+                            case "Huge": {
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), huge)) {
+                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
+                                }
+                                break;
+                            }
+                            case "Massive": {
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
+                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
+                                }
+                                break;
+                            }
+                            case "Gigantic": {
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), gigantic)) {
+                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), gigantic);
+                                }
+                                break;
                             }
 
-                            switch (plotType) {
-
-                                case "Basic": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), basic)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), basic);
-                                    }
-                                    break;
-                                }
-                                case "Large": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), large)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), large);
-                                    }
-                                    break;
-                                }
-                                case "Huge": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), huge)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
-                                    }
-                                    break;
-                                }
-                                case "Massive": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
-                                    }
-                                    break;
-                                }
-                                case "Gigantic": {
-                                    if (!Utilities.locationWithin(entity.getLocation(), commonStart.clone().add(20, 0, 0), gigantic)) {
-                                        Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), gigantic);
-                                    }
-                                    break;
-                                }
-
-                            }
                         }
                     }
                 }

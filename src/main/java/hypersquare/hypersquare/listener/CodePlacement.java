@@ -23,7 +23,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -63,38 +62,42 @@ public class CodePlacement implements Listener {
 
     public static boolean blockOutsidePlot(Location location) {
         RestrictMovement.commonVars(location);
-        return !Utilities.locationWithin(location, new Location(location.getWorld(), -3, 0, 0), new Location(location.getWorld(), -108, 0, 256));
+        return Utilities.notWithinLocation(location, new Location(location.getWorld(), -3, 0, 0), new Location(location.getWorld(), -108, 0, 256));
     }
 
     public static boolean blockInPlot(Location location) {
         String plotType = location.getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
         RestrictMovement.commonVars(location);
         switch (plotType) {
+            case null:
+                break;
             case "Basic":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1, 0, -1))) {
+                if (Utilities.notWithinLocation(location, RestrictMovement.commonStart, RestrictMovement.basic.clone().add(-1, 0, -1))) {
                     return false;
                 }
                 break;
             case "Large":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1, 0, -1))) {
+                if (Utilities.notWithinLocation(location, RestrictMovement.commonStart, RestrictMovement.large.clone().add(-1, 0, -1))) {
                     return false;
                 }
                 break;
             case "Huge":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1, 0, -1))) {
+                if (Utilities.notWithinLocation(location, RestrictMovement.commonStart, RestrictMovement.huge.clone().add(-1, 0, -1))) {
                     return false;
                 }
                 break;
             case "Massive":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1, 0, -1))) {
+                if (Utilities.notWithinLocation(location, RestrictMovement.commonStart, RestrictMovement.massive.clone().add(-1, 0, -1))) {
                     return false;
                 }
                 break;
             case "Gigantic":
-                if (!Utilities.locationWithin(location, RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1, 0, -1))) {
+                if (Utilities.notWithinLocation(location, RestrictMovement.commonStart, RestrictMovement.gigantic.clone().add(-1, 0, -1))) {
                     return false;
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + plotType);
         }
         return true;
     }
@@ -217,7 +220,6 @@ public class CodePlacement implements Listener {
     @EventHandler
     public void onPlayerBreakBlock(BlockBreakEvent event) {
 
-
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             if (Hypersquare.mode.get(event.getPlayer()).equals("building") || Hypersquare.mode.get(event.getPlayer()).equals("playing")) {
                 if (!blockInPlot(event.getBlock().getLocation()))
@@ -279,6 +281,7 @@ public class CodePlacement implements Listener {
                 signBlock.setType(Material.AIR);
                 block.setType(Material.AIR);
                 if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {
+                    assert bracketLoc != null;
                     bracketLoc.getBlock().setType(Material.AIR);
                     if (breakAll) {
                         BlockVector3 loc1 = BlockVector3.at(blockLoc.getBlockX(), blockLoc.getBlockY(), blockLoc.getBlockZ());

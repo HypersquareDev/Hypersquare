@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static hypersquare.hypersquare.util.Utilities.savePersistentData;
@@ -31,7 +32,8 @@ import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 public class Plot {
 
     public static ItemStack getPlotItem(int plotID) {
-        org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
+        Material mat = Material.matchMaterial(Objects.requireNonNull(PlotDatabase.getPlotIcon(plotID)));
+        org.bukkit.inventory.ItemStack plotItem = new ItemStack(mat == null ? Material.PAPER : mat);
         ItemMeta meta = plotItem.getItemMeta();
         if (Hypersquare.PLOT_VERSION == PlotDatabase.getPlotVersion(plotID)) {
             meta.displayName(PlotDatabase.getPlotName(plotID));
@@ -40,14 +42,22 @@ public class Plot {
             meta.displayName(Hypersquare.fullMM.deserialize(name + "<red>" + " (Out of date)"));
         }
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot").decoration(TextDecoration.ITALIC, false));
+        lore.add(MiniMessage.miniMessage()
+                .deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot")
+                .decoration(TextDecoration.ITALIC, false));
         lore.add(MiniMessage.miniMessage().deserialize(""));
         lore.add(MiniMessage.miniMessage().deserialize(""));
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>ID: " + plotID).decoration(TextDecoration.ITALIC, false));
+        lore.add(MiniMessage.miniMessage()
+                .deserialize("<dark_gray>ID: " + plotID)
+                .decoration(TextDecoration.ITALIC, false));
         if (Hypersquare.PLOT_VERSION == PlotDatabase.getPlotVersion(plotID)) {
-            lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false));
+            lore.add(MiniMessage.miniMessage()
+                    .deserialize("<dark_gray>Plot version: " + PlotDatabase.getPlotVersion(plotID))
+                    .decoration(TextDecoration.ITALIC, false));
         } else {
-            Component aa = MiniMessage.miniMessage().deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID)).decoration(TextDecoration.ITALIC, false);
+            Component aa = MiniMessage.miniMessage()
+                    .deserialize("<red>Plot version: " + PlotDatabase.getPlotVersion(plotID))
+                    .decoration(TextDecoration.ITALIC, false);
             lore.add(aa);
         }
 
@@ -72,8 +82,9 @@ public class Plot {
         PlayerDatabase.addPlot(player.getUniqueId(), plotType.replace("plot_template_", ""));
         Utilities.sendInfo(player, Component.text("Starting creation of new " + Utilities.capitalize(plotType.replace("plot_template_", "")) + " plot."));
         String worldName = "hs." + plotID;
-        WorldUtilities.cloneWorld(plotType, worldName, (buildWorld) -> {
+        WorldUtilities.cloneWorld(plotType, worldName, _ -> {
             World w = Bukkit.getWorld(worldName);
+            assert w != null;
             String capitalized = Utilities.capitalize(plotType.replace("plot_template_", ""));
             w.getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, capitalized);
             w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
@@ -82,9 +93,9 @@ public class Plot {
             w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
             w.setSpawnLocation(25, -55, 4);
 
-            WorldUtilities.cloneWorld("dev_template", "hs.code." + plotID, (codeWorld) -> {
+            WorldUtilities.cloneWorld("dev_template", "hs.code." + plotID, _ -> {
                 PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.PLOT_VERSION);
-                Bukkit.getWorld("hs.code." + plotID).getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, "Code");
+                Objects.requireNonNull(Bukkit.getWorld("hs.code." + plotID)).getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, "Code");
                 new CodeFile(Bukkit.getWorld("hs.code." + plotID)).setCode("[]");
                 savePersistentData(w, plugin);
                 PlotManager.loadPlot(plotID);
@@ -139,8 +150,7 @@ public class Plot {
                         }
                     }.runTask(Hypersquare.instance);
                 }
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                     WorldLockedException e) {
+            } catch (Exception e) {
                 Utilities.sendError(player, "Error loading plot. Please try again later.");
                 throw new RuntimeException(e);
             }
@@ -160,6 +170,7 @@ public class Plot {
 
     public static void loadRules(String worldName) {
         World w = Bukkit.getWorld(worldName);
+        assert w != null;
         w.setTime(1000);
         w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
@@ -174,8 +185,8 @@ public class Plot {
         String worldName = "hs." + plotID;
         String codeWorldName = "hs.code." + plotID;
         SlimeLoader file = Hypersquare.slimePlugin.getLoader("mongodb");
-        Bukkit.unloadWorld(Bukkit.getWorld(worldName), true);
-        Bukkit.unloadWorld(Bukkit.getWorld(codeWorldName), true);
+        Bukkit.unloadWorld(Objects.requireNonNull(Bukkit.getWorld(worldName)), true);
+        Bukkit.unloadWorld(Objects.requireNonNull(Bukkit.getWorld(codeWorldName)), true);
         file.deleteWorld(worldName);
         file.deleteWorld(codeWorldName);
     }

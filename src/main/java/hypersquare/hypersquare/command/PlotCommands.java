@@ -14,11 +14,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
@@ -58,11 +60,7 @@ public class PlotCommands implements HyperCommand {
             for (String name : PlotDatabase.getPlotDevs(plotID)) {
                 devs.append(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName()).append(", ");
             }
-
-            if (devs.length() > 2) {
-                devs = new StringBuilder(devs.substring(0, devs.length() - 2));
-            }
-
+            if (devs.length() > 2) devs = new StringBuilder(devs.substring(0, devs.length() - 2));
             player.sendMessage(Component.text("Plot Devs: ").color(NamedTextColor.AQUA)
                     .append(Component.text(devs.toString()).color(NamedTextColor.GREEN)));
         }
@@ -78,22 +76,17 @@ public class PlotCommands implements HyperCommand {
             }
             String recipient = ctx.getArgument("player", String.class);
             if (!ctx.getArgument("player", String.class).equalsIgnoreCase(player.getName())) {
-                if (Bukkit.getOfflinePlayer(recipient).hasPlayedBefore()) {
-                    if (PlotDatabase.getRawDevs(plotID).contains(Bukkit.getOfflinePlayer(recipient).getUniqueId().toString())) {
+                OfflinePlayer offlineRecipentPlayer = Bukkit.getOfflinePlayer(recipient);
+                if (offlineRecipentPlayer.hasPlayedBefore()) {
+                    if (Objects.requireNonNull(PlotDatabase.getRawDevs(plotID)).contains(offlineRecipentPlayer.getUniqueId().toString())) {
+                        // TODO: don't use getRawDevs
                         Utilities.sendError(player, "That player is already a dev.");
                     } else {
-                        PlotDatabase.addDev(plotID, Bukkit.getOfflinePlayer(recipient).getUniqueId());
-                        Utilities.sendInfo(player, (Hypersquare.fullMM.deserialize("<reset>" + Bukkit.getOfflinePlayer(recipient).getName() + " <gray>now has dev permissions for " + PlotDatabase.getPlotName(plotID))));
-                        if (Utilities.playerOnline(recipient)) {
-                            Utilities.sendInfo(player, cleanMM.deserialize(("<white>" + Bukkit.getPlayer(recipient).getName() + "<reset><gray>now has dev permissions for <white>" + PlotDatabase.getPlotName(plotID)) + "<reset><gray>."));
-                        }
+                        PlotDatabase.addDev(plotID, offlineRecipentPlayer.getUniqueId());
+                        Utilities.sendInfo(player, (Hypersquare.fullMM.deserialize("<reset>" + offlineRecipentPlayer.getName() + " <gray>now has dev permissions for " + PlotDatabase.getPlotName(plotID))));
                     }
-                } else {
-                    Utilities.sendError(player, "Could not find that player.");
-                }
-            } else {
-                Utilities.sendError(player, "You cannot add yourself as a dev.");
-            }
+                } else Utilities.sendError(player, "Could not find that player.");
+            } else Utilities.sendError(player, "You cannot add yourself as a dev.");
         }
         return DONE;
     }
@@ -120,13 +113,12 @@ public class PlotCommands implements HyperCommand {
             int plotID = Utilities.getPlotID(player.getWorld());
             if (player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
                 World world = player.getWorld();
-                if (world.getName().startsWith("hs.code.")) {
-                    world = Bukkit.getWorld("hs." + Utilities.getPlotID(world));
-                }
-                PlayerDatabase.removePlot(player.getUniqueId(), world.getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING).toLowerCase());
-                for (Player player1 : player.getWorld().getPlayers()) {
-                    ChangeGameMode.spawn(player1);
-                    Utilities.sendRedInfo(player1, Component.text("The plot that you were currently on was unclaimed."));
+                if (world.getName().startsWith("hs.code.")) world = Bukkit.getWorld("hs." + Utilities.getPlotID(world));
+                assert world != null;
+                PlayerDatabase.removePlot(player.getUniqueId(), Objects.requireNonNull(world.getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING)).toLowerCase());
+                for (Player playerInWorld : player.getWorld().getPlayers()) {
+                    ChangeGameMode.spawn(playerInWorld);
+                    Utilities.sendRedInfo(playerInWorld, Component.text("The plot that you were currently on was unclaimed."));
                 }
 
                 Utilities.sendInfo(player, Component.text("Plot " + plotID + " has been unclaimed."));
@@ -168,11 +160,8 @@ public class PlotCommands implements HyperCommand {
             PlotDatabase.changePlotIcon(plotID, icon);
             Utilities.sendInfo(player, Component.text("Successfully changed the plot icon to " + icon + "."));
             PlotManager.loadPlot(plotID);
-        } else {
-            Utilities.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
-        }
+        } else Utilities.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
         return DONE;
     }
-
 }
 

@@ -204,10 +204,8 @@ public class PlotDatabase {
     public static Integer getPlotVersion(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
-        if (result != null) {
-            return result.getInteger("version");
-        }
-        return null;
+        if (result != null) return result.getInteger("version");
+        return 0;
     }
 
     public static int getPlotNode(int plotID) {

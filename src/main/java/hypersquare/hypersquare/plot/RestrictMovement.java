@@ -33,7 +33,7 @@ public class RestrictMovement {
     public static void movementCheck(Player player) {
         if (Hypersquare.mode.get(player).equals("coding")) {
             commonVars(player.getLocation());
-            if (!Utilities.locationWithinIgnoreY(player.getLocation(), codeStart, code)) {
+            if (Utilities.notWithinLocationIgnoreY(player.getLocation(), codeStart, code)) {
                 Utilities.moveEntityInsidePlot(player, codeStart, code);
             }
         }
@@ -42,36 +42,40 @@ public class RestrictMovement {
             String plotType = player.getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
 
             switch (plotType) {
+                case null:
+                    break;
                 case "Basic": {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, basic)) {
+                    if (Utilities.notWithinLocationIgnoreY(player.getLocation(), commonStart, basic)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, basic);
                     }
                     break;
                 }
                 case "Large": {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, large)) {
+                    if (Utilities.notWithinLocationIgnoreY(player.getLocation(), commonStart, large)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, large);
                     }
                     break;
                 }
                 case "Huge": {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, huge)) {
+                    if (Utilities.notWithinLocationIgnoreY(player.getLocation(), commonStart, huge)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, huge);
                     }
                     break;
                 }
                 case "Massive": {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, massive)) {
+                    if (Utilities.notWithinLocationIgnoreY(player.getLocation(), commonStart, massive)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, massive);
                     }
                     break;
                 }
                 case "Gigantic": {
-                    if (!Utilities.locationWithinIgnoreY(player.getLocation(), commonStart, gigantic)) {
+                    if (Utilities.notWithinLocationIgnoreY(player.getLocation(), commonStart, gigantic)) {
                         Utilities.moveEntityInsidePlot(player, commonStart, gigantic);
                     }
                     break;
                 }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + plotType);
             }
         }
     }

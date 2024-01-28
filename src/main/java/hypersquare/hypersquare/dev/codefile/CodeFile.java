@@ -7,7 +7,6 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;

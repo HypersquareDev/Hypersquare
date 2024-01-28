@@ -11,7 +11,6 @@ import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -45,12 +44,10 @@ public class Utilities {
     }
 
     public static int findLengthOfLongestString(List<String> strings) {
-        if (strings == null || strings.isEmpty()) {
-            return 0; // Return 0 if the list is null or empty
-        }
+        if (strings == null || strings.isEmpty()) return 0; // Return 0 if the list is null or empty
 
 
-        int maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(strings.get(0))).length();  // Initialize maxLength to the length of the first string
+        int maxLength = PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(strings.getFirst())).length();  // Initialize maxLength to the length of the first string
 
         for (String s : strings) {
             if (PlainTextComponentSerializer.plainText().serialize(cleanMM.deserialize(s)).length() > maxLength) {
@@ -153,24 +150,24 @@ public class Utilities {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
     }
 
-    public static boolean locationWithin(Location targetLocation, Location location1, Location location2) {
-        return targetLocation.getWorld().equals(location1.getWorld()) &&
-                targetLocation.getWorld().equals(location2.getWorld()) &&
-                targetLocation.getX() >= Math.min(location1.getX(), location2.getX()) &&
-                targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
-                targetLocation.getY() >= Math.min(location1.getY(), location2.getY()) &&
-                targetLocation.getY() <= Math.max(location1.getY(), location2.getY()) &&
-                targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
-                targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
+    public static boolean notWithinLocation(Location targetLocation, Location location1, Location location2) {
+        return !targetLocation.getWorld().equals(location1.getWorld()) ||
+                !targetLocation.getWorld().equals(location2.getWorld()) ||
+                !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
+                !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
+                !(targetLocation.getY() >= Math.min(location1.getY(), location2.getY())) ||
+                !(targetLocation.getY() <= Math.max(location1.getY(), location2.getY())) ||
+                !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
+                !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
-    public static boolean locationWithinIgnoreY(Location targetLocation, Location location1, Location location2) {
-        return targetLocation.getWorld().equals(location1.getWorld()) &&
-                targetLocation.getWorld().equals(location2.getWorld()) &&
-                targetLocation.getX() >= Math.min(location1.getX(), location2.getX()) &&
-                targetLocation.getX() <= Math.max(location1.getX(), location2.getX()) &&
-                targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ()) &&
-                targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ());
+    public static boolean notWithinLocationIgnoreY(Location targetLocation, Location location1, Location location2) {
+        return !targetLocation.getWorld().equals(location1.getWorld()) ||
+                !targetLocation.getWorld().equals(location2.getWorld()) ||
+                !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
+                !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
+                !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
+                !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
     public static void moveEntityInsidePlot(Entity entity, Location locA, Location locB) {

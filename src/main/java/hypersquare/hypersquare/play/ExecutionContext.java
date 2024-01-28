@@ -10,15 +10,17 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.function.Function;
 
-public record ExecutionContext(CodeSelection selection, ActionArguments args, CodeStacktrace trace, List<CodeActionData> containing,
-                               Action action, CodeActionData data) {
+public record ExecutionContext(
+        CodeSelection selection,
+        ActionArguments args,
+        CodeStacktrace trace,
+        List<CodeActionData> containing,
+        Action action, CodeActionData data
+) {
     public CodeVariableScope getScope(VariableValue.Scope scope) {
-        switch (scope) {
-            case THREAD -> {
-                return trace.scope;
-            }
-            default -> throw new IllegalStateException();
-        }
+        return switch (scope) {
+            case THREAD -> trace.scope;
+        };
     }
 
     @SuppressWarnings("unchecked")

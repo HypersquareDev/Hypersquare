@@ -38,8 +38,8 @@ public class ActionArguments {
     }
 
     public <T> T single(String id) {
-        return values.get(id).get(0) == null ? null
-                : (T) getAs(values.get(id).get(0), ctx.action().getParameter(id).type().codeVal);
+        return values.get(id).getFirst() == null ? null
+                : (T) getAs(values.get(id).getFirst(), ctx.action().getParameter(id).type().codeVal);
     }
 
     public boolean has(String id) {

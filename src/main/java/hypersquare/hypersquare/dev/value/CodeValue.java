@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.value;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.color.Color;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -81,7 +82,7 @@ public interface CodeValue<T, S> {
         lore.addAll(getDescription());
 
         lore.add(Component.empty());
-        lore.add(Component.text("How to set:").color(TextColor.color(0xF56EE6)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("How to set:").color(Color.PINK_LIGHT.color()).decoration(TextDecoration.ITALIC, false));
 
         lore.addAll(getHowToSet());
 

@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev.value.impl;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValue;
+import hypersquare.hypersquare.item.DisplayValue;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
 public class TextValue implements CodeValue<TextValue.TxtComponent, Component> {
     @Override
     public Component getName() {
-        return Component.text("Text").color(TextColor.color(0x7FD42A));
+        return Component.text("Text").color(DisplayValue.TEXT.color);
     }
 
     @Override

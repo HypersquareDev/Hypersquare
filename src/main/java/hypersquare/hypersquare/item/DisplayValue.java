@@ -3,9 +3,8 @@ package hypersquare.hypersquare.item;
 
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.util.Utilities;
-import hypersquare.hypersquare.util.color.Color;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 
@@ -13,20 +12,20 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public enum DisplayValue {
-    NUMBER(Color.RED_LIGHT.color(), v -> v == CodeValues.NUMBER),
-    ITEM(Color.GOLD.color(), v -> false),
-    BLOCK(Color.GOLD.color(), v -> false),
-    SPAWN_EGG(Color.GOLD.color(), v -> false),
-    ANY(Color.GOLD_LIGHT.color(), v -> true),
-    VARIABLE(Color.YELLOW.color(), v -> false),
-    TEXT(Color.LIME_DARK.color(), v -> v == CodeValues.TEXT),
-    LIST(Color.GREEN_DARK_2.color(), v -> false),
-    VECTOR(Color.TEAL.color(), v -> false),
-    STRING(Color.AQUA_LIGHT.color(), v -> v == CodeValues.STRING),
-    DICTIONARY(Color.SKY.color(), v -> false),
-    SOUND(Color.BLUE_DARK_2.color(), v -> false),
-    PARTICLE(Color.PURPLE.color(), v -> false),
-    POTION(Color.ROSE_DARK.color(), v -> false),
+    NUMBER(Colors.RED_LIGHT, v -> v == CodeValues.NUMBER),
+    ITEM(Colors.GOLD, v -> false),
+    BLOCK(Colors.GOLD, v -> false),
+    SPAWN_EGG(Colors.GOLD, v -> false),
+    ANY(Colors.GOLD_LIGHT, v -> true),
+    VARIABLE(Colors.YELLOW, v -> false),
+    TEXT(Colors.LIME_DARK, v -> v == CodeValues.TEXT),
+    LIST(Colors.GREEN_DARK_2, v -> false),
+    VECTOR(Colors.TEAL, v -> false),
+    STRING(Colors.AQUA_LIGHT, v -> v == CodeValues.STRING),
+    DICTIONARY(Colors.SKY, v -> false),
+    SOUND(Colors.BLUE_DARK_2, v -> false),
+    PARTICLE(Colors.PURPLE, v -> false),
+    POTION(Colors.ROSE_DARK, v -> false),
     ;
 
     public static HashMap<DisplayValue, Material> menuPaneColor = new HashMap<>() {{

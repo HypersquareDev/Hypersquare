@@ -33,8 +33,9 @@ import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 public class Plot {
 
     public static ItemStack getPlotItem(int plotID) {
-        org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
+        ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
+        if (meta == null) plotItem.setType(Material.PAPER); // Edge case
         if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
             meta.displayName(PlotDatabase.getPlotName(plotID));
         } else {

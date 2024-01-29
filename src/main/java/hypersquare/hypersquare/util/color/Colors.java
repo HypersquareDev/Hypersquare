@@ -1,9 +1,6 @@
 package hypersquare.hypersquare.util.color;
 
 import net.kyori.adventure.text.format.TextColor;
-import oshi.util.tuples.Pair;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class Colors {

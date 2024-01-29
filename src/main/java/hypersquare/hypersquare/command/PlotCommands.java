@@ -15,6 +15,7 @@ import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.IOException;
@@ -157,7 +158,13 @@ public class PlotCommands implements HyperCommand {
                 Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
                 return DONE;
             }
-            String icon = player.getInventory().getItemInMainHand().getType().toString();
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (item.getItemMeta() == null) {
+                Utilities.sendError(player, "Hold the item you want to use as your plot icon, then use plot icon.");
+                return DONE;
+            }
+            String icon = item.getType().toString();
+
             PlotDatabase.changePlotIcon(plotID, icon);
             Utilities.sendInfo(player, Component.text("Successfully changed the plot icon to " + icon + "."));
             PlotManager.loadPlot(plotID);

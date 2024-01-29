@@ -160,7 +160,7 @@ public class PlotCommands implements HyperCommand {
             }
             ItemStack item = player.getInventory().getItemInMainHand();
             if (item.getItemMeta() == null) {
-                Utilities.sendError(player, "Hold the item you want to use as your plot icon, then use plot icon.");
+                Utilities.sendError(player, "Hold the item you want to use as your plot icon, then use /plot icon.");
                 return DONE;
             }
             String icon = item.getType().toString();

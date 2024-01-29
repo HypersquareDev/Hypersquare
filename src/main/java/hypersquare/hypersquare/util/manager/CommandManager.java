@@ -26,7 +26,8 @@ public class CommandManager {
                 new PlayCommand(),
                 new SpawnCommand(),
                 new PlotCommands(),
-                new ValueCommands()
+                new ValueCommands(),
+                new ColorPaletteCommand()
         );
     }
 

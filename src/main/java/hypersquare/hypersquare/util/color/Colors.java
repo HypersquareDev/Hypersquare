@@ -1,6 +1,9 @@
 package hypersquare.hypersquare.util.color;
 
 import net.kyori.adventure.text.format.TextColor;
+import oshi.util.tuples.Pair;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class Colors {
@@ -92,6 +95,6 @@ public class Colors {
     public static final TextColor GRAY_LIGHT_2 = TextColor.color(0xD4D4D4);
     public static final TextColor WHITE = TextColor.color(0xFFFFFF);
     public static final TextColor GREEN_DESATURATED_TEMP = TextColor.color(0xAAD4AA);
-    public static final TextColor AQUA_DESATURATED_TEMP = TextColor.color(0x55AAAA);
-    public static final TextColor SKY_DESATURATED_TEMP = TextColor.color(0x557FD4);
+    public static final TextColor AQUA_DESATURATED = TextColor.color(0x55AAAA);
+    public static final TextColor SKY_DESATURATED = TextColor.color(0x557FD4);
 }

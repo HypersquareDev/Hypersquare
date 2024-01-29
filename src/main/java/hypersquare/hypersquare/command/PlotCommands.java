@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.*;
-import hypersquare.hypersquare.util.color.Color;
 import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.color.HSColor;
 import net.kyori.adventure.text.Component;

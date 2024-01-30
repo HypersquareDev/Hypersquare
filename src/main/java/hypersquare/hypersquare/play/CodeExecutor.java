@@ -3,11 +3,13 @@ package hypersquare.hypersquare.play;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.dev.action.CallbackAfterAction;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.play.CodeStacktrace.Frame;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.entity.Player;
 
@@ -36,13 +38,28 @@ public class CodeExecutor {
 
     private static void continueEval(int plotId, CodeStacktrace trace) {
         try {
-            eval: while (true) {
+            long startTime = System.currentTimeMillis();
+            while (true) {
+                if (System.currentTimeMillis() - startTime > 1000) {
+                    CodeError.sendError(plotId, CodeErrorType.LOW_MSPT); // TODO use actually mspt
+                    break;
+                }
                 if (trace.isDone()) break;
                 CodeStacktrace.Frame frame = trace.next();
                 if (frame == null) break;
                 CodeActionData data = frame.next();
                 if (data == null) {
                     trace.popFrame();
+                    if (trace.isDone()) break;
+                    frame = trace.next();
+                    if (frame == null) break;
+                    data = frame.current();
+                    Actions action = Actions.getAction(data.action, data.codeblock);
+                    if (action.a instanceof CallbackAfterAction cb) {
+                        ExecutionContext ctx = getCtx(action, trace, data, plotId, frame);
+                        if (ctx == null) break;
+                        cb.after(ctx);
+                    }
                     continue;
                 }
 
@@ -51,20 +68,9 @@ public class CodeExecutor {
                     CodeError.sendError(plotId, CodeErrorType.INVALID_ACT);
                     break;
                 }
-                HashMap<String, List<JsonObject>> arguments = new HashMap<>();
-                for (Action.ActionParameter param : action.parameters()) {
-                    List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
-                    if (args.isEmpty() && !param.optional()) {
-                        CodeError.sendError(plotId, CodeErrorType.MISSING_PARAM);
-                        break eval;
-                    }
-                    arguments.put(param.id(), args);
-                }
-                ActionArguments args = new ActionArguments(arguments);
-                ExecutionContext ctx = new ExecutionContext(
-                        frame.selection, args, trace, data.actions, action, data
-                );
-                args.bind(ctx);
+
+                ExecutionContext ctx = getCtx(action, trace, data, plotId, frame);
+                if (ctx == null) break;
                 action.execute(ctx);
             }
         } catch (Exception err) {
@@ -72,5 +78,19 @@ public class CodeExecutor {
             CodeError.sendError(plotId, CodeErrorType.INTERNAL_ERROR);
         }
     }
-
+    private static ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data, int plotId, Frame frame) {
+        HashMap<String, List<JsonObject>> arguments = new HashMap<>();
+        for (Action.ActionParameter param : action.parameters()) {
+        List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
+            if (args.isEmpty() && !param.optional()) {
+                CodeError.sendError(plotId, CodeErrorType.MISSING_PARAM);
+                return null;
+            }
+            arguments.put(param.id(), args);
+        }
+        ActionArguments args = new ActionArguments(arguments);
+        ExecutionContext ctx = new ExecutionContext(frame.selection, args, trace, data.actions, action, data);
+        args.bind(ctx);
+        return ctx;
+    }
 }

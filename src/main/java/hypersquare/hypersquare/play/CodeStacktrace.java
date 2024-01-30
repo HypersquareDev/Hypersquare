@@ -3,6 +3,7 @@ package hypersquare.hypersquare.play;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CodeStacktrace {
@@ -39,6 +40,7 @@ public class CodeStacktrace {
         public int position = 0;
         public final List<CodeActionData> actions;
         public final CodeSelection selection;
+        public final HashMap<String, Object> tempData = new HashMap<>();
 
         public Frame(List<CodeActionData> actions, CodeSelection selection) {
             this.actions = actions;
@@ -52,6 +54,10 @@ public class CodeStacktrace {
                 return action;
             }
             return null;
+        }
+
+        public CodeActionData current() {
+            return actions.get(position - 1);
         }
     }
 }

@@ -5,6 +5,7 @@ import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
+import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
@@ -23,18 +24,19 @@ public enum Actions implements Action {
 
     PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
-    ASSIGN_VARIABLE(new AssignVariableAction())
+    ASSIGN_VARIABLE(new AssignVariableAction()),
+    REPEAT_MULTIPLE(new RepeatMultiple()),
     ;
 
-    final Action a;
+    public final Action a;
     Actions(Action a) {
         this.a = a;
     }
 
-    public static Action getAction(String id, String codeblockId) {
+    public static Actions getAction(String id, String codeblockId) {
         if (id == null || codeblockId == null || id.equals("empty")) return Actions.EMPTY;
 
-        for (Action action : values()) {
+        for (Actions action : values()) {
             if (Objects.equals(action.getCodeblockId(), codeblockId) && Objects.equals(action.getId(), id)) return action;
         }
         return null;

@@ -263,7 +263,7 @@ public class CodePlacement implements Listener {
                 try (EditSession editSession = WorldEdit.getInstance().newEditSession(faweWorld)) {
                     editSession.setBlocks(selection, BukkitAdapter.asBlockState(new ItemStack(Material.AIR)));
                 } catch (WorldEditException e) {
-                    Bukkit.getLogger().warning("Failed to remove codeline");
+                    Hypersquare.logger().warning("Failed to remove codeline");
                 }
             }
 
@@ -292,7 +292,7 @@ public class CodePlacement implements Listener {
                         try (EditSession session = WorldEdit.getInstance().newEditSession(faweWorld)) {
                             session.setBlocks(selection, BukkitAdapter.asBlockType(Material.AIR));
                         } catch (WorldEditException e) {
-                            Bukkit.getLogger().warning("Failed to remove if contents");
+                            Hypersquare.logger().warning("Failed to remove if contents");
                         }
                     }
                 }

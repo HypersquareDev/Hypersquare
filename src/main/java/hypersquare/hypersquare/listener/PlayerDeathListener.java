@@ -12,6 +12,6 @@ public class PlayerDeathListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Hypersquare.lastDeathLoc.put(player, player.getWorld());
-        Bukkit.getLogger().info(Hypersquare.lastDeathLoc.toString());
+        Hypersquare.logger().info(Hypersquare.lastDeathLoc.toString());
     }
 }

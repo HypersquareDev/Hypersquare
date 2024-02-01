@@ -6,10 +6,7 @@ import com.mongodb.client.MongoClients;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.menu.system.MenuListeners;
-import hypersquare.hypersquare.plot.MoveEntities;
-import hypersquare.hypersquare.plot.PlayerDatabase;
-import hypersquare.hypersquare.plot.PlotDatabase;
-import hypersquare.hypersquare.plot.PlotStats;
+import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.util.manager.CommandManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -28,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
     public static String DB_PASS;
@@ -71,6 +69,17 @@ public final class Hypersquare extends JavaPlugin {
     public static LuckPerms lpPlugin;
     public static SlimePlugin slimePlugin;
 
+    public static Logger logger() {
+        if (instance == null) {
+            return Bukkit.getLogger();
+        }
+        return instance.getLogger();
+    }
+
+    /**
+     * @deprecated Use Hypersquare.logger() instead.
+     */
+    @Deprecated @Override
 
     @Override
     public void onEnable() {

@@ -83,7 +83,7 @@ public class PlotDatabase {
                     }
                     zipStream.close();
                 } catch (Exception err) {
-                    Bukkit.getLogger().warning(err.toString());
+                    Hypersquare.logger().warning(err.toString());
                 }
             }
 
@@ -267,6 +267,19 @@ public class PlotDatabase {
 
         // Use Filters.eq to find documents with the matching ownerUUID
         FindIterable<Document> plotDocuments = plotsCollection.find(Filters.eq("owner", ownerUUID));
+
+        for (Document plotDocument : plotDocuments) {
+            plots.add(plotDocument);
+        }
+
+        return plots;
+    }
+
+    public static List<Document> getAllPlots() {
+        List<Document> plots = new ArrayList<>();
+        MongoCollection<Document> plotsCollection = database.getCollection("plots");
+
+        FindIterable<Document> plotDocuments = plotsCollection.find();
 
         for (Document plotDocument : plotDocuments) {
             plots.add(plotDocument);

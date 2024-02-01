@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.codefile;
 
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
@@ -56,7 +57,7 @@ public class CodeFileHelper {
         try {
             positions = findCodeIndex(location);
         } catch (Exception e) {
-            Bukkit.getLogger().warning("Failed to find code positions");
+            Hypersquare.logger().warning("Failed to find code positions");
             return plotCode;
         }
 
@@ -88,7 +89,7 @@ public class CodeFileHelper {
         try {
             positions = findCodeIndex(location);
         } catch (Exception e) {
-            Bukkit.getLogger().warning("Failed to find code positions");
+            Hypersquare.logger().warning("Failed to find code positions");
             return plotCode;
         }
 
@@ -126,7 +127,7 @@ public class CodeFileHelper {
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
+            Hypersquare.logger().warning("Tried updating a non existent codeline @ " + code.world);
             return code.getCodeData();
         }
 
@@ -144,7 +145,7 @@ public class CodeFileHelper {
             positions = CodeFileHelper.findCodeIndex(location);
         } catch (Exception e) {
             // We are updating a non-existent codeblock
-            Bukkit.getLogger().info("Couldn't find the codeblock the player was editing @ " + code.world);
+            Hypersquare.logger().info("Couldn't find the codeblock the player was editing @ " + code.world);
             return plotCode;
         }
 
@@ -166,7 +167,7 @@ public class CodeFileHelper {
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
+            Hypersquare.logger().warning("Tried updating a non existent codeline @ " + code.world);
             return code.getCodeData();
         }
 

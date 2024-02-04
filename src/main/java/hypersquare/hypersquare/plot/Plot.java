@@ -127,7 +127,7 @@ public class Plot {
                             // Configure worlds
                             try {
                                 plugin.loadWorld(world);
-                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                            } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
                             Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
@@ -143,7 +143,7 @@ public class Plot {
                             // Configure worlds
                             try {
                                 plugin.loadWorld(world);
-                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                            } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
                             Utilities.getWorldDataFromSlimeWorlds(player.getWorld());

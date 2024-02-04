@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.listener;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.util.component.BasicComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;

@@ -19,12 +19,13 @@ public class RestrictMovement {
     public static Location codeStart = null;
 
     public static void commonVars(Location location) {
-        basic = new Location(location.getWorld(), 64, -640, 64);
-        large = new Location(location.getWorld(), 128, -640, 128);
-        huge = new Location(location.getWorld(), 256, -640, 256);
-        massive = new Location(location.getWorld(), 512, -640, 512);
-        gigantic = new Location(location.getWorld(), 1024, -640, 1024);
-        commonStart = new Location(location.getWorld(), 0, 255, 0);
+        basic = MoveEntities.basic;
+        large = MoveEntities.large;
+        huge = MoveEntities.huge;
+        massive = MoveEntities.massive;
+        gigantic = MoveEntities.gigantic;
+        commonStart = MoveEntities.commonStart;
+
         code = new Location(location.getWorld(), -111, 0, 256);
         codeStart = new Location(location.getWorld(), 1, 255, 0);
     }

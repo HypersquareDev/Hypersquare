@@ -10,7 +10,7 @@ import java.util.List;
 public class CodeLineData {
 
     public int position;
-    public List<CodeActionData> actions = new ArrayList<>();
+    public final List<CodeActionData> actions = new ArrayList<>();
     public String type;
     public String event;
 

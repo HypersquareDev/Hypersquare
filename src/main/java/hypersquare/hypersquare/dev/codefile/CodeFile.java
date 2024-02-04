@@ -17,7 +17,7 @@ import java.util.Base64;
 import java.util.zip.Deflater;
 
 public class CodeFile {
-    public World world;
+    public final World world;
     public Player player;
 
     public CodeFile(World world) {

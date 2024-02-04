@@ -118,8 +118,7 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
         return null;
     }
 
-    public record HSVar(String name, Scope scope) {
-    }
+    public record HSVar(String name, Scope scope) {}
     public enum Scope {
         THREAD(NamedTextColor.AQUA, "T"),
         ;

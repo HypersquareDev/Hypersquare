@@ -23,7 +23,7 @@ public class RepeatMultiple implements RepeatAction {
     @Override
     public ActionParameter[] parameters() {
         return new ActionParameter[] {
-                new ActionParameter(DisplayValue.NUMBER, Component.text("How often to repeat."), "amount")
+                new ActionParameter(DisplayValue.NUMBER, Component.text("Amount to repeat executing code."), "amount")
         };
     }
 

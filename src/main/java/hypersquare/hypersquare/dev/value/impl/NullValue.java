@@ -1,12 +1,10 @@
 package hypersquare.hypersquare.dev.value.impl;
 
 import com.google.gson.JsonObject;
-import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 

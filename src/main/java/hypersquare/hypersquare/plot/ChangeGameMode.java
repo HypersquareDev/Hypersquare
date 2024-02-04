@@ -1,9 +1,5 @@
 package hypersquare.hypersquare.plot;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.Events;
@@ -18,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,12 +22,13 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID, boolean keepState) {
         if (Hypersquare.mode.get(player).equals("playing")) {
+            UnloadPlotsSchedule.tryGameUnload(plotID);
             CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         String worldName = "hs.code." + plotID;
         Plot.loadPlot(plotID, player,() ->{  
             Utilities.resetPlayerStats(player, !keepState);
-            Bukkit.getWorld(worldName).setTime(1000);
+            Objects.requireNonNull(Bukkit.getWorld(worldName)).setTime(1000);
             if (!keepState) {
                 Inventory inv = player.getInventory();
                 inv.setItem(7, CodeItems.BLOCKS_SHORTCUT);
@@ -68,9 +64,11 @@ public class ChangeGameMode {
             String oldMode = Hypersquare.mode.get(player);
 
             if (oldPlotID == plotID && oldMode.equals("playing")) {
+                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(plotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
                 CodeExecutor.trigger(plotID, Events.PLAYER_REJOIN_EVENT, new CodeSelection(player));
             } else if (oldMode.equals("playing")) {
+                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
 
@@ -78,7 +76,7 @@ public class ChangeGameMode {
             PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
             player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
             CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
             Hypersquare.mode.put(player, "playing");
             String ownerName;
@@ -99,6 +97,7 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID, player,() -> {
             String worldName = "hs." + plotID;
             if (Hypersquare.mode.get(player).equals("playing")) {
+                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
             Utilities.resetPlayerStats(player, !keepState);
@@ -115,7 +114,7 @@ public class ChangeGameMode {
                     && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
                 player.teleport(Hypersquare.lastBuildLocation.get(player));
             } else {
-                player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+                player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
             }
         });
     }
@@ -132,13 +131,14 @@ public class ChangeGameMode {
 
     public static void spawn(Player player) {
         if (Hypersquare.mode.get(player).equals("playing")) {
+            UnloadPlotsSchedule.tryGameUnload(player.getWorld());
             CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player);
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0, MiscItems.MY_PLOTS.build());
-        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+        player.teleport(Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation());
         Hypersquare.mode.put(player, "at spawn");
         PlayerDatabase.updateLocalPlayerData(player);
         player.setHealth(20);

@@ -8,7 +8,7 @@ public class DecimalNumber {
         long temp = 0L;
         try {
             temp = Math.addExact(Math.multiplyExact(whole, SCALE), decimalPart);
-        } catch (ArithmeticException e) {}
+        } catch (ArithmeticException _) {}
         this.value = temp;
     }
 

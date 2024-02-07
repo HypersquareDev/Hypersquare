@@ -47,7 +47,7 @@ public final class Hypersquare extends JavaPlugin {
     public static HashMap<Integer, HashMap<String, String>> eventCache = new HashMap<>();
     public static HashMap<UUID, HashMap<String, Integer>> localPlayerData = new HashMap<>();
     public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
-    public final static int PLOT_VERSION = 4;
+    public final static int PLOT_VERSION = 5;
 
     public static MiniMessage cleanMM = MiniMessage.builder()
             .tags(TagResolver.resolver(

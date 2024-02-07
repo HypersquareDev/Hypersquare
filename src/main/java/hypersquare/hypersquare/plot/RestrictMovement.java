@@ -2,8 +2,10 @@ package hypersquare.hypersquare.plot;
 
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.LocationInitializer;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -19,12 +21,13 @@ public class RestrictMovement {
     public static Location codeStart = null;
 
     public static void commonVars(Location location) {
-        basic = MoveEntities.basic;
-        large = MoveEntities.large;
-        huge = MoveEntities.huge;
-        massive = MoveEntities.massive;
-        gigantic = MoveEntities.gigantic;
-        commonStart = MoveEntities.commonStart;
+        World world = location.getWorld();
+        basic = LocationInitializer.getBasicLocation(world);
+        large = LocationInitializer.getLargeLocation(world);
+        huge = LocationInitializer.getHugeLocation(world);
+        massive = LocationInitializer.getMassiveLocation(world);
+        gigantic = LocationInitializer.getGiganticLocation(world);
+        commonStart = LocationInitializer.getCommonStartLocation(world);
 
         code = new Location(location.getWorld(), -111, 0, 256);
         codeStart = new Location(location.getWorld(), 1, 255, 0);

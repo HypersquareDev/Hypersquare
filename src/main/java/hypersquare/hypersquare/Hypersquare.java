@@ -21,12 +21,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
@@ -129,8 +129,7 @@ public final class Hypersquare extends JavaPlugin {
 
         CodeItems.register();
         MoveEntities.entityLoop();
-        BukkitScheduler scheduler = getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(this, new UnloadPlotsSchedule(), 0L, 1);
+        getServer().getScheduler().runTaskTimer(Hypersquare.instance, UnloadPlotsSchedule::run, 0L, TimeUnit.SECONDS.toMillis(2L));
 
         // Make sure no world's spawn chunks are kept in memory
         for (World world : Bukkit.getWorlds()) {

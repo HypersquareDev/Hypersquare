@@ -22,7 +22,6 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID, boolean keepState) {
         if (Hypersquare.mode.get(player).equals("playing")) {
-            UnloadPlotsSchedule.tryGameUnload(plotID);
             CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         String worldName = "hs.code." + plotID;
@@ -45,6 +44,8 @@ public class ChangeGameMode {
                 player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
             }
 
+            UnloadPlotsSchedule.tryGameUnload(plotID);
+
             Utilities.sendInfo(player, Component.text("You are now in dev mode."));
             Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
             PlotDatabase.updateLocalData(plotID);
@@ -64,11 +65,9 @@ public class ChangeGameMode {
             String oldMode = Hypersquare.mode.get(player);
 
             if (oldPlotID == plotID && oldMode.equals("playing")) {
-                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(plotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
                 CodeExecutor.trigger(plotID, Events.PLAYER_REJOIN_EVENT, new CodeSelection(player));
             } else if (oldMode.equals("playing")) {
-                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
 
@@ -77,6 +76,7 @@ public class ChangeGameMode {
             player.closeInventory();
             player.setGameMode(GameMode.SURVIVAL);
             player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
+            UnloadPlotsSchedule.tryGameUnload(plotID);
             CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
             Hypersquare.mode.put(player, "playing");
             String ownerName;
@@ -97,7 +97,6 @@ public class ChangeGameMode {
         Plot.loadPlot(plotID, player,() -> {
             String worldName = "hs." + plotID;
             if (Hypersquare.mode.get(player).equals("playing")) {
-                UnloadPlotsSchedule.tryGameUnload(plotID);
                 CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
             }
             Utilities.resetPlayerStats(player, !keepState);
@@ -116,6 +115,8 @@ public class ChangeGameMode {
             } else {
                 player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
             }
+
+            UnloadPlotsSchedule.tryGameUnload(plotID);
         });
     }
 

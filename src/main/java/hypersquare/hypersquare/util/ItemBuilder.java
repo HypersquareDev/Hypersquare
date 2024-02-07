@@ -379,9 +379,7 @@ public class ItemBuilder {
      * @since 1.0
      */
     public ItemBuilder clearLore(final String lore){
-        if(meta().getLore().contains(lore)){
-            meta().getLore().remove(lore);
-        }
+        meta().getLore().remove(lore);
         build().setItemMeta(meta());
         return this;
     }

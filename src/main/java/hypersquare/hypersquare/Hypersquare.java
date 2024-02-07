@@ -30,44 +30,36 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
-    public static String DB_PASS;
-    public static String DB_NAME;
-    public static MongoClient mongoClient;
-    public static int lastUsedWorldNumber;
     public static final HashMap<Player, World> lastDeathLoc = new HashMap<>();
     public static final HashMap<Player, Long> lastSwapHands = new HashMap<>();
     public static final HashMap<Player, List<Document>> plotData = new HashMap<>();
-
     public static final HashMap<Player, Location> lastDevLocation = new HashMap<>();
     public static final HashMap<Player, Location> lastBuildLocation = new HashMap<>();
-
     public static final HashMap<Player, String> mode = new HashMap<>();
     public static final HashMap<Integer, List<Object>> loadedPlots = new HashMap<>();
     public static final HashMap<Integer, Long> gameUnloadTimestamp = new HashMap<>();
-
     public static final HashMap<Integer, HashMap<String, String>> eventCache = new HashMap<>();
     public static final HashMap<UUID, HashMap<String, Integer>> localPlayerData = new HashMap<>();
     public static final HashMap<UUID, Long> cooldownMap = new HashMap<>();
     public final static int PLOT_VERSION = 4;
-
     public static final MiniMessage cleanMM = MiniMessage.builder()
-            .tags(TagResolver.resolver(
-                    StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
-                    StandardTags.gradient(), StandardTags.hoverEvent(), StandardTags.rainbow(),
-                    StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
-            )).build();
-
+        .tags(TagResolver.resolver(
+            StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
+            StandardTags.gradient(), StandardTags.hoverEvent(), StandardTags.rainbow(),
+            StandardTags.transition(), StandardTags.reset(), StandardTags.newline()
+        )).build();
     public static final MiniMessage minimalMM = MiniMessage.builder()
-            .tags(TagResolver.resolver(
-                    StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
-                    StandardTags.gradient(), StandardTags.rainbow(),
-                    StandardTags.transition(), StandardTags.reset()
-            )).build();
-
-
+        .tags(TagResolver.resolver(
+            StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
+            StandardTags.gradient(), StandardTags.rainbow(),
+            StandardTags.transition(), StandardTags.reset()
+        )).build();
     public static final String pluginName = "hypersquare";
     public static final MiniMessage fullMM = MiniMessage.miniMessage();
-
+    public static String DB_PASS;
+    public static String DB_NAME;
+    public static MongoClient mongoClient;
+    public static int lastUsedWorldNumber;
     public static Plugin instance;
     public static LuckPerms lpPlugin;
     public static SlimePlugin slimePlugin;
@@ -82,7 +74,8 @@ public final class Hypersquare extends JavaPlugin {
     /**
      * @deprecated Use Hypersquare.logger() instead.
      */
-    @Deprecated @Override
+    @Deprecated
+    @Override
     public @NotNull Logger getLogger() {
         return super.getLogger();
     }

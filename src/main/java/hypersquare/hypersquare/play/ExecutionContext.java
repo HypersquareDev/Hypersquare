@@ -17,9 +17,12 @@ public record ExecutionContext(
         List<CodeActionData> containing,
         Action action, CodeActionData data
 ) {
+    public static final CodeVariableScope globalScope = new CodeVariableScope();
+
     public CodeVariableScope getScope(VariableValue.Scope scope) {
         return switch (scope) {
             case THREAD -> trace.scope;
+            case GLOBAL -> globalScope;
         };
     }
 

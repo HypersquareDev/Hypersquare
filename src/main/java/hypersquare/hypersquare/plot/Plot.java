@@ -101,7 +101,7 @@ public class Plot {
                 PlotManager.loadPlot(plotID);
                 ChangeGameMode.devMode(player, plotID);
                 Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
-                PlotDatabase.setPlotSpawnLocation(plotID,new Location(Bukkit.getWorld(worldName),10,0,10,0,0));
+                PlotDatabase.setPlotSpawnLocation(plotID, new Location(Bukkit.getWorld(worldName), 10, 0, 10, 0, 0));
             });
         });
     }
@@ -131,6 +131,8 @@ public class Plot {
                                 try {
                                     plugin.loadWorld(world);
                                 } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                    if (e instanceof UnknownWorldException)
+                                        Utilities.sendError(player, "That plot is vacant.");
                                     throw new RuntimeException(e);
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
@@ -147,7 +149,7 @@ public class Plot {
                                 try {
                                     plugin.loadWorld(world);
                                 } catch (Exception e) {
-                                    throw new RuntimeException(e);
+                                    if (e instanceof UnknownWorldException) Utilities.sendError(player, "That plot is vacant.");
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }
@@ -155,7 +157,7 @@ public class Plot {
                     }
                 } catch (Exception e) {
                     Utilities.sendError(player, "Error loading plot. Please try again later.");
-                    throw new RuntimeException(e);
+                    if (e instanceof UnknownWorldException) Utilities.sendError(player, "That plot is vacant.");
                 }
                 new BukkitRunnable() {
                     @Override
@@ -174,7 +176,6 @@ public class Plot {
             callback.run();
         }
     }
-
 
 
     public static void loadRules(String worldName) {

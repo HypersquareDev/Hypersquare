@@ -1,9 +1,5 @@
 package hypersquare.hypersquare.plot;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.Events;
@@ -18,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -56,7 +51,7 @@ public class ChangeGameMode {
                 PlotManager.loadPlot(plotID);
             });
         } else {
-            Utilities.sendError(player,"You do not have dev permissions for this plot.");
+            Utilities.sendError(player, "You do not have dev permissions for this plot.");
         }
     }
 
@@ -66,7 +61,7 @@ public class ChangeGameMode {
 
     public static void playMode(Player player, int plotID) {
         String worldName = "hs." + plotID;
-        Plot.loadPlot(plotID, player,() ->{
+        Plot.loadPlot(plotID, player, () -> {
             PlotManager.loadPlot(plotID);
             int oldPlotID = Utilities.getPlotID(player.getWorld());
             String oldMode = Hypersquare.mode.get(player);
@@ -124,7 +119,7 @@ public class ChangeGameMode {
                 }
             });
         } else {
-            Utilities.sendError(player,"You do not have build permissions for this plot");
+            Utilities.sendError(player, "You do not have build permissions for this plot");
         }
     }
 

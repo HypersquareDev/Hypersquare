@@ -80,14 +80,14 @@ public class EventItem {
             }
         }
 
-        // Cancelable
+        // Cancellable
         if (cancellable) {
             lore.add(Component.newline()
                         .decoration(TextDecoration.ITALIC, false)
                     .append(Component.text("∅")
                             .color(Colors.RED_DARK)
                     )
-                    .append(Component.text(" Cancelable")
+                    .append(Component.text(" Cancellable")
                             .color(Colors.RED)
                     )
             );

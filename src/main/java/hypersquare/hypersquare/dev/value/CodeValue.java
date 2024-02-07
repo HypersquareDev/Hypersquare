@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
@@ -110,7 +110,7 @@ public interface CodeValue<T, S> {
 
         if (!getHowToSet().isEmpty()) {
             lore.add(Component.empty());
-            lore.add(Component.text("How to set:").color(TextColor.color(0xF56EE6)).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("How to set:").color(Colors.PINK_LIGHT).decoration(TextDecoration.ITALIC, false));
 
             lore.addAll(getHowToSet());
         }

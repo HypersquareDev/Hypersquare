@@ -41,7 +41,7 @@ public final class Hypersquare extends JavaPlugin {
     public static final HashMap<Integer, HashMap<String, String>> eventCache = new HashMap<>();
     public static final HashMap<UUID, HashMap<String, Integer>> localPlayerData = new HashMap<>();
     public static final HashMap<UUID, Long> cooldownMap = new HashMap<>();
-    public final static int PLOT_VERSION = 4;
+    public final static int PLOT_VERSION = 5;
     public static final MiniMessage cleanMM = MiniMessage.builder()
         .tags(TagResolver.resolver(
             StandardTags.decorations(), StandardTags.color(), StandardTags.font(),
@@ -60,6 +60,7 @@ public final class Hypersquare extends JavaPlugin {
     public static String DB_NAME;
     public static MongoClient mongoClient;
     public static int lastUsedWorldNumber;
+
     public static Plugin instance;
     public static LuckPerms lpPlugin;
     public static SlimePlugin slimePlugin;

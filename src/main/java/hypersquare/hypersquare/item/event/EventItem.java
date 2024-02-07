@@ -1,8 +1,8 @@
 package hypersquare.hypersquare.item.event;
 
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -82,11 +82,14 @@ public class EventItem {
 
         // Cancellable
         if (cancellable) {
-            lore.add(Component.empty());
-            lore.add(Component.empty()
-                    .decoration(TextDecoration.ITALIC, false)
-                    .append(Component.text("∅").color(TextColor.color(0xCC1010)))
-                    .append(Component.text(" Cancellable").color(TextColor.color(0xFF3D3D)))
+            lore.add(Component.newline()
+                        .decoration(TextDecoration.ITALIC, false)
+                    .append(Component.text("∅")
+                            .color(Colors.RED_DARK)
+                    )
+                    .append(Component.text(" Cancellable")
+                            .color(Colors.RED)
+                    )
             );
         }
 

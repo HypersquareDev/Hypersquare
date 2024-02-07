@@ -81,7 +81,7 @@ public class CodeblockMenu {
         PLAYER_EVENT("player_event", "Player Event", "Events", 5, PlayerEventItems.values(), false),
         PLAYER_ACTION("player_action", "Player Action", "Actions", 5, PlayerActionItems.values(), true),
         IF_PLAYER("if_player", "If Player", "Conditions", 3, IfPlayerItems.values(), true),
-        SET_VARIABLE("set_variable", "Set Variable", "Variables", 3, SetVariableItems.values(), true),
+        SET_VARIABLE("set_variable", "Set Variable", "Variables", 5, SetVariableItems.values(), true),
         REPEAT("repeat", "Repeat", "Repeats", 3, RepeatItems.values(), true)
         ;
 

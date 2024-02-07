@@ -24,7 +24,6 @@ import org.bukkit.block.data.type.Piston;
 public class CodeBlockManagement {
     @Deprecated
     public static void placeBracket(Location location, String codeblock, String bracket, String action) {
-        Location loc = location.getBlock().getLocation();
         if (bracket.equals("open")) {
             //Open Bracket
             location.add(0, 0, 0).getBlock().setType(Material.PISTON);

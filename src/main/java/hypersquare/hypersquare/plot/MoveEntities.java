@@ -4,6 +4,7 @@ import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.LocationInitializer;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,12 +22,13 @@ public class MoveEntities {
     public static Location commonStart = null;
 
     public static void commonVars(Location location) {
-        basic = new Location(location.getWorld(), 64, -640, 64);
-        large = new Location(location.getWorld(), 128, -640, 128);
-        huge = new Location(location.getWorld(), 256, -640, 256);
-        massive = new Location(location.getWorld(), 512, -640, 512);
-        gigantic = new Location(location.getWorld(), 1024, -640, 1024);
-        commonStart = new Location(location.getWorld(), -20, 255, 0);
+        World world = location.getWorld();
+        basic = LocationInitializer.getBasicLocation(world);
+        large = LocationInitializer.getLargeLocation(world);
+        huge = LocationInitializer.getHugeLocation(world);
+        massive = LocationInitializer.getMassiveLocation(world);
+        gigantic = LocationInitializer.getGiganticLocation(world);
+        commonStart = LocationInitializer.getCommonStartLocation(world);
     }
 
     public static void entityLoop() {

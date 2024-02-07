@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.dev.ActionTag;
-import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.value.DisplayValue;
@@ -52,7 +51,7 @@ public interface Action {
         }
 
         public ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, List<Component> notes, String id) {
-            this(type, false, false, addNotes(description, notes), id);
+            this(type, plural, plural, addNotes(description, notes), id);
         }
 
         private static Component addNotes(Component description, List<Component> notes) {

@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.codefile;
 
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
@@ -7,7 +8,6 @@ import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -20,10 +20,6 @@ import java.util.List;
 public class CodeFileHelper {
     private static int getCodelineWorldIndex(Location location) {
         return Math.abs(location.getBlockX() / 3) - 1;
-    }
-
-    public static int getCodeblockIndex(Location location) {
-        return (int) Math.floor((double) location.getBlockZ() / 2) - 1;
     }
 
     public static int getCodelineListIndex(Location location, CodeData plotCode) {
@@ -56,7 +52,7 @@ public class CodeFileHelper {
         try {
             positions = findCodeIndex(location);
         } catch (Exception e) {
-            Bukkit.getLogger().warning("Failed to find code positions");
+            Hypersquare.logger().warning("Failed to find code positions");
             return plotCode;
         }
 
@@ -88,7 +84,7 @@ public class CodeFileHelper {
         try {
             positions = findCodeIndex(location);
         } catch (Exception e) {
-            Bukkit.getLogger().warning("Failed to find code positions");
+            Hypersquare.logger().warning("Failed to find code positions");
             return plotCode;
         }
 
@@ -119,15 +115,16 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData updateAction(Location location, CodeFile code, Action newAction) {
+    public static void updateAction(Location location, CodeFile code, Action newAction) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
-            return code.getCodeData();
+            Hypersquare.logger().warning("Tried updating a non existent codeline @ " + code.world);
+            code.getCodeData();
+            return;
         }
 
         CodeLineData codeline = new CodeLineData();
@@ -144,8 +141,8 @@ public class CodeFileHelper {
             positions = CodeFileHelper.findCodeIndex(location);
         } catch (Exception e) {
             // We are updating a non-existent codeblock
-            Bukkit.getLogger().info("Couldn't find the codeblock the player was editing @ " + code.world);
-            return plotCode;
+            Hypersquare.logger().info("Couldn't find the codeblock the player was editing @ " + code.world);
+            return;
         }
 
         CodeActionData actionJson = codeline.actions.get(positions.get(0));
@@ -156,18 +153,18 @@ public class CodeFileHelper {
         actionJson.arguments = new HashMap<>();
 
         code.setCode(plotCode.toJson().toString());
-        return plotCode;
     }
 
-    public static CodeData updateEvent(Location location, CodeFile code, Event newEvent) {
+    public static void updateEvent(Location location, CodeFile code, Event newEvent) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Bukkit.getLogger().warning("Tried updating a non existent codeline @ " + code.world);
-            return code.getCodeData();
+            Hypersquare.logger().warning("Tried updating a non existent codeline @ " + code.world);
+            code.getCodeData();
+            return;
         }
 
         CodeLineData codeline = new CodeLineData();
@@ -181,7 +178,6 @@ public class CodeFileHelper {
         codeline.event = newEvent.getId();
         plotCode.codelines.set(codelineListIndex, codeline);
         code.setCode(plotCode.toJson().toString());
-        return plotCode;
     }
 
     /**

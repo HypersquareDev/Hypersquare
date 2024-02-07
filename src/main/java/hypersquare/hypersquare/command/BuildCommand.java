@@ -19,14 +19,9 @@ public class BuildCommand implements HyperCommand {
         CommandSender sender = ctx.getSource().getBukkitSender();
         if (sender instanceof Player player) {
             int plotID = Utilities.getPlotID(player.getWorld());
-            if (plotID != 0) {
-                ChangeGameMode.buildMode(player, plotID);
-            } else {
-                Utilities.sendError(player, "You must be on a plot!");
-            }
-        } else {
-            sender.sendMessage("This command can only be used by players.");
-        }
+            if (plotID != 0) ChangeGameMode.buildMode(player, plotID);
+            else Utilities.sendError(player, "You must be on a plot!");
+        } else sender.sendMessage("This command can only be used by players.");
         return DONE;
     }
 }

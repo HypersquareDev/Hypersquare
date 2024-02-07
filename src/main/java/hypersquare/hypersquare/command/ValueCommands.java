@@ -29,7 +29,6 @@ public class ValueCommands implements HyperCommand {
                             if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
                             String v = StringArgumentType.getString(ctx, "value");
                             try {
-                                @SuppressWarnings("unchecked")
                                 ItemStack item = value.getItem(value.fromString(v, null));
                                 player.getInventory().addItem(item);
                             } catch (Exception ignored) {

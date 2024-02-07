@@ -111,6 +111,7 @@ public class Plot {
         String worldName = "hs." + plotID;
         String codeWorldName = "hs.code." + plotID;
         player.closeInventory();
+
         SlimePlugin plugin = Hypersquare.slimePlugin;
         SlimeLoader file = plugin.getLoader("mongodb");
         SlimePropertyMap properties = new SlimePropertyMap();
@@ -145,15 +146,14 @@ public class Plot {
                                 // Configure worlds
                                 try {
                                     plugin.loadWorld(world);
-                                } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                } catch (Exception e) {
                                     throw new RuntimeException(e);
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }
                         }.runTask(Hypersquare.instance);
                     }
-                } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                         WorldLockedException e) {
+                } catch (Exception e) {
                     Utilities.sendError(player, "Error loading plot. Please try again later.");
                     throw new RuntimeException(e);
                 }

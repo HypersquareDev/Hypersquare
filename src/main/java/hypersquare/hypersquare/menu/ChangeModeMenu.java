@@ -28,10 +28,7 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         play.lore(lore);
-
-        play.onClick(() -> {
-            ChangeGameMode.playMode(player, plotId);
-        });
+        play.onClick(() -> ChangeGameMode.playMode(player, plotId));
 
         MenuItem build = new MenuItem(Material.GRASS_BLOCK);
         build.name(BasicComponent.create("Build").color(TextColor.fromHexString("#2AD4D4")));
@@ -45,10 +42,7 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         build.lore(lore);
-
-        build.onClick(() -> {
-            ChangeGameMode.buildMode(player, plotId);
-        });
+        build.onClick(() -> ChangeGameMode.buildMode(player, plotId));
 
         MenuItem code = new MenuItem(Material.COMMAND_BLOCK);
 
@@ -63,13 +57,9 @@ public class ChangeModeMenu {
         lore.add(Component.text(""));
         lore.replaceAll(component -> component.decoration(TextDecoration.ITALIC, false));
         code.lore(lore);
-
-        code.onClick(() -> {
-            ChangeGameMode.devMode(player, plotId);
-        });
+        code.onClick(() -> ChangeGameMode.devMode(player, plotId));
 
         MenuItem addToFav = new MenuItem(Material.EMERALD);
-
         addToFav.name(Component.text("Add to Favorites").color(NamedTextColor.GREEN));
 
         Menu menu = new Menu(Component.text("Plot Information"), 3)

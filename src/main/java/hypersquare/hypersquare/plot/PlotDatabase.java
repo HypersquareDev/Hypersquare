@@ -65,11 +65,10 @@ public class PlotDatabase {
     public static void createTemplates(String worldName, String schematicName) {
         Document templateDoc = new Document(worldName, schematicName);
         SlimeWorld world = slimePlugin.getWorld(worldName);
-
         if (world == null) {
-
             String schematicsPath = "plugins/FastAsyncWorldEdit/schematics/";
-            if (!Files.exists(Path.of(schematicsPath + schematicName))) {
+            Path schemPath = Path.of(schematicsPath + schematicName);
+            if (!Files.exists(schemPath)) {
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/va3kne1vo7x1nc5qi2jd4/schematics.zip?rlkey=s2ze6j7jf1y9h8ofafakhmffm&dl=1")).build();
@@ -77,15 +76,15 @@ public class PlotDatabase {
                     ByteArrayInputStream byteStream = new ByteArrayInputStream(schematics);
                     ZipInputStream zipStream = new ZipInputStream(byteStream);
                     ZipEntry zipEntry = zipStream.getNextEntry();
-                    Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
+                    boolean mkdirsSuccess = Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
+                    if (!mkdirsSuccess) Hypersquare.logger().warning("Couldn't create directory 'plugins/FastAsyncWorldEdit/schematics'!");
                     while (zipEntry != null) {
-
                         Files.copy(zipStream, Path.of(schematicsPath + zipEntry.getName()));
                         zipEntry = zipStream.getNextEntry();
                     }
                     zipStream.close();
                 } catch (Exception err) {
-                    Bukkit.getLogger().warning(err.toString());
+                    Hypersquare.logger().warning(err.toString());
                 }
             }
 
@@ -101,7 +100,7 @@ public class PlotDatabase {
                 Hypersquare.slimePlugin.loadWorld(world);
                 Clipboard clipboard;
 
-                File schematic = Path.of(schematicsPath + schematicName).toFile();
+                File schematic = schemPath.toFile();
 
                 ClipboardFormat format = ClipboardFormats.findByFile(schematic);
                 try (ClipboardReader reader = format.getReader(new FileInputStream(schematic))) {
@@ -116,7 +115,7 @@ public class PlotDatabase {
                     Operations.complete(operation);
                 }
 
-                Bukkit.getWorld(world.getName()).save();
+                Objects.requireNonNull(Bukkit.getWorld(world.getName())).save();
             } catch (Exception e) {
                 return;
             }
@@ -319,6 +318,19 @@ public class PlotDatabase {
 
         // Use Filters.eq to find documents with the matching ownerUUID
         FindIterable<Document> plotDocuments = plotsCollection.find(Filters.eq("owner", ownerUUID));
+
+        for (Document plotDocument : plotDocuments) {
+            plots.add(plotDocument);
+        }
+
+        return plots;
+    }
+
+    public static List<Document> getAllPlots() {
+        List<Document> plots = new ArrayList<>();
+        MongoCollection<Document> plotsCollection = database.getCollection("plots");
+
+        FindIterable<Document> plotDocuments = plotsCollection.find();
 
         for (Document plotDocument : plotDocuments) {
             plots.add(plotDocument);

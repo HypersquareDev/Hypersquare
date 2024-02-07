@@ -9,7 +9,7 @@ import java.util.List;
 public class CodeStacktrace {
     public final List<Frame> frames;
     public final int plotId;
-    public CodeVariableScope scope = new CodeVariableScope();
+    public final CodeVariableScope scope = new CodeVariableScope();
 
     public CodeStacktrace(int plotId, Frame frame) {
         frames = new ArrayList<>(List.of(frame));

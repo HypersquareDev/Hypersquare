@@ -20,10 +20,8 @@ import java.util.Map;
 
 /**
  * NOTICE: This utility was developer as part of AeolusLib. While you can use it for your own projects, You are NOT allowed to delete or move this header comment.
- *
  * Utility:
  * Chainable {@link ItemStack}s
- *
  * @author MCAeolus, modified by RedVortex_
  * @version 1.1
  */
@@ -202,7 +200,6 @@ public class ItemBuilder {
      * Sets a custom String tag to the {@link ItemStack}
      * @param key The namespaced key to set the value to
      * @param value The value to set the key to
-     * @return
      */
     public ItemBuilder setCustomTag(NamespacedKey key, String value) {
         meta().getPersistentDataContainer().set(key, PersistentDataType.STRING, value);

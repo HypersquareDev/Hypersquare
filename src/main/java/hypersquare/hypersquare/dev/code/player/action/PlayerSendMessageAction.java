@@ -58,11 +58,11 @@ public class PlayerSendMessageAction implements Action {
     @Override
     public ActionTag[] tags() {
         return new ActionTag[]{
-                new ActionTag("text_merging", "Text Value Splitting", MergingOptions.SPACES,
-                        new ActionTag.Option(MergingOptions.NO_SPACES, "No spaces", Material.PAPER),
-                        new ActionTag.Option(MergingOptions.SPACES, "Add spaces", Material.MAP),
-                        new ActionTag.Option(MergingOptions.SEPARATE_MESSAGES, "Separate messages", Material.FILLED_MAP)
-                )
+            new ActionTag("text_merging", "Text Value Splitting", MergingOptions.SPACES,
+                    new ActionTag.Option(MergingOptions.NO_SPACES, "No spaces", Material.PAPER),
+                    new ActionTag.Option(MergingOptions.SPACES, "Add spaces", Material.MAP),
+                    new ActionTag.Option(MergingOptions.SEPARATE_MESSAGES, "Separate messages", Material.FILLED_MAP)
+                    )
         };
     }
 

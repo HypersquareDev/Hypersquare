@@ -25,12 +25,8 @@ public class CodeVariable {
     public <T> T get(CodeValues target) {
         JsonObject json = getJson();
         if (json == null) return null;
-        if (target == null) {
-            target = CodeValues.getType(json);
-        }
-        if (target.isType(json)) {
-            return (T) target.realValue(target.fromJson(json));
-        }
+        if (target == null) target = CodeValues.getType(json);
+        if (target.isType(json)) return (T) target.realValue(target.fromJson(json));
         return (T) target.realValue(target.coerce(json));
     }
 

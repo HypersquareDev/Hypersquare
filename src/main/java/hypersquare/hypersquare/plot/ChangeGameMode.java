@@ -44,7 +44,7 @@ public class ChangeGameMode {
                 } else {
                     player.teleport(new Location(Bukkit.getWorld(worldName), -3.5, 0, 2.5, -90, 0));
                 }
-
+                UnloadPlotsSchedule.tryGameUnload(plotID);
                 Utilities.sendInfo(player, Component.text("You are now in dev mode."));
                 Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
                 PlotDatabase.updateLocalData(plotID);
@@ -77,7 +77,8 @@ public class ChangeGameMode {
             PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
             player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
+            player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
+            UnloadPlotsSchedule.tryGameUnload(plotID);
             CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
             Hypersquare.mode.put(player, "playing");
             String ownerName;
@@ -117,6 +118,7 @@ public class ChangeGameMode {
                 } else {
                     player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
                 }
+                UnloadPlotsSchedule.tryGameUnload(plotID);
             });
         } else {
             Utilities.sendError(player, "You do not have build permissions for this plot");
@@ -135,13 +137,14 @@ public class ChangeGameMode {
 
     public static void spawn(Player player) {
         if (Hypersquare.mode.get(player).equals("playing")) {
+            UnloadPlotsSchedule.tryGameUnload(player.getWorld());
             CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player);
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().setItem(0, MiscItems.MY_PLOTS.build());
-        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+        player.teleport(Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation());
         Hypersquare.mode.put(player, "at spawn");
         PlayerDatabase.updateLocalPlayerData(player);
         player.setHealth(20);

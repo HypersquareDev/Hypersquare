@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotManager;
 import hypersquare.hypersquare.util.Utilities;
-import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import org.bukkit.Bukkit;

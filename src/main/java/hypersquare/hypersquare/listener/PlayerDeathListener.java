@@ -1,7 +1,6 @@
 package hypersquare.hypersquare.listener;
 
 import hypersquare.hypersquare.Hypersquare;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +11,6 @@ public class PlayerDeathListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Hypersquare.lastDeathLoc.put(player, player.getWorld());
-        Bukkit.getLogger().info(Hypersquare.lastDeathLoc.toString());
+        Hypersquare.logger().info(Hypersquare.lastDeathLoc.toString());
     }
 }

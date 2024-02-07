@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
-import hypersquare.hypersquare.play.CodeVariable;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
@@ -16,9 +15,9 @@ import java.util.Map;
 public class CodeActionData {
     public String action;
     public String codeblock;
-    public List<CodeActionData> actions = new ArrayList<>();
+    public final List<CodeActionData> actions = new ArrayList<>();
     public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
-    public HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
+    public final HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
 
     public CodeActionData() {
     }

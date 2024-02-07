@@ -53,6 +53,7 @@ public class CodeExecutor {
                     if (trace.isDone()) break;
                     frame = trace.next();
                     if (frame == null) break;
+
                     data = frame.current();
                     Actions action = Actions.getAction(data.action, data.codeblock);
                     if (action.a instanceof CallbackAfterAction cb) {

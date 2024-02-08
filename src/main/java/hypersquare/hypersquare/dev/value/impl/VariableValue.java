@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.play.CodeVariable;
+import hypersquare.hypersquare.util.color.Colors;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -122,6 +123,8 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
     public enum Scope {
         GLOBAL(Colors.GREEN_LIGHT, "G"),
         THREAD(Colors.AQUA_LIGHT, "T"),
+        LINE(Colors.SKY, "L"),
+        SAVE(Colors.YELLOW_LIGHT, "S");
         ;
 
         public final TextColor color;

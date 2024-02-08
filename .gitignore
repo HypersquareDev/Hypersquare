@@ -1,10 +1,9 @@
 # User-specific stuff
 .idea/
+.settings/
 
 # Server Files (if stored in root dir)
 server/
-# Credentials
-src/main/resources/credentials.yml
 
 *.iml
 *.ipr

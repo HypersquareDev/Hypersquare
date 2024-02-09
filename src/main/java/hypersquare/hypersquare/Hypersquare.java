@@ -106,7 +106,7 @@ public final class Hypersquare extends JavaPlugin {
         pm.registerEvents(new PlayerGoToSpawnEvent(), this);
         pm.registerEvents(new DevEvents(), this);
         pm.registerEvents(new PlayerQuitListener(), this);
-        pm.registerEvents(new PlaytimeEventExecuter(), this);
+        pm.registerEvents(new PlaytimeEventExecutor(), this);
         pm.registerEvents(new CodePlacement(), this);
         pm.registerEvents(new WorldLoadListener(), this);
 

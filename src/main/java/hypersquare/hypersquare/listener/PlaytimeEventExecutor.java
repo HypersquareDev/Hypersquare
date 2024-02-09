@@ -21,7 +21,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaytimeEventExecuter implements Listener {
+public class PlaytimeEventExecutor implements Listener {
     static List<String> eventList = new ArrayList();
 
     public static void ExecuteEvent(String[] PlotEvents) {

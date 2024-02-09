@@ -5,6 +5,7 @@ import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.util.LocationInitializer;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,31 +50,31 @@ public class MoveEntities {
 
                             case "Basic": {
                                 if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), basic)) {
-                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), basic);
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), basic);
                                 }
                                 break;
                             }
                             case "Large": {
                                 if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), large)) {
-                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), large);
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), large);
                                 }
                                 break;
                             }
                             case "Huge": {
                                 if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), huge)) {
-                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
                                 }
                                 break;
                             }
                             case "Massive": {
                                 if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
-                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
                                 }
                                 break;
                             }
                             case "Gigantic": {
                                 if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), gigantic)) {
-                                    Utilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), gigantic);
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), gigantic);
                                 }
                                 break;
                             }

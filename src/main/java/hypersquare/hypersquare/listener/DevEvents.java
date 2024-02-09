@@ -19,6 +19,7 @@ import hypersquare.hypersquare.menu.actions.ActionMenu;
 import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.MoveEntities;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -311,9 +312,7 @@ public class DevEvents implements Listener {
             if (System.currentTimeMillis() - Hypersquare.lastSwapHands.get(player) < 950
                     && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
                 String worldName = player.getWorld().getName();
-                int plotID = Integer.parseInt(worldName.startsWith("hs.code.")
-                        ? worldName.substring(8) : worldName.substring(3)
-                );
+                int plotID = PlotUtilities.getPlotId(player);
                 if (playerMode.equals("coding")) {
                     Hypersquare.lastDevLocation.put(player, player.getLocation());
                     ChangeGameMode.buildMode(player, plotID, true);

@@ -1,8 +1,8 @@
 package hypersquare.hypersquare.dev.action;
 
 import hypersquare.hypersquare.play.CodeSelection;
-import hypersquare.hypersquare.play.CodeStacktrace;
-import hypersquare.hypersquare.play.ExecutionContext;
+import hypersquare.hypersquare.play.execution.CodeStacktrace;
+import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;

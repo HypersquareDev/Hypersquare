@@ -2,10 +2,9 @@ package hypersquare.hypersquare.listener;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Events;
-import hypersquare.hypersquare.play.CodeExecutor;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.plot.UnloadPlotsSchedule;
-import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.PlotUtilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class PlayerQuitListener implements Listener {
         // Trigger leave and possibly game unload
         if (Hypersquare.mode.get(player).equals("playing")) {
             UnloadPlotsSchedule.tryGameUnload(player.getWorld());
-            CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+            PlotUtilities.getExecutor(player).trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
 
         // Remove player from the hashmaps

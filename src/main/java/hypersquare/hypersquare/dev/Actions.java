@@ -1,17 +1,18 @@
 package hypersquare.hypersquare.dev;
 
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.EmptyAction;
-import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.control.WaitAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.action.Action;
-import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ExecutionContext;
+import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -26,6 +27,7 @@ public enum Actions implements Action {
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
+    CONTROl_WAIT(new WaitAction())
     ;
 
     public final Action a;

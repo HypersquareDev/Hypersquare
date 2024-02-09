@@ -1,10 +1,14 @@
-package hypersquare.hypersquare.play;
+package hypersquare.hypersquare.play.execution;
 
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
+import hypersquare.hypersquare.play.ActionArguments;
+import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.CodeVariable;
+import hypersquare.hypersquare.play.CodeVariableScope;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
@@ -23,6 +27,7 @@ public record ExecutionContext(
         return switch (scope) {
             case THREAD -> trace.scope;
             case GLOBAL -> globalScope;
+            default -> null; // TODO: implement other scopes
         };
     }
 
@@ -38,5 +43,10 @@ public record ExecutionContext(
             }
         }
         return o.apply(tagValue.getA());
+    }
+
+    public void sleep(long duration) {
+        try { Thread.sleep(duration); }
+        catch (Exception ignored) {}
     }
 }

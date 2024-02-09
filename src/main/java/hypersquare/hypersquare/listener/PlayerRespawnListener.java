@@ -10,6 +10,7 @@ public class PlayerRespawnListener implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("playing")) return;
         event.setRespawnLocation(Hypersquare.lastDeathLoc.get(player).getSpawnLocation());
         Hypersquare.lastDeathLoc.remove(player);
     }

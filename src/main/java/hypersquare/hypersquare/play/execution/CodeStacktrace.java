@@ -1,18 +1,22 @@
-package hypersquare.hypersquare.play;
+package hypersquare.hypersquare.play.execution;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.CodeVariableScope;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CodeStacktrace {
     public final List<Frame> frames;
     public final int plotId;
     public final CodeVariableScope scope = new CodeVariableScope();
+    public boolean cancelAll = false;
 
     public CodeStacktrace(int plotId, Frame frame) {
-        frames = new ArrayList<>(List.of(frame));
+        frames = new LinkedList<>();
+        frames.add(frame);
         this.plotId = plotId;
     }
 
@@ -25,7 +29,7 @@ public class CodeStacktrace {
     }
 
     public boolean isDone() {
-        return frames.isEmpty();
+        return frames.isEmpty() || cancelAll;
     }
 
     public void popFrame() {
@@ -37,10 +41,10 @@ public class CodeStacktrace {
     }
 
     public static class Frame {
-        public int position = 0;
         public final List<CodeActionData> actions;
         public final CodeSelection selection;
         public final HashMap<String, Object> tempData = new HashMap<>();
+        public int position = 0;
 
         public Frame(List<CodeActionData> actions, CodeSelection selection) {
             this.actions = actions;

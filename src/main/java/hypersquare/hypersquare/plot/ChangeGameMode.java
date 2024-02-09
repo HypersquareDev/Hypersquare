@@ -4,8 +4,9 @@ import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.Events;
 import hypersquare.hypersquare.item.MiscItems;
-import hypersquare.hypersquare.play.CodeExecutor;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.execution.CodeExecutor;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
+import static hypersquare.hypersquare.Hypersquare.codeExecMap;
 
 public class ChangeGameMode {
     public static void devMode(Player player, int plotID, boolean keepState) {
@@ -25,7 +27,7 @@ public class ChangeGameMode {
             String worldName = "hs.code." + plotID;
             Plot.loadPlot(plotID, player, () -> {
                 if (Hypersquare.mode.get(player).equals("playing")) {
-                    CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+                    codeExecMap.get(plotID).trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
                 }
                 Utilities.resetPlayerStats(player, !keepState);
                 Bukkit.getWorld(worldName).setTime(1000);
@@ -63,23 +65,22 @@ public class ChangeGameMode {
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player, () -> {
             PlotManager.loadPlot(plotID);
-            int oldPlotID = Utilities.getPlotID(player.getWorld());
+            int oldPlotID = PlotUtilities.getPlotId(player.getWorld());
             String oldMode = Hypersquare.mode.get(player);
+            CodeExecutor executor = codeExecMap.get(plotID);
 
             if (oldPlotID == plotID && oldMode.equals("playing")) {
-                CodeExecutor.trigger(plotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
-                CodeExecutor.trigger(plotID, Events.PLAYER_REJOIN_EVENT, new CodeSelection(player));
-            } else if (oldMode.equals("playing")) {
-                CodeExecutor.trigger(oldPlotID, Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
-            }
+                executor.trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+                executor.trigger(Events.PLAYER_REJOIN_EVENT, new CodeSelection(player));
+            } else if (oldMode.equals("playing"))
+                executor.trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
 
             Utilities.resetPlayerStats(player);
-            PlotDatabase.updateEventsCache(plotID);
             player.closeInventory();
             player.setGameMode(GameMode.SURVIVAL);
             player.teleport(Objects.requireNonNull(Bukkit.getWorld(worldName)).getSpawnLocation());
             UnloadPlotsSchedule.tryGameUnload(plotID);
-            CodeExecutor.trigger(plotID, Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_JOIN_EVENT, new CodeSelection(player));
             Hypersquare.mode.put(player, "playing");
             String ownerName;
             try { // Edge case where the owner of the plot is not in the database
@@ -100,7 +101,7 @@ public class ChangeGameMode {
             Plot.loadPlot(plotID, player, () -> {
                 String worldName = "hs." + plotID;
                 if (Hypersquare.mode.get(player).equals("playing")) {
-                    CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+                    codeExecMap.get(plotID).trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
                 }
                 Utilities.resetPlayerStats(player, !keepState);
                 player.closeInventory();
@@ -138,7 +139,7 @@ public class ChangeGameMode {
     public static void spawn(Player player) {
         if (Hypersquare.mode.get(player).equals("playing")) {
             UnloadPlotsSchedule.tryGameUnload(player.getWorld());
-            CodeExecutor.trigger(Utilities.getPlotID(player.getWorld()), Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
+            PlotUtilities.getExecutor(player).trigger(Events.PLAYER_LEAVE_EVENT, new CodeSelection(player));
         }
         Utilities.resetPlayerStats(player);
         player.getInventory().clear();

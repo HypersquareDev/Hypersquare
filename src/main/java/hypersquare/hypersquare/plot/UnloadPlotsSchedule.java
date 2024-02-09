@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.plot;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.play.execution.CodeExecutor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -29,9 +30,7 @@ public class UnloadPlotsSchedule {
                 Hypersquare.gameUnloadTimestamp.remove(plotId);
 
                 // Game unload should have already happened
-                Bukkit.unloadWorld(buildWorld, true);
-                Bukkit.unloadWorld(devWorld, true);
-                Hypersquare.loadedPlots.remove(plotId);
+                PlotManager.unloadPlot(plotId, devWorld, buildWorld);
 
                 Hypersquare.logger().info("Unloaded worlds for ID " + plotId);
                 //TODO: non saved variables will be purged in the gameUnload method
@@ -56,5 +55,7 @@ public class UnloadPlotsSchedule {
     private static void gameUnload(int plotId, @NotNull World buildWorld) {
         Hypersquare.gameUnloadTimestamp.put(plotId, System.currentTimeMillis());
         buildWorld.getEntities().listIterator().forEachRemaining(Entity::remove);
+        CodeExecutor executor = Hypersquare.codeExecMap.get(plotId);
+        if (executor != null) executor.cancel();
     }
 }

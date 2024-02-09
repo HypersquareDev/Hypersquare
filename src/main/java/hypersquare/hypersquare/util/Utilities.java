@@ -17,7 +17,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -32,16 +31,6 @@ import static hypersquare.hypersquare.Hypersquare.fullMM;
 public class Utilities {
 
     private static final Pattern firstWordLetter = Pattern.compile("\\b\\w");
-
-    public static int getPlotID(World world) {
-        String name = world.getName();
-        if (name.contains("hs.")) {
-            name = name.replace("hs.", "");
-            if (name.startsWith("code.")) name = name.substring(5);
-            return Integer.parseInt(name);
-        }
-        return 0;
-    }
 
     public static int findLengthOfLongestString(List<String> strings) {
         if (strings == null || strings.isEmpty()) return 0; // Return 0 if the list is null or empty
@@ -170,31 +159,6 @@ public class Utilities {
                 !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
-    public static void moveEntityInsidePlot(Entity entity, Location locA, Location locB) {
-        Location entityLocation = entity.getLocation();
-
-        double minX = Math.min(locA.getX(), locB.getX());
-        double minY = Math.min(locA.getY(), locB.getY());
-        double minZ = Math.min(locA.getZ(), locB.getZ());
-        double maxX = Math.max(locA.getX(), locB.getX());
-        double maxY = Math.max(locA.getY(), locB.getY());
-        double maxZ = Math.max(locA.getZ(), locB.getZ());
-
-        // Check if the entity is even outside the boundaries
-        if (entityLocation.getX() < minX || entityLocation.getX() > maxX ||
-                entityLocation.getY() < minY || entityLocation.getY() > maxY ||
-                entityLocation.getZ() < minZ || entityLocation.getZ() > maxZ) {
-
-            // Calculate a location that is within the boundaries
-            double tpX = clamp(entityLocation.getX(), minX, maxX);
-            double tpY = clamp(entityLocation.getY(), minY, maxY);
-            double tpZ = clamp(entityLocation.getZ(), minZ, maxZ);
-
-            Location tpLocation = new Location(entity.getWorld(), tpX, tpY, tpZ, entityLocation.getYaw(), entityLocation.getPitch());
-            entity.teleport(tpLocation);
-        }
-    }
-
     public static Location parseLocation(String input, World world) {
         try {
             String[] parts = input.split(",");
@@ -314,7 +278,7 @@ public class Utilities {
             Sign sign = (Sign) block.getState();
             sign.getSide(Side.FRONT).line(1, Component.text(id));
             sign.update();
-            int plotID = Utilities.getPlotID(player.getWorld());
+            int plotID = PlotUtilities.getPlotId(player.getWorld());
             HashMap<String, String> map = new HashMap<>();
             map.put(LocationToString(block.getLocation().add(1, 0, 0)), id);
             PlotDatabase.addEvents(plotID, map);

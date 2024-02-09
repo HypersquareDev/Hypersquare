@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -19,17 +20,20 @@ import java.util.zip.Deflater;
 public class CodeFile {
     public final World world;
     public Player player;
+    public final int plotId;
 
     public CodeFile(World world) {
         this.world = world;
+        this.plotId = PlotUtilities.getPlotId(world);
     }
 
     public CodeFile(Player player) {
+        this(player.getWorld());
         this.player = player;
-        this.world = player.getWorld();
     }
 
     public CodeFile(int plotId) {
+        this.plotId = plotId;
         world = Bukkit.getWorld("hs.code." + plotId);
     }
 

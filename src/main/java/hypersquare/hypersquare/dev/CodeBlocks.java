@@ -20,7 +20,7 @@ public enum CodeBlocks {
     OBSIDIAN(Material.OBSIDIAN, "IF VARIABLE", "if_variable", true, true),
     NETHERRACK(Material.NETHERRACK, "GAME ACTION", "game_action", true, false),
     RED_NETHER_BRICKS(Material.RED_NETHER_BRICKS, "IF GAME", "if_game", true, true),
-    COAL_BLOCK(Material.COAL_BLOCK, "CONTROL", "control", true, false, false, false, "wait"),
+    COAL_BLOCK(Material.COAL_BLOCK, "CONTROL", "control", true, false, false, true, "wait"),
     PURPUR_BLOCK(Material.PURPUR_BLOCK, "SELECT OBJECT", "select_object", true, false),
     PRISMARINE(Material.PRISMARINE, "REPEAT", "repeat", true, true),
     END_STONE(Material.END_STONE, "ELSE", "else", false, true, false, false),
@@ -32,12 +32,13 @@ public enum CodeBlocks {
     final String name;
     @NotNull
     final String id;
+    @NotNull
+    final String defaultAction;
     final boolean isThreadStarter;
     final boolean hasBarrel;
     final boolean hasBrackets;
     public final boolean hasActions;
     @NotNull
-    final String defaultAction;
 
     CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets) {
         this.material = material;
@@ -132,6 +133,10 @@ public enum CodeBlocks {
 
     public String id() {
         return id;
+    }
+
+    public String getDefaultAction() {
+        return defaultAction;
     }
 
     public boolean isThreadStarter() {

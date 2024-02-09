@@ -5,10 +5,10 @@ import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.play.ExecutionContext;
+import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -33,16 +33,10 @@ public class PlayerSendMessageAction implements Action {
             MergingOptions merging = ctx.getTag("text_merging", MergingOptions::valueOf);
 
             switch (merging) {
-                case SPACES -> {
-                    p.sendMessage(Component.join(JoinConfiguration.builder().separator(Component.text(" ")).build(), messages));
-                }
-                case NO_SPACES -> {
-                    p.sendMessage(Component.join(JoinConfiguration.noSeparators(), messages));
-                }
+                case SPACES -> p.sendMessage(Component.join(JoinConfiguration.builder().separator(Component.text(" ")).build(), messages));
+                case NO_SPACES -> p.sendMessage(Component.join(JoinConfiguration.noSeparators(), messages));
                 case SEPARATE_MESSAGES -> {
-                    for (Component c : messages) {
-                        p.sendMessage(c);
-                    }
+                    for (Component c : messages) p.sendMessage(c);
                 }
             }
         }

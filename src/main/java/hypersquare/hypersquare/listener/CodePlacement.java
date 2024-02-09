@@ -18,6 +18,7 @@ import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -250,7 +251,7 @@ public class CodePlacement implements Listener {
             if (codeblock == null) return; // Shouldn't ever happen
 
             if (codeblock.isThreadStarter()) {
-                PlotDatabase.removeEventByKey(Utilities.getPlotID(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
+                PlotDatabase.removeEventByKey(PlotUtilities.getPlotId(event.getBlock().getWorld()), Utilities.LocationToString(block.getLocation()));
 
                 // Purge the entire codeline
                 Location endLoc = CodeBlockManagement.findCodeEnd(blockLoc.clone());

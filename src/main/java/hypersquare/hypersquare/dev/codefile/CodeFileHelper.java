@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.dev.codefile;
 
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
@@ -71,6 +72,10 @@ public class CodeFileHelper {
         }
 
         parent.actions.add(positions.get(positions.size() - 1), action);
+
+        if (!codeblock.getDefaultAction().isEmpty()) {
+            updateAction(location, code, Actions.getAction(codeblock.getDefaultAction(), codeblock.id()));
+        }
         return plotCode;
     }
 

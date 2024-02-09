@@ -1,19 +1,18 @@
-package hypersquare.hypersquare.item.action.repeat;
-
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+package hypersquare.hypersquare.item.action.control;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
-public enum RepeatItems implements ActionMenuItem {
-
-    NUMERIC(Material.SLIME_BALL, NamedTextColor.RED, "Number based.", "<gray>Repeats that are%n<gray>related to numbers.", 0)
-    ;
+public enum ControlItems implements ActionMenuItem {
+    THREAD(Material.PRISMARINE_SHARD, Colors.TEAL, "Thread Manipulation.", "<gray>Actions that%n<gray>manipulate the%n<gray>current thread.", 11)
+        ;
 
     public final Material material;
     public final TextColor nameColor;
@@ -21,7 +20,7 @@ public enum RepeatItems implements ActionMenuItem {
     public final String lore;
     public final int slot;
 
-    RepeatItems(Material material, TextColor nameColor, String name, String lore, int slot) {
+    ControlItems(Material material, TextColor nameColor, String name, String lore, int slot) {
         this.material = material;
         this.nameColor = nameColor;
         this.name = name;

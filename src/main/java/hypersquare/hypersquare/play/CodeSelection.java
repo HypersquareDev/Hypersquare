@@ -19,6 +19,10 @@ public class CodeSelection {
         this.selection = Arrays.asList(selection);
     }
 
+    public CodeSelection() {
+        this.selection = new ArrayList<>();
+    }
+
     public CodeSelection add(List<Entity> entity) {
         List<Entity> newSelection = new ArrayList<>(selection);
         newSelection.addAll(entity);

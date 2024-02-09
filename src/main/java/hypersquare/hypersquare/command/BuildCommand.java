@@ -3,6 +3,7 @@ package hypersquare.hypersquare.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.plot.ChangeGameMode;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ public class BuildCommand implements HyperCommand {
     private int run(CommandContext<CommandSourceStack> ctx){
         CommandSender sender = ctx.getSource().getBukkitSender();
         if (sender instanceof Player player) {
-            int plotID = Utilities.getPlotID(player.getWorld());
+            int plotID = PlotUtilities.getPlotId(player.getWorld());
             if (plotID != 0) ChangeGameMode.buildMode(player, plotID);
             else Utilities.sendError(player, "You must be on a plot!");
         } else sender.sendMessage("This command can only be used by players.");

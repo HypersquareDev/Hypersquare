@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotManager;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -47,7 +48,7 @@ public class LocateCommand implements HyperCommand {
             messages.add(color2 + "→ " + color + "Server: <white>Node 1");
             Utilities.sendMultiMiniMessage(self, messages);
         } else {
-            int plotID = Utilities.getPlotID(target.getWorld());
+            int plotID = PlotUtilities.getPlotId(target.getWorld());
             String cmd = "<click:run_command:/join " + plotID + "><hover:show_text:'<color:#AAD4AA>Click to join'>";
             List<String> messages = new ArrayList<>();
             String plotName = PlotManager.getPlotName(plotID);

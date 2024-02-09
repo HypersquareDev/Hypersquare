@@ -15,7 +15,6 @@ public class CommandManager {
         register(
                 new FlyCommand(),
                 new BuildCommand(),
-                new DebugCommand(),
                 new DeleteAllPlotsCommand(),
                 new DevCommand(),
                 new EditSpawn(),

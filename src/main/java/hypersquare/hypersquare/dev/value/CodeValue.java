@@ -3,8 +3,8 @@ package hypersquare.hypersquare.dev.value;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -81,7 +81,7 @@ public interface CodeValue<T, S> {
         lore.addAll(getDescription());
 
         lore.add(Component.empty());
-        lore.add(Component.text("How to set:").color(TextColor.color(0xF56EE6)).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("How to set:").color(Colors.PINK_LIGHT).decoration(TextDecoration.ITALIC, false));
 
         lore.addAll(getHowToSet());
 

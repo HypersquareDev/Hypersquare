@@ -24,6 +24,8 @@ import hypersquare.hypersquare.Hypersquare;
 import net.kyori.adventure.text.Component;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -201,6 +203,56 @@ public class PlotDatabase {
         return null;
     }
 
+    public static String getRawPlotName(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("name");
+        }
+        return null;
+    }
+
+    public static Location getPlotSpawnLocation(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null && result.containsKey("spawnLocation")) {
+            Document spawnLocationDoc = result.get("spawnLocation", Document.class);
+
+            String worldName = spawnLocationDoc.getString("world");
+            World world = Bukkit.getWorld(worldName);
+
+            if (world != null) {
+                double x = spawnLocationDoc.getDouble("x");
+                double y = spawnLocationDoc.getDouble("y");
+                double z = spawnLocationDoc.getDouble("z");
+                double yaw = spawnLocationDoc.getDouble("yaw");
+                double pitch = spawnLocationDoc.getDouble("pitch");
+
+                return new Location(world, x, y, z,(float) yaw,(float) pitch);
+            }
+        }
+
+        return null;
+    }
+
+    public static void setPlotSpawnLocation(int plotID, Location spawnLocation) {
+        Document filter = new Document("plotID", plotID);
+        Document update = new Document("$set",
+                new Document("spawnLocation",
+                        new Document("world", spawnLocation.getWorld().getName())
+                                .append("x", spawnLocation.getX())
+                                .append("y", spawnLocation.getY())
+                                .append("z", spawnLocation.getZ())
+                                .append("yaw", spawnLocation.getYaw())
+                                .append("pitch", spawnLocation.getPitch())
+                )
+        );
+
+        plotsCollection.updateOne(filter, update);
+    }
+
+
     public static Integer getPlotVersion(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
@@ -305,6 +357,68 @@ public class PlotDatabase {
             String currentDevs = result.getString("devs");
             String newDevs = currentDevs + "," + playerID.toString();
             Document update = new Document("$set", new Document("devs", newDevs));
+            plotsCollection.updateOne(query, update);
+        }
+    }
+
+    public static String[] getPlotBuilders(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            String builders = result.getString("builders");
+            if (builders != null) {
+                return builders.split(",");
+            }
+        }
+        return new String[0];
+    }
+
+    public static String getRawBuilders(int plotID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            return result.getString("builders");
+        }
+        return null;
+    }
+
+    public static void addBuilder(int plotID, UUID playerID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+        if (result != null) {
+            String currentBuilders = result.getString("builders");
+            String newBuilders = currentBuilders + "," + playerID.toString();
+            Document update = new Document("$set", new Document("builders", newBuilders));
+            plotsCollection.updateOne(query, update);
+        }
+    }
+
+    public static void removeBuilder(int plotID, UUID playerID) {
+        Document query = new Document("plotID", plotID);
+        Document result = plotsCollection.find(query).first();
+
+        if (result != null) {
+            String currentBuilders = result.getString("builders");
+
+            // Split the currentDevs string into an array of player IDs
+            String[] devsArray = currentBuilders.split(",");
+
+            // Create a StringBuilder to construct the newDevs string
+            StringBuilder newBuildersBuilder = new StringBuilder();
+
+            for (String dev : devsArray) {
+                if (!dev.equals(playerID.toString())) {
+                    if (!newBuildersBuilder.isEmpty()) {
+                        newBuildersBuilder.append(",");
+                    }
+                    newBuildersBuilder.append(dev);
+                }
+            }
+
+            String newBuilders = newBuildersBuilder.toString();
+
+            // Update the document with the newDevs string
+            Document update = new Document("$set", new Document("builders", newBuilders));
             plotsCollection.updateOne(query, update);
         }
     }

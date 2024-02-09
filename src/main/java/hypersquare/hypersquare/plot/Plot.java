@@ -33,13 +33,14 @@ import static hypersquare.hypersquare.util.Utilities.savePersistentData;
 public class Plot {
 
     public static ItemStack getPlotItem(int plotID) {
-        org.bukkit.inventory.ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
+        ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
+        if (meta == null) plotItem.setType(Material.PAPER); // Edge case
         if (Hypersquare.plotVersion == PlotDatabase.getPlotVersion(plotID)) {
             meta.displayName(PlotDatabase.getPlotName(plotID));
         } else {
-            Component name = PlotDatabase.getPlotName(plotID);
-            meta.displayName(Hypersquare.fullMM.deserialize(name + "<red>" + " (Out of date)"));
+            String name = PlotDatabase.getRawPlotName(plotID);
+            meta.displayName(Hypersquare.minimalMM.deserialize(name + "<red>" + " (Out of date)"));
         }
         List<Component> lore = new ArrayList<>();
         lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>" + PlotDatabase.getPlotSize(plotID) + " Plot").decoration(TextDecoration.ITALIC, false));
@@ -82,7 +83,7 @@ public class Plot {
             w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
             w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-            w.setSpawnLocation(25, -55, 4);
+            w.setSpawnLocation(10, 0, 10);
 
             WorldUtilities.cloneWorld("dev_template", "hs.code." + plotID, (codeWorld) -> {
                 PlotDatabase.addPlot(plotID, ownerUUID, "map", "<" + Utilities.randomHSVHex(0, 360, 97, 62) + ">" + Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)).getName() + "'s Game", 1, "None", 0, Utilities.capitalize(plotType.replace("plot_template_", "")), Hypersquare.plotVersion);
@@ -92,6 +93,7 @@ public class Plot {
                 PlotManager.loadPlot(plotID);
                 ChangeGameMode.devMode(player, plotID);
                 Hypersquare.plotData.put(player, PlotDatabase.getPlot(player.getUniqueId().toString()));
+                PlotDatabase.setPlotSpawnLocation(plotID, new Location(Bukkit.getWorld(worldName), 10, 0, 10, 0, 0));
             });
         });
     }
@@ -101,63 +103,74 @@ public class Plot {
         String worldName = "hs." + plotID;
         String codeWorldName = "hs.code." + plotID;
         player.closeInventory();
-        Utilities.sendInfo(player,Component.text("Loading plot please wait..."));
-        new Thread(() -> {
-            SlimePlugin plugin = Hypersquare.slimePlugin;
-            SlimeLoader file = plugin.getLoader("mongodb");
-            SlimePropertyMap properties = new SlimePropertyMap();
-            SlimeWorld buildTest = plugin.getWorld(worldName);
-            SlimeWorld codeTest = plugin.getWorld(codeWorldName);
-            try {
-                // Load both dev and build worlds
-                if (!plugin.getLoadedWorlds().contains(buildTest)) {
-                    SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            // Configure worlds
-                            try {
-                                plugin.loadWorld(world);
-                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
-                                throw new RuntimeException(e);
+        SlimePlugin plugin = Hypersquare.slimePlugin;
+        SlimeLoader file = plugin.getLoader("mongodb");
+        SlimePropertyMap properties = new SlimePropertyMap();
+        SlimeWorld buildTest = plugin.getWorld(worldName);
+        SlimeWorld codeTest = plugin.getWorld(codeWorldName);
+        if (!plugin.getLoadedWorlds().contains(buildTest)) {
+            new Thread(() -> {
+                Utilities.sendInfo(player, Component.text("Loading plot please wait..."));
+                try {
+                    // Load both dev and build worlds
+                    if (!plugin.getLoadedWorlds().contains(buildTest)) {
+                        SlimeWorld world = plugin.loadWorld(file, worldName, false, properties);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                // Configure worlds
+                                try {
+                                    plugin.loadWorld(world);
+                                } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                    if (e instanceof UnknownWorldException)
+                                        Utilities.sendError(player, "That plot is vacant.");
+                                    throw new RuntimeException(e);
+                                }
+                                Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }
-                            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
-                        }
-                    }.runTask(Hypersquare.instance);
+                        }.runTask(Hypersquare.instance);
 
-                }
-                if (!plugin.getLoadedWorlds().contains(codeTest)) {
-                    SlimeWorld world = plugin.loadWorld(file, codeWorldName, false, properties);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            // Configure worlds
-                            try {
-                                plugin.loadWorld(world);
-                            } catch (UnknownWorldException | WorldLockedException | IOException e) {
-                                throw new RuntimeException(e);
+                    }
+                    if (!plugin.getLoadedWorlds().contains(codeTest)) {
+                        SlimeWorld world = plugin.loadWorld(file, codeWorldName, false, properties);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                // Configure worlds
+                                try {
+                                    plugin.loadWorld(world);
+                                } catch (UnknownWorldException | WorldLockedException | IOException e) {
+                                    if (e instanceof UnknownWorldException)
+                                        Utilities.sendError(player, "That plot is vacant.");
+                                    throw new RuntimeException(e);
+                                }
+                                Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }
-                            Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
-                        }
-                    }.runTask(Hypersquare.instance);
+                        }.runTask(Hypersquare.instance);
+                    }
+                } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                         WorldLockedException e) {
+                    if (e instanceof UnknownWorldException)
+                        Utilities.sendError(player, "That plot is vacant.");
+                    throw new RuntimeException(e);
                 }
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
-                     WorldLockedException e) {
-                Utilities.sendError(player, "Error loading plot. Please try again later.");
-                throw new RuntimeException(e);
-            }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    // Configure worlds
-                    loadRules(worldName);
-                    loadRules(codeWorldName);
-                    callback.run();
-                }
-            }.runTask(Hypersquare.instance);
-        }).start();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        // Configure worlds
+                        Location spawn = PlotDatabase.getPlotSpawnLocation(plotID);
+                        Bukkit.getWorld(worldName).setSpawnLocation(spawn);
+                        loadRules(worldName);
+                        loadRules(codeWorldName);
+
+                        callback.run();
+                    }
+                }.runTask(Hypersquare.instance);
+            }).start();
+        } else {
+            callback.run();
+        }
     }
-
 
 
     public static void loadRules(String worldName) {

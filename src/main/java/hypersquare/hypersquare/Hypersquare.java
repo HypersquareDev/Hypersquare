@@ -17,12 +17,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -30,17 +33,28 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public final class Hypersquare extends JavaPlugin {
+    // Last death location - Used for respawning players where they died when not in play mode
     public static final HashMap<Player, World> lastDeathLoc = new HashMap<>();
+    // Last swap hands timestamp - Used for quick swapping between dev and build mode (checking time diff)
     public static final HashMap<Player, Long> lastSwapHands = new HashMap<>();
+    // Plot data - Contains plot size, owners, devs, etc.
     public static final HashMap<Player, List<Document>> plotData = new HashMap<>();
     public static final HashMap<Player, Location> lastDevLocation = new HashMap<>();
     public static final HashMap<Player, Location> lastBuildLocation = new HashMap<>();
+    // Mode - Contains each player's mode (playing, coding, building, editing spawn, etc.)
+    // TODO: Use enum instead of strings composed of verbs
     public static final HashMap<Player, String> mode = new HashMap<>();
+    // Loaded plots - Contains all world-loaded plots
     public static final HashMap<Integer, List<Object>> loadedPlots = new HashMap<>();
+    // Game unload timestamp - A plot's last game unload, used for world-unloading
     public static final HashMap<Integer, Long> gameUnloadTimestamp = new HashMap<>();
-    public static final HashMap<Integer, HashMap<String, String>> eventCache = new HashMap<>();
+    // Local player data - Contains each player's data like max plot count for each type
     public static final HashMap<UUID, HashMap<String, Integer>> localPlayerData = new HashMap<>();
+    // Cooldown - Generic per player cooldown
     public static final HashMap<UUID, Long> cooldownMap = new HashMap<>();
+    // Code execution - Contains each plot's code execution instance
+    public static final HashMap<Integer, CodeExecutor> codeExecMap = new HashMap<>();
+
     public final static int PLOT_VERSION = 5;
     public static final MiniMessage cleanMM = MiniMessage.builder()
         .tags(TagResolver.resolver(
@@ -66,9 +80,7 @@ public final class Hypersquare extends JavaPlugin {
     public static SlimePlugin slimePlugin;
 
     public static Logger logger() {
-        if (instance == null) {
-            return Bukkit.getLogger();
-        }
+        if (instance == null) return Bukkit.getLogger();
         return instance.getLogger();
     }
 
@@ -103,20 +115,27 @@ public final class Hypersquare extends JavaPlugin {
         PlotStats.init();
 
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerJoinListener(), this);
-        pm.registerEvents(new PlayerRightClickListener(), this);
-        pm.registerEvents(new PlayerRespawnListener(), this);
-        pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerMoveListener(), this);
-        pm.registerEvents(new PaperServerListPingListener(), this);
-        pm.registerEvents(new MenuListeners(), this);
+        List<Listener> listeners = List.of(
+            new PlayerJoinListener(),
+            new PlayerQuitListener(),
 
-        pm.registerEvents(new PlayerGoToSpawnEvent(), this);
-        pm.registerEvents(new DevEvents(), this);
-        pm.registerEvents(new PlayerQuitListener(), this);
-        pm.registerEvents(new CodePlacement(), this);
-        pm.registerEvents(new WorldLoadListener(), this);
-        pm.registerEvents(new PlayModeListener(), this);
+            new PlayerRightClickListener(),
+            new PlayerMoveListener(),
+
+            new PlayerRespawnListener(),
+            new PlayerDeathListener(),
+
+            new PaperServerListPingListener(),
+            new MenuListeners(),
+            new WorldLoadListener(),
+
+            new PlayerGoToSpawnEvent(),
+            new DevEvents(),
+            new CodePlacement(),
+            new PlayModeListener()
+        );
+
+        for (Listener l : listeners) pm.registerEvents(l, this);
 
         loadLastUsedWorldNumber();
         CommandManager.registerCommands();

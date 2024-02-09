@@ -3,6 +3,7 @@ package hypersquare.hypersquare.plot;
 import java.util.List;
 
 import static hypersquare.hypersquare.Hypersquare.loadedPlots;
+import static hypersquare.hypersquare.Hypersquare.codeExecMap;
 import static hypersquare.hypersquare.Hypersquare.minimalMM;
 
 public class PlotManager {
@@ -10,13 +11,12 @@ public class PlotManager {
 
     public static void loadPlot(int plotID) {
         List<Object> plotData = PlotDatabase.getPlotData(plotID);
-        if (plotData != null) {
-            loadedPlots.put(plotID, plotData);
-        }
+        if (plotData != null) loadedPlots.put(plotID, plotData);
     }
 
     public static void unloadPlot(int plotID) {
         loadedPlots.remove(plotID);
+        codeExecMap.get(plotID).ca
     }
 
     public static List<Object> getPlotData(int plotID) {

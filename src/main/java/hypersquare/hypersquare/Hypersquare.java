@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClients;
 import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.menu.system.MenuListeners;
+import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.util.manager.CommandManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -39,7 +40,9 @@ public final class Hypersquare extends JavaPlugin {
     public static final HashMap<Player, Long> lastSwapHands = new HashMap<>();
     // Plot data - Contains plot size, owners, devs, etc.
     public static final HashMap<Player, List<Document>> plotData = new HashMap<>();
+    // Last dev location - Used for teleporting back to the last dev location
     public static final HashMap<Player, Location> lastDevLocation = new HashMap<>();
+    // Last build location - Used for teleporting back to the last build location
     public static final HashMap<Player, Location> lastBuildLocation = new HashMap<>();
     // Mode - Contains each player's mode (playing, coding, building, editing spawn, etc.)
     // TODO: Use enum instead of strings composed of verbs

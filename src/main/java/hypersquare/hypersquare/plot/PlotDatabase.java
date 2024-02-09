@@ -517,10 +517,6 @@ public class PlotDatabase {
     }
 
 
-    public static void updateEventsCache(int plotID) {
-        eventCache.put(plotID, PlotDatabase.getAllUniqueEventsInPlot(plotID));
-    }
-
     public static void removeEventByKey(int plotID, String eventKeyToRemove) {
         Document filter = new Document("plotID", plotID);
         Document update = new Document("$unset", new Document("events." + eventKeyToRemove, ""));

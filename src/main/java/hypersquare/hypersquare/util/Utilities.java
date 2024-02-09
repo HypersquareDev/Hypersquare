@@ -318,7 +318,6 @@ public class Utilities {
             HashMap<String, String> map = new HashMap<>();
             map.put(LocationToString(block.getLocation().add(1, 0, 0)), id);
             PlotDatabase.addEvents(plotID, map);
-            PlotDatabase.updateEventsCache(plotID);
         }
         player.closeInventory();
     }

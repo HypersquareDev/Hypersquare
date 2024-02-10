@@ -18,6 +18,14 @@ public class BasicComponent {
     }
 
     /**
+     * Creates an empty plain text component in white.
+     * @return Component
+     */
+    public static Component create() {
+        return create("");
+    }
+
+    /**
      * Creates a plain text component in gray.
      * @param text Content
      * @return Component

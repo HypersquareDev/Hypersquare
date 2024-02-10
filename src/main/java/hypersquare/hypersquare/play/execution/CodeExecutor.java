@@ -62,13 +62,18 @@ public class CodeExecutor {
         boolean cancelEval = false;
         try {
             while (true) {
-                // TODO: Check world tick time instead of server TPS
+                // TODO: Check world tick time
                 // (urgent)
+
+                // NOTE: Temporary server TPS check removed as it uses spigot timings which is marked for removal
+                // (we are using spark in prod server)
+                /*
                 if (Bukkit.getServer().getAverageTickTime() <= 17) {
                     CodeError.sendError(plotId, CodeErrorType.LOW_MSPT);
                     cancelEval = true;
                     break;
                 }
+                */
                 if (trace.isDone()) break;
                 CodeStacktrace.Frame frame = trace.next();
                 if (frame == null) break;

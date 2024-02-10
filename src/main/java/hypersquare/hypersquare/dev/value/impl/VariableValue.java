@@ -60,8 +60,8 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
 
     @Override
     public Component getValueName(HSVar value) {
-        return Component.text(value.name).color(NamedTextColor.YELLOW)
-                .decoration(TextDecoration.ITALIC, false);
+        return BasicComponent.create(value.name).color(NamedTextColor.YELLOW)
+            .append(Component.text("("+value.scope.letter+")").color(value.scope().color));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
         GLOBAL(Colors.GREEN_LIGHT, "G"),
         THREAD(Colors.AQUA_LIGHT, "T"),
         LINE(Colors.SKY, "L"),
-        SAVE(Colors.YELLOW_LIGHT, "S");
+        SAVE(Colors.YELLOW_LIGHT, "S"),
         ;
 
         public final TextColor color;

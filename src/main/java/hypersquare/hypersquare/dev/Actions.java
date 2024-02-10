@@ -27,7 +27,7 @@ public enum Actions implements Action {
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
-    CONTROl_WAIT(new WaitAction())
+    CONTROL_WAIT(new WaitAction())
     ;
 
     public final Action a;

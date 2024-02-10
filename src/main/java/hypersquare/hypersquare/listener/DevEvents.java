@@ -127,9 +127,7 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player player) {
-            if (!Hypersquare.mode.get(player).equals("playing")) {
-                event.setCancelled(true);
-            }
+            if (!Hypersquare.mode.get(player).equals("playing")) event.setCancelled(true);
         }
     }
 
@@ -141,8 +139,7 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onRClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!Hypersquare.mode.get(player).equals("coding")
-            && !Hypersquare.mode.get(player).equals("building")) return;
+        if (!Hypersquare.mode.get(player).equals("coding") && !Hypersquare.mode.get(player).equals("building")) return;
 
         if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR) {
             ItemStack eventItem = event.getItem();
@@ -201,7 +198,7 @@ public class DevEvents implements Listener {
     public static Location gigantic = null;
     public static Location commonStart = null;
 
-    public static void commonVars(Location location) {
+    public static void commonVars() {
         basic = MoveEntities.basic;
         large = MoveEntities.large;
         huge = MoveEntities.huge;
@@ -212,7 +209,7 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void onSpread(BlockFromToEvent event) {
-        commonVars(event.getToBlock().getLocation());
+        commonVars();
         String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
         if (plotType == null)
             return;
@@ -311,7 +308,6 @@ public class DevEvents implements Listener {
             // Swapping hands twice in 1 second
             if (System.currentTimeMillis() - Hypersquare.lastSwapHands.get(player) < 950
                     && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
-                String worldName = player.getWorld().getName();
                 int plotID = PlotUtilities.getPlotId(player);
                 if (playerMode.equals("coding")) {
                     Hypersquare.lastDevLocation.put(player, player.getLocation());

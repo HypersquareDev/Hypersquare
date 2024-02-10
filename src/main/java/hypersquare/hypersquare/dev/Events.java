@@ -8,11 +8,38 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public enum Events implements Event {
+    // Plot and server events
     PLAYER_JOIN_EVENT(new PlayerJoinEvent()),
     PLAYER_LEAVE_EVENT(new PlayerLeaveEvent()),
     PLAYER_REJOIN_EVENT(new PlayerRejoinEvent()),
-    PLAYER_RIGHT_CLICK(new PlayerRightClickEvent()),
-    PLAYER_DROP_ITEM(new PlayerDropItemEvent()),
+    PLAYER_CHAT_EVENT(new PlayerChatEvent()),
+    // Click Events
+    PLAYER_RIGHT_CLICK_EVENT(new PlayerRightClickEvent()),
+    PLAYER_LEFT_CLICK_EVENT(new PlayerLeftClickEvent()),
+    PLAYER_CLICK_PLAYER_EVENT(new PlaceholderEvent()),
+    PLAYER_CLICK_ENTITY_EVENT(new PlaceholderEvent()),
+    PLAYER_PLACE_BLOCK_EVENT(new PlaceholderEvent()),
+    PLAYER_BREAK_BLOCK_EVENT(new PlaceholderEvent()),
+    PLAYER_SWAP_HANDS_EVENT(new PlaceholderEvent()),
+    PLAYER_CHANGE_SLOT_EVENT(new PlaceholderEvent()),
+    PLAYER_TAME_MOB_EVENT(new PlaceholderEvent()),
+    // Movement Events
+    PLAYER_WALK_EVENT(new PlaceholderEvent()),
+    PLAYER_JUMP_EVENT(new PlaceholderEvent()),
+    PLAYER_SNEAK_EVENT(new PlaceholderEvent()),
+    PLAYER_UNSNEAK_EVENT(new PlaceholderEvent()),
+    PLAYER_START_SPRINT_EVENT(new PlaceholderEvent()),
+    PLAYER_STOP_SPRINT_EVENT(new PlaceholderEvent()),
+    PLAYER_START_FLY_EVENT(new PlaceholderEvent()),
+    PLAYER_STOP_FLY_EVENT(new PlaceholderEvent()),
+    PLAYER_RIPTIDE_EVENT(new PlaceholderEvent()),
+    PLAYER_DISMOUNT_EVENT(new PlaceholderEvent()),
+    PLAYER_HORSE_JUMP_EVENT(new PlaceholderEvent()),
+    // Item Events
+    PLAYER_CLICK_MENU_SLOT_EVENT(new PlaceholderEvent()),
+    PLAYER_CLICK_INV_SLOT_EVENT(new PlaceholderEvent()),
+    PLAYER_DROP_ITEM_EVENT(new PlayerDropItemEvent()),
+
     ;
 
     final Event v;

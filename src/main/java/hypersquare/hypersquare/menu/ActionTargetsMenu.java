@@ -10,6 +10,7 @@ import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class ActionTargetsMenu {
     public static void open(Player player, ArrayList<Target> targets, Location loc) {
-        // TODO: check if right clicked loc is a sign
+        if (loc.getBlock().getType() != Material.OAK_WALL_SIGN) return;
         if (targets.isEmpty()) {
             Utilities.sendErrorSound(player);
             return;
@@ -34,8 +35,6 @@ public class ActionTargetsMenu {
         }
         Menu menu = new Menu(Component.text("Select Target"), 1);
         SignSide side = sign.getSide(Side.FRONT);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAA " + targets);
-        // Add selected target to the list (always compatible) // add a breakpoint and enable debug mode to the line 46 and let me cook
         targets.add(0, Target.SELECTED);
 
         for (int slot = 0; slot < targets.size(); slot++) {
@@ -46,7 +45,6 @@ public class ActionTargetsMenu {
             menu.slot(slot, new MenuItem(t.mat).onClick(() -> {
                 CodeFileHelper.updateTarget(loc, new CodeFile(player.getWorld()), t);
                 // DEFAULT_PLAYER -> Default Player
-                //B ack
                 side.line(2, Component.text(StringUtils.capitaliseAllWords(t.name().replace('_', ' ').toLowerCase())).color(t.color));
                 sign.update();
                 player.closeInventory();

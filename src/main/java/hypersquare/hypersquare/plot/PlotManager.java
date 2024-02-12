@@ -23,7 +23,6 @@ public class PlotManager {
 
     public static void unloadPlot(int plotId, World devWorld, World buildWorld) {
         loadedPlots.remove(plotId);
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Unloading plot");
         codeExecMap.get(plotId).cancel();
         codeExecMap.remove(plotId);
 

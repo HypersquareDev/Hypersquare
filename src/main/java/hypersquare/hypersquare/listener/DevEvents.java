@@ -3,7 +3,10 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.*;
+import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.Events;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
@@ -118,10 +121,13 @@ public class DevEvents implements Listener {
                 if (menu.items.get(i) instanceof MenuParameter param) {
                     if (!param.isEmpty(actionData)) continue;
                     if (!param.isValid(mainHandItem)) continue;
+                    int oldAmount = mainHandItem.getAmount();
+                    // We only want to insert 1 item (as well as remove 1 item) at a time
+                    mainHandItem.setAmount(1);
                     param.replaceValue(actionData, mainHandItem);
                     file.setCode(data.toJson().toString());
 
-                    mainHandItem.setAmount(mainHandItem.getAmount() - 1);
+                    mainHandItem.setAmount(oldAmount - 1);
                     player.getInventory().setItemInMainHand(mainHandItem);
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
                     return;

@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.targets;
+package hypersquare.hypersquare.dev.target;
 
 /**
  * Target priority when null / unspecified

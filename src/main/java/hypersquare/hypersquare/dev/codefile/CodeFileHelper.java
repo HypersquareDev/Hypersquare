@@ -3,7 +3,7 @@ package hypersquare.hypersquare.dev.codefile;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.dev.targets.Target;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;

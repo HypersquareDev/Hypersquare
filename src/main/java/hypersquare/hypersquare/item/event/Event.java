@@ -1,6 +1,6 @@
 package hypersquare.hypersquare.item.event;
 
-import hypersquare.hypersquare.dev.targets.Target;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import org.bukkit.inventory.ItemStack;
 

@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.targets;
+package hypersquare.hypersquare.dev.target;
 
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.play.CodeSelection;

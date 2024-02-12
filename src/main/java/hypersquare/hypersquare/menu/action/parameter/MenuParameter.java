@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.menu.actions.parameter;
+package hypersquare.hypersquare.menu.action.parameter;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;

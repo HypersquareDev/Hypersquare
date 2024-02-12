@@ -79,7 +79,7 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
 
     @Override
     public HSVar defaultValue() {
-        return new HSVar("unnamed variable", Scope.THREAD);
+        return new HSVar("(unnamed)", Scope.THREAD);
     }
 
     @Override

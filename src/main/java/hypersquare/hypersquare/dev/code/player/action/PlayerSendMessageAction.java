@@ -7,7 +7,8 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -21,8 +22,8 @@ import java.util.List;
 public class PlayerSendMessageAction implements Action {
 
     @Override
-    public void execute(ExecutionContext ctx) {
-        for (Player p : ctx.selection().players()) {
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+        for (Player p : targetSel.players()) {
             List<Component> messages = ctx.args().allNonNull("messages");
 
             if (messages.isEmpty()) {

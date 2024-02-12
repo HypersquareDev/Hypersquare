@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.menu.actions;
+package hypersquare.hypersquare.menu.action;
 
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.action.Action;
@@ -8,8 +8,8 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
-import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
-import hypersquare.hypersquare.menu.actions.tag.MenuTag;
+import hypersquare.hypersquare.menu.action.parameter.MenuParameter;
+import hypersquare.hypersquare.menu.action.tag.MenuTag;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import net.kyori.adventure.text.Component;

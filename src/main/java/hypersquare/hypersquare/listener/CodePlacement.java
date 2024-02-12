@@ -20,6 +20,7 @@ import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
 import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -170,7 +171,7 @@ public class CodePlacement implements Listener {
             ((Directional) blockData).setFacing(BlockFace.WEST);
             Sign sign = (Sign) signLocation.getBlock().getState();
             sign.setWaxed(true);
-            sign.getSide(Side.FRONT).line(0, Component.text(codeblock.getName()));
+            sign.getSide(Side.FRONT).line(0, Component.text(codeblock.getName()).color(Colors.YELLOW_LIGHT));
             sign.update();
             signLocation.getBlock().setBlockData(blockData);
         }

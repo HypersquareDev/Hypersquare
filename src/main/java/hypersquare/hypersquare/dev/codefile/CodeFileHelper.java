@@ -3,10 +3,11 @@ package hypersquare.hypersquare.dev.codefile;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.CodeBlocks;
+import hypersquare.hypersquare.dev.target.Target;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
-import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import org.bukkit.Location;
@@ -73,9 +74,8 @@ public class CodeFileHelper {
 
         parent.actions.add(positions.get(positions.size() - 1), action);
 
-        if (!codeblock.getDefaultAction().isEmpty()) {
+        if (!codeblock.getDefaultAction().isEmpty())
             updateAction(location, code, Actions.getAction(codeblock.getDefaultAction(), codeblock.id()));
-        }
         return plotCode;
     }
 
@@ -101,9 +101,7 @@ public class CodeFileHelper {
         if (positions.size() == 1) {
             int pos = positions.get(0);
             CodeActionData prev = codeline.actions.remove(pos);
-            if (!breakAll) for (CodeActionData action : prev.actions) {
-                codeline.actions.add(pos, action);
-            }
+            if (!breakAll) for (CodeActionData action : prev.actions) codeline.actions.add(pos, action);
             return plotCode;
         }
 
@@ -133,12 +131,8 @@ public class CodeFileHelper {
         }
 
         CodeLineData codeline = new CodeLineData();
-
-        if (!plotCode.codelines.isEmpty()) {
-            codeline = plotCode.codelines.get(codelineListIndex);
-        } else {
-            plotCode.codelines.set(codelineListIndex, codeline);
-        }
+        if (!plotCode.codelines.isEmpty()) codeline = plotCode.codelines.get(codelineListIndex);
+        else plotCode.codelines.set(codelineListIndex, codeline);
 
 
         List<Integer> positions;
@@ -150,12 +144,12 @@ public class CodeFileHelper {
             return;
         }
 
-        CodeActionData actionJson = codeline.actions.get(positions.get(0));
+        CodeActionData actionData = codeline.actions.get(positions.get(0));
         for (int i = 1; i < positions.size(); i++) {
-            actionJson = actionJson.actions.get(positions.get(i));
+            actionData = actionData.actions.get(positions.get(i));
         }
-        actionJson.action = newAction.getId();
-        actionJson.arguments = new HashMap<>();
+        actionData.action = newAction.getId();
+        actionData.arguments = new HashMap<>();
 
         code.setCode(plotCode.toJson().toString());
     }
@@ -173,15 +167,43 @@ public class CodeFileHelper {
         }
 
         CodeLineData codeline = new CodeLineData();
-
-        if (!plotCode.codelines.isEmpty()) {
-            codeline = plotCode.codelines.get(codelineListIndex);
-        } else {
-            plotCode.codelines.set(codelineListIndex, codeline);
-        }
+        if (!plotCode.codelines.isEmpty()) codeline = plotCode.codelines.get(codelineListIndex);
+        else plotCode.codelines.set(codelineListIndex, codeline);
 
         codeline.event = newEvent.getId();
         plotCode.codelines.set(codelineListIndex, codeline);
+        code.setCode(plotCode.toJson().toString());
+    }
+
+    public static void updateTarget(Location location, CodeFile code, Target newTarget) {
+        CodeData plotCode = code.getCodeData();
+        int codelineListIndex = getCodelineListIndex(location, plotCode);
+
+        if (codelineListIndex == -1) {
+            Hypersquare.logger().warning("Tried updating a non existent codeline @ " + code.world);
+            code.getCodeData();
+            return;
+        }
+
+        CodeLineData codeline = new CodeLineData();
+        if (!plotCode.codelines.isEmpty()) codeline = plotCode.codelines.get(codelineListIndex);
+        else plotCode.codelines.set(codelineListIndex, codeline);
+
+        List<Integer> positions;
+        try {
+            positions = CodeFileHelper.findCodeIndex(location);
+        } catch (Exception e) {
+            // We are updating a non-existent codeblock
+            Hypersquare.logger().info("Couldn't find the codeblock the player was editing @ " + code.world);
+            return;
+        }
+
+        CodeActionData actionData = codeline.actions.get(positions.get(0));
+        for (int i = 1; i < positions.size(); i++) {
+            actionData = actionData.actions.get(positions.get(i));
+        }
+        actionData.target = newTarget.name();
+
         code.setCode(plotCode.toJson().toString());
     }
 
@@ -193,18 +215,14 @@ public class CodeFileHelper {
         List<Integer> trace = new ArrayList<>();
         trace.add(0);
 
-        if (queryLoc.getBlockZ() == 1) {
-            // Thread starter special treatment
-            return List.of();
-        }
+        // Thread starter special treatment
+        if (queryLoc.getBlockZ() == 1) return List.of();
 
         Location end = CodeBlockManagement.findCodeEnd(queryLoc.clone());
         Location location = queryLoc.clone().set(queryLoc.getBlockX(), queryLoc.getBlockY(), 1);
 
         while (location.getBlockZ() <= end.getBlockZ() + 5) { // +5 for extra padding
-            if (location.getBlockZ() == queryLoc.getBlockZ()) {
-                return trace;
-            }
+            if (location.getBlockZ() == queryLoc.getBlockZ()) return trace;
 
             if (location.getBlock().getType() == Material.STONE || location.getBlock().getType() == Material.AIR) {
                 location.add(0, 0, 1);

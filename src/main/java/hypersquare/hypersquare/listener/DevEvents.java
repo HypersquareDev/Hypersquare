@@ -3,20 +3,21 @@ package hypersquare.hypersquare.listener;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.Actions;
-import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.dev.CodeItems;
+import hypersquare.hypersquare.dev.*;
+import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.*;
-import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.menu.ActionTargetsMenu;
 import hypersquare.hypersquare.menu.CodeblockMenu;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
-import hypersquare.hypersquare.menu.actions.parameter.MenuParameter;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.action.parameter.MenuParameter;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.util.PlotUtilities;
@@ -24,7 +25,10 @@ import hypersquare.hypersquare.util.Utilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,6 +43,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DevEvents implements Listener {
 
@@ -58,13 +65,17 @@ public class DevEvents implements Listener {
 
                 CodeFile codeFile = new CodeFile(event.getPlayer());
                 CodeActionData actionData = CodeFileHelper.getActionAt(codeblockLocation, codeFile.getCodeData());
-                String id;
-                if (actionData == null) {
-                    int listIndex = CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData());
-                    CodeLineData line = codeFile.getCodeData().codelines.get(listIndex);
-                    id = line.type;
-                } else id = actionData.codeblock;
-                CodeblockMenu.open(id, event.getPlayer(), event.getClickedBlock().getLocation());
+                CodeLineData line = codeFile.getCodeData().codelines.get(CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData()));
+                String id = actionData == null ? line.type : actionData.codeblock;
+                Event hsEvent = Events.getEvent(line.event);
+
+                // TODO: if (line.type.equals("func") || line.type.equals("proc")) { find all sources of the func/proc being called }
+
+                if (event.getPlayer().isSneaking() && actionData != null && hsEvent != null) {
+                    ArrayList<Target> targets = new ArrayList<>(Arrays.asList(hsEvent.compatibleTargets()));
+
+                    ActionTargetsMenu.open(event.getPlayer(), targets, event.getClickedBlock().getLocation());
+                } else CodeblockMenu.open(id, event.getPlayer(), event.getClickedBlock().getLocation());
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
             } else if (event.getClickedBlock().getType() == Material.BARREL) {
                 event.setCancelled(true);

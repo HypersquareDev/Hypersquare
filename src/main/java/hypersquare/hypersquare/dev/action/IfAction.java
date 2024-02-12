@@ -13,9 +13,9 @@ public interface IfAction extends Action {
     boolean check(Entity entity, ExecutionContext ctx);
 
     @Override
-    default void execute(ExecutionContext ctx) {
+    default void execute(ExecutionContext ctx, CodeSelection targetSel) {
         List<Entity> filtered = new ArrayList<>();
-        for (Entity e : ctx.selection().all()) {
+        for (Entity e : targetSel.all()) {
             if (check(e, ctx)) filtered.add(e);
         }
         if (!filtered.isEmpty()) {

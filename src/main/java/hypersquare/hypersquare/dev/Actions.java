@@ -11,7 +11,8 @@ import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
@@ -97,7 +98,7 @@ public enum Actions implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx) {
-        a.execute(ctx);
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+        a.execute(ctx, targetSel);
     }
 }

@@ -4,7 +4,8 @@ import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -42,8 +43,7 @@ public interface Action {
         return null;
     }
 
-    void execute(ExecutionContext ctx);
-
+    void execute(ExecutionContext ctx, CodeSelection targetSel);
 
     record ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, String id) {
         public ActionParameter(DisplayValue type, Component description, String id) {

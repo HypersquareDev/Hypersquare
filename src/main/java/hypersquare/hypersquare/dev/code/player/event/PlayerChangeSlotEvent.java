@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.event;
 
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.item.event.EventItem;
@@ -36,9 +37,13 @@ public class PlayerChangeSlotEvent implements Event {
     public String getSignName() {
         return "ChangeSlot";
     }
-
     @Override
     public PlayerEventItems getCategory() {
         return PlayerEventItems.CLICK_EVENTS_CATEGORY;
+    }
+
+    @Override
+    public Target[] compatibleTargets() {
+        return new Target[]{Target.DEFAULT_PLAYER};
     }
 }

@@ -6,7 +6,6 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.util.PlotUtilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +33,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_CHAT_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_CHAT_EVENT, event, new CodeSelection(player));
     }
 
     /* TODO: Uncomment once resource pack action is implemented
@@ -61,9 +60,9 @@ public class PlayModeListener implements Listener {
         CodeExecutor executor = PlotUtilities.getExecutor(player);
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
             if (event.getHand() == EquipmentSlot.HAND)
-                executor.trigger(Events.PLAYER_RIGHT_CLICK_EVENT, new CodeSelection(player));
+                executor.trigger(Events.PLAYER_RIGHT_CLICK_EVENT, event, new CodeSelection(player));
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
-            executor.trigger(Events.PLAYER_LEFT_CLICK_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_LEFT_CLICK_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -74,8 +73,8 @@ public class PlayModeListener implements Listener {
         // TODO: assign getRightClicked() to the event victim
         if (event.getRightClicked() instanceof Player) {
             if (event.getHand() == EquipmentSlot.HAND)
-                executor.trigger(Events.PLAYER_CLICK_PLAYER_EVENT, new CodeSelection(player));
-        } else executor.trigger(Events.PLAYER_CLICK_ENTITY_EVENT, new CodeSelection(player));
+                executor.trigger(Events.PLAYER_CLICK_PLAYER_EVENT, event, new CodeSelection(player));
+        } else executor.trigger(Events.PLAYER_CLICK_ENTITY_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -83,7 +82,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_PLACE_BLOCK_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_PLACE_BLOCK_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -91,7 +90,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_BREAK_BLOCK_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_BREAK_BLOCK_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -99,7 +98,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_SWAP_HANDS_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_SWAP_HANDS_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -107,7 +106,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_CHANGE_SLOT_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_CHANGE_SLOT_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -115,7 +114,7 @@ public class PlayModeListener implements Listener {
         Player player = (Player) event.getOwner();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_TAME_MOB_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_TAME_MOB_EVENT, event, new CodeSelection(player));
     }
 
     /* MOVEMENT EVENTS */
@@ -126,7 +125,7 @@ public class PlayModeListener implements Listener {
         if (cannotExecute(player)) return;
         if (event.getFrom().getBlock() != event.getTo().getBlock() && !player.isSprinting() && !player.isFlying() && !player.isSwimming()) {
             CodeExecutor executor = PlotUtilities.getExecutor(player);
-            executor.trigger(Events.PLAYER_WALK_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_WALK_EVENT, event, new CodeSelection(player));
         }
     }
 
@@ -136,7 +135,7 @@ public class PlayModeListener implements Listener {
         if (event.getFrom().getBlockY() < event.getTo().getBlockY()) {
             if (cannotExecute(player)) return;
             CodeExecutor executor = PlotUtilities.getExecutor(player);
-            executor.trigger(Events.PLAYER_JUMP_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_JUMP_EVENT, event, new CodeSelection(player));
         }
     }
 
@@ -145,8 +144,8 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        if (event.isSneaking()) executor.trigger(Events.PLAYER_SNEAK_EVENT, new CodeSelection(player));
-        else executor.trigger(Events.PLAYER_UNSNEAK_EVENT, new CodeSelection(player));
+        if (event.isSneaking()) executor.trigger(Events.PLAYER_SNEAK_EVENT, event, new CodeSelection(player));
+        else executor.trigger(Events.PLAYER_UNSNEAK_EVENT, event, new CodeSelection(player));
     }
 
 
@@ -155,8 +154,8 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        if (event.isSprinting()) executor.trigger(Events.PLAYER_START_SPRINT_EVENT, new CodeSelection(player));
-        else executor.trigger(Events.PLAYER_STOP_SPRINT_EVENT, new CodeSelection(player));
+        if (event.isSprinting()) executor.trigger(Events.PLAYER_START_SPRINT_EVENT, event, new CodeSelection(player));
+        else executor.trigger(Events.PLAYER_STOP_SPRINT_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -164,8 +163,8 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        if (event.isFlying()) executor.trigger(Events.PLAYER_START_FLY_EVENT, new CodeSelection(player));
-        else executor.trigger(Events.PLAYER_STOP_FLY_EVENT, new CodeSelection(player));
+        if (event.isFlying()) executor.trigger(Events.PLAYER_START_FLY_EVENT, event, new CodeSelection(player));
+        else executor.trigger(Events.PLAYER_STOP_FLY_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -173,7 +172,7 @@ public class PlayModeListener implements Listener {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_RIPTIDE_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_RIPTIDE_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -182,16 +181,16 @@ public class PlayModeListener implements Listener {
         // We can cast because we already made sure it's a player
         if (cannotExecute((Player) event.getExited())) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_DISMOUNT_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_DISMOUNT_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
     public void playerHorseJumpEvent(HorseJumpEvent event) {
-        Entity entity = event.getEntity().getPassengers().get(0);
+        Entity entity = event.getEntity().getPassengers().getFirst();
         if (!(entity instanceof Player player)) return;
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
-        executor.trigger(Events.PLAYER_HORSE_JUMP_EVENT, new CodeSelection(player));
+        executor.trigger(Events.PLAYER_HORSE_JUMP_EVENT, event, new CodeSelection(player));
     }
 
     // TODO: Vehicle Jump
@@ -204,10 +203,10 @@ public class PlayModeListener implements Listener {
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
         if (event.getClickedInventory() != player.getInventory())
-            executor.trigger(Events.PLAYER_CLICK_MENU_SLOT_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_CLICK_MENU_SLOT_EVENT, event, new CodeSelection(player));
 
         if (event.getClickedInventory() == player.getInventory())
-            executor.trigger(Events.PLAYER_CLICK_INV_SLOT_EVENT, new CodeSelection(player));
+            executor.trigger(Events.PLAYER_CLICK_INV_SLOT_EVENT, event, new CodeSelection(player));
 
     }
 
@@ -215,7 +214,7 @@ public class PlayModeListener implements Listener {
     public void playerDropItemListener(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         if (cannotExecute(p)) return;
-        PlotUtilities.getExecutor(p).trigger(Events.PLAYER_DROP_ITEM_EVENT, new CodeSelection(p));
+        PlotUtilities.getExecutor(p).trigger(Events.PLAYER_DROP_ITEM_EVENT, event, new CodeSelection(p));
     }
 
     // TODO: Consume Item

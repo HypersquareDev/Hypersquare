@@ -1,8 +1,9 @@
 package hypersquare.hypersquare.dev;
 
 import hypersquare.hypersquare.dev.code.player.event.*;
-import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
+import hypersquare.hypersquare.item.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -77,5 +78,10 @@ public enum Events implements Event {
     @Override
     public ItemStack item() {
         return v.item();
+    }
+
+    @Override
+    public Target[] compatibleTargets() {
+        return v.compatibleTargets();
     }
 }

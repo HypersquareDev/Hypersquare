@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.menu.actions.tag;
+package hypersquare.hypersquare.menu.action.tag;
 
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;

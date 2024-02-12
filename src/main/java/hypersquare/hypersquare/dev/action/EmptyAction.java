@@ -3,7 +3,8 @@ package hypersquare.hypersquare.dev.action;
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,7 +55,7 @@ public class EmptyAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx) {
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
 
     }
 }

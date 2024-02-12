@@ -8,7 +8,8 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -22,7 +23,7 @@ import java.util.List;
 public class PlayerGiveItemsAction implements Action {
 
     @Override
-    public void execute(ExecutionContext ctx) {
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
         List<ItemStack> items = new ArrayList<>();
         double multiplier = ctx.args().getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
         for (ItemStack item : ctx.args().<ItemStack>allNonNull("items")) {
@@ -37,7 +38,7 @@ public class PlayerGiveItemsAction implements Action {
             items.add(item);
         }
         
-        for (Player p : ctx.selection().players()) {
+        for (Player p : targetSel.players()) {
             for (ItemStack item : items) {
                 p.getInventory().addItem(item);
             }

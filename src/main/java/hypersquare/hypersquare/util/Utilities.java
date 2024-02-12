@@ -8,6 +8,7 @@ import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -95,9 +96,11 @@ public class Utilities {
 
     public static void sendError(CommandSender sender, String message) {
         sender.sendMessage(cleanMM.deserialize("<red>Error: <gray>" + message));
-        if (sender instanceof Player player) {
-            player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
-        }
+        if (sender instanceof Player player) sendErrorSound(player);
+    }
+
+    public static void sendErrorSound(Player player) {
+        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
     }
 
     public static void sendInfo(CommandSender sender, Component message) {
@@ -276,7 +279,7 @@ public class Utilities {
     public static void setAction(Block block, String id, Player player) {
         if (block.getType() == Material.OAK_WALL_SIGN) {
             Sign sign = (Sign) block.getState();
-            sign.getSide(Side.FRONT).line(1, Component.text(id));
+            sign.getSide(Side.FRONT).line(1, Component.text(id).color(Colors.WHITE));
             sign.update();
             int plotID = PlotUtilities.getPlotId(player.getWorld());
             HashMap<String, String> map = new HashMap<>();

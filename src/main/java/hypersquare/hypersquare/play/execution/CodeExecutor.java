@@ -4,22 +4,25 @@ import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.CallbackAfterAction;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
+import hypersquare.hypersquare.dev.target.TargetPriority;
+import hypersquare.hypersquare.dev.target.TargetSet;
+import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeError;
 import hypersquare.hypersquare.play.CodeErrorType;
 import hypersquare.hypersquare.play.CodeSelection;
-import hypersquare.hypersquare.play.execution.CodeStacktrace.Frame;
-import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
@@ -37,7 +40,7 @@ public class CodeExecutor {
         running = MultimapBuilder.hashKeys().hashSetValues().build();
     }
 
-    public void trigger(Event event, CodeSelection selection) {
+    public <T extends org.bukkit.event.Event> void trigger(Event event, T bukkitEvent, CodeSelection selection) {
         if (running.size() >= RUNNING_LIMIT) {
             CodeError.sendError(plotId, CodeErrorType.RUN_LIMIT);
             return;
@@ -50,7 +53,8 @@ public class CodeExecutor {
         var completable = CompletableFuture.runAsync(() -> {
             for (CodeLineData line : data.codelines) {
                 if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
-                CodeStacktrace trace = new CodeStacktrace(plotId, new CodeStacktrace.Frame(line.actions, selection));
+                // run every line that has the same event
+                CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
                 if (continueEval(plotId, trace)) break;
             }
         }, Executors.newSingleThreadExecutor());
@@ -78,21 +82,20 @@ public class CodeExecutor {
                 CodeStacktrace.Frame frame = trace.next();
                 if (frame == null) break;
                 CodeActionData data = frame.next();
+
                 if (data == null) {
                     trace.popFrame();
                     if (trace.isDone()) break;
                     frame = trace.next();
                     if (frame == null) break;
-
                     data = frame.current();
+
                     Actions action = Actions.getAction(data.action, data.codeblock);
                     if (action != null && action.a instanceof CallbackAfterAction cb) {
-                        ExecutionContext ctx = getCtx(action, trace, data, plotId, frame);
-                        if (ctx == null) {
+                        if (execute(cb::after, action, trace, frame, data, plotId)) {
                             cancelEval = true;
                             break;
                         }
-                        cb.after(ctx);
                     }
                     continue;
                 }
@@ -103,13 +106,10 @@ public class CodeExecutor {
                     cancelEval = true;
                     break;
                 }
-
-                ExecutionContext ctx = getCtx(action, trace, data, plotId, frame);
-                if (ctx == null) {
+                if (execute(action::execute, action, trace, frame, data, plotId)) {
                     cancelEval = true;
                     break;
                 }
-                action.execute(ctx);
             }
         } catch (Exception err) {
             err.printStackTrace();
@@ -119,7 +119,43 @@ public class CodeExecutor {
         return cancelEval;
     }
 
-    private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data, int plotId, Frame frame) {
+    private boolean execute(RunFunction run, Action action, CodeStacktrace trace, CodeStacktrace.Frame frame, CodeActionData data, int plotId) {
+        ExecutionContext ctx = getCtx(action, trace, data, plotId);
+        if (ctx == null) return true;
+        CodeSelection targetSel = null;
+        if (data.target == null) {
+            TargetType targetType = TargetType.ofEvent(trace.bukkitEvent);
+            if (targetType == null) {
+                CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
+                return true;
+            }
+            else {
+                TargetSet set = TargetPriority.ofType(targetType);
+                for (Target t : set.targets()) {
+                    try { targetSel = t.get(trace.bukkitEvent, frame.selection); } catch (Exception ignored) {
+                        CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
+                        return true;
+                    }
+                }
+            }
+        }
+        else {
+            try {
+                targetSel = Objects.requireNonNull(Target.getTarget(data.target)).get(trace.bukkitEvent, frame.selection);
+            } catch (Exception ignored) {
+                CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
+                return true;
+            }
+        }
+        if (targetSel == null) {
+            CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
+            return true;
+        }
+        run.apply(ctx, targetSel);
+        return false;
+    }
+
+    private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data, int plotId) {
         HashMap<String, List<JsonObject>> arguments = new HashMap<>();
         for (Action.ActionParameter param : action.parameters()) {
             List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
@@ -130,8 +166,12 @@ public class CodeExecutor {
             arguments.put(param.id(), args);
         }
         ActionArguments args = new ActionArguments(arguments);
-        ExecutionContext ctx = new ExecutionContext(frame.selection, args, trace, data.actions, action, data);
+        ExecutionContext ctx = new ExecutionContext(args, trace, data.actions, action, data);
         args.bind(ctx);
         return ctx;
     }
+}
+
+interface RunFunction {
+    void apply(ExecutionContext ctx, CodeSelection targetSel);
 }

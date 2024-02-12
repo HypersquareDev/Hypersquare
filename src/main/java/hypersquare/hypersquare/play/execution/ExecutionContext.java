@@ -6,7 +6,6 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.play.CodeVariableScope;
 import oshi.util.tuples.Pair;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public record ExecutionContext(
-        CodeSelection selection,
         ActionArguments args,
         CodeStacktrace trace,
         List<CodeActionData> containing,

@@ -26,10 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -58,7 +55,9 @@ public final class Hypersquare extends JavaPlugin {
     // Code execution - Contains each plot's code execution instance
     public static final HashMap<Integer, CodeExecutor> codeExecMap = new HashMap<>();
 
-    public final static int PLOT_VERSION = 5;
+    public static final int PLOT_VERSION = 5;
+    public static final Random RANDOM = new Random(PLOT_VERSION * 12345L);
+
     public static final MiniMessage cleanMM = MiniMessage.builder()
         .tags(TagResolver.resolver(
             StandardTags.decorations(), StandardTags.color(), StandardTags.font(),

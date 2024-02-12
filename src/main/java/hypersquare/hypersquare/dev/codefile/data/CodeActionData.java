@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class CodeActionData {
     public String action;
+    public String target;
     public String codeblock;
     public final List<CodeActionData> actions = new ArrayList<>();
     public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
@@ -26,6 +27,9 @@ public class CodeActionData {
         action = data.get("action").getAsString();
         codeblock = data.get("codeblock").getAsString();
 
+        if (data.has("target")) {
+            if (!data.get("target").isJsonNull()) target = data.get("target").getAsString();
+        }
         if (data.has("actions")) {
             for (JsonElement element : data.get("actions").getAsJsonArray()) {
                 actions.add(new CodeActionData(element.getAsJsonObject()));
@@ -57,6 +61,7 @@ public class CodeActionData {
         JsonObject data = new JsonObject();
         data.addProperty("action", action);
         data.addProperty("codeblock", codeblock);
+        data.addProperty("target", target);
         if (!actions.isEmpty()) {
             JsonArray actions = new JsonArray();
             for (CodeActionData action : this.actions) {

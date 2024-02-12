@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.play.execution;
 
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.CodeVariableScope;
 
@@ -10,14 +11,15 @@ import java.util.List;
 
 public class CodeStacktrace {
     public final List<Frame> frames;
-    public final int plotId;
+    public final Event event;
+    public final org.bukkit.event.Event bukkitEvent;
     public final CodeVariableScope scope = new CodeVariableScope();
-    public boolean cancelAll = false;
 
-    public CodeStacktrace(int plotId, Frame frame) {
+    public CodeStacktrace(Event event, org.bukkit.event.Event bukkitEvent, Frame frame) {
         frames = new LinkedList<>();
         frames.add(frame);
-        this.plotId = plotId;
+        this.event = event;
+        this.bukkitEvent = bukkitEvent;
     }
 
     public Frame next() {
@@ -29,11 +31,11 @@ public class CodeStacktrace {
     }
 
     public boolean isDone() {
-        return frames.isEmpty() || cancelAll;
+        return frames.isEmpty();
     }
 
     public void popFrame() {
-        frames.remove(frames.size() - 1);
+        frames.removeLast();
     }
 
     public void pushFrame(Frame frame) {
@@ -42,8 +44,8 @@ public class CodeStacktrace {
 
     public static class Frame {
         public final List<CodeActionData> actions;
-        public final CodeSelection selection;
         public final HashMap<String, Object> tempData = new HashMap<>();
+        public CodeSelection selection;
         public int position = 0;
 
         public Frame(List<CodeActionData> actions, CodeSelection selection) {

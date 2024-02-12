@@ -7,7 +7,8 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.var.SetVariableItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
@@ -72,7 +73,7 @@ public class AssignVariableAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx) {
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
         ctx.args().<CodeVariable>single("variable").set(ctx.args().single("value"));
     }
 }

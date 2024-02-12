@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.dev.code.player.event;
 
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.item.event.EventItem;
@@ -40,5 +41,10 @@ public class PlayerStopFlyEvent implements Event {
     @Override
     public PlayerEventItems getCategory() {
         return PlayerEventItems.MOVEMENT_EVENTS_CATEGORY;
+    }
+
+    @Override
+    public Target[] compatibleTargets() {
+        return new Target[]{Target.DEFAULT_PLAYER};
     }
 }

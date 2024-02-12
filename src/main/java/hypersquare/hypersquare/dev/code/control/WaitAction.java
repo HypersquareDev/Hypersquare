@@ -8,7 +8,8 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.control.ControlItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.actions.ActionMenu;
+import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
@@ -79,7 +80,7 @@ public class WaitAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx) {
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
         WaitTimeUnit unit = ctx.getTag("unit", WaitTimeUnit::valueOf);
         DecimalNumber duration = ctx.args().getOr("duration", new DecimalNumber(0L));
         ctx.sleep(unit.getMillis(duration.toInt()));

@@ -1,8 +1,9 @@
 package hypersquare.hypersquare.dev.code.player.event;
 
+import hypersquare.hypersquare.dev.target.Target;
+import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.item.event.EventItem;
-import hypersquare.hypersquare.item.action.player.PlayerEventItems;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -39,5 +40,10 @@ public class PlayerRightClickEvent implements Event {
     @Override
     public PlayerEventItems getCategory() {
         return PlayerEventItems.CLICK_EVENTS_CATEGORY;
+    }
+
+    @Override
+    public Target[] compatibleTargets() {
+        return new Target[]{Target.DEFAULT_PLAYER};
     }
 }

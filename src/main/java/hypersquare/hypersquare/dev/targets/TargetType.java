@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.target;
+package hypersquare.hypersquare.dev.targets;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityEvent;

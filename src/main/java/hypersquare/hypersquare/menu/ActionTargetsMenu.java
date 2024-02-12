@@ -1,6 +1,6 @@
 package hypersquare.hypersquare.menu;
 
-import hypersquare.hypersquare.dev.target.Target;
+import hypersquare.hypersquare.dev.targets.Target;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.menu.system.Menu;

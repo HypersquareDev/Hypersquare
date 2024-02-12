@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.dev.target;
+package hypersquare.hypersquare.dev.targets;
 
 
 import hypersquare.hypersquare.item.event.Event;

@@ -2,24 +2,21 @@
 
 ![Hypersquare](./.github/banner.png)
 
-Hypersquare is a remake of the popular server DiamondFire.
+Hypersquare is a remake of the popular server DiamondFire.<br/>
 We aim to include all the most requested features by the community, as well as some quality of life features.
 
 ⚠ The project is still in development, some features are not done yet.
 
 ## Discord
-
 You can contact us or join the community by joining the discord [here](https://discord.gg/uyXGY73kdw)
 
 
 ## Contributing
-
 You can contribute by fixing inefficiencies, mistakes or oversights made by us in the code, as well as adding new features.
 
-(Please keep your PRs clean and concise)
+(Please keep your PRs clean and concise, and use [conventional commit messages](https://www.conventionalcommits.org/en/v1.0.0/))
 
 ### Dev Setup
-
 1. Clone the repository
 2. Build the project
 3. Run the jar in an empty folder either with the CLI or GUI:

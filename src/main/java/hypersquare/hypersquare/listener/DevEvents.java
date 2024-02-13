@@ -14,6 +14,7 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.target.Target;
+import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.*;
 import hypersquare.hypersquare.item.event.Event;
@@ -75,8 +76,11 @@ public class DevEvents implements Listener {
                 // TODO: if (line.type.equals("func") || line.type.equals("proc")) { find all sources of the func/proc being called }
 
                 if (event.getPlayer().isSneaking() && actionData != null && hsEvent != null) {
-                    ArrayList<Target> targets = new ArrayList<>(Arrays.asList(hsEvent.compatibleTargets()));
-
+                    ArrayList<Target> targets = new ArrayList<>(Arrays.asList(hsEvent.compatibleTargets()).stream().filter(t -> {
+                        TargetType acceptedType = TargetType.ofCodeblock(actionData.codeblock);
+                        if (acceptedType == null) return false;
+                        return acceptedType == t.targetType;
+                    }).toList());
                     ActionTargetsMenu.open(event.getPlayer(), targets, event.getClickedBlock().getLocation());
                 } else CodeblockMenu.open(id, event.getPlayer(), event.getClickedBlock().getLocation());
                 event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);

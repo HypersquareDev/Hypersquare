@@ -22,7 +22,6 @@ import java.util.List;
 
 public class ActionTargetsMenu {
     public static void open(Player player, ArrayList<Target> targets, Location loc) {
-        if (loc.getBlock().getType() != Material.OAK_WALL_SIGN) return;
         if (targets.isEmpty()) {
             Utilities.sendErrorSound(player);
             return;
@@ -41,7 +40,6 @@ public class ActionTargetsMenu {
             Target t = targets.get(slot);
             List<Component> lore = new ArrayList<>();
             for (String line : t.description) lore.add(BasicComponent.gray(line));
-
             menu.slot(slot, new MenuItem(t.mat).onClick(() -> {
                 CodeFileHelper.updateTarget(loc, new CodeFile(player.getWorld()), t);
                 // DEFAULT_PLAYER -> Default Player

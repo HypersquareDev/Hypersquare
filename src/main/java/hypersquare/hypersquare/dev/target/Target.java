@@ -95,7 +95,7 @@ public enum Target {
     }
 
     public <T extends Event> CodeSelection get(T event, CodeSelection s) {
-        if (!event.getClass().isAssignableFrom(eventType)) throw new RuntimeException("Event class is not compatible with target "+name);
+        if (!eventType.isAssignableFrom(event.getClass())) throw new RuntimeException(event.getClass().getName()+" class is not compatible with target "+name+" ("+eventType.getName()+")");
         //noinspection unchecked
         return getter.get(eventType.cast(event), s);
     }

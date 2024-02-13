@@ -122,37 +122,34 @@ public class CodeExecutor {
     private boolean execute(RunFunction run, Action action, CodeStacktrace trace, CodeStacktrace.Frame frame, CodeActionData data, int plotId) {
         ExecutionContext ctx = getCtx(action, trace, data, plotId);
         if (ctx == null) return true;
-        CodeSelection targetSel = null;
-        if (data.target == null) {
-            TargetType targetType = TargetType.ofEvent(trace.bukkitEvent);
-            if (targetType == null) {
-                CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
-                return true;
-            }
-            else {
-                TargetSet set = TargetPriority.ofType(targetType);
-                for (Target t : set.targets()) {
-                    try { targetSel = t.get(trace.bukkitEvent, frame.selection); } catch (Exception ignored) {
-                        CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
-                        return true;
-                    }
-                }
-            }
-        }
-        else {
-            try {
-                targetSel = Objects.requireNonNull(Target.getTarget(data.target)).get(trace.bukkitEvent, frame.selection);
-            } catch (Exception ignored) {
-                CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
-                return true;
-            }
-        }
+        CodeSelection targetSel = getTargetSel(data.target, action, trace, frame.selection);
         if (targetSel == null) {
             CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
             return true;
         }
         run.apply(ctx, targetSel);
         return false;
+    }
+
+    private CodeSelection getTargetSel(String target, Action action, CodeStacktrace trace, CodeSelection selection) {
+        CodeSelection targetSel = null;
+        if (target == null) {
+            TargetType type = TargetType.ofCodeblock(action.getCodeblockId());
+            if (type == null) return selection; // codeblock can't be targeted, preserve original selection
+            TargetSet set = TargetPriority.ofType(type);
+            for (Target t : set.targets()) {
+                try { targetSel = t.get(trace.bukkitEvent, selection); } catch (Exception ignored) {}
+            }
+        }
+        else {
+            try {
+                targetSel = Objects.requireNonNull(Target.getTarget(target)).get(trace.bukkitEvent, selection);
+            } catch (Exception err) {
+                err.printStackTrace();
+                return null;
+            }
+        }
+        return targetSel;
     }
 
     private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data, int plotId) {

@@ -1,15 +1,16 @@
 package hypersquare.hypersquare.dev.target;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.player.PlayerEvent;
-
 public enum TargetType {
     PLAYER, ENTITY, ALL;
 
-    public static TargetType ofEvent(Event bukkitEvent) {
-        if (bukkitEvent instanceof PlayerEvent) return PLAYER;
-        else if (bukkitEvent instanceof EntityEvent) return ENTITY;
-        else return null;
+    public static TargetType ofCodeblock(String id) {
+        return switch(id) {
+            case "player_action" -> PLAYER;
+            case "if_player" -> PLAYER;
+
+            case "entity_action" -> ENTITY;
+            case "if_entity" -> ENTITY;
+            default -> null;
+        };
     }
 }

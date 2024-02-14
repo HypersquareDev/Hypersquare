@@ -16,7 +16,7 @@ You can contribute by fixing inefficiencies, mistakes or oversights made by us i
 
 (Please keep your PRs clean and concise, and use [conventional commit messages](https://www.conventionalcommits.org/en/v1.0.0/))
 
-### Dev Setup
+### Dev Server Setup
 1. Clone the repository
 2. Build the project
 3. Run the jar in an empty folder either with the CLI or GUI:

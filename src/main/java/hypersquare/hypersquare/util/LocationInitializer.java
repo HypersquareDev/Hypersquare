@@ -26,6 +26,6 @@ public class LocationInitializer {
     }
 
     public static Location getCommonStartLocation(World world) {
-        return new Location(world, -20, 255, 0);
+        return new Location(world, 0, 255, 0);
     }
 }

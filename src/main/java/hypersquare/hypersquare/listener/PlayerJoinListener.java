@@ -47,7 +47,7 @@ public class PlayerJoinListener implements Listener {
                         
                 <#87CEEB>- Work in Progress: <white>Not all code blocks and events are in place yet. We're actively adding new features to enhance your experience.
                         
-                <#87CEEB>- Report Bugs: <white>If you spot any bugs, please let us know at our <click:open_url:'https://discord.gg/m6uHxSUyKX'><#4169E1><u><b>Discord</b><u></click>. Your input helps us improve!
+                <#87CEEB>- Report Bugs: <white>If you spot any bugs, please let us know at our <click:open_url:'https://discord.gg/Angjk6F3W'><#4169E1><u><b>Discord</b><u></click>. Your input helps us improve!
                                                 
                 <#00FFFF>Thanks for being a part of our community. Let's make this server awesome together!
                 """));

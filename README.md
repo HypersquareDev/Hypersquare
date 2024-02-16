@@ -8,7 +8,7 @@ We aim to include all the most requested features by the community, as well as s
 ⚠ The project is still in development, some features are not done yet.
 
 ## Discord
-You can contact us or join the community by joining the discord [here](https://discord.gg/uyXGY73kdw)
+You can contact us or join the community by joining the discord [here](https://discord.gg/qup9uaDaUt)
 
 
 ## Contributing

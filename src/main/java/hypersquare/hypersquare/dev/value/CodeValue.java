@@ -28,7 +28,9 @@ public interface CodeValue<T, S> {
     List<Component> getDescription();
     List<Component> getHowToSet();
     JsonObject getVarItemData(T type);
-    Component getValueName(T value);
+    default Component getValueName(T value) { // Defaults to the CodeValue's name
+        return getName().decoration(TextDecoration.ITALIC, false);
+    }
 
     T fromJson(JsonObject obj);
     T defaultValue();
@@ -67,7 +69,7 @@ public interface CodeValue<T, S> {
     default ItemStack getItem(T value) {
         ItemStack item = new ItemStack(getMaterial());
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(getValueName(value));
+        meta.displayName(getValueName(value).decoration(TextDecoration.ITALIC, false));
 
         JsonObject obj = getVarItemData(value);
         obj.addProperty("type", getTypeId());

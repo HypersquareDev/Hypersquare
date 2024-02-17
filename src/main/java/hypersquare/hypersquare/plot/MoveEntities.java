@@ -49,32 +49,32 @@ public class MoveEntities {
                         switch (plotType) {
 
                             case "Basic": {
-                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), basic)) {
-                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), basic);
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart, basic)) {
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart, basic);
                                 }
                                 break;
                             }
                             case "Large": {
-                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), large)) {
-                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), large);
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart, large)) {
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart, large);
                                 }
                                 break;
                             }
                             case "Huge": {
-                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), huge)) {
-                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), huge);
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart, huge)) {
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart, huge);
                                 }
                                 break;
                             }
                             case "Massive": {
-                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), massive)) {
-                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), massive);
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart, massive)) {
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart, massive);
                                 }
                                 break;
                             }
                             case "Gigantic": {
-                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart.clone().add(20, 0, 0), gigantic)) {
-                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart.clone().add(20, 0, 0), gigantic);
+                                if (Utilities.notWithinLocation(entity.getLocation(), commonStart, gigantic)) {
+                                    PlotUtilities.moveEntityInsidePlot(entity, commonStart, gigantic);
                                 }
                                 break;
                             }

@@ -20,7 +20,8 @@ public enum CodeValues implements CodeValue {
     STRING(new StringValue()),
     TEXT(new TextValue()),
     ITEM(new ItemValue()),
-    VARIABLE(new VariableValue())
+    VARIABLE(new VariableValue()),
+    LOCATION(new LocationValue())
     ;
 
     private final CodeValue v;

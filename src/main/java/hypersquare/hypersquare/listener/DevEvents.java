@@ -204,6 +204,7 @@ public class DevEvents implements Listener {
                 inv.setItem(1, new TextValue().emptyValue());
                 inv.setItem(2, new NumberValue().emptyValue());
                 inv.setItem(3, new VariableValue().emptyValue());
+                inv.setItem(4,new LocationValue().emptyValue());
 
                 inv.setItem(9, new NullValue().emptyValue());
 
@@ -282,9 +283,7 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.NATURAL ||
-                event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND
-        ) {
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) {
             event.setCancelled(true);
         }
     }

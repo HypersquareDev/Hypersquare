@@ -9,6 +9,7 @@ import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
@@ -63,7 +64,7 @@ public class PlayerCreativeModeAction implements Action {
     public ItemStack item() {
         return new ActionItem()
                 .setMaterial(Material.GRASS_BLOCK)
-                .setName(Component.text("Set to Creative Mode").color(TextColor.color(0xAAFF55)))
+                .setName(Component.text("Set to Creative Mode").color(Colors.LIME))
                 .setDescription(Component.text("Sets a player's game"),
                         Component.text("mode to Creative."))
                 .setParameters(parameters())

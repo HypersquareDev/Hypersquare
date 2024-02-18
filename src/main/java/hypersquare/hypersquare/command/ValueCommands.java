@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.play.error.HSException;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +32,7 @@ public class ValueCommands implements HyperCommand {
                                 ItemStack item = value.getItem(value.fromString(v, null));
                                 player.getInventory().addItem(item);
                             } catch (Exception ignored) {
-                                Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                HSException.sendError(player, "Invalid input: '" + v + "'");
                             }
                         }
                         return DONE;

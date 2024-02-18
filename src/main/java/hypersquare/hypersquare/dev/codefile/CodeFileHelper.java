@@ -125,7 +125,7 @@ public class CodeFileHelper {
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Hypersquare.logger().warning("[Update Action] Tried updating a non existent codeline @ " + code.world);
+            Hypersquare.logger().warning("[Update Action] Tried updating a non existent codeline @ " + code.world());
             code.getCodeData();
             return;
         }
@@ -140,7 +140,7 @@ public class CodeFileHelper {
             positions = CodeFileHelper.findCodeIndex(location);
         } catch (Exception e) {
             // We are updating a non-existent codeblock
-            Hypersquare.logger().info("[Update Action] Couldn't find the codeblock the player was editing @ " + code.world);
+            Hypersquare.logger().info("[Update Action] Couldn't find the codeblock the player was editing @ " + code.world());
             return;
         }
 
@@ -161,7 +161,7 @@ public class CodeFileHelper {
         if (codelineListIndex == -1) {
             // We are updating a non-existent codeline (got deleted by another player)
             // Logging just in case for debug purposes
-            Hypersquare.logger().warning("[Update Event] Tried updating a non existent codeline @ " + code.world);
+            Hypersquare.logger().warning("[Update Event] Tried updating a non existent codeline @ " + code.world());
             code.getCodeData();
             return;
         }
@@ -180,7 +180,7 @@ public class CodeFileHelper {
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
         if (codelineListIndex == -1) {
-            Hypersquare.logger().warning("[Update Target] Tried updating a non existent codeline @ " + code.world);
+            Hypersquare.logger().warning("[Update Target] Tried updating a non existent codeline @ " + code.world());
             code.getCodeData();
             return;
         }
@@ -194,7 +194,7 @@ public class CodeFileHelper {
             positions = CodeFileHelper.findCodeIndex(location);
         } catch (Exception e) {
             // We are updating a non-existent codeblock
-            Hypersquare.logger().info("[Update Target] Couldn't find the codeblock the player was editing @ " + code.world);
+            Hypersquare.logger().info("[Update Target] Couldn't find the codeblock the player was editing @ " + code.world());
             return;
         }
 

@@ -3,6 +3,7 @@ package hypersquare.hypersquare.play.execution;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
 import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.action.Action;
@@ -16,61 +17,62 @@ import hypersquare.hypersquare.dev.target.TargetSet;
 import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeError;
-import hypersquare.hypersquare.play.CodeErrorType;
+import hypersquare.hypersquare.play.error.HSException;
+import hypersquare.hypersquare.play.error.CodeErrorType;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.util.PlotUtilities;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 public class CodeExecutor {
     public final static int RUNNING_LIMIT = 100;
+
     public final int plotId;
-    public SetMultimap<Event, CompletableFuture<Void>> running = MultimapBuilder.hashKeys().hashSetValues().build();
+    public SetMultimap<Event, BukkitRunnable> running = MultimapBuilder.hashKeys().hashSetValues().build();
 
     public CodeExecutor(int plotId) {
         this.plotId = plotId;
     }
 
     public void cancel() {
-        for (var r : running.values()) r.cancel(false);
-        running = MultimapBuilder.hashKeys().hashSetValues().build();
+        for (var r : running.values()) r.cancel();
+        running.clear();
     }
 
     public <T extends org.bukkit.event.Event> void trigger(Event event, T bukkitEvent, CodeSelection selection) {
-        if (running.size() >= RUNNING_LIMIT) {
-            CodeError.sendError(plotId, CodeErrorType.RUN_LIMIT);
-            return;
-        }
-        if (event == null) {
-            CodeError.sendError(plotId, CodeErrorType.INVALID_EVENT);
-            return;
-        }
+        if (running.size() >= RUNNING_LIMIT) throw new HSException(CodeErrorType.RUN_LIMIT, null);
+        if (event == null) throw new HSException(CodeErrorType.INVALID_EVENT, null);
         CodeData data = new CodeFile(plotId).getCodeData();
-        var completable = CompletableFuture.runAsync(() -> {
-            for (CodeLineData line : data.codelines) {
-                if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
-                // run every line that has the same event
-                CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
-                if (continueEval(plotId, trace)) break;
+        BukkitRunnable task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (CodeLineData line : data.codelines) {
+                    if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
+                    // run every line that has the same event
+                    CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
+                    try {
+                        continueEval(trace);
+                    } catch (Exception e) {
+                        new HSException(plotId, CodeErrorType.RUNTIME_ERROR, e).sendMessage();
+                    }
+                }
+                running.remove(event, this);
             }
-        }, Executors.newSingleThreadExecutor());
-        running.put(event, completable);
-        completable.thenRun(() -> running.remove(event, completable));
+        };
+        task.runTask(Hypersquare.instance);
+        running.put(event, task);
     }
 
-    private boolean continueEval(int plotId, CodeStacktrace trace) {
-        boolean cancelEval = false;
-        try {
-            while (true) {
-                // TODO: Check world tick time
-                // (urgent)
+    private void continueEval(CodeStacktrace trace) {
+        while (true) {
+            // TODO: Check world tick time
+            // (urgent)
 
-                // NOTE: Temporary server TPS check removed as it uses spigot timings which is marked for removal
-                // (we are using spark in prod server)
+            // NOTE: Temporary server TPS check removed as it uses spigot timings which is marked for removal
+            // (we are using spark in prod server)
                 /*
                 if (Bukkit.getServer().getAverageTickTime() <= 17) {
                     CodeError.sendError(plotId, CodeErrorType.LOW_MSPT);
@@ -78,57 +80,43 @@ public class CodeExecutor {
                     break;
                 }
                 */
+            if (trace.isDone()) break;
+            CodeStacktrace.Frame frame = trace.next();
+            if (frame == null) break;
+            CodeActionData data = frame.next();
+
+            if (data == null) {
+                trace.popFrame();
                 if (trace.isDone()) break;
-                CodeStacktrace.Frame frame = trace.next();
+                frame = trace.next();
                 if (frame == null) break;
-                CodeActionData data = frame.next();
+                data = frame.current();
 
-                if (data == null) {
-                    trace.popFrame();
-                    if (trace.isDone()) break;
-                    frame = trace.next();
-                    if (frame == null) break;
-                    data = frame.current();
-
-                    Actions action = Actions.getAction(data.action, data.codeblock);
-                    if (action != null && action.a instanceof CallbackAfterAction cb) {
-                        if (execute(cb::after, action, trace, frame, data, plotId)) {
-                            cancelEval = true;
-                            break;
-                        }
-                    }
-                    continue;
+                Actions action = Actions.getAction(data.action, data.codeblock);
+                if (action != null && action.a instanceof CallbackAfterAction cb) {
+                    execute(cb::after, action, trace, frame, data);
                 }
-
-                Action action = Actions.getAction(data.action, data.codeblock);
-                if (action == null) {
-                    CodeError.sendError(plotId, CodeErrorType.INVALID_ACT);
-                    cancelEval = true;
-                    break;
-                }
-                if (execute(action::execute, action, trace, frame, data, plotId)) {
-                    cancelEval = true;
-                    break;
-                }
+                continue;
             }
-        } catch (Exception err) {
-            err.printStackTrace();
-            cancelEval = true;
-            CodeError.sendError(plotId, CodeErrorType.INTERNAL_ERROR);
+
+            Action action = Actions.getAction(data.action, data.codeblock);
+            if (action == null) {
+                throw new HSException(CodeErrorType.INVALID_ACT, new NullPointerException("CodeAction data is invalid?"));
+            }
+            execute(action::execute, action, trace, frame, data);
         }
-        return cancelEval;
     }
 
-    private boolean execute(RunFunction run, Action action, CodeStacktrace trace, CodeStacktrace.Frame frame, CodeActionData data, int plotId) {
-        ExecutionContext ctx = getCtx(action, trace, data, plotId);
-        if (ctx == null) return true;
-        CodeSelection targetSel = getTargetSel(data.target, action, trace, frame.selection);
-        if (targetSel == null) {
-            CodeError.sendError(plotId, CodeErrorType.FAILED_TARGET);
-            return true;
+    private void execute(RunFunction run, Action action, CodeStacktrace trace, CodeStacktrace.Frame frame, CodeActionData data) {
+        ExecutionContext ctx;
+        try { ctx = getCtx(action, trace, data); } catch (Exception e) {
+            throw new HSException(CodeErrorType.FAILED_CONTEXT, e);
+        }
+        CodeSelection targetSel;
+        try { targetSel = getTargetSel(data.target, action, trace, frame.selection); } catch (Exception e) {
+            throw new HSException(CodeErrorType.FAILED_TARGET, e);
         }
         run.apply(ctx, targetSel);
-        return false;
     }
 
     private CodeSelection getTargetSel(String target, Action action, CodeStacktrace trace, CodeSelection selection) {
@@ -140,26 +128,20 @@ public class CodeExecutor {
             for (Target t : set.targets()) {
                 try { targetSel = t.get(trace.bukkitEvent, selection); } catch (Exception ignored) {}
             }
+            if (targetSel == null)throw new HSException(
+                CodeErrorType.FAILED_TARGET,
+                new NullPointerException("Couldn't find any target prioritization for " + action.getCodeblockId())
+            );
         }
-        else {
-            try {
-                targetSel = Objects.requireNonNull(Target.getTarget(target)).get(trace.bukkitEvent, selection);
-            } catch (Exception err) {
-                err.printStackTrace();
-                return null;
-            }
-        }
+        else targetSel = Objects.requireNonNull(Target.getTarget(target)).get(trace.bukkitEvent, selection);
         return targetSel;
     }
 
-    private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data, int plotId) {
+    private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data) {
         HashMap<String, List<JsonObject>> arguments = new HashMap<>();
         for (Action.ActionParameter param : action.parameters()) {
             List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
-            if (args.isEmpty() && !param.optional()) {
-                CodeError.sendError(plotId, CodeErrorType.MISSING_PARAM);
-                return null;
-            }
+            if (args.isEmpty() && !param.optional()) throw new HSException(CodeErrorType.MISSING_PARAM, null);
             arguments.put(param.id(), args);
         }
         ActionArguments args = new ActionArguments(arguments);

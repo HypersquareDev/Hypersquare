@@ -5,6 +5,7 @@ import hypersquare.hypersquare.dev.CodeItems;
 import hypersquare.hypersquare.dev.Events;
 import hypersquare.hypersquare.item.MiscItems;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
@@ -59,7 +60,7 @@ public class ChangeGameMode {
                 PlotManager.loadPlot(plotID);
             });
         } else {
-            Utilities.sendError(player, "You do not have dev permissions for this plot.");
+            HSException.sendError(player, "You do not have dev permissions for this plot.");
         }
     }
 
@@ -127,7 +128,7 @@ public class ChangeGameMode {
                 UnloadPlotsSchedule.tryGameUnload(plotID);
             });
         } else {
-            Utilities.sendError(player, "You do not have build permissions for this plot");
+            HSException.sendError(player, "You do not have build permissions for this plot");
         }
     }
 

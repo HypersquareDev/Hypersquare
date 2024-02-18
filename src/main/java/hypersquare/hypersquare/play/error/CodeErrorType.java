@@ -1,6 +1,8 @@
-package hypersquare.hypersquare.play;
+package hypersquare.hypersquare.play.error;
 
 public enum CodeErrorType {
+    RUNTIME_ERROR("Runtime error!", false),
+    FAILED_CONTEXT("Failed to create context", true),
     INVALID_ACT("Invalid action", true),                              // Codeblock/Codeline data is invalid
     FAILED_TARGET("Unable to find target for codeblock", true),       // Target is invalid
     INVALID_EVENT("Invalid event", true),                             // Triggered event that doesn't exist

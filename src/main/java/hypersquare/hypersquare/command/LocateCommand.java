@@ -3,6 +3,7 @@ package hypersquare.hypersquare.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.PlotManager;
 import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
@@ -34,7 +35,7 @@ public class LocateCommand implements HyperCommand {
         CommandSender self = ctx.getSource().getBukkitSender();
         if (target == null)
         {
-            Utilities.sendError(self,"This player is not online.");
+            HSException.sendError(self,"This player is not online.");
             return;
         }
         String color = "<#AAD4FF>";

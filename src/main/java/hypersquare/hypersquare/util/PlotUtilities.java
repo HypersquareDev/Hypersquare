@@ -1,10 +1,16 @@
 package hypersquare.hypersquare.util;
 
 import hypersquare.hypersquare.play.execution.CodeExecutor;
+import hypersquare.hypersquare.plot.PlotDatabase;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static hypersquare.hypersquare.Hypersquare.codeExecMap;
 
@@ -23,6 +29,15 @@ public class PlotUtilities {
             return Integer.parseInt(name);
         }
         return 0;
+    }
+
+    public static List<Player> getOnlinePlotDevs(int plotId) {
+        ArrayList<Player> l = new ArrayList<>();
+        for (String uuid : PlotDatabase.getPlotDevs(plotId)) {
+            Player p = Bukkit.getPlayer(UUID.fromString(uuid));
+            if (p != null && getPlotId(p.getWorld()) == plotId) l.add(p);
+        }
+        return l;
     }
 
     /**

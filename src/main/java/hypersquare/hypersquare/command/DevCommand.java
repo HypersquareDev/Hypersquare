@@ -2,10 +2,10 @@ package hypersquare.hypersquare.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.util.PlotUtilities;
-import hypersquare.hypersquare.util.Utilities;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,10 +27,10 @@ public class DevCommand implements HyperCommand {
                 if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString())) {
                     ChangeGameMode.devMode(player, plotID);
                 } else {
-                    Utilities.sendError(player,"You do not have dev permissions for this plot!");
+                    HSException.sendError(player,"You do not have dev permissions for this plot!");
                 }
             } else {
-                Utilities.sendError(player,"You must be on a plot!");
+                HSException.sendError(player,"You must be on a plot!");
             }
         } else {
             sender.sendMessage("This command can only be used by players.");

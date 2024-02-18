@@ -17,24 +17,18 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.zip.Deflater;
 
-public class CodeFile {
-    public final World world;
-    public Player player;
-    public final int plotId;
+public record CodeFile(World world, int plotId) {
 
     public CodeFile(World world) {
-        this.world = world;
-        this.plotId = PlotUtilities.getPlotId(world);
+        this(world, PlotUtilities.getPlotId(world));
+    }
+
+    public CodeFile(int plotId) {
+        this(Bukkit.getWorld("hs.code." + plotId), plotId);
     }
 
     public CodeFile(Player player) {
         this(player.getWorld());
-        this.player = player;
-    }
-
-    public CodeFile(int plotId) {
-        this.plotId = plotId;
-        world = Bukkit.getWorld("hs.code." + plotId);
     }
 
     public CodeData getCodeData() {

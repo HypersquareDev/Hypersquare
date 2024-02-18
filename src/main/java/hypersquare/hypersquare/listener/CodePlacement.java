@@ -15,6 +15,7 @@ import hypersquare.hypersquare.dev.CodeBlocks;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.plot.RestrictMovement;
@@ -131,23 +132,23 @@ public class CodePlacement implements Listener {
                             location.getBlockX() % 3 != 0 ||        // Codelines not spaced 3 blocks apart
                             (location.getBlockZ() + 1) % 2 != 0     // Codeblocks not spaced 2 blocks apart
                     ) {
-                        Utilities.sendError(player, "Invalid block placement.");
+                        HSException.sendError(player, "Invalid block placement.");
                         return;
                     } else if (threadStarter && location.getBlockZ() != 1) {
                         // Thread starter not at the very start
-                        Utilities.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
+                        HSException.sendError(player, "Events, Functions, and Processes must be placed at the very start of the code line.");
                         return;
                     }
                     CodeData code = new CodeFile(event.getPlayer()).getCodeData();
                     if (!threadStarter) {
                         if (CodeFileHelper.getCodelineListIndex(location.clone(), code) == -1) {
-                            Utilities.sendError(player, "Your code must start with an Event, Function, or Process.");
+                            HSException.sendError(player, "Your code must start with an Event, Function, or Process.");
                             return;
                         }
                     }
 
                     if (blockOutsidePlot(CodeBlockManagement.findCodeEnd(location.clone()).add(0, 0, size))) {
-                        Utilities.sendError(player, "Your code has reached the end of the plot.");
+                        HSException.sendError(player, "Your code has reached the end of the plot.");
                         return;
                     }
 

@@ -5,12 +5,11 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
-import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
@@ -23,7 +22,7 @@ import java.util.List;
 public class ActionTargetsMenu {
     public static void open(Player player, ArrayList<Target> targets, Location loc) {
         if (targets.isEmpty()) {
-            Utilities.sendErrorSound(player);
+            HSException.sendErrorSound(player);
             return;
         }
         Sign sign;

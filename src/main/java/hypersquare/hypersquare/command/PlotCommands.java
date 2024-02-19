@@ -10,6 +10,7 @@ import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.item.event.Event;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.plot.*;
 import hypersquare.hypersquare.util.PlotUtilities;
@@ -88,7 +89,7 @@ public class PlotCommands implements HyperCommand {
 
         int plotID = PlotUtilities.getPlotId(sender.getWorld());
         if (!sender.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
-            Utilities.sendError(sender, "You are not allowed to do this.");
+            HSException.sendError(sender, "You are not allowed to do this.");
             return;
         }
         String recipientName = recipient.getName();
@@ -96,12 +97,12 @@ public class PlotCommands implements HyperCommand {
             if (recipient.hasPlayedBefore() || Utilities.playerOnline(recipientName)) {
                 if (permission.equalsIgnoreCase("builder")) {
                     if (PlotDatabase.getRawBuilders(plotID).contains(recipient.getUniqueId().toString())) { // this has a vulnerability
-                        Utilities.sendError(sender, "That player is already a builder.");
+                        HSException.sendError(sender, "That player is already a builder.");
                     } else PlotDatabase.addBuilder(plotID, recipient.getUniqueId());
                 }
                 if (permission.equalsIgnoreCase("dev")) {
                     if (PlotDatabase.getRawDevs(plotID).contains(recipient.getUniqueId().toString())) {
-                        Utilities.sendError(sender, "That player is already a dev.");
+                        HSException.sendError(sender, "That player is already a dev.");
                     } else PlotDatabase.addDev(plotID, recipient.getUniqueId());
                 }
                 Utilities.sendInfo(sender, (Hypersquare.minimalMM.deserialize("<reset>" + recipientName + " <gray>now has " + permission + " permissions for " + PlotDatabase.getRawPlotName(plotID))));
@@ -109,10 +110,10 @@ public class PlotCommands implements HyperCommand {
                     Utilities.sendInfo((CommandSender) recipient, minimalMM.deserialize(("<reset>You now have " + permission + " permissions for " + PlotDatabase.getRawPlotName(plotID))));
                 }
             } else {
-                Utilities.sendError(sender, "Could not find that player.");
+                HSException.sendError(sender, "Could not find that player.");
             }
         } else {
-            Utilities.sendError(sender, "You cannot add yourself as a " + permission + ".");
+            HSException.sendError(sender, "You cannot add yourself as a " + permission + ".");
         }
     }
 
@@ -123,7 +124,7 @@ public class PlotCommands implements HyperCommand {
 
         int plotID = PlotUtilities.getPlotId(sender.getWorld());
         if (!sender.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
-            Utilities.sendError(sender, "You are not allowed to do this.");
+            HSException.sendError(sender, "You are not allowed to do this.");
             return;
         }
         String recipientName = recipient.getName();
@@ -131,14 +132,14 @@ public class PlotCommands implements HyperCommand {
             if (recipient.hasPlayedBefore() || Utilities.playerOnline(recipientName)) {
                 if (permission.equalsIgnoreCase("builder")) {
                     if (!PlotDatabase.getRawBuilders(plotID).contains(recipient.getUniqueId().toString())) {
-                        Utilities.sendError(sender, "That player is not a builder.");
+                        HSException.sendError(sender, "That player is not a builder.");
                     } else {
                         PlotDatabase.removeBuilder(plotID, recipient.getUniqueId());
                     }
                 }
                 if (permission.equalsIgnoreCase("dev")) {
                     if (!PlotDatabase.getRawDevs(plotID).contains(recipient.getUniqueId().toString())) {
-                        Utilities.sendError(sender, "That player is not a dev.");
+                        HSException.sendError(sender, "That player is not a dev.");
                     } else {
                         PlotDatabase.removeDev(plotID, recipient.getUniqueId());
                     }
@@ -148,10 +149,10 @@ public class PlotCommands implements HyperCommand {
                     Utilities.sendInfo((CommandSender) recipient, minimalMM.deserialize(("<reset>You no longer have " + permission + " permissions for " + PlotDatabase.getRawPlotName(plotID))));
                 }
             } else {
-                Utilities.sendError(sender, "Could not find that player.");
+                HSException.sendError(sender, "Could not find that player.");
             }
         } else {
-            Utilities.sendError(sender, "You cannot remove yourself as a " + permission + ".");
+            HSException.sendError(sender, "You cannot remove yourself as a " + permission + ".");
         }
     }
 
@@ -159,7 +160,7 @@ public class PlotCommands implements HyperCommand {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
             int plotID = PlotUtilities.getPlotId(player.getWorld());
             if (!player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
-                Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
+                HSException.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
                 return DONE;
             }
             StringBuilder devs = new StringBuilder("&a");
@@ -177,7 +178,7 @@ public class PlotCommands implements HyperCommand {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
             int plotID = PlotUtilities.getPlotId(player.getWorld());
             if (!player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
-                Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
+                HSException.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
                 return DONE;
             }
             String recipient = ctx.getArgument("player", String.class);
@@ -186,13 +187,13 @@ public class PlotCommands implements HyperCommand {
                 if (offlineRecipentPlayer.hasPlayedBefore()) {
                     if (Objects.requireNonNull(PlotDatabase.getRawDevs(plotID)).contains(offlineRecipentPlayer.getUniqueId().toString())) {
                         // TODO: don't use getRawDevs
-                        Utilities.sendError(player, "That player is already a dev.");
+                        HSException.sendError(player, "That player is already a dev.");
                     } else {
                         PlotDatabase.addDev(plotID, offlineRecipentPlayer.getUniqueId());
                         Utilities.sendInfo(player, (Hypersquare.fullMM.deserialize("<reset>" + offlineRecipentPlayer.getName() + " <gray>now has dev permissions for " + PlotDatabase.getPlotName(plotID))));
                     }
-                } else Utilities.sendError(player, "Could not find that player.");
-            } else Utilities.sendError(player, "You cannot add yourself as a dev.");
+                } else HSException.sendError(player, "Could not find that player.");
+            } else HSException.sendError(player, "You cannot add yourself as a dev.");
         }
         return DONE;
     }
@@ -218,11 +219,11 @@ public class PlotCommands implements HyperCommand {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
             int plotID = PlotUtilities.getPlotId(player.getWorld());
             if (plotID == 0) {
-                Utilities.sendError(player, "You must be on a plot to run this command!");
+                HSException.sendError(player, "You must be on a plot to run this command!");
                 return DONE;
             }
             if (!PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString())) {
-                Utilities.sendError(player, "You do not have dev permissions for this plot!");
+                HSException.sendError(player, "You do not have dev permissions for this plot!");
                 return DONE;
             }
 
@@ -230,7 +231,7 @@ public class PlotCommands implements HyperCommand {
                 .setPrettyPrinting()
                 .create();
             CodeFile file = new CodeFile(plotID);
-            Utilities.sendInfo(player, Component.text("Debugging plot " + file.plotId + "."));
+            Utilities.sendInfo(player, Component.text("Debugging plot " + file.plotId() + "."));
             player.sendMessage(Component.text("Code Data:").color(Colors.YELLOW_LIGHT));
             player.sendMessage(Component.text(gson.toJson(file.getCodeData().toJson())).color(Colors.YELLOW));
 
@@ -271,7 +272,7 @@ public class PlotCommands implements HyperCommand {
                     throw new RuntimeException(e);
                 }
             } else
-                Utilities.sendError(player, "Only the plot owner can do that!");
+                HSException.sendError(player, "Only the plot owner can do that!");
         }
         return DONE;
     }
@@ -284,9 +285,9 @@ public class PlotCommands implements HyperCommand {
                 PlotDatabase.changePlotName(PlotUtilities.getPlotId((player).getWorld()), name);
                 Utilities.sendInfo(player, Component.text("Successfully changed the plot name to " + name + "."));
                 PlotManager.loadPlot(plotID);
-            } else Utilities.sendError(player, "Only the plot owner can do that!");
+            } else HSException.sendError(player, "Only the plot owner can do that!");
         } else {
-            Utilities.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
+            HSException.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
         }
         return DONE;
     }
@@ -295,12 +296,12 @@ public class PlotCommands implements HyperCommand {
         if (ctx.getSource().getBukkitSender() instanceof Player player) {
             int plotID = PlotUtilities.getPlotId(player.getWorld());
             if (!player.getUniqueId().toString().equals(PlotManager.getPlotOwner(plotID))) {
-                Utilities.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
+                HSException.sendError(ctx.getSource().getBukkitSender(), "You are not allowed to do this.");
                 return DONE;
             }
             ItemStack item = player.getInventory().getItemInMainHand();
             if (item.getItemMeta() == null) {
-                Utilities.sendError(player, "Hold the item you want to use as your plot icon, then use /plot icon.");
+                HSException.sendError(player, "Hold the item you want to use as your plot icon, then use /plot icon.");
                 return DONE;
             }
             String icon = item.getType().toString();
@@ -308,7 +309,7 @@ public class PlotCommands implements HyperCommand {
             PlotDatabase.changePlotIcon(plotID, icon);
             Utilities.sendInfo(player, Component.text("Successfully changed the plot icon to " + icon + "."));
             PlotManager.loadPlot(plotID);
-        } else Utilities.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
+        } else HSException.sendError(ctx.getSource().getBukkitSender(), "Only a player can do this");
         return DONE;
     }
 }

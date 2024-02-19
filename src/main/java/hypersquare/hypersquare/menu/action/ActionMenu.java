@@ -53,42 +53,33 @@ public class ActionMenu extends Menu {
 
     @Override
     public void performClick(InventoryClickEvent event) {
-        if (!items.containsKey(event.getSlot())) return;
-        if (items.get(event.getSlot()) instanceof MenuParameter param) {
+        MenuItem menuItem = items.get(event.getSlot());
+        if (menuItem == null) return;
+        CodeFile file = new CodeFile(block.getWorld());
+        CodeData data = file.getCodeData();
+        if (menuItem instanceof MenuParameter param) {
             HumanEntity p = event.getWhoClicked();
-            CodeFile file = new CodeFile(block.getWorld());
-            CodeData data = file.getCodeData();
             CodeActionData action = CodeFileHelper.getActionAt(block, data);
             if (action == null) return;
-            if (p.getItemOnCursor().isEmpty()) {
-                p.setItemOnCursor(param.getValue(action, true));
-                slot(event.getSlot(), param.updated(action));
-                file.setCode(data.toJson().toString());
-                return;
-            }
-            p.setItemOnCursor(param.replaceValue(action, p.getItemOnCursor()));
+            ItemStack cursor = p.getItemOnCursor();
+            if (cursor.isEmpty()) p.setItemOnCursor(param.getValue(action, true));
+            else p.setItemOnCursor(param.replaceValue(action, cursor));
             slot(event.getSlot(), param.updated(action));
-            file.setCode(data.toJson().toString());
-            return;
         }
-        if (items.get(event.getSlot()) instanceof MenuTag tag) {
-            CodeFile file = new CodeFile(block.getWorld());
-            CodeData codeData = file.getCodeData();
-            CodeActionData action = CodeFileHelper.getActionAt(block, codeData);
+        else if (menuItem instanceof MenuTag tag) {
+            CodeActionData action = CodeFileHelper.getActionAt(block, data);
             if (action == null) return;
-
             VariableValue.HSVar varValue = action.tags.getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
-            JsonObject itemData = CodeValues.getVarItemData(event.getWhoClicked().getItemOnCursor());
 
+            ItemStack clickedItem = event.getWhoClicked().getItemOnCursor();
+            JsonObject itemData = CodeValues.getVarItemData(clickedItem);
             int direction = event.isRightClick() ? -1 : 1;
 
             if (CodeValues.VARIABLE.isType(itemData)) {
-                varValue = (VariableValue.HSVar) CodeValues.VARIABLE.fromItem(event.getWhoClicked().getItemOnCursor());
+                varValue = (VariableValue.HSVar) CodeValues.VARIABLE.fromItem(clickedItem);
                 direction = 0;
-
                 ItemStack item = event.getWhoClicked().getItemOnCursor();
                 item.setAmount(item.getAmount() - 1);
-
                 event.getWhoClicked().setItemOnCursor(item);
             }
 
@@ -107,11 +98,11 @@ public class ActionMenu extends Menu {
                     tag.tag.options()[position].id().name(),
                     varValue
             ));
-            file.setCode(codeData.toJson().toString());
             slot(event.getSlot(), new MenuTag(tag.tag, action));
             Player player = (Player) event.getWhoClicked();
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1.5f);
         }
+        file.setCode(data.toJson().toString());
     }
 
     @Override

@@ -94,15 +94,6 @@ public class Utilities {
         return sb.toString();
     }
 
-    public static void sendError(CommandSender sender, String message) {
-        sender.sendMessage(cleanMM.deserialize("<red>Error: <gray>" + message));
-        if (sender instanceof Player player) sendErrorSound(player);
-    }
-
-    public static void sendErrorSound(Player player) {
-        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED, 1, 1);
-    }
-
     public static void sendInfo(CommandSender sender, Component message) {
         sender.sendMessage(Component.text("»")
                 .color(NamedTextColor.GREEN)

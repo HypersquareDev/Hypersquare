@@ -22,6 +22,7 @@ import hypersquare.hypersquare.menu.ActionTargetsMenu;
 import hypersquare.hypersquare.menu.CodeblockMenu;
 import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.menu.action.parameter.MenuParameter;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.util.PlotUtilities;
@@ -95,7 +96,7 @@ public class DevEvents implements Listener {
                 }
                 Action action = Actions.getAction(actionData.action, actionData.codeblock);
                 if (action == null) {
-                    Utilities.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
+                    HSException.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
                     throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
                 }
                 event.getPlayer().playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_BARREL_OPEN, 0.75f, 1);
@@ -310,7 +311,7 @@ public class DevEvents implements Listener {
         try {
             v = value.fromString(raw, value.fromItem(item));
         } catch (Exception ignored) {
-            Utilities.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
+            HSException.sendError(event.getPlayer(), "Invalid input: '" + raw + "'");
             return;
         }
         ItemStack newItem = value.getItem(v);

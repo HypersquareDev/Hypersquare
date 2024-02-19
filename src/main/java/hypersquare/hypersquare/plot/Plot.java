@@ -8,6 +8,7 @@ import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.WorldUtilities;
 import net.kyori.adventure.text.Component;
@@ -132,7 +133,7 @@ public class Plot {
                                     plugin.loadWorld(world);
                                 } catch (UnknownWorldException | WorldLockedException | IOException e) {
                                     if (e instanceof UnknownWorldException)
-                                        Utilities.sendError(player, "That plot is vacant.");
+                                        HSException.sendError(player, "That plot is vacant.");
                                     throw new RuntimeException(e);
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
@@ -149,15 +150,15 @@ public class Plot {
                                 try {
                                     plugin.loadWorld(world);
                                 } catch (Exception e) {
-                                    if (e instanceof UnknownWorldException) Utilities.sendError(player, "That plot is vacant.");
+                                    if (e instanceof UnknownWorldException) HSException.sendError(player, "That plot is vacant.");
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }
                         }.runTask(Hypersquare.instance);
                     }
                 } catch (Exception e) {
-                    Utilities.sendError(player, "Error loading plot. Please try again later.");
-                    if (e instanceof UnknownWorldException) Utilities.sendError(player, "That plot is vacant.");
+                    HSException.sendError(player, "Error loading plot. Please try again later.");
+                    if (e instanceof UnknownWorldException) HSException.sendError(player, "That plot is vacant.");
                 }
                 new BukkitRunnable() {
                     @Override

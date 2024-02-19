@@ -8,6 +8,7 @@ import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.LocationValue;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.play.error.HSException;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -37,7 +38,7 @@ public class ValueCommands implements HyperCommand {
                                 ItemStack item = value.getItem(value.fromString(v, null));
                                 player.getInventory().addItem(item);
                             } catch (Exception ignored) {
-                                Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                HSException.sendError(player, "Invalid input: '" + v + "'");
                             }
                         }
                         return DONE;

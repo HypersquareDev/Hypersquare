@@ -4,6 +4,7 @@ import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.menu.system.MenuItem;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -25,7 +26,7 @@ public class MenuTag extends MenuItem {
 
         name(Component.text("Tag: ")
                 .decoration(TextDecoration.ITALIC, false)
-                .color(TextColor.color(0xFFE942))
+                .color(Colors.MUSTARD)
                 .append(Component.text(tag.name()))
         );
 
@@ -55,16 +56,16 @@ public class MenuTag extends MenuItem {
             if (option == currentOption(tag, data)) {
                 lore.add(Component.text("» ")
                         .decoration(TextDecoration.ITALIC, false)
-                        .color(TextColor.color(0x2487CC))
+                        .color(Colors.SKY_DARK)
                         .append(Component.text(option.text())
-                                .color(TextColor.color(0x42C7FF)))
+                                .color(Colors.SKY))
                 );
             } else {
                 lore.add(Component.text("» ")
                         .decoration(TextDecoration.ITALIC, false)
-                        .color(TextColor.color(0x505050))
+                        .color(Colors.GRAY_DARK)
                         .append(Component.text(option.text())
-                                .color(TextColor.color(0x808080)))
+                                .color(Colors.GRAY))
                 );
             }
         }

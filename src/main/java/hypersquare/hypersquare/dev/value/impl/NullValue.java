@@ -63,11 +63,6 @@ public class NullValue implements CodeValue<String, String> {
     }
 
     @Override
-    public Component getValueName(String value) {
-        return getName();
-    }
-
-    @Override
     public String realValue(String value) {
         return "null";
     }

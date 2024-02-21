@@ -136,7 +136,7 @@ public final class Hypersquare extends JavaPlugin {
             new DevEvents(),
             new CodePlacement(),
             new PlayModeListener(),
-            new PlotUtilities()
+            new PlotEvents()
         );
 
         for (Listener l : listeners) pm.registerEvents(l, this);

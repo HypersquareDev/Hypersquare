@@ -111,26 +111,4 @@ public class PlotUtilities implements Listener {
             entity.teleport(tpLocation);
         }
     }
-
-    //Stopping blocks indirectly being placed outside plot
-    @EventHandler
-    public void BlockDispense(BlockDispenseEvent event){
-        Location blockLocation = event.getBlock().getLocation();
-        Location dispenseLocation = blockLocation.clone().add(blockLocation.getDirection().multiply(-1));
-        if (!CodePlacement.blockInPlot(dispenseLocation)) event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void BlockMultiPlace(BlockMultiPlaceEvent event){
-        for (BlockState blockState : event.getReplacedBlockStates()) {
-            if (!CodePlacement.blockInPlot(blockState.getLocation())) event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void StructureGrow(StructureGrowEvent event){
-        for (BlockState blockState : event.getBlocks()) {
-            if (!CodePlacement.blockInPlot(blockState.getLocation())) blockState.setType(Material.AIR);
-        }
-    }
 }

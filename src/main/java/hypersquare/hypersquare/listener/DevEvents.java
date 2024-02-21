@@ -347,8 +347,4 @@ public class DevEvents implements Listener {
         Hypersquare.lastSwapHands.put(player, System.currentTimeMillis());
     }
 
-    @EventHandler
-    public void onBucketEmptyEvent(PlayerBucketEmptyEvent event){
-        if (!CodePlacement.blockInPlot(event.getBlock().getLocation())) event.setCancelled(true);
-    }
 }

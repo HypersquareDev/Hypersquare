@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,12 @@ public class MenuParameter extends MenuItem {
     private final int slotId;
     private final Action.ActionParameter p;
 
-    public MenuParameter(Action.ActionParameter p, int slotId, CodeActionData action) {
+    public MenuParameter(Action.@NotNull ActionParameter p, int slotId, @NotNull CodeActionData action) {
         super(DisplayValue.menuPaneColor.get(p.type()));
         this.slotId = slotId;
         this.p = p;
 
-        List<JsonObject> current = action.arguments.computeIfAbsent(p.id(), id -> new ArrayList<>());
+        List<JsonObject> current = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         Component typeName = p.type().getName();
         if (p.plural()) typeName = typeName.append(Component.text("(s)"));
@@ -72,18 +73,18 @@ public class MenuParameter extends MenuItem {
         }
     }
 
-    public boolean isValid(ItemStack item) {
-        if (item == null) return false;
+    public boolean notValid(ItemStack item) {
+        if (item == null) return true;
         JsonObject data = CodeValues.getVarItemData(item);
-        if (data == null) return p.type().isValid(CodeValues.ITEM, item);
+        if (data == null) return p.type().notValid(CodeValues.ITEM, item);
         CodeValues v = CodeValues.getType(data);
-        if (v == CodeValues.VARIABLE) return true;
-        return p.type().isValid(v, item);
+        if (v == CodeValues.VARIABLE) return false;
+        return p.type().notValid(v, item);
     }
 
     public ItemStack replaceValue(CodeActionData action, ItemStack newItem) {
         ItemStack oldItem = getValue(action, true);
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), id -> new ArrayList<>());
+        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         JsonObject data = CodeValues.getVarItemData(newItem);
         CodeValues v;
@@ -91,7 +92,7 @@ public class MenuParameter extends MenuItem {
             else v = CodeValues.getType(data);
 
         if (v == null) return oldItem;
-        if (!p.type().isValid(v, newItem) && p.type().codeVal != null && v != CodeValues.VARIABLE) {
+        if (p.type().notValid(v, newItem) && p.type().codeVal != null && v != CodeValues.VARIABLE) {
             v = p.type().codeVal;
             if (CodeValues.getType(data) != v) {
                 Object newVal = v.coerce(data);
@@ -115,20 +116,20 @@ public class MenuParameter extends MenuItem {
     }
 
     public boolean isEmpty(CodeActionData action) {
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), id -> new ArrayList<>());
+        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         return previous.size() <= slotId || !previous.get(slotId).has("type");
     }
 
     public void reset(List<JsonObject> previous) {
         previous.set(slotId, new JsonObject());
-        while (!previous.isEmpty() && !previous.get(previous.size() - 1).has("type")) {
-            previous.remove(previous.size() - 1);
+        while (!previous.isEmpty() && !previous.getLast().has("type")) {
+            previous.removeLast();
         }
     }
 
     public ItemStack getValue(CodeActionData action, boolean reset) {
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), id -> new ArrayList<>());
+        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         if (previous.size() > slotId) {
             JsonObject data = previous.get(slotId);

@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class MenuTag extends MenuItem {
         hideAllFlags();
     }
 
-    public static ActionTag.Option currentOption(ActionTag tag, CodeActionData data) {
+    public static ActionTag.Option currentOption(@NotNull ActionTag tag, @NotNull CodeActionData data) {
         return tag.getOption(data.tags.getOrDefault(tag.id(), new Pair<>(tag.defaultOption().name(), null)).getA());
     }
 }

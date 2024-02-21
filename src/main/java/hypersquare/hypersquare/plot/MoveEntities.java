@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class MoveEntities {
     public static Location basic = null;
@@ -22,7 +23,7 @@ public class MoveEntities {
     public static Location gigantic = null;
     public static Location commonStart = null;
 
-    public static void commonVars(Location location) {
+    public static void commonVars(@NotNull Location location) {
         World world = location.getWorld();
         basic = LocationInitializer.getBasicLocation(world);
         large = LocationInitializer.getLargeLocation(world);

@@ -44,7 +44,6 @@ public class PlotUtilities {
      * Get plot ID from a player's world
      *
      * @param player Player to get plot ID from
-     * @return
      */
     public static int getPlotId(Player player) {
         return getPlotId(player.getWorld());

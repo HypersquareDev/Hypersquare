@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayModeListener implements Listener {
 
@@ -29,7 +30,7 @@ public class PlayModeListener implements Listener {
     /* PLOT AND SERVER EVENTS */
 
     @EventHandler
-    public void playerChatEvent(AsyncChatEvent event) {
+    public void playerChatEvent(@NotNull AsyncChatEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -54,7 +55,7 @@ public class PlayModeListener implements Listener {
     /* CLICK EVENTS */
 
     @EventHandler
-    public void playerInteractEvent(PlayerInteractEvent event) {
+    public void playerInteractEvent(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -66,7 +67,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerInteractAtEntityEvent(PlayerInteractAtEntityEvent event) {
+    public void playerInteractAtEntityEvent(@NotNull PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -78,7 +79,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerPlaceBlockEvent(BlockPlaceEvent event) {
+    public void playerPlaceBlockEvent(@NotNull BlockPlaceEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -86,7 +87,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerBreakBlockEvent(BlockBreakEvent event) {
+    public void playerBreakBlockEvent(@NotNull BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -94,7 +95,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerSwapHandsEvent(PlayerSwapHandItemsEvent event) {
+    public void playerSwapHandsEvent(@NotNull PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -102,7 +103,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerChangeSlotEvent(PlayerItemHeldEvent event) {
+    public void playerChangeSlotEvent(@NotNull PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -110,7 +111,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerTameEvent(EntityTameEvent event) {
+    public void playerTameEvent(@NotNull EntityTameEvent event) {
         Player player = (Player) event.getOwner();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -120,7 +121,7 @@ public class PlayModeListener implements Listener {
     /* MOVEMENT EVENTS */
 
     @EventHandler
-    public void playerWalkEvent(PlayerMoveEvent event) {
+    public void playerWalkEvent(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         if (event.getFrom().getBlock() != event.getTo().getBlock() && !player.isSprinting() && !player.isFlying() && !player.isSwimming()) {
@@ -130,7 +131,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerJumpEvent(PlayerMoveEvent event) {
+    public void playerJumpEvent(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (event.getFrom().getBlockY() < event.getTo().getBlockY()) {
             if (cannotExecute(player)) return;
@@ -140,7 +141,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerSneakEvent(PlayerToggleSneakEvent event) {
+    public void playerSneakEvent(@NotNull PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -150,7 +151,7 @@ public class PlayModeListener implements Listener {
 
 
     @EventHandler
-    public void playerSprintEvent(PlayerToggleSprintEvent event) {
+    public void playerSprintEvent(@NotNull PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -159,7 +160,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerFlightEvent(PlayerToggleFlightEvent event) {
+    public void playerFlightEvent(@NotNull PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -168,7 +169,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerRiptideEvent(PlayerRiptideEvent event) {
+    public void playerRiptideEvent(@NotNull PlayerRiptideEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -176,7 +177,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerDismountEvent(VehicleExitEvent event) {
+    public void playerDismountEvent(@NotNull VehicleExitEvent event) {
         if (!(event.getExited() instanceof Player player)) return;
         // We can cast because we already made sure it's a player
         if (cannotExecute((Player) event.getExited())) return;
@@ -185,7 +186,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerHorseJumpEvent(HorseJumpEvent event) {
+    public void playerHorseJumpEvent(@NotNull HorseJumpEvent event) {
         Entity entity = event.getEntity().getPassengers().getFirst();
         if (!(entity instanceof Player player)) return;
         if (cannotExecute(player)) return;
@@ -198,7 +199,7 @@ public class PlayModeListener implements Listener {
     /* ITEM EVENTS */
 
     @EventHandler
-    public void playerClickMenuSlotEvent(InventoryClickEvent event) {
+    public void playerClickMenuSlotEvent(@NotNull InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);
@@ -211,7 +212,7 @@ public class PlayModeListener implements Listener {
     }
 
     @EventHandler
-    public void playerDropItemListener(PlayerDropItemEvent event) {
+    public void playerDropItemListener(@NotNull PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         if (cannotExecute(p)) return;
         PlotUtilities.getExecutor(p).trigger(Events.PLAYER_DROP_ITEM_EVENT, event, new CodeSelection(p));

@@ -8,13 +8,14 @@ import hypersquare.hypersquare.plot.Plot;
 import hypersquare.hypersquare.plot.PlotDatabase;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 import static hypersquare.hypersquare.Hypersquare.lastUsedWorldNumber;
 
 public class CreatePlotsMenu {
-    public static void open(Player player) {
+    public static void open(@NotNull Player player) {
         HashMap<String, Integer> playerData = Hypersquare.localPlayerData.get(player.getUniqueId());
 
         Menu menu = new Menu(Component.text("Choose a plot size"), 1);
@@ -23,17 +24,17 @@ public class CreatePlotsMenu {
         int maxBasic = playerData.get("maxBasic");
         int usedLarge = playerData.get("usedLarge");
         int maxLarge = playerData.get("maxLarge");
-        int usedhuge = playerData.get("usedhuge");
-        int maxhuge = playerData.get("maxhuge");
-        int usedmassive = playerData.get("usedmassive");
-        int maxmassive = playerData.get("maxmassive");
+        int usedHuge = playerData.get("usedHuge");
+        int maxHuge = playerData.get("maxHuge");
+        int usedMassive = playerData.get("usedMassive");
+        int maxMassive = playerData.get("maxMassive");
         int usedGigantic = playerData.get("usedGigantic");
         int maxGigantic = playerData.get("maxGigantic");
 
         MenuItem basic = new MenuItem(CreatePlotMenuItems.BASIC_PLOT.build(usedBasic, maxBasic));
         MenuItem large = new MenuItem(CreatePlotMenuItems.LARGE_PLOT.build(usedLarge, maxLarge));
-        MenuItem huge = new MenuItem(CreatePlotMenuItems.HUGE_PLOT.build(usedhuge, maxhuge));
-        MenuItem massive = new MenuItem(CreatePlotMenuItems.MASSIVE_PLOT.build(usedmassive, maxmassive));
+        MenuItem huge = new MenuItem(CreatePlotMenuItems.HUGE_PLOT.build(usedHuge, maxHuge));
+        MenuItem massive = new MenuItem(CreatePlotMenuItems.MASSIVE_PLOT.build(usedMassive, maxMassive));
         MenuItem gigantic = new MenuItem(CreatePlotMenuItems.GIGANTIC_PLOT.build(usedGigantic, maxGigantic));
 
         menu.slot(0, basic)
@@ -63,7 +64,7 @@ public class CreatePlotsMenu {
         });
 
         huge.onClick(() -> {
-            if (usedhuge < maxhuge) {
+            if (usedHuge < maxHuge) {
                 player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_massive");
@@ -73,7 +74,7 @@ public class CreatePlotsMenu {
         });
 
         massive.onClick(() -> {
-            if (usedmassive < maxmassive) {
+            if (usedMassive < maxMassive) {
                 player.closeInventory();
                 int plotID = lastUsedWorldNumber;
                 Plot.createPlot(player, plotID, Hypersquare.slimePlugin, player.getUniqueId().toString(), "plot_template_huge");
@@ -93,5 +94,9 @@ public class CreatePlotsMenu {
         });
 
         menu.open(player);
+    }
+
+    private void create() {
+
     }
 }

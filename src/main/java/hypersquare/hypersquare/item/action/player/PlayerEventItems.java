@@ -36,7 +36,7 @@ public enum PlayerEventItems implements ActionMenuItem {
         return cleanMM.deserialize(name);
     }
 
-    public Component getLore() {
+    public @NotNull Component getLore() {
         return cleanMM.deserialize(lore.replace("%n", "\n"));
     }
 

@@ -43,6 +43,9 @@ import java.util.zip.ZipInputStream;
 
 import static hypersquare.hypersquare.Hypersquare.*;
 
+// bro istfg chicken needs to be locked up for writing the plot related classes
+// this is hard to read and unnecessarily long ;-;
+
 public class PlotDatabase {
     private static MongoDatabase database;
     private static MongoCollection<Document> plotsCollection;
@@ -271,11 +274,7 @@ public class PlotDatabase {
     public static String getPlotIcon(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
-
-        if (result != null) {
-            return result.getString("icon");
-        }
-
+        if (result != null) return result.getString("icon");
         return null;
     }
 

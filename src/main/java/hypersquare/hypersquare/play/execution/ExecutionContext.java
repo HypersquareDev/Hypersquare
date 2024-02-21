@@ -1,5 +1,6 @@
 package hypersquare.hypersquare.play.execution;
 
+import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -8,20 +9,23 @@ import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.play.CodeVariableScope;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.List;
 import java.util.function.Function;
 
 public record ExecutionContext(
-        ActionArguments args,
-        CodeStacktrace trace,
-        List<CodeActionData> containing,
-        Action action, CodeActionData data
+    CodeExecutor executor,
+    ActionArguments args,
+    CodeStacktrace trace,
+    Action action, CodeActionData data
 ) {
     public static final CodeVariableScope globalScope = new CodeVariableScope();
 
-    public CodeVariableScope getScope(VariableValue.Scope scope) {
+    @Contract(pure = true)
+    public CodeVariableScope getScope(VariableValue.@NotNull Scope scope) {
         return switch (scope) {
             case THREAD -> trace.scope;
             case GLOBAL -> globalScope;
@@ -43,8 +47,9 @@ public record ExecutionContext(
         return o.apply(tagValue.getA());
     }
 
-    public void sleep(long duration) {
-        try { Thread.sleep(duration); }
-        catch (Exception ignored) {}
+    public void sleep(int dur) {
+        if (dur == 0) return; // TODO: warn the user about useless code
+        trace.cancel = true;
+        Bukkit.getScheduler().runTaskLater(Hypersquare.instance, () -> executor.continueEval(trace), dur);
     }
 }

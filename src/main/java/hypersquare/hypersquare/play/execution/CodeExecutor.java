@@ -20,8 +20,8 @@ import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.error.CodeErrorType;
 import hypersquare.hypersquare.play.CodeSelection;
-import hypersquare.hypersquare.util.PlotUtilities;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,9 +53,7 @@ public class CodeExecutor {
                     if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
                     // run every line that has the same event
                     CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
-                    try {
-                        continueEval(trace);
-                    } catch (Exception e) {
+                    try { continueEval(trace); } catch (Exception e) {
                         new HSException(plotId, CodeErrorType.RUNTIME_ERROR, e).sendMessage();
                     }
                 }
@@ -66,7 +64,7 @@ public class CodeExecutor {
         running.put(event, task);
     }
 
-    private void continueEval(CodeStacktrace trace) {
+    public void continueEval(@NotNull CodeStacktrace trace) {
         while (true) {
             // TODO: Check world tick time
             // (urgent)
@@ -89,21 +87,21 @@ public class CodeExecutor {
                 trace.popFrame();
                 if (trace.isDone()) break;
                 frame = trace.next();
-                if (frame == null) break;
                 data = frame.current();
 
                 Actions action = Actions.getAction(data.action, data.codeblock);
                 if (action != null && action.a instanceof CallbackAfterAction cb) {
                     execute(cb::after, action, trace, frame, data);
                 }
-                continue;
             }
-
-            Action action = Actions.getAction(data.action, data.codeblock);
-            if (action == null) {
-                throw new HSException(CodeErrorType.INVALID_ACT, new NullPointerException("CodeAction data is invalid?"));
+            else {
+                Action action = Actions.getAction(data.action, data.codeblock);
+                if (action == null) {
+                    throw new HSException(CodeErrorType.INVALID_ACT, new NullPointerException("CodeActionData is invalid?"));
+                }
+                execute(action::execute, action, trace, frame, data);
             }
-            execute(action::execute, action, trace, frame, data);
+            if (trace.cancel) break;
         }
     }
 
@@ -122,22 +120,20 @@ public class CodeExecutor {
     private CodeSelection getTargetSel(String target, Action action, CodeStacktrace trace, CodeSelection selection) {
         CodeSelection targetSel = null;
         if (target == null) {
-            TargetType type = TargetType.ofCodeblock(action.getCodeblockId());
+            String codeblock = action.getCodeblockId();
+            TargetType type = TargetType.ofCodeblock(codeblock);
             if (type == null) return selection; // codeblock can't be targeted, preserve original selection
             TargetSet set = TargetPriority.ofType(type);
             for (Target t : set.targets()) {
                 try { targetSel = t.get(trace.bukkitEvent, selection); } catch (Exception ignored) {}
             }
-            if (targetSel == null)throw new HSException(
-                CodeErrorType.FAILED_TARGET,
-                new NullPointerException("Couldn't find any target prioritization for " + action.getCodeblockId())
-            );
+            if (targetSel == null) throw new NullPointerException("Couldn't find any target prioritization for " + codeblock);
         }
         else targetSel = Objects.requireNonNull(Target.getTarget(target)).get(trace.bukkitEvent, selection);
         return targetSel;
     }
 
-    private ExecutionContext getCtx(Action action, CodeStacktrace trace, CodeActionData data) {
+    private @NotNull ExecutionContext getCtx(@NotNull Action action, CodeStacktrace trace, CodeActionData data) {
         HashMap<String, List<JsonObject>> arguments = new HashMap<>();
         for (Action.ActionParameter param : action.parameters()) {
             List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
@@ -145,7 +141,7 @@ public class CodeExecutor {
             arguments.put(param.id(), args);
         }
         ActionArguments args = new ActionArguments(arguments);
-        ExecutionContext ctx = new ExecutionContext(args, trace, data.actions, action, data);
+        ExecutionContext ctx = new ExecutionContext(this, args, trace, action, data);
         args.bind(ctx);
         return ctx;
     }

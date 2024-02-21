@@ -15,6 +15,7 @@ import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class WaitAction implements Action {
     @Override
@@ -28,7 +29,6 @@ public class WaitAction implements Action {
     public ActionTag[] tags() {
         return new ActionTag[]{
             new ActionTag("unit", "Time Unit", WaitTimeUnit.TICKS,
-                new ActionTag.Option(WaitTimeUnit.MILLISECONDS, "Milliseconds", Material.LEVER),
                 new ActionTag.Option(WaitTimeUnit.TICKS, "Ticks", Material.REPEATER),
                 new ActionTag.Option(WaitTimeUnit.SECONDS, "Seconds", Material.CLOCK),
                 new ActionTag.Option(WaitTimeUnit.MINUTES, "Minutes", Material.RED_BED)
@@ -80,26 +80,25 @@ public class WaitAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, CodeSelection targetSel) {
         WaitTimeUnit unit = ctx.getTag("unit", WaitTimeUnit::valueOf);
         DecimalNumber duration = ctx.args().getOr("duration", new DecimalNumber(0L));
-        ctx.sleep(unit.getMillis(duration.toInt()));
+        ctx.sleep(unit.get(duration.toDouble()));
     }
 
     enum WaitTimeUnit {
-        MILLISECONDS(1),
-        TICKS(50),
-        SECONDS(1000),
-        MINUTES(60000),
+        TICKS(1),
+        SECONDS(20),
+        MINUTES(20 * 60),
         ;
 
-        public final long millis;
-        WaitTimeUnit(long millis) {
-            this.millis = millis;
+        public final long ticks;
+        WaitTimeUnit(long ticks) {
+            this.ticks = ticks;
         }
 
-        public long getMillis(int dur) {
-            return dur * millis;
+        public int get(double dur) {
+            return (int) (dur * ticks);
         }
     }
 }

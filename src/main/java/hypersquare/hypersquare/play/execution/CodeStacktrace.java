@@ -14,6 +14,7 @@ public class CodeStacktrace {
     public final Event event;
     public final org.bukkit.event.Event bukkitEvent;
     public final CodeVariableScope scope = new CodeVariableScope();
+    public boolean cancel = false;
 
     public CodeStacktrace(Event event, org.bukkit.event.Event bukkitEvent, Frame frame) {
         frames = new LinkedList<>();
@@ -23,9 +24,9 @@ public class CodeStacktrace {
     }
 
     public Frame next() {
-        Frame next = frames.get(frames.size() - 1);
+        Frame next = frames.getLast();
         if (next != null) return next;
-        frames.remove(frames.size() - 1);
+        frames.removeLast();
         if (isDone()) return null;
         return next();
     }

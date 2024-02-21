@@ -7,16 +7,13 @@ import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CodeActionData {
     public String action;
     public String target;
     public String codeblock;
-    public final List<CodeActionData> actions = new ArrayList<>();
+    public final List<CodeActionData> actions = new LinkedList<>();
     public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
     public final HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
 

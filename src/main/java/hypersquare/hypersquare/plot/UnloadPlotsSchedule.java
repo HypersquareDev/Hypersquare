@@ -48,7 +48,7 @@ public class UnloadPlotsSchedule {
         gameUnload(plotId, buildWorld);
     }
 
-    public static void tryGameUnload(World world) {
+    public static void tryGameUnload(@NotNull World world) {
         tryGameUnload(Integer.parseInt(world.getName().replace("hs.", "")));
     }
 

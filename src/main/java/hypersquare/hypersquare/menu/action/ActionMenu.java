@@ -20,6 +20,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 public class ActionMenu extends Menu {
@@ -52,7 +53,7 @@ public class ActionMenu extends Menu {
     }
 
     @Override
-    public void performClick(InventoryClickEvent event) {
+    public void performClick(@NotNull InventoryClickEvent event) {
         MenuItem menuItem = items.get(event.getSlot());
         if (menuItem == null) return;
         CodeFile file = new CodeFile(block.getWorld());
@@ -106,7 +107,7 @@ public class ActionMenu extends Menu {
     }
 
     @Override
-    public void open(Player player) {
+    public void open(@NotNull Player player) {
         throw new IllegalStateException("Regular open call on ActionMenu");
     }
 
@@ -128,7 +129,7 @@ public class ActionMenu extends Menu {
                 if (!items.containsKey(i)) continue;
                 if (items.get(i) instanceof MenuParameter param) {
                     if (!param.isEmpty(action)) continue;
-                    if (!param.isValid(item)) continue;
+                    if (param.notValid(item)) continue;
                     param.replaceValue(action, item);
                     slot(i, param.updated(action));
                     file.setCode(data.toJson().toString());

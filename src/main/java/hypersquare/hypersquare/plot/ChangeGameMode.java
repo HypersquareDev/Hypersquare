@@ -17,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -25,11 +27,12 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 import static hypersquare.hypersquare.Hypersquare.codeExecMap;
 
 public class ChangeGameMode {
-    private static PlayerQuitEvent quitEvent(Player p) {
+    @Contract("_ -> new")
+    private static @NotNull PlayerQuitEvent quitEvent(Player p) {
         return new PlayerQuitEvent(p, Component.text("Switching mode"), PlayerQuitEvent.QuitReason.DISCONNECTED);
     }
 
-    public static void devMode(Player player, int plotID, boolean keepState) {
+    public static void devMode(@NotNull Player player, int plotID, boolean keepState) {
         if (PlotDatabase.getRawDevs(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.developers")) {
             String worldName = "hs.code." + plotID;
             Plot.loadPlot(plotID, player, () -> {
@@ -102,7 +105,7 @@ public class ChangeGameMode {
         });
     }
 
-    public static void buildMode(Player player, int plotID, boolean keepState) {
+    public static void buildMode(@NotNull Player player, int plotID, boolean keepState) {
         if (PlotDatabase.getRawBuilders(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.builders")) {
             Plot.loadPlot(plotID, player, () -> {
                 String worldName = "hs." + plotID;

@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class ActionItem {
         return this;
     }
 
-    public ActionItem addAdditionalInfo(Component... info) {
+    public ActionItem addAdditionalInfo(Component @NotNull ... info) {
         List<Component[]> infoList = new ArrayList<>(additionalInfo);
         info[0] = Component.text("⏵")
                 .color(NamedTextColor.BLUE)

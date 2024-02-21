@@ -108,11 +108,6 @@ public class PlayerDatabase {
         thread.start();
     }
 
-    public static void deleteAllPlayers() {
-        Document query = new Document(); // Empty query matches all documents
-        playerCollection.deleteMany(query);
-    }
-
     public static void increaseMaxPlots(UUID playerUUID, String plotSize, int additionalPlots) {
         Document query = new Document("uuid", playerUUID);
         Document playerDocument = playerCollection.find(query).first();

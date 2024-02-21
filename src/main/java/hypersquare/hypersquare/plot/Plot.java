@@ -35,7 +35,10 @@ public class Plot {
     public static ItemStack getPlotItem(int plotID) {
         ItemStack plotItem = new ItemStack(Material.matchMaterial(PlotDatabase.getPlotIcon(plotID)));
         ItemMeta meta = plotItem.getItemMeta();
-        if (meta == null) plotItem.setType(Material.PAPER); // Edge case
+        if (meta == null) {
+            plotItem.setType(Material.PAPER); // Edge case
+            meta = Bukkit.getItemFactory().getItemMeta(Material.PAPER);
+        }
         if (Hypersquare.PLOT_VERSION == PlotDatabase.getPlotVersion(plotID)) {
             meta.displayName(PlotDatabase.getPlotName(plotID));
         } else {

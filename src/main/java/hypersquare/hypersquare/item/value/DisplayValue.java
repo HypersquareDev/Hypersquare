@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -59,11 +60,11 @@ public enum DisplayValue {
         this.isValid = isValid;
     }
 
-    public Component getName() {
+    public @NotNull Component getName() {
         return Component.text(Utilities.capitalize(toString().toLowerCase())).color(color);
     }
 
-    public boolean isValid(CodeValues v, @Nullable ItemStack t) {
+    public boolean notValid(CodeValues v, @Nullable ItemStack t) {
         return isValid.apply(v, t);
     }
 }

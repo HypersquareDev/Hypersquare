@@ -39,12 +39,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class CodePlacement implements Listener {
     @EventHandler
-    public void onPlayerPlaceBlock(BlockPlaceEvent event) {
+    public void onPlayerPlaceBlock(@NotNull BlockPlaceEvent event) {
         if (Hypersquare.mode.get(event.getPlayer()).equals("building") || Hypersquare.mode.get(event.getPlayer()).equals("playing")) {
             if (blockInPlot(event.getBlockPlaced().getLocation())) {
                 return;
@@ -57,7 +58,7 @@ public class CodePlacement implements Listener {
         }
     }
 
-    private static boolean checkIfValidAgainst(Block againstLocation) {
+    private static boolean checkIfValidAgainst(@NotNull Block againstLocation) {
         Material type = againstLocation.getType();
         return type == Material.STONE || type == Material.PISTON || type == Material.STICKY_PISTON;
     }
@@ -67,7 +68,7 @@ public class CodePlacement implements Listener {
         return Utilities.notWithinLocation(location, new Location(location.getWorld(), -3, 0, 0), new Location(location.getWorld(), -108, 0, 256));
     }
 
-    public static boolean blockInPlot(Location location) {
+    public static boolean blockInPlot(@NotNull Location location) {
         String plotType = location.getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
         RestrictMovement.commonVars(location);
         switch (plotType) {
@@ -105,7 +106,7 @@ public class CodePlacement implements Listener {
     }
 
 
-    public void processPlace(BlockPlaceEvent event) {
+    public void processPlace(@NotNull BlockPlaceEvent event) {
         long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId()) == null ? 0 : Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         event.setCancelled(true);
         if (cooldown <= System.currentTimeMillis()) {
@@ -159,7 +160,7 @@ public class CodePlacement implements Listener {
         }
     }
 
-    private static void placeBlock(ItemStack codeblockItem, Location location, boolean brackets, boolean barrel, CodeBlocks codeblock) {
+    private static void placeBlock(ItemStack codeblockItem, @NotNull Location location, boolean brackets, boolean barrel, CodeBlocks codeblock) {
         Location signLocation = location.clone().add(-1, 0, 0);
 
         CodeFile code = new CodeFile(location.getWorld());
@@ -220,7 +221,7 @@ public class CodePlacement implements Listener {
     }
 
     @EventHandler
-    public void onPlayerBreakBlock(BlockBreakEvent event) {
+    public void onPlayerBreakBlock(@NotNull BlockBreakEvent event) {
 
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) {
             if (Hypersquare.mode.get(event.getPlayer()).equals("building") || Hypersquare.mode.get(event.getPlayer()).equals("playing")) {

@@ -6,11 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class MenuListeners implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onClick(@NotNull InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player) {
             if (!Menu.openMenus.containsKey(player)) return;
 
@@ -34,7 +35,7 @@ public class MenuListeners implements Listener {
     }
 
     @EventHandler
-    public void onClose(InventoryCloseEvent event) {
+    public void onClose(@NotNull InventoryCloseEvent event) {
         if (event.getPlayer() instanceof Player player) {
             if (!Menu.openMenus.containsKey(player)) return;
             Menu.openMenus.remove(player);
@@ -42,7 +43,7 @@ public class MenuListeners implements Listener {
     }
 
     @EventHandler
-    public void onLeave(PlayerQuitEvent event) {
+    public void onLeave(@NotNull PlayerQuitEvent event) {
         if (!Menu.openMenus.containsKey(event.getPlayer())) return;
         Menu.openMenus.remove(event.getPlayer());
     }

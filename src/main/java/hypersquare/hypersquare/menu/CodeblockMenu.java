@@ -19,6 +19,7 @@ import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +27,11 @@ import java.util.regex.Pattern;
 import static hypersquare.hypersquare.Hypersquare.cleanMM;
 
 public class CodeblockMenu {
-    public static void open(Player player, Location targetLocation, String fullTitle, String shortTitle, int rows, ActionMenuItem[] items, boolean actions) {
+    public static void open(
+        Player player, Location targetLocation,
+        String fullTitle, String shortTitle,
+        int rows, ActionMenuItem @NotNull [] items, boolean actions
+    ) {
         Menu menu = new Menu(Component.text(fullTitle + " Categories"), rows);
 
         // Loop through all categories

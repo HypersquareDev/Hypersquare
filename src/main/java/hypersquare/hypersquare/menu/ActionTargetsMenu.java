@@ -15,12 +15,13 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActionTargetsMenu {
-    public static void open(Player player, ArrayList<Target> targets, Location loc) {
+    public static void open(Player player, @NotNull ArrayList<Target> targets, Location loc) {
         if (targets.isEmpty()) {
             HSException.sendErrorSound(player);
             return;
@@ -33,7 +34,7 @@ public class ActionTargetsMenu {
         }
         Menu menu = new Menu(Component.text("Select Target"), 1);
         SignSide side = sign.getSide(Side.FRONT);
-        targets.add(0, Target.SELECTED);
+        targets.addFirst(Target.SELECTED);
 
         for (int slot = 0; slot < targets.size(); slot++) {
             Target t = targets.get(slot);

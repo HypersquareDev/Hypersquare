@@ -125,7 +125,7 @@ public class DevEvents implements Listener {
                 if (!menu.items.containsKey(i)) continue;
                 if (menu.items.get(i) instanceof MenuParameter param) {
                     if (!param.isEmpty(actionData)) continue;
-                    if (!param.isValid(mainHandItem)) continue;
+                    if (param.notValid(mainHandItem)) continue;
                     int oldAmount = mainHandItem.getAmount();
                     // We only want to insert 1 item (as well as remove 1 item) at a time
                     mainHandItem.setAmount(1);

@@ -9,10 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerRespawnListener implements Listener {
     @EventHandler
-    public void onRespawn(PlayerRespawnEvent event) {
+    public void onRespawn(@NotNull PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         if (Hypersquare.mode.get(player).equals("playing")) {
             event.setRespawnLocation(PlotDatabase.getPlotSpawnLocation(PlotUtilities.getPlotId(player)));

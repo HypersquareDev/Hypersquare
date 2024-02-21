@@ -76,12 +76,9 @@ public class RepeatMultiple implements RepeatAction {
     @Override
     public boolean check(ExecutionContext ctx, boolean initial) {
         HashMap<String, Object> data = ctx.trace().next().tempData;
-        int remaining = 0;
-        if (initial) {
-            remaining = ctx.args().<DecimalNumber>single("amount").toInt();
-        } else {
-            remaining = ((int) data.get("repeat_multiple")) - 1;
-        }
+        int remaining;
+        if (initial) remaining = ctx.args().<DecimalNumber>single("amount").toInt();
+        else remaining = ((int) data.get("repeat_multiple")) - 1;
         data.put("repeat_multiple", remaining);
         return remaining > 0;
     }

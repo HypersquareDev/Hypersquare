@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public enum SetVariableItems implements ActionMenuItem {
 
@@ -51,7 +52,7 @@ public enum SetVariableItems implements ActionMenuItem {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return Hypersquare.cleanMM.deserialize(name);
     }
 }

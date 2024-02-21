@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Menu {
      * @param item Item to set
      * @return {@link Menu}
      */
-    public Menu slot(int slot, MenuItem item) {
+    public Menu slot(int slot, @NotNull MenuItem item) {
         inventory.setItem(slot, item.item);
         items.put(slot, item);
         return this;
@@ -44,7 +45,7 @@ public class Menu {
      * @param items Items to set
      * @return {@link Menu}
      */
-    public Menu items(List<MenuItem> items) {
+    public Menu items(@NotNull List<MenuItem> items) {
         for (int i = 0; i < items.size(); i++) {
             slot(i, items.get(i));
         }
@@ -62,25 +63,24 @@ public class Menu {
     /**
      * Inserts an item to the menu, replacing the first empty slot,
      * or does nothing if no empty slot is found.
+     *
      * @param item Item to insert
-     * @return {@link Menu}
      */
-    public Menu addItem(MenuItem item) {
+    public void addItem(MenuItem item) {
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack current = inventory.getItem(i);
             if (current == null || current.getType() == Material.AIR) {
                 slot(i, item);
-                return this;
+                return;
             }
         }
-        return this;
     }
 
     /**
      * Runs the click event for the item in the specified slot
      * @param event The event that caused this.
      */
-    public void performClick(InventoryClickEvent event) {
+    public void performClick(@NotNull InventoryClickEvent event) {
         if (!items.containsKey(event.getSlot())) return;
         items.get(event.getSlot()).performClick();
     }
@@ -88,7 +88,7 @@ public class Menu {
     /**
      * Opens the menu for the player
      */
-    public void open(Player player) {
+    public void open(@NotNull Player player) {
         player.openInventory(inventory);
         openMenus.put(player, this);
     }

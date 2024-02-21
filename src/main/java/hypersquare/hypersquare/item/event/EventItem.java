@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class EventItem {
         return this;
     }
 
-    public EventItem addAdditionalInfo(Component... info) {
+    public EventItem addAdditionalInfo(Component @NotNull ... info) {
         List<Component[]> infoList = new ArrayList<>(additionalInfo);
         info[0] = Component.text("⏵")
                 .color(NamedTextColor.BLUE)

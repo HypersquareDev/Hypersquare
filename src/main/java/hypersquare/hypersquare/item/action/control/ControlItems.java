@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public enum ControlItems implements ActionMenuItem {
     THREAD(Material.PRISMARINE_SHARD, Colors.TEAL, "Thread Manipulation.", "<gray>Actions that%n<gray>manipulate the%n<gray>current thread.", 11)
@@ -38,7 +39,7 @@ public enum ControlItems implements ActionMenuItem {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return Hypersquare.cleanMM.deserialize(name);
     }
 }

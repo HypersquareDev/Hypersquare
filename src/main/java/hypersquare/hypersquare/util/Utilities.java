@@ -21,6 +21,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -65,7 +67,7 @@ public class Utilities {
         sendMultiMiniMessage(recipient, messages, false);
     }}
 
-    public static ItemStack formatItem(String lore, Material material, String name) {
+    public static ItemStack formatItem(@NotNull String lore, Material material, String name) {
         String[] parts = lore.split("%n");
         List<Component> list = new ArrayList<>(List.of());
         for (String part : parts) {
@@ -73,10 +75,10 @@ public class Utilities {
         }
 
         return new ItemBuilder(material)
-                .name(cleanMM.deserialize(name))
-                .lore(list)
-                .hideFlags()
-                .build();
+            .name(cleanMM.deserialize(name))
+            .lore(list)
+            .hideFlags()
+            .build();
     }
 
     public static String capitalize(String str) {
@@ -84,7 +86,7 @@ public class Utilities {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public static String capitalizeAll(String text) {
+    public static @NotNull String capitalizeAll(String text) {
         Matcher m = firstWordLetter.matcher(text);
         StringBuilder sb = new StringBuilder();
         while (m.find()) {
@@ -94,7 +96,7 @@ public class Utilities {
         return sb.toString();
     }
 
-    public static void sendInfo(CommandSender sender, Component message) {
+    public static void sendInfo(@NotNull CommandSender sender, Component message) {
         sender.sendMessage(Component.text("»")
                 .color(NamedTextColor.GREEN)
                 .decoration(TextDecoration.BOLD, true)
@@ -105,7 +107,7 @@ public class Utilities {
                 )
         );
     }
-    public static void sendRedInfo(Player player, Component message) {
+    public static void sendRedInfo(@NotNull Player player, Component message) {
         player.sendMessage(Component.text("»")
                 .color(NamedTextColor.RED)
                 .decoration(TextDecoration.BOLD, true)
@@ -117,23 +119,23 @@ public class Utilities {
         );
     }
 
-    public static void sendOpenMenuSound(Player player) {
+    public static void sendOpenMenuSound(@NotNull Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_OFF, 1, 2);
     }
 
-    public static void sendClickMenuSound(Player player) {
+    public static void sendClickMenuSound(@NotNull Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1.5f);
     }
 
-    public static void sendSecondaryMenuSound(Player player) {
+    public static void sendSecondaryMenuSound(@NotNull Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
     }
 
-    public static void sendSuccessClickMenuSound(Player player) {
+    public static void sendSuccessClickMenuSound(@NotNull Player player) {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
     }
 
-    public static boolean notWithinLocation(Location targetLocation, Location location1, Location location2) {
+    public static boolean notWithinLocation(@NotNull Location targetLocation, @NotNull Location location1, Location location2) {
         return !targetLocation.getWorld().equals(location1.getWorld()) ||
                 !targetLocation.getWorld().equals(location2.getWorld()) ||
                 !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
@@ -144,31 +146,13 @@ public class Utilities {
                 !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
-    public static boolean notWithinLocationIgnoreY(Location targetLocation, Location location1, Location location2) {
+    public static boolean notWithinLocationIgnoreY(@NotNull Location targetLocation, @NotNull Location location1, Location location2) {
         return !targetLocation.getWorld().equals(location1.getWorld()) ||
                 !targetLocation.getWorld().equals(location2.getWorld()) ||
                 !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
                 !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
                 !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
                 !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
-    }
-
-    public static Location parseLocation(String input, World world) {
-        try {
-            String[] parts = input.split(",");
-            if (parts.length == 3) {
-                double x = Double.parseDouble(parts[0].trim());
-                double y = Double.parseDouble(parts[1].trim());
-                double z = Double.parseDouble(parts[2].trim());
-
-                // You can set the world here if needed. In this example, it's set to null.
-                return new Location(world, x, y, z);
-            } else {
-                throw new IllegalArgumentException("Input should be in the format 'x, y, z'");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number format in input.");
-        }
     }
 
     public static double clamp(double value, double min, double max) {
@@ -185,7 +169,7 @@ public class Utilities {
         return optionalChunkData.orElse(null);
     }
 
-    public static void savePersistentData(World world, SlimePlugin plugin) {
+    public static void savePersistentData(@NotNull World world, @NotNull SlimePlugin plugin) {
         SlimeWorld slimeWorld = plugin.getWorld(world.getName());
         CompoundTag chunkData = getChunkData(slimeWorld);
         if(chunkData == null) return;
@@ -194,7 +178,7 @@ public class Utilities {
         slimeWorld.getExtraData().getValue().put("worldData", chunkData);
     }
 
-    public static void getWorldDataFromSlimeWorlds(World world) {
+    public static void getWorldDataFromSlimeWorlds(@NotNull World world) {
         SlimeWorld slimeWorld = Hypersquare.slimePlugin.getWorld(world.getName());
         CompoundTag chunkData = getChunkData(slimeWorld);
         if (chunkData == null) return;
@@ -202,7 +186,7 @@ public class Utilities {
         world.getPersistentDataContainer().set(HSKeys.PLOT_TYPE, PersistentDataType.STRING, pType1);
     }
 
-    public static String randomHSVHex(float minHue, float maxHue, float saturation, float value) {
+    public static @NotNull String randomHSVHex(float minHue, float maxHue, float saturation, float value) {
         Random random = new Random();
 
         // Generate a random hue within the specified range
@@ -215,7 +199,7 @@ public class Utilities {
         return colorToHex(color);
     }
 
-    public static String colorToHex(Color color) {
+    public static @NotNull String colorToHex(@NotNull Color color) {
         int red = color.getRed();
         int green = color.getGreen();
         int blue = color.getBlue();
@@ -228,25 +212,26 @@ public class Utilities {
         return "#" + redHex + greenHex + blueHex;
     }
 
-    public static String padWithZeroes(String input) {
+    @Contract(pure = true)
+    public static @NotNull String padWithZeroes(@NotNull String input) {
         if (input.length() == 1) {
             return "0" + input;
         }
         return input;
     }
 
-    public static Boolean playerOnline(String player) {
+    public static @NotNull Boolean playerOnline(String player) {
         return Bukkit.getPlayerExact(player) != null;
     }
 
-    public static void sendUsageError(CommandSender sender, String usage) {
+    public static void sendUsageError(@NotNull CommandSender sender, String usage) {
         sender.sendMessage(Component.text("Usage: ")
                 .color(NamedTextColor.DARK_AQUA)
                 .append(Component.text(usage).color(NamedTextColor.GRAY))
         );
     }
 
-    public static void resetPlayerStats(Player player, boolean clearInventory) {
+    public static void resetPlayerStats(@NotNull Player player, boolean clearInventory) {
         player.setHealth(20);
         player.setHealthScale(20);
         player.setTotalExperience(0);
@@ -267,7 +252,7 @@ public class Utilities {
         resetPlayerStats(player, true);
     }
 
-    public static void setAction(Block block, String id, Player player) {
+    public static void setAction(@NotNull Block block, String id, Player player) {
         if (block.getType() == Material.OAK_WALL_SIGN) {
             Sign sign = (Sign) block.getState();
             sign.getSide(Side.FRONT).line(1, Component.text(id).color(Colors.WHITE));
@@ -280,16 +265,7 @@ public class Utilities {
         player.closeInventory();
     }
 
-    public static String LocationToString(Location location) {
+    public static @NotNull String LocationToString(@NotNull Location location) {
         return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
-    }
-
-    public static String getKeyFromValue(HashMap<String, String> map, String targetValue) {
-        for (HashMap.Entry<String, String> entry : map.entrySet()) {
-            if (entry.getValue().equals(targetValue)) {
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 }

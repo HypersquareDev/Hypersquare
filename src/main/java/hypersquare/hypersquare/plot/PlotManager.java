@@ -43,7 +43,7 @@ public class PlotManager {
     public static String getPlotName(int plotID) {
         List<Object> plotData = getPlotData(plotID);
         if (plotData != null && !plotData.isEmpty()) {
-            return minimalMM.serialize(minimalMM.deserialize((String) plotData.get(0)));
+            return minimalMM.serialize(minimalMM.deserialize((String) plotData.getFirst()));
         }
         return null;
     }

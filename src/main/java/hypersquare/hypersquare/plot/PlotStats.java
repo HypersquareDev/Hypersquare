@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class PlotStats {
-
     private static MongoCollection<Document> plotStats;
 
     public static void init() {

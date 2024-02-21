@@ -11,14 +11,14 @@ public interface RepeatAction extends Action, CallbackAfterAction {
     @Override
     default void execute(ExecutionContext ctx, CodeSelection targetSel) {
         if (check(ctx, true)) {
-            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.containing(), targetSel));
+            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.data().actions, targetSel));
         }
     }
 
     @Override
     default void after(ExecutionContext ctx, CodeSelection targetSel) {
         if (check(ctx, false)) {
-            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.containing(), targetSel));
+            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.data().actions, targetSel));
         }
     }
 }

@@ -19,7 +19,7 @@ public interface IfAction extends Action {
             if (check(e, ctx)) filtered.add(e);
         }
         if (!filtered.isEmpty()) {
-            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.containing(), new CodeSelection(filtered)));
+            ctx.trace().pushFrame(new CodeStacktrace.Frame(ctx.data().actions, new CodeSelection(filtered)));
         }
     }
 }

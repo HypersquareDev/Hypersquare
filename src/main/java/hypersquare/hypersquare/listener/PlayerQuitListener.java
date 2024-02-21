@@ -11,10 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerQuitListener implements Listener {
     @EventHandler
-    public void playerQuitEvent(PlayerQuitEvent event) {
+    public void playerQuitEvent(@NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
         // Trigger leave and possibly game unload

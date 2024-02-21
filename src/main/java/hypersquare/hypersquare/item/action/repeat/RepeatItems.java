@@ -9,6 +9,7 @@ import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.NotNull;
 
 public enum RepeatItems implements ActionMenuItem {
 
@@ -39,7 +40,7 @@ public enum RepeatItems implements ActionMenuItem {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return Hypersquare.cleanMM.deserialize(name);
     }
 }

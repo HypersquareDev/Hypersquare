@@ -8,6 +8,7 @@ import hypersquare.hypersquare.listener.*;
 import hypersquare.hypersquare.menu.system.MenuListeners;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.plot.*;
+import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.manager.CommandManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -134,7 +135,8 @@ public final class Hypersquare extends JavaPlugin {
             new PlayerGoToSpawnEvent(),
             new DevEvents(),
             new CodePlacement(),
-            new PlayModeListener()
+            new PlayModeListener(),
+            new PlotUtilities()
         );
 
         for (Listener l : listeners) pm.registerEvents(l, this);

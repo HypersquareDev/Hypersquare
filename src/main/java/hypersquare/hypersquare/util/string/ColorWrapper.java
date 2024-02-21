@@ -1,4 +1,4 @@
-package hypersquare.hypersquare.util.color;
+package hypersquare.hypersquare.util.string;
 
 import hypersquare.hypersquare.dev.value.impl.NumberValue;
 import hypersquare.hypersquare.item.value.DisplayValue;

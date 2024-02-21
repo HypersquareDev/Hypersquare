@@ -10,6 +10,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -31,6 +32,11 @@ public interface CodeValue<T, S> {
     default Component getValueName(T value) { // Defaults to the CodeValue's name
         return getName().decoration(TextDecoration.ITALIC, false);
     }
+
+    default void onRightClick(Player player, T value) {}
+    default void onLeftClick(Player player, T value) {}
+    default void onShiftRightClick(Player player, T value) {}
+    default void onShiftLeftClick(Player player, T value) {}
 
     T fromJson(JsonObject obj);
     T defaultValue();

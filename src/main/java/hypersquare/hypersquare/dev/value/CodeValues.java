@@ -7,6 +7,7 @@ import hypersquare.hypersquare.dev.value.impl.*;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -73,6 +74,30 @@ public enum CodeValues implements CodeValue {
     @Override
     public Component getValueName(Object value) {
         return v.getValueName(value);
+    }
+
+    @Override
+    public void onRightClick(Player player, Object value) {
+        CodeValue.super.onRightClick(player, value);
+        v.onRightClick(player, value);
+    }
+
+    @Override
+    public void onShiftRightClick(Player player, Object value) {
+        CodeValue.super.onShiftRightClick(player, value);
+        v.onShiftRightClick(player, value);
+    }
+
+    @Override
+    public void onLeftClick(Player player, Object value) {
+        CodeValue.super.onLeftClick(player, value);
+        v.onLeftClick(player, value);
+    }
+
+    @Override
+    public void onShiftLeftClick(Player player, Object value) {
+        CodeValue.super.onShiftLeftClick(player, value);
+        v.onShiftLeftClick(player, value);
     }
 
     @Override

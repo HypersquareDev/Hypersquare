@@ -50,6 +50,16 @@ public class PlotUtilities {
     }
 
     /**
+     * Get executor instance from a plot id
+     *
+     * @param plotId Plot ID to get executor from
+     * @return {@link CodeExecutor} instance
+     */
+    public static CodeExecutor getExecutor(int plotId) {
+        return codeExecMap.get(plotId);
+    }
+
+    /**
      * Get executor instance from a world
      *
      * @param world World to get executor from

@@ -1,12 +1,22 @@
 package hypersquare.hypersquare.util;
 
+import hypersquare.hypersquare.listener.CodePlacement;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.plot.PlotDatabase;
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockMultiPlaceEvent;
+import org.bukkit.event.world.StructureGrowEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +24,7 @@ import java.util.UUID;
 
 import static hypersquare.hypersquare.Hypersquare.codeExecMap;
 
-public class PlotUtilities {
+public class PlotUtilities implements Listener {
     /**
      * Get plot ID from a world (supports code and build worlds)
      *

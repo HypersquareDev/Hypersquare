@@ -61,7 +61,7 @@ public class ValueCommands implements HyperCommand {
                                     ItemStack item = value.getItem(value.fromString(v, null));
                                     player.getInventory().addItem(item);
                                 } catch (Exception ignored) {
-                                    Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                    HSException.sendError(player, "Invalid input: '" + v + "'");
                                 }
                             }
                             return DONE;
@@ -81,7 +81,7 @@ public class ValueCommands implements HyperCommand {
                                             ItemStack item = value.getItem(new LocationValue.HSLocation(new DecimalNumber(Long.parseLong(v)), location.y(), location.z(), location.pitch(), location.yaw()));
                                             player.getInventory().setItemInMainHand(item);
                                         } catch (Exception ignored) {
-                                            Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                            HSException.sendError(player, "Invalid input: '" + v + "'");
                                         }
                                     }
                                 }
@@ -101,7 +101,7 @@ public class ValueCommands implements HyperCommand {
                                             ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), new DecimalNumber(Long.parseLong(v)), location.z(), location.pitch(), location.yaw()));
                                             player.getInventory().setItemInMainHand(item);
                                         } catch (Exception ignored) {
-                                            Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                            HSException.sendError(player, "Invalid input: '" + v + "'");
                                         }
                                     }
                                 }
@@ -121,7 +121,7 @@ public class ValueCommands implements HyperCommand {
                                             ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), new DecimalNumber(Long.parseLong(v)), location.pitch(), location.yaw()));
                                             player.getInventory().setItemInMainHand(item);
                                         } catch (Exception ignored) {
-                                            Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                            HSException.sendError(player, "Invalid input: '" + v + "'");
                                         }
                                     }
                                 }
@@ -141,7 +141,7 @@ public class ValueCommands implements HyperCommand {
                                             ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), location.z(), new DecimalNumber(Long.parseLong(v)), location.yaw()));
                                             player.getInventory().setItemInMainHand(item);
                                         } catch (Exception ignored) {
-                                            Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                            HSException.sendError(player, "Invalid input: '" + v + "'");
                                         }
                                     }
                                 }
@@ -161,7 +161,7 @@ public class ValueCommands implements HyperCommand {
                                             ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), location.z(), location.pitch(), new DecimalNumber(Long.parseLong(v))));
                                             player.getInventory().setItemInMainHand(item);
                                         } catch (Exception ignored) {
-                                            Utilities.sendError(player, "Invalid input: '" + v + "'");
+                                            HSException.sendError(player, "Invalid input: '" + v + "'");
                                         }
                                     }
                                 }

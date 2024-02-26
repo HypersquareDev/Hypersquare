@@ -301,11 +301,14 @@ public class DevEvents implements Listener {
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) return;
 
+        int originalAmount = item.getAmount();
+
         JsonObject json = CodeValues.getVarItemData(item);
         if (json == null) return;
 
         CodeValues value = CodeValues.getType(json);
         if (value == null) return;
+        if (value.isUnsetable()) return;
         event.setCancelled(true);
         String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
         Object v;
@@ -316,6 +319,7 @@ public class DevEvents implements Listener {
             return;
         }
         ItemStack newItem = value.getItem(v);
+        newItem.setAmount(originalAmount);
         event.getPlayer().getInventory().setItemInMainHand(newItem);
     }
 

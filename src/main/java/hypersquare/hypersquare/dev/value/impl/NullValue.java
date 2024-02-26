@@ -33,6 +33,11 @@ public class NullValue implements CodeValue<String, String> {
     }
 
     @Override
+    public boolean isUnsetable() {
+        return true;
+    }
+
+    @Override
     public List<Component> getDescription() {
         return List.of(
                 BasicComponent.gray("Represents a null value."),

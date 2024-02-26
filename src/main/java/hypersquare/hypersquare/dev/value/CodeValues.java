@@ -70,6 +70,9 @@ public enum CodeValues implements CodeValue {
     public JsonObject getVarItemData(Object type) {
         return v.getVarItemData(type);
     }
+    public boolean isUnsetable() {
+        return v.isUnsetable();
+    }
 
     @Override
     public Component getValueName(Object value) {

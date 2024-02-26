@@ -301,6 +301,8 @@ public class DevEvents implements Listener {
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) return;
 
+        int originalAmount = item.getAmount();
+
         JsonObject json = CodeValues.getVarItemData(item);
         if (json == null) return;
 
@@ -316,6 +318,7 @@ public class DevEvents implements Listener {
             return;
         }
         ItemStack newItem = value.getItem(v);
+        newItem.setAmount(originalAmount);
         event.getPlayer().getInventory().setItemInMainHand(newItem);
     }
 

@@ -29,6 +29,7 @@ public interface CodeValue<T, S> {
     List<Component> getDescription();
     List<Component> getHowToSet();
     JsonObject getVarItemData(T type);
+    default boolean isUnsetable() { return false; }
     default Component getValueName(T value) { // Defaults to the CodeValue's name
         return getName().decoration(TextDecoration.ITALIC, false);
     }

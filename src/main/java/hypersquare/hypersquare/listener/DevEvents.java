@@ -308,6 +308,7 @@ public class DevEvents implements Listener {
 
         CodeValues value = CodeValues.getType(json);
         if (value == null) return;
+        if (value.isUnsetable()) return;
         event.setCancelled(true);
         String raw = PlainTextComponentSerializer.plainText().serialize(event.message());
         Object v;

@@ -11,12 +11,16 @@ import hypersquare.hypersquare.util.color.Colors;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -44,8 +48,6 @@ public class LocationValue implements CodeValue<LocationValue.HSLocation, Locati
             BasicComponent.gray("based on world coordinates")
         );
     }
-
-
 
     @Override
     public List<Component> getHowToSet() {
@@ -84,8 +86,6 @@ public class LocationValue implements CodeValue<LocationValue.HSLocation, Locati
         return item;
     }
 
-
-
     @Override
     public JsonObject getVarItemData(HSLocation type) {
         JsonObject loc = new JsonObject();
@@ -112,7 +112,6 @@ public class LocationValue implements CodeValue<LocationValue.HSLocation, Locati
     public HSLocation defaultValue() {
         return new HSLocation(new DecimalNumber(0), new DecimalNumber(0), new DecimalNumber(0), new DecimalNumber(0), new DecimalNumber(0));
     }
-
 
     @Override
     public HSLocation fromString(String data, HSLocation previous) {
@@ -160,5 +159,40 @@ public class LocationValue implements CodeValue<LocationValue.HSLocation, Locati
         return null;
     }
 
-    public record HSLocation(DecimalNumber x, DecimalNumber y, DecimalNumber z, DecimalNumber pitch, DecimalNumber yaw) {}
+    public record HSLocation(DecimalNumber x, DecimalNumber y, DecimalNumber z, DecimalNumber pitch, DecimalNumber yaw) {
+        public HSLocation shift(HSDirection d, double amount) {
+            Vec3i dirV = d.mc.getNormal();
+            return new HSLocation(
+                x.add(new DecimalNumber(amount * (double)dirV.getX())),
+                y.add(new DecimalNumber(amount * (double)dirV.getY())),
+                z.add(new DecimalNumber(amount * (double)dirV.getZ())),
+                pitch, yaw
+            );
+        }
+    }
+
+    public enum HSDirection {
+        NORTH(Direction.NORTH), EAST(Direction.EAST), SOUTH(Direction.SOUTH), WEST(Direction.WEST);
+
+        public final Direction mc;
+        HSDirection(Direction mc) {
+            this.mc = mc;
+        }
+    }
+
+    public enum HSAxis {
+        X, Y, Z, PITCH, YAW;
+
+        HSAxis() {}
+
+        public HSLocation set(HSLocation loc, DecimalNumber val) {
+            return switch (this) {
+                case X -> new HSLocation(val, loc.y, loc.z, loc.pitch, loc.yaw);
+                case Y -> new HSLocation(loc.x, val, loc.z, loc.pitch, loc.yaw);
+                case Z -> new HSLocation(loc.x, loc.y, val, loc.pitch, loc.yaw);
+                case PITCH -> new HSLocation(loc.x, loc.y, loc.z, val, loc.yaw);
+                case YAW -> new HSLocation(loc.x, loc.y, loc.z, loc.pitch, val);
+            };
+        }
+    }
 }

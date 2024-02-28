@@ -93,16 +93,16 @@ public class PlayerDatabase {
     public static void updateLocalPlayerData(Player player) {
         Thread thread = new Thread(() -> {
             HashMap<String, Integer> playerData = new HashMap<>();
-            playerData.put("usedBasic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "basic"));
-            playerData.put("usedLarge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "large"));
-            playerData.put("usedhuge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "huge"));
-            playerData.put("usedmassive", PlayerDatabase.getUsedPlots(player.getUniqueId(), "massive"));
-            playerData.put("usedGigantic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "gigantic"));
-            playerData.put("maxBasic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "basic"));
-            playerData.put("maxLarge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "large"));
-            playerData.put("maxhuge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "huge"));
-            playerData.put("maxmassive", PlayerDatabase.getMaxPlots(player.getUniqueId(), "massive"));
-            playerData.put("maxGigantic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "gigantic"));
+            playerData.put("used_basic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "basic"));
+            playerData.put("used_large", PlayerDatabase.getUsedPlots(player.getUniqueId(), "large"));
+            playerData.put("used_huge", PlayerDatabase.getUsedPlots(player.getUniqueId(), "huge"));
+            playerData.put("used_massive", PlayerDatabase.getUsedPlots(player.getUniqueId(), "massive"));
+            playerData.put("used_gigantic", PlayerDatabase.getUsedPlots(player.getUniqueId(), "gigantic"));
+            playerData.put("max_basic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "basic"));
+            playerData.put("max_large", PlayerDatabase.getMaxPlots(player.getUniqueId(), "large"));
+            playerData.put("max_huge", PlayerDatabase.getMaxPlots(player.getUniqueId(), "huge"));
+            playerData.put("max_massive", PlayerDatabase.getMaxPlots(player.getUniqueId(), "massive"));
+            playerData.put("max_gigantic", PlayerDatabase.getMaxPlots(player.getUniqueId(), "gigantic"));
             Hypersquare.localPlayerData.put(player.getUniqueId(), playerData);
         });
         thread.start();

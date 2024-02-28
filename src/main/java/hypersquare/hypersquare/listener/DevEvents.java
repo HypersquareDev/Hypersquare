@@ -34,6 +34,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,66 +50,79 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DevEvents implements Listener {
 
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null) {
+    private static void handleCodeblockRClick(@NotNull Block clickedBlock, @NotNull PlayerInteractEvent event) {
+        event.setCancelled(true);
+        Location codeblockLocation = clickedBlock.getType() == Material.OAK_WALL_SIGN ?
+            clickedBlock.getLocation().clone().add(1, 0, 0) : clickedBlock.getLocation();
+        CodeFile codeFile = new CodeFile(event.getPlayer());
+        CodeActionData actionData = CodeFileHelper.getActionAt(codeblockLocation, codeFile.getCodeData());
+        CodeLineData line = codeFile.getCodeData().codelines.get(CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData()));
+        String id = actionData == null ? line.type : actionData.codeblock;
+        Event hsEvent = Events.getEvent(line.event);
+
+        // TODO: if (line.type.equals("func") || line.type.equals("proc")) { find all sources of the func/proc being called }
+
+        if (event.getPlayer().isSneaking() && actionData != null && hsEvent != null) {
+            ArrayList<Target> targets = new ArrayList<>(Arrays.stream(hsEvent.compatibleTargets()).filter(t -> {
+                TargetType acceptedType = TargetType.ofCodeblock(actionData.codeblock);
+                if (acceptedType == null) return false;
+                return acceptedType == t.targetType;
+            }).toList());
+            ActionTargetsMenu.open(event.getPlayer(), targets, clickedBlock.getLocation());
+        } else CodeblockMenu.open(id, event.getPlayer(), clickedBlock.getLocation());
+        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
+    }
+
+    private static void handleBarrelRClick(@NotNull Block clickedBlock, @NotNull PlayerInteractEvent event) {
+        event.setCancelled(true);
+        CodeData codeData = new CodeFile(event.getPlayer()).getCodeData();
+        CodeActionData actionData = CodeFileHelper.getActionAt(clickedBlock.getLocation().subtract(0, 1, 0), codeData);
+        if (actionData == null) {
+            Utilities.sendRedInfo(event.getPlayer(), Component.text("Couldn't find this action in the plot (corrupted plot?)"));
             return;
         }
-        if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK && event.getHand() == EquipmentSlot.HAND) {
-
-            if (event.getClickedBlock().getLocation().getX() > -0) return;
-
-            Material clickedMaterial = event.getClickedBlock().getType();
-            if (clickedMaterial == Material.OAK_WALL_SIGN || CodeBlocks.getByMaterial(clickedMaterial) != null) {
-                event.setCancelled(true);
-                Location codeblockLocation = clickedMaterial == Material.OAK_WALL_SIGN ? event.getClickedBlock().getLocation().clone().add(1, 0, 0) : event.getClickedBlock().getLocation();
-
-                CodeFile codeFile = new CodeFile(event.getPlayer());
-                CodeActionData actionData = CodeFileHelper.getActionAt(codeblockLocation, codeFile.getCodeData());
-                CodeLineData line = codeFile.getCodeData().codelines.get(CodeFileHelper.getCodelineListIndex(codeblockLocation, codeFile.getCodeData()));
-                String id = actionData == null ? line.type : actionData.codeblock;
-                Event hsEvent = Events.getEvent(line.event);
-
-                // TODO: if (line.type.equals("func") || line.type.equals("proc")) { find all sources of the func/proc being called }
-
-                if (event.getPlayer().isSneaking() && actionData != null && hsEvent != null) {
-                    ArrayList<Target> targets = new ArrayList<>(Arrays.asList(hsEvent.compatibleTargets()).stream().filter(t -> {
-                        TargetType acceptedType = TargetType.ofCodeblock(actionData.codeblock);
-                        if (acceptedType == null) return false;
-                        return acceptedType == t.targetType;
-                    }).toList());
-                    ActionTargetsMenu.open(event.getPlayer(), targets, event.getClickedBlock().getLocation());
-                } else CodeblockMenu.open(id, event.getPlayer(), event.getClickedBlock().getLocation());
-                event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1.75f);
-            } else if (event.getClickedBlock().getType() == Material.BARREL) {
-                event.setCancelled(true);
-                CodeData codeData = new CodeFile(event.getPlayer()).getCodeData();
-
-                CodeActionData actionData = CodeFileHelper.getActionAt(event.getClickedBlock().getLocation().subtract(0, 1, 0), codeData);
-                if (actionData == null) {
-                    Utilities.sendRedInfo(event.getPlayer(), Component.text("Couldn't find this action in the plot (corrupted plot?)"));
-                    return;
-                }
-                Action action = Actions.getAction(actionData.action, actionData.codeblock);
-                if (action == null) {
-                    HSException.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
-                    throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
-                }
-                event.getPlayer().playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_BARREL_OPEN, 0.75f, 1);
-                action.actionMenu(actionData).open(event.getPlayer(), event.getClickedBlock().getLocation().subtract(0, 1, 0));
-            }
+        Action action = Actions.getAction(actionData.action, actionData.codeblock);
+        if (action == null) {
+            HSException.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
+            throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
         }
-
+        event.getPlayer().playSound(clickedBlock.getLocation(), Sound.BLOCK_BARREL_OPEN, 0.75f, 1);
+        action.actionMenu(actionData).open(event.getPlayer(), clickedBlock.getLocation().subtract(0, 1, 0));
     }
 
     @EventHandler
-    public void onBreakBlock(BlockBreakEvent event) {
+    public void onInteract(@NotNull PlayerInteractEvent event) {
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null) return;
+        switch (event.getAction()) {
+            case RIGHT_CLICK_BLOCK -> {
+                if (event.getHand() != EquipmentSlot.HAND || clickedBlock.getLocation().getX() > -0) return;
+                Material clickedMaterial = clickedBlock.getType();
+                if (clickedMaterial == Material.AIR) return;
+                if (clickedMaterial == Material.OAK_WALL_SIGN || CodeBlocks.getByMaterial(clickedMaterial) != null) handleCodeblockRClick(clickedBlock, event);
+                else if (clickedBlock.getType() == Material.BARREL) handleBarrelRClick(clickedBlock, event);
+            }
+            case RIGHT_CLICK_AIR -> {
+                if (event.getHand() != EquipmentSlot.HAND) return;
+                ItemStack item = event.getItem();
+                if (item == null) return;
+                JsonObject varItem = CodeValues.getVarItemData(item);
+                CodeValues v = CodeValues.getType(varItem);
+                if (v == null) return;
+                v.onRightClick(event.getPlayer(), v.fromJson(varItem));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBreakBlock(@NotNull BlockBreakEvent event) {
         Player player = event.getPlayer();
         Location brokenLocation = event.getBlock().getLocation();
         Material brokenMaterial = event.getBlock().getType();
@@ -143,31 +157,30 @@ public class DevEvents implements Listener {
     }
 
     @EventHandler
-    public void onExplode(EntityExplodeEvent event) {
+    public void onExplode(@NotNull EntityExplodeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
+    public void onDamage(@NotNull EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player player) {
             if (!Hypersquare.mode.get(player).equals("playing")) event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onExplode(BlockExplodeEvent event) {
+    public void onExplode(@NotNull BlockExplodeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onRClick(PlayerInteractEvent event) {
+    public void onRightClick(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (!Hypersquare.mode.get(player).equals("coding") && !Hypersquare.mode.get(player).equals("building")) return;
+        ItemStack eventItem = event.getItem();
+        if (eventItem == null || eventItem.getType() == Material.AIR) return;
 
         if (event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR) {
-            ItemStack eventItem = event.getItem();
-            if (eventItem == null) return;
-
             if (eventItem.isSimilar(CodeItems.BLOCKS_SHORTCUT)) {
                 event.setCancelled(true);
 
@@ -194,6 +207,7 @@ public class DevEvents implements Listener {
                 inv.setItem(22, CodeItems.ENTITY_ACTION_ITEM);
                 inv.setItem(23, CodeItems.FUNCTION_ITEM);
                 inv.setItem(24, CodeItems.PROCESS_ITEM);
+                inv.setItem(26, CodeItems.DEV_ITEM);
                 player.openInventory(inv);
             }
             if (eventItem.isSimilar(CodeItems.VALUES_INGOT)) {
@@ -232,7 +246,7 @@ public class DevEvents implements Listener {
     }
 
     @EventHandler
-    public void onSpread(BlockFromToEvent event) {
+    public void onSpread(@NotNull BlockFromToEvent event) {
         commonVars();
         String plotType = event.getToBlock().getWorld().getPersistentDataContainer().get(HSKeys.PLOT_TYPE, PersistentDataType.STRING);
         if (plotType == null)
@@ -274,29 +288,28 @@ public class DevEvents implements Listener {
     }
 
     @EventHandler
-    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+    public void onBlockPistonExtend(@NotNull BlockPistonExtendEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+    public void onBlockPistonRetract(@NotNull BlockPistonRetractEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) {
-            event.setCancelled(true);
-        }
+    public void creatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) event.setCancelled(true);
     }
 
     @EventHandler
-    public void onDropItem(PlayerDropItemEvent event) {
+    public void onDropItem(@NotNull PlayerDropItemEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         event.setCancelled(true);
     }
+
     @EventHandler
-    public void onChat(AsyncChatEvent event) {
+    public void onChat(@NotNull AsyncChatEvent event) {
         if (!Hypersquare.mode.get(event.getPlayer()).equals("coding")) return;
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) return;
@@ -324,7 +337,7 @@ public class DevEvents implements Listener {
     }
 
     @EventHandler
-    public void onSwapHands(PlayerSwapHandItemsEvent event) {
+    public void onSwapHands(@NotNull PlayerSwapHandItemsEvent event) {
         String playerMode = Hypersquare.mode.get(event.getPlayer());
         if (!(playerMode.equals("coding") || playerMode.equals("building"))) return;
 

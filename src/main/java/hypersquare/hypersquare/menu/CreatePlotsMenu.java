@@ -20,16 +20,16 @@ public class CreatePlotsMenu {
 
         Menu menu = new Menu(Component.text("Choose a plot size"), 1);
         
-        int usedBasic = playerData.get("usedBasic");
-        int maxBasic = playerData.get("maxBasic");
-        int usedLarge = playerData.get("usedLarge");
-        int maxLarge = playerData.get("maxLarge");
-        int usedHuge = playerData.get("usedHuge");
-        int maxHuge = playerData.get("maxHuge");
-        int usedMassive = playerData.get("usedMassive");
-        int maxMassive = playerData.get("maxMassive");
-        int usedGigantic = playerData.get("usedGigantic");
-        int maxGigantic = playerData.get("maxGigantic");
+        int usedBasic = playerData.get("used_basic");
+        int maxBasic = playerData.get("max_basic");
+        int usedLarge = playerData.get("used_large");
+        int maxLarge = playerData.get("max_large");
+        int usedHuge = playerData.get("used_huge");
+        int maxHuge = playerData.get("max_huge");
+        int usedMassive = playerData.get("used_massive");
+        int maxMassive = playerData.get("max_massive");
+        int usedGigantic = playerData.get("used_gigantic");
+        int maxGigantic = playerData.get("max_gigantic");
 
         MenuItem basic = new MenuItem(CreatePlotMenuItems.BASIC_PLOT.build(usedBasic, maxBasic));
         MenuItem large = new MenuItem(CreatePlotMenuItems.LARGE_PLOT.build(usedLarge, maxLarge));

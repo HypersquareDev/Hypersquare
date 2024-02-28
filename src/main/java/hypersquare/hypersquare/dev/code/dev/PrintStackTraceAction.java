@@ -1,31 +1,24 @@
-package hypersquare.hypersquare.dev.code.player.action;
+package hypersquare.hypersquare.dev.code.dev;
 
 import hypersquare.hypersquare.dev.ActionTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.item.action.player.PlayerActionItems;
+import hypersquare.hypersquare.item.action.SpecialActionType;
 import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerCreativeModeAction implements Action {
+import java.util.List;
 
-    @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
-        for (Player p : targetSel.players()) {
-            p.setGameMode(GameMode.CREATIVE);
-        }
-    }
-
+public class PrintStackTraceAction implements Action {
     @Override
     public ActionParameter[] parameters() {
         return new ActionParameter[]{};
@@ -33,42 +26,56 @@ public class PlayerCreativeModeAction implements Action {
 
     @Override
     public ActionTag[] tags() {
-        return new ActionTag[] {};
+        return new ActionTag[]{};
+    }
+
+    @Override
+    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+        List<Component> stack = HSException.getStackTrace(new RuntimeException("<PrintStackTraceAction>"));
+        for (Player player : targetSel.players()) {
+            for (Component line : stack) {
+                player.sendMessage(line);
+            }
+        }
     }
 
     @Override
     public String getId() {
-        return "creative_mode";
+        return "print_stack_trace";
     }
+
     @Override
     public String getCodeblockId() {
-        return "player_action";
+        return "dev";
     }
 
     @Override
     public String getSignName() {
-        return "CreativeMode";
+        return "PrintStackTrace";
     }
 
     @Override
     public String getName() {
-        return "Set to Creative Mode";
+        return "Print Stack Trace";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.SETTINGS_CATEGORY;
+        return null;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.GRASS_BLOCK)
-                .setName(Component.text("Set to Creative Mode").color(Colors.LIME))
-                .setDescription(Component.text("Sets a player's game"),
-                                Component.text("mode to Creative."))
-                .setParameters(parameters())
-                .build();
+            .setName(Component.text(getName()).color(Colors.ORANGE))
+            .setMaterial(Material.ORANGE_CANDLE)
+            .setDescription(
+                Component.text("Prints the current stack trace"),
+                Component.text("to the selected players.")
+            )
+            .setSpecialActionType(SpecialActionType.DEV)
+            .setEnchanted(true)
+            .build();
     }
 
     @Override

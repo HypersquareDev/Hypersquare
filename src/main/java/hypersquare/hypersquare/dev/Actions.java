@@ -3,6 +3,7 @@ package hypersquare.hypersquare.dev;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.code.control.WaitAction;
+import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
@@ -20,15 +21,16 @@ import java.util.Objects;
 
 public enum Actions implements Action {
     EMPTY(new EmptyAction()),
+    PRINT_STACKTRACE(new PrintStackTraceAction()),
 
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
-
     PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
-    CONTROL_WAIT(new WaitAction())
+    CONTROL_WAIT(new WaitAction()),
     ;
 
     public final Action a;

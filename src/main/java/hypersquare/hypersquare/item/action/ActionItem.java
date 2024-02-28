@@ -24,6 +24,7 @@ public class ActionItem {
     int tags;
     List<Component[]> additionalInfo = List.of();
     boolean enchanted;
+    SpecialActionType specialActionType;
 
     public ActionItem setMaterial(Material material) {
         this.material = material;
@@ -72,6 +73,11 @@ public class ActionItem {
         return this;
     }
 
+    public ActionItem setSpecialActionType(SpecialActionType specialActionType) {
+        this.specialActionType = specialActionType;
+        return this;
+    }
+
     public ItemStack build() {
         ItemStack actionItem = new ItemStack(material);
         ItemMeta meta = actionItem.getItemMeta();
@@ -79,6 +85,11 @@ public class ActionItem {
 
         //Name
         meta.displayName(name.decoration(TextDecoration.ITALIC, false));
+
+        // Special Action Type
+        if (specialActionType != null) {
+            lore.add(specialActionType.getComp());
+        }
 
         // Description
         for (Component part : description) {

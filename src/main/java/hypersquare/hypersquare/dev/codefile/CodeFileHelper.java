@@ -14,17 +14,19 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Piston;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CodeFileHelper {
-    private static int getCodelineWorldIndex(Location location) {
+    private static int getCodelineWorldIndex(@NotNull Location location) {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
 
-    public static int getCodelineListIndex(Location location, CodeData plotCode) {
+    public static int getCodelineListIndex(Location location, @NotNull CodeData plotCode) {
         int position = getCodelineWorldIndex(location);
 
         for (CodeLineData element : plotCode.codelines) {
@@ -36,13 +38,12 @@ public class CodeFileHelper {
     /**
      * Set index to -1 for the codeblock to be appended instead of inserted.
      */
-    public static CodeData addCodeblock(Location location, CodeBlocks codeblock, CodeFile code) {
-
+    public static CodeData addCodeblock(Location location, @NotNull CodeBlocks codeblock, @NotNull CodeFile code) {
         CodeData plotCode = code.getCodeData();
 
-        if (codeblock.isThreadStarter()) {
+        if (codeblock.isThreadStarter) {
             CodeLineData event = new CodeLineData();
-            event.type = codeblock.id();
+            event.type = codeblock.id;
             event.event = "empty";
             event.position = getCodelineWorldIndex(location);
             plotCode.codelines.add(event);
@@ -59,8 +60,8 @@ public class CodeFileHelper {
         }
 
         CodeActionData action = new CodeActionData();
-        action.codeblock = codeblock.id();
-        action.action = "empty";
+        action.codeblock = codeblock.id;
+        action.action = codeblock.defaultAction.isEmpty() ? "empty" : codeblock.defaultAction;
 
         if (positions.size() == 1) {
             codeline.actions.add(positions.get(0), action);
@@ -74,12 +75,10 @@ public class CodeFileHelper {
 
         parent.actions.add(positions.get(positions.size() - 1), action);
 
-        if (!codeblock.getDefaultAction().isEmpty())
-            updateAction(location, code, Actions.getAction(codeblock.getDefaultAction(), codeblock.id()));
         return plotCode;
     }
 
-    public static CodeData removeCodeBlock(Location location, CodeFile code, boolean breakAll) {
+    public static CodeData removeCodeBlock(Location location, @NotNull CodeFile code, boolean breakAll) {
         CodeData plotCode = code.getCodeData();
 
         int codelineListIndex = getCodelineListIndex(location, plotCode);
@@ -118,7 +117,7 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static void updateAction(Location location, CodeFile code, Action newAction) {
+    public static void updateAction(Location location, @NotNull CodeFile code, Action newAction) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -154,7 +153,7 @@ public class CodeFileHelper {
         code.setCode(plotCode.toJson().toString());
     }
 
-    public static void updateEvent(Location location, CodeFile code, Event newEvent) {
+    public static void updateEvent(Location location, @NotNull CodeFile code, Event newEvent) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -175,7 +174,7 @@ public class CodeFileHelper {
         code.setCode(plotCode.toJson().toString());
     }
 
-    public static void updateTarget(Location location, CodeFile code, Target newTarget) {
+    public static void updateTarget(Location location, @NotNull CodeFile code, Target newTarget) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -211,7 +210,7 @@ public class CodeFileHelper {
      * @return List of integers representing the path to the codeblock,
      * if the codeblock is the thread starter it returns an empty list
      */
-    public static List<Integer> findCodeIndex(Location queryLoc) throws Exception {
+    public static List<Integer> findCodeIndex(@NotNull Location queryLoc) throws Exception {
         List<Integer> trace = new ArrayList<>();
         trace.add(0);
 
@@ -231,7 +230,7 @@ public class CodeFileHelper {
 
             if (location.getBlock().getType() != Material.PISTON && location.getBlock().getType() != Material.STICKY_PISTON) {
                 CodeBlocks codeblock = CodeBlocks.getByMaterial(location.getBlock().getType());
-                if (codeblock != null && !(codeblock.hasBrackets() || codeblock.isThreadStarter())) {
+                if (codeblock != null && !(codeblock.hasBrackets || codeblock.isThreadStarter)) {
                     trace.set(trace.size() - 1, trace.get(trace.size() - 1) + 1); // ^ Skip the bracket codeblock or the thread starter
                 }
                 location.add(0, 0, 1);
@@ -253,7 +252,7 @@ public class CodeFileHelper {
         throw new Exception("Somehow never reached the query location");
     }
 
-    public static CodeActionData getActionAt(Location location, CodeData data) {
+    public static @Nullable CodeActionData getActionAt(Location location, CodeData data) {
         int codelineIndex = CodeFileHelper.getCodelineListIndex(location, data);
         if (codelineIndex < 0 || codelineIndex >= data.codelines.size()) return null;
         CodeLineData line = data.codelines.get(codelineIndex);

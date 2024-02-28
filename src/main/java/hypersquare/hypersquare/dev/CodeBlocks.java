@@ -2,6 +2,7 @@ package hypersquare.hypersquare.dev;
 
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -24,56 +25,33 @@ public enum CodeBlocks {
     PURPUR_BLOCK(Material.PURPUR_BLOCK, "SELECT OBJECT", "select_object", true, false),
     PRISMARINE(Material.PRISMARINE, "REPEAT", "repeat", true, true),
     END_STONE(Material.END_STONE, "ELSE", "else", false, true, false, false),
-    EMPTY(Material.AIR, "empty");
+    DIORITE(Material.DIORITE, "DEV", "dev", false, false, false, true),
+    EMPTY(Material.AIR, "empty"),
+    ;
 
-    @NotNull
-    final Material material;
-    @NotNull
-    final String name;
-    @NotNull
-    final String id;
-    @NotNull
-    final String defaultAction;
-    final boolean isThreadStarter;
-    final boolean hasBarrel;
-    final boolean hasBrackets;
+    public final Material material;
+    public final String name;
+    public final String id;
+    public final String defaultAction;
+    public final boolean isThreadStarter;
+    public final boolean hasBarrel;
+    public final boolean hasBrackets;
     public final boolean hasActions;
-    @NotNull
 
+    CodeBlocks(Material material, String id) {
+        this(material, id, id, false, false, false, false, "");
+    }
     CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets) {
-        this.material = material;
-        this.name = name;
-        this.id = id;
-        this.hasBarrel = hasBarrel;
-        this.hasBrackets = hasBrackets;
-        this.isThreadStarter = false;
-        this.hasActions = true;
-        this.defaultAction = "";
+        this(material, name, id, hasBarrel, hasBrackets, false, true, "");
     }
 
     CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter) {
-        this.material = material;
-        this.name = name;
-        this.id = id;
-        this.hasBarrel = hasBarrel;
-        this.hasBrackets = hasBrackets;
-        this.isThreadStarter = isThreadStarter;
-        this.hasActions = true;
-        this.defaultAction = "";
+        this(material, name, id, hasBarrel, hasBrackets, isThreadStarter, true, "");
     }
-
     CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter, boolean hasActions) {
-        this.material = material;
-        this.name = name;
-        this.id = id;
-        this.hasBarrel = hasBarrel;
-        this.hasBrackets = hasBrackets;
-        this.isThreadStarter = isThreadStarter;
-        this.hasActions = hasActions;
-        this.defaultAction = "";
+        this(material, name, id, hasBarrel, hasBrackets, isThreadStarter, hasActions, "");
     }
-
-    CodeBlocks(Material material, String name, String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter, boolean hasActions, String defaultAction) {
+    CodeBlocks(@NotNull Material material, @NotNull String name, @NotNull String id, boolean hasBarrel, boolean hasBrackets, boolean isThreadStarter, boolean hasActions, @NotNull String defaultAction) {
         this.material = material;
         this.name = name;
         this.id = id;
@@ -84,70 +62,25 @@ public enum CodeBlocks {
         this.defaultAction = defaultAction;
     }
 
-
-    CodeBlocks(Material material, String id) {
-        this.material = material;
-        this.id = id;
-        this.name = id;
-        this.hasBarrel = false;
-        this.hasBrackets = false;
-        this.isThreadStarter = false;
-        this.hasActions = false;
-        this.defaultAction = "";
-    }
-
-    public static CodeBlocks getByMaterial(Material material) {
+    public static @Nullable CodeBlocks getByMaterial(Material material) {
+        System.out.println("Looking for codeblock with material " + material);
         for (CodeBlocks codeBlock : CodeBlocks.values()) {
-            if (codeBlock.material == material) {
-                return codeBlock;
-            }
+            if (codeBlock.material == material) return codeBlock;
         }
         return null;
     }
 
-    public static CodeBlocks getById(String id) {
+    public static @Nullable CodeBlocks getById(String id) {
         for (CodeBlocks codeBlock : CodeBlocks.values()) {
-            if (Objects.equals(codeBlock.id, id)) {
-                return codeBlock;
-            }
+            if (Objects.equals(codeBlock.id, id)) return codeBlock;
         }
         return null;
     }
 
-    public static CodeBlocks getByName(String name) {
+    public static @Nullable CodeBlocks getByName(String name) {
         for (CodeBlocks codeBlock : CodeBlocks.values()) {
-            if (Objects.equals(codeBlock.name, name)) {
-                return codeBlock;
-            }
+            if (Objects.equals(codeBlock.name, name)) return codeBlock;
         }
         return null;
-    }
-
-    public Material material() {
-        return material;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String id() {
-        return id;
-    }
-
-    public String getDefaultAction() {
-        return defaultAction;
-    }
-
-    public boolean isThreadStarter() {
-        return isThreadStarter;
-    }
-
-    public boolean hasBarrel() {
-        return hasBarrel;
-    }
-
-    public boolean hasBrackets() {
-        return hasBrackets;
     }
 }

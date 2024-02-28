@@ -46,7 +46,11 @@ public class CodeBlockManagement {
 
     @Contract("_ -> param1")
     public static Location findCodeEnd(@NotNull Location location) {
-        while (location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR || location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR || location.clone().getBlock().getType() != Material.AIR) {
+        while (
+            location.clone().add(0, 0, 1).getBlock().getType() != Material.AIR ||
+            location.clone().add(0, 0, 2).getBlock().getType() != Material.AIR ||
+            location.clone().getBlock().getType() != Material.AIR
+        ) {
             location.add(0, 0, 1);
         }
         return location;
@@ -56,11 +60,14 @@ public class CodeBlockManagement {
         Location endLoc = findCodeEnd(copyLoc.clone()).add(-1, 1, 0);
         World world = FaweAPI.getWorld(copyLoc.getWorld().getName());
 
-        Region region = new CuboidRegion(world, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ()), BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ()));
+        Region region = new CuboidRegion(
+            world,
+            BlockVector3.at(copyLoc.getBlockX(),copyLoc.getBlockY(),copyLoc.getBlockZ()),
+            BlockVector3.at(endLoc.getBlockX(), endLoc.getBlockY(), endLoc.getBlockZ())
+        );
         BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
-            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-                    editSession, region, clipboard, region.getMinimumPoint());
+            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
             Operations.complete(forwardExtentCopy);
         }
 

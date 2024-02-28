@@ -2,175 +2,134 @@ package hypersquare.hypersquare.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.value.CodeValue;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.LocationValue;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
-import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.play.error.HSException;
 import net.minecraft.commands.CommandSourceStack;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ValueCommands implements HyperCommand {
 
-    @Override
-    public void register(CommandDispatcher<CommandSourceStack> cd) {
-        register(cd, CodeValues.NULL, "null", "nul");
-        register(cd, CodeValues.STRING, "string", "str");
-        register(cd, CodeValues.TEXT, "text", "txt");
-        register(cd, CodeValues.NUMBER, "number", "num");
-        register(cd, CodeValues.VARIABLE, "variable", "var");
-        registerLocation(cd, CodeValues.LOCATION, "location", "loc");
+    private final static RequiredArgumentBuilder<CommandSourceStack, String> valueArg = RequiredArgumentBuilder.argument("value", StringArgumentType.greedyString());
+
+    private static String getValArg(CommandContext<?> ctx) {
+        return StringArgumentType.getString(ctx, "value");
     }
 
-    private void register(CommandDispatcher<CommandSourceStack> cd, CodeValues value, String... cmds) {
+    private static int exec(@NotNull CommandContext<CommandSourceStack> ctx, Consumer<Player> x) {
+        if (ctx.getSource().getBukkitSender() instanceof Player player) {
+            if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
+            x.accept(player);
+        }
+        return DONE;
+    }
+
+    private static int execValArg(@NotNull CommandContext<CommandSourceStack> ctx, BiConsumer<Player, String> x) {
+        return exec(ctx, p -> {
+            String v = getValArg(ctx);
+            try {
+                x.accept(p, v);
+            } catch (Exception ignored) {
+                HSException.sendError(p, "Invalid input: '" + v + "'");
+            }
+        });
+    }
+
+    @Override
+    public void register(CommandDispatcher<CommandSourceStack> cd) {
+        register(cd, false, CodeValues.NULL, "null", "nul");
+        register(cd, true, CodeValues.STRING, "string", "str");
+        register(cd, true, CodeValues.TEXT, "text", "txt");
+        register(cd, true, CodeValues.NUMBER, "number", "num");
+        register(cd, true, CodeValues.VARIABLE, "variable", "var");
+        registerLocation(cd, "location", "loc");
+    }
+
+    private void register(CommandDispatcher<CommandSourceStack> cd, boolean useValArg, CodeValues value, String @NotNull ... cmds) {
         for (String alias : cmds) {
-            cd.register(literal(alias)
-                .then(argument("value", StringArgumentType.greedyString())
-                    .executes(ctx -> {
-                        if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                            if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                            String v = StringArgumentType.getString(ctx, "value");
-                            try {
-                                ItemStack item = value.getItem(value.fromString(v, null));
-                                player.getInventory().addItem(item);
-                            } catch (Exception ignored) {
-                                HSException.sendError(player, "Invalid input: '" + v + "'");
-                            }
-                        }
-                        return DONE;
-                    })
-                )
-            );
+            var literal = literal(alias);
+            if (useValArg) literal = literal.then(valueArg.executes(ctx -> execValArg(ctx, (p, v) -> {
+                ItemStack item;
+                try {
+                    item = value.getItem(value.fromString(v, null));
+                } catch (Exception ignored) {
+                    HSException.sendError(p, "Invalid input: '" + v + "'");
+                    return;
+                }
+                p.getInventory().addItem(item);
+            })));
+            else
+                literal = literal.executes(ctx -> exec(ctx, p -> p.getInventory().addItem(value.getItem(value.defaultValue()))));
+            cd.register(literal);
         }
     }
 
-    private void registerLocation(CommandDispatcher<CommandSourceStack> cd, CodeValues value, String... cmds) {
+    private void registerLocation(CommandDispatcher<CommandSourceStack> cd, String @NotNull ... cmds) {
         for (String alias : cmds) {
             cd.register(literal(alias)
                 .then(literal("get")
-                    .then(argument("value", StringArgumentType.greedyString())
-                        .executes(ctx -> {
-                            if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                String v = StringArgumentType.getString(ctx, "value");
-                                try {
-                                    ItemStack item = value.getItem(value.fromString(v, null));
-                                    player.getInventory().addItem(item);
-                                } catch (Exception ignored) {
-                                    HSException.sendError(player, "Invalid input: '" + v + "'");
-                                }
-                            }
-                            return DONE;
-                        })
+                    .then(valueArg
+                        .executes(ctx -> execValArg(ctx, (p, v) -> {
+                            ItemStack item = CodeValues.LOCATION.getItem(CodeValues.LOCATION.fromString(v, null));
+                            p.getInventory().addItem(item);
+                        }))
                     )
                 )
                 .then(literal("set")
                     .then(literal("x")
-                        .then(argument("value", StringArgumentType.greedyString())
-                            .executes(ctx -> {
-                                if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                    if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                    if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                        String v = StringArgumentType.getString(ctx, "value");
-                                        LocationValue.HSLocation location = (LocationValue.HSLocation) value.fromItem(player.getInventory().getItemInMainHand());
-                                        try {
-                                            ItemStack item = value.getItem(new LocationValue.HSLocation(new DecimalNumber(Long.parseLong(v)), location.y(), location.z(), location.pitch(), location.yaw()));
-                                            player.getInventory().setItemInMainHand(item);
-                                        } catch (Exception ignored) {
-                                            HSException.sendError(player, "Invalid input: '" + v + "'");
-                                        }
-                                    }
-                                }
-                                return DONE;
-                            })
+                        .then(valueArg
+                            .executes(ctx -> execValArg(ctx, (p, v) -> {
+                                LocationValue.HSLocation location = (LocationValue.HSLocation) CodeValues.LOCATION.fromItem(p.getInventory().getItemInMainHand());
+                                ItemStack item = CodeValues.LOCATION.getItem(LocationValue.HSAxis.X.set(location, new DecimalNumber(Double.parseDouble(v))));
+                                p.getInventory().setItemInMainHand(item);
+                            }))
                         )
                     )
                     .then(literal("y")
-                        .then(argument("value", StringArgumentType.greedyString())
-                            .executes(ctx -> {
-                                if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                    if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                    if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                        String v = StringArgumentType.getString(ctx, "value");
-                                        LocationValue.HSLocation location = (LocationValue.HSLocation) value.fromItem(player.getInventory().getItemInMainHand());
-                                        try {
-                                            ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), new DecimalNumber(Long.parseLong(v)), location.z(), location.pitch(), location.yaw()));
-                                            player.getInventory().setItemInMainHand(item);
-                                        } catch (Exception ignored) {
-                                            HSException.sendError(player, "Invalid input: '" + v + "'");
-                                        }
-                                    }
-                                }
-                                return DONE;
-                            })
+                        .then(valueArg
+                            .executes(ctx -> execValArg(ctx, (p, v) -> {
+                                LocationValue.HSLocation location = (LocationValue.HSLocation) CodeValues.LOCATION.fromItem(p.getInventory().getItemInMainHand());
+                                ItemStack item = CodeValues.LOCATION.getItem(LocationValue.HSAxis.Y.set(location, new DecimalNumber(Double.parseDouble(v))));
+                                p.getInventory().setItemInMainHand(item);
+                            }))
                         )
                     )
                     .then(literal("z")
-                        .then(argument("value", StringArgumentType.greedyString())
-                            .executes(ctx -> {
-                                if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                    if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                    if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                        String v = StringArgumentType.getString(ctx, "value");
-                                        LocationValue.HSLocation location = (LocationValue.HSLocation) value.fromItem(player.getInventory().getItemInMainHand());
-                                        try {
-                                            ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), new DecimalNumber(Long.parseLong(v)), location.pitch(), location.yaw()));
-                                            player.getInventory().setItemInMainHand(item);
-                                        } catch (Exception ignored) {
-                                            HSException.sendError(player, "Invalid input: '" + v + "'");
-                                        }
-                                    }
-                                }
-                                return DONE;
-                            })
+                        .then(valueArg
+                            .executes(ctx -> execValArg(ctx, (p, v) -> {
+                                LocationValue.HSLocation location = (LocationValue.HSLocation) CodeValues.LOCATION.fromItem(p.getInventory().getItemInMainHand());
+                                ItemStack item = CodeValues.LOCATION.getItem(LocationValue.HSAxis.Z.set(location, new DecimalNumber(Double.parseDouble(v))));
+                                p.getInventory().setItemInMainHand(item);
+                            }))
                         )
                     )
                     .then(literal("pitch")
-                        .then(argument("value", StringArgumentType.greedyString())
-                            .executes(ctx -> {
-                                if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                    if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                    if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                        String v = StringArgumentType.getString(ctx, "value");
-                                        LocationValue.HSLocation location = (LocationValue.HSLocation) value.fromItem(player.getInventory().getItemInMainHand());
-                                        try {
-                                            ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), location.z(), new DecimalNumber(Long.parseLong(v)), location.yaw()));
-                                            player.getInventory().setItemInMainHand(item);
-                                        } catch (Exception ignored) {
-                                            HSException.sendError(player, "Invalid input: '" + v + "'");
-                                        }
-                                    }
-                                }
-                                return DONE;
-                            })
+                        .then(valueArg
+                            .executes(ctx -> execValArg(ctx, (p, v) -> {
+                                LocationValue.HSLocation location = (LocationValue.HSLocation) CodeValues.LOCATION.fromItem(p.getInventory().getItemInMainHand());
+                                ItemStack item = CodeValues.LOCATION.getItem(LocationValue.HSAxis.PITCH.set(location, new DecimalNumber(Double.parseDouble(v))));
+                                p.getInventory().setItemInMainHand(item);
+                            }))
                         )
                     )
                     .then(literal("yaw")
-                        .then(argument("value", StringArgumentType.greedyString())
-                            .executes(ctx -> {
-                                if (ctx.getSource().getBukkitSender() instanceof Player player) {
-                                    if (!Hypersquare.mode.get(player).equals("coding")) return DONE;
-                                    if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                        String v = StringArgumentType.getString(ctx, "value");
-                                        LocationValue.HSLocation location = (LocationValue.HSLocation) value.fromItem(player.getInventory().getItemInMainHand());
-                                        try {
-                                            ItemStack item = value.getItem(new LocationValue.HSLocation(location.x(), location.y(), location.z(), location.pitch(), new DecimalNumber(Long.parseLong(v))));
-                                            player.getInventory().setItemInMainHand(item);
-                                        } catch (Exception ignored) {
-                                            HSException.sendError(player, "Invalid input: '" + v + "'");
-                                        }
-                                    }
-                                }
-                                return DONE;
-                            })
+                        .then(valueArg
+                            .executes(ctx -> execValArg(ctx, (p, v) -> {
+                                LocationValue.HSLocation location = (LocationValue.HSLocation) CodeValues.LOCATION.fromItem(p.getInventory().getItemInMainHand());
+                                ItemStack item = CodeValues.LOCATION.getItem(LocationValue.HSAxis.YAW.set(location, new DecimalNumber(Double.parseDouble(v))));
+                                p.getInventory().setItemInMainHand(item);
+                            }))
                         )
                     )
-
-
                 )
             );
         }

@@ -6,7 +6,6 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.item.action.control.ControlItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.play.CodeSelection;
@@ -58,7 +57,7 @@ public class WaitAction implements Action {
 
     @Override
     public ActionMenuItem getCategory() {
-        return ControlItems.THREAD;
+        return null;
     }
 
     @Override
@@ -75,14 +74,14 @@ public class WaitAction implements Action {
     @Override
     public ActionMenu actionMenu(CodeActionData data) {
         return new ActionMenu(this, 3, data)
-            .parameter("duration", 13)
-            .tag("unit", 15);
+            .parameter("duration", 12)
+            .tag("unit", 14);
     }
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, CodeSelection targetSel) {
         WaitTimeUnit unit = ctx.getTag("unit", WaitTimeUnit::valueOf);
-        DecimalNumber duration = ctx.args().getOr("duration", new DecimalNumber(0L));
+        DecimalNumber duration = ctx.args().getOr("duration", new DecimalNumber(1L));
         ctx.sleep(unit.get(duration.toDouble()));
     }
 

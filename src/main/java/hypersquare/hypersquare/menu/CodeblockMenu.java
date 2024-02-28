@@ -6,7 +6,6 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.item.action.control.ControlItems;
 import hypersquare.hypersquare.item.action.player.IfPlayerItems;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
@@ -21,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,13 +29,21 @@ import static hypersquare.hypersquare.Hypersquare.cleanMM;
 public class CodeblockMenu {
     public static void open(
         Player player, Location targetLocation,
-        String fullTitle, String shortTitle,
-        int rows, ActionMenuItem @NotNull [] items, boolean actions
+        @NotNull Menus codeblockMenu
     ) {
-        Menu menu = new Menu(Component.text(fullTitle + " Categories"), rows);
+        Menu menu = new Menu(Component.text(codeblockMenu.fullTitle + (codeblockMenu.items == null ? "" : " Categories")), codeblockMenu.rows);
+
+        if (codeblockMenu.items == null) {
+            for (Action action : Actions.values()) {
+                if (!Objects.equals(action.getCodeblockId(), codeblockMenu.id) || action.getId() == null) continue;
+                addActionToMenu(player, targetLocation, menu, action);
+            }
+            menu.open(player);
+            return;
+        }
 
         // Loop through all categories
-        for (ActionMenuItem item : items) {
+        for (ActionMenuItem item : codeblockMenu.items) {
             menu.slot(item.getSlot(), new MenuItem(item.build()).onClick(() -> {
                 Utilities.sendSecondaryMenuSound(player);
 
@@ -44,18 +52,13 @@ public class CodeblockMenu {
                 Matcher matcher = pattern.matcher(cleanMM.serialize(item.getName()));
 
                 // Create a new gui for the category
-                Menu categoryGui = new Menu(Component.text(shortTitle + " > " + matcher.replaceAll("")), 5);
+                Menu categoryGui = new Menu(Component.text(codeblockMenu.shortTitle + " > " + matcher.replaceAll("")), 5);
 
-                if (actions) {
+                if (codeblockMenu.actions) {
                     // Loop through all actions in the category
                     for (Action action : Actions.values()) {
                         if (action.getCategory() != item || action.getId() == null) continue;
-                        MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
-                            Utilities.sendSuccessClickMenuSound(player);
-                            Utilities.setAction(targetLocation.getBlock(), action.getSignName(), player);
-                            CodeFileHelper.updateAction(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), action);
-                        });
-                        categoryGui.addItem(actionItem);
+                        addActionToMenu(player, targetLocation, categoryGui, action);
                     }
                 } else {
                     // Loop through all event actions in the category
@@ -77,9 +80,18 @@ public class CodeblockMenu {
         menu.open(player);
     }
 
+    private static void addActionToMenu(Player player, Location targetLocation, Menu menu, Action action) {
+        MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
+            Utilities.sendSuccessClickMenuSound(player);
+            Utilities.setAction(targetLocation.getBlock(), action.getSignName(), player);
+            CodeFileHelper.updateAction(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), action);
+        });
+        menu.addItem(actionItem);
+    }
+
     public static void open(String id, Player p, Location loc) {
         for (Menus m : Menus.values()) {
-            if (m.id.equals(id)) open(p, loc, m.fullTitle, m.shortTitle, m.rows, m.items, m.actions);
+            if (m.id.equals(id)) open(p, loc, m);
         }
     }
 
@@ -89,7 +101,8 @@ public class CodeblockMenu {
         IF_PLAYER("if_player", "If Player", "Conditions", 3, IfPlayerItems.values(), true),
         SET_VARIABLE("set_variable", "Set Variable", "Variables", 5, SetVariableItems.values(), true),
         REPEAT("repeat", "Repeat", "Repeats", 3, RepeatItems.values(), true),
-        CONTROL("control", "Control", "Controls", 3, ControlItems.values(), true)
+        CONTROL("control", "Control", "Controls", 3, null, true),
+        DEV("dev", "Dev Actions", null, 3, null, true)
         ;
 
         public final String id, fullTitle, shortTitle;

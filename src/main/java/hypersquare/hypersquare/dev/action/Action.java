@@ -17,6 +17,7 @@ import java.util.Objects;
 public interface Action {
     ActionParameter[] parameters();
     ActionTag[] tags();
+    void execute(ExecutionContext ctx, CodeSelection targetSel);
     String getId();
     String getCodeblockId();
     String getSignName();
@@ -43,7 +44,6 @@ public interface Action {
         return null;
     }
 
-    void execute(ExecutionContext ctx, CodeSelection targetSel);
 
     record ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, String id) {
         public ActionParameter(DisplayValue type, Component description, String id) {

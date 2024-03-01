@@ -65,6 +65,6 @@ public enum DisplayValue {
     }
 
     public boolean notValid(CodeValues v, @Nullable ItemStack t) {
-        return isValid.apply(v, t);
+        return !isValid.apply(v, t);
     }
 }

@@ -16,6 +16,7 @@ import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -100,7 +101,7 @@ public enum Actions implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         a.execute(ctx, targetSel);
     }
 }

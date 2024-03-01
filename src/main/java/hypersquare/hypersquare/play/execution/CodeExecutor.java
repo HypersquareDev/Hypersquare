@@ -17,6 +17,7 @@ import hypersquare.hypersquare.dev.target.TargetSet;
 import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.play.ActionArguments;
+import hypersquare.hypersquare.play.CodeVariableScope;
 import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.error.CodeErrorType;
 import hypersquare.hypersquare.play.CodeSelection;
@@ -26,42 +27,46 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class CodeExecutor {
     public final static int RUNNING_LIMIT = 100;
 
     public final int plotId;
-    public SetMultimap<Event, BukkitRunnable> running = MultimapBuilder.hashKeys().hashSetValues().build();
+    public SetMultimap<Event, EventRunnable> running = MultimapBuilder.hashKeys().hashSetValues().build();
+    public final CodeVariableScope globalScope = new CodeVariableScope();
 
     public CodeExecutor(int plotId) {
         this.plotId = plotId;
     }
 
-    public void cancel() {
+    public void halt() {
         for (var r : running.values()) r.cancel();
         running.clear();
     }
 
-    public <T extends org.bukkit.event.Event> void trigger(Event event, T bukkitEvent, CodeSelection selection) {
+    // TODO: note for functions & processes:
+    // there should be an internal event that is used to trigger function/process calls
+    // so that the stacktrace is renewed and the line var scope works
+    // calling a call function action would save the current stacktrace, trigger a function call event
+    // and after the function ends, it'll resume the previous stacktrace
+
+    public void trigger(Event event, org.bukkit.event.Event bukkitEvent, CodeSelection selection) {
         if (running.size() >= RUNNING_LIMIT) throw new HSException(CodeErrorType.RUN_LIMIT, null);
         if (event == null) throw new HSException(CodeErrorType.INVALID_EVENT, null);
         CodeData data = new CodeFile(plotId).getCodeData();
-        BukkitRunnable task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (CodeLineData line : data.codelines) {
-                    if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
-                    // run every line that has the same event
-                    CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
-                    try { continueEval(trace); } catch (Exception e) {
-                        new HSException(plotId, CodeErrorType.RUNTIME_ERROR, e).sendMessage();
-                    }
-                }
-                running.remove(event, this);
-            }
-        };
-        task.runTask(Hypersquare.instance);
-        running.put(event, task);
+        for (CodeLineData line : data.codelines) {
+            if (!line.event.equals(event.getId()) || !line.type.equals(event.getCodeblockId())) continue;
+            // run every line that has the same event
+            CodeStacktrace trace = new CodeStacktrace(event, bukkitEvent, new CodeStacktrace.Frame(line.actions, selection));
+            trigger(trace, r -> r.runTask(Hypersquare.instance));
+        }
+    }
+
+    public void trigger(@NotNull CodeStacktrace trace, @NotNull Consumer<EventRunnable> runTask) {
+        EventRunnable r = new EventRunnable(trace);
+        runTask.accept(r);
+        running.put(trace.event, r);
     }
 
     public void continueEval(@NotNull CodeStacktrace trace) {
@@ -101,7 +106,7 @@ public class CodeExecutor {
                 }
                 execute(action::execute, action, trace, frame, data);
             }
-            if (trace.cancel) break;
+            if (trace.halt) break;
         }
     }
 
@@ -114,7 +119,7 @@ public class CodeExecutor {
         try { targetSel = getTargetSel(data.target, action, trace, frame.selection); } catch (Exception e) {
             throw new HSException(CodeErrorType.FAILED_TARGET, e);
         }
-        try { run.apply(ctx, targetSel); } catch (Exception e) {
+        try { run.invoke(ctx, targetSel); } catch (Exception e) {
             throw new HSException(CodeErrorType.INTERNAL_ERROR, e);
         }
     }
@@ -147,8 +152,24 @@ public class CodeExecutor {
         args.bind(ctx);
         return ctx;
     }
+
+    public class EventRunnable extends BukkitRunnable {
+        private final CodeStacktrace trace;
+        EventRunnable(CodeStacktrace trace) {
+            this.trace = trace;
+        }
+        @Override
+        public void run() {
+            trace.halt = false;
+            try { continueEval(trace); } catch (Exception e) {
+                new HSException(plotId, CodeErrorType.RUNTIME_ERROR, e).sendMessage();
+            }
+            running.remove(trace.event, this);
+        }
+    }
+    
+    private interface RunFunction {
+        void invoke(ExecutionContext ctx, CodeSelection targetSel);
+    }
 }
 
-interface RunFunction {
-    void apply(ExecutionContext ctx, CodeSelection targetSel);
-}

@@ -47,7 +47,6 @@ import org.jetbrains.annotations.NotNull;
 public class CodePlacement implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        Thread.dumpStack();
         String mode = Hypersquare.mode.get(event.getPlayer());
         if (mode.equals("building") || mode.equals("playing")) {
             if (blockInPlot(event.getBlockPlaced().getLocation())) return;

@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class PrintStackTraceAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         List<Component> stack = HSException.getStackTrace(new RuntimeException("<PrintStackTraceAction>"));
         for (Player player : targetSel.players()) {
             for (Component line : stack) {

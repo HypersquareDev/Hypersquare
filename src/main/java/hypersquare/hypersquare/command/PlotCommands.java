@@ -239,7 +239,7 @@ public class PlotCommands implements HyperCommand {
             var threadsMap = executor.running;
             player.sendMessage(Component.text(" ".repeat(12)).color(Colors.GRAY_DARK).decoration(TextDecoration.STRIKETHROUGH, true));
             player.sendMessage(Component.text("Threads: (" + threadsMap.size() + ")").color(Colors.YELLOW_LIGHT));
-            for (Event e : threadsMap.keys()) {
+            for (Event e : threadsMap.keySet()) {
                 int count = threadsMap.get(e).size();
                 player.sendMessage(Component.text(" • "
                     + e.getSignName()

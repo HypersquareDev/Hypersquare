@@ -1,15 +1,15 @@
 package hypersquare.hypersquare.dev.code.player.event;
 
+import hypersquare.hypersquare.dev.action.CancellableEvent;
 import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.action.player.PlayerEventItems;
-import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.item.event.EventItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerDropItemEvent implements Event {
+public class PlayerDropItemEvent implements CancellableEvent {
     @Override
     public String getId() {
         return "drop_item";

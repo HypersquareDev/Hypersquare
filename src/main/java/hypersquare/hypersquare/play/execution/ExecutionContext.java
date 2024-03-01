@@ -9,7 +9,6 @@ import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.play.ActionArguments;
 import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.play.CodeVariableScope;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -22,13 +21,12 @@ public record ExecutionContext(
     CodeStacktrace trace,
     Action action, CodeActionData data
 ) {
-    public static final CodeVariableScope globalScope = new CodeVariableScope();
 
     @Contract(pure = true)
     public CodeVariableScope getScope(VariableValue.@NotNull Scope scope) {
         return switch (scope) {
-            case THREAD -> trace.scope;
-            case GLOBAL -> globalScope;
+            case LINE -> trace.lineScope;
+            case GLOBAL -> executor.globalScope;
             default -> null; // TODO: implement other scopes
         };
     }
@@ -48,8 +46,7 @@ public record ExecutionContext(
     }
 
     public void sleep(int dur) {
-        if (dur == 0) return; // TODO: warn the user about useless code
-        trace.cancel = true;
-        Bukkit.getScheduler().runTaskLater(Hypersquare.instance, () -> executor.continueEval(trace), dur);
+        trace.halt = true;
+        executor.trigger(trace, r -> r.runTaskLater(Hypersquare.instance, dur));
     }
 }

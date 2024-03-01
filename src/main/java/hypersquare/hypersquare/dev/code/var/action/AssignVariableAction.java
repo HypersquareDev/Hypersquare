@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class AssignVariableAction implements Action {
     @Override
@@ -73,7 +74,7 @@ public class AssignVariableAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         ctx.args().<CodeVariable>single("variable").set(ctx.args().single("value"));
     }
 }

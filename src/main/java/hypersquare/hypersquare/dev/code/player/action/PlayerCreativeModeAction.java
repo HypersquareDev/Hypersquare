@@ -11,16 +11,16 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCreativeModeAction implements Action {
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             p.setGameMode(GameMode.CREATIVE);
         }

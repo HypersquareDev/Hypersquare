@@ -56,6 +56,6 @@ public class UnloadPlotsSchedule {
         Hypersquare.gameUnloadTimestamp.put(plotId, System.currentTimeMillis());
         buildWorld.getEntities().listIterator().forEachRemaining(Entity::remove);
         CodeExecutor executor = Hypersquare.codeExecMap.get(plotId);
-        if (executor != null) executor.cancel();
+        if (executor != null) executor.halt();
     }
 }

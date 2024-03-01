@@ -16,6 +16,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 public class PlayerGiveItemsAction implements Action {
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         List<ItemStack> items = new ArrayList<>();
         double multiplier = ctx.args().getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
         for (ItemStack item : ctx.args().<ItemStack>allNonNull("items")) {

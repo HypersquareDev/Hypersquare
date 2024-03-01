@@ -23,7 +23,7 @@ public class PlotManager {
 
     public static void unloadPlot(int plotId, World devWorld, World buildWorld) {
         loadedPlots.remove(plotId);
-        codeExecMap.get(plotId).cancel();
+        codeExecMap.get(plotId).halt();
         codeExecMap.remove(plotId);
 
         if (buildWorld == null || devWorld == null) {

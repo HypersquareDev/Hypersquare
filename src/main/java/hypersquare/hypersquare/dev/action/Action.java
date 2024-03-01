@@ -10,6 +10,7 @@ import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
 public interface Action {
     ActionParameter[] parameters();
     ActionTag[] tags();
-    void execute(ExecutionContext ctx, CodeSelection targetSel);
+    void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel);
     String getId();
     String getCodeblockId();
     String getSignName();
@@ -51,10 +52,10 @@ public interface Action {
         }
 
         public ActionParameter(DisplayValue type, boolean plural, boolean optional, Component description, List<Component> notes, String id) {
-            this(type, plural, plural, addNotes(description, notes), id);
+            this(type, plural, optional, addNotes(description, notes), id);
         }
 
-        private static Component addNotes(Component description, List<Component> notes) {
+        private static Component addNotes(Component description, @NotNull List<Component> notes) {
             if (notes.isEmpty()) return description;
             for (Component note : notes) {
                 description = description.appendNewline() // \n<blue>⏵ <gray>[TEXT]

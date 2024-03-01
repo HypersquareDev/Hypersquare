@@ -10,16 +10,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CodeStacktrace {
-    public final List<Frame> frames;
     public final Event event;
+    public final List<Frame> frames;
     public final org.bukkit.event.Event bukkitEvent;
-    public final CodeVariableScope scope = new CodeVariableScope();
-    public boolean cancel = false;
+    public final CodeVariableScope lineScope = new CodeVariableScope();
+    public boolean halt = false;
 
     public CodeStacktrace(Event event, org.bukkit.event.Event bukkitEvent, Frame frame) {
+        this.event = event;
         frames = new LinkedList<>();
         frames.add(frame);
-        this.event = event;
         this.bukkitEvent = bukkitEvent;
     }
 

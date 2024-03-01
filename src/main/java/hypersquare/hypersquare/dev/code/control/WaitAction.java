@@ -79,7 +79,7 @@ public class WaitAction implements Action {
     }
 
     @Override
-    public void execute(@NotNull ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         WaitTimeUnit unit = ctx.getTag("unit", WaitTimeUnit::valueOf);
         DecimalNumber duration = ctx.args().getOr("duration", new DecimalNumber(1L));
         ctx.sleep(unit.get(duration.toDouble()));

@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -74,7 +75,7 @@ public class RepeatMultiple implements RepeatAction {
     }
 
     @Override
-    public boolean check(ExecutionContext ctx, boolean initial) {
+    public boolean check(@NotNull ExecutionContext ctx, boolean initial) {
         HashMap<String, Object> data = ctx.trace().next().tempData;
         int remaining;
         if (initial) remaining = ctx.args().<DecimalNumber>single("amount").toInt();

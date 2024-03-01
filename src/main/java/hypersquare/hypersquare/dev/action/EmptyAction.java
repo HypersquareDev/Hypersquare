@@ -7,6 +7,7 @@ import hypersquare.hypersquare.menu.action.ActionMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class EmptyAction implements Action {
     @Override
@@ -55,7 +56,7 @@ public class EmptyAction implements Action {
     }
 
     @Override
-    public void execute(ExecutionContext ctx, CodeSelection targetSel) {
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
 
     }
 }

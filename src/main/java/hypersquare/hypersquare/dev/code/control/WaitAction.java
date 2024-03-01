@@ -1,13 +1,14 @@
 package hypersquare.hypersquare.dev.code.control;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import hypersquare.hypersquare.util.color.Colors;
@@ -18,19 +19,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class WaitAction implements Action {
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[]{
-            new ActionParameter(DisplayValue.NUMBER, false, true, Component.text("Wait duration"), "duration")
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{
+            new BarrelParameter(DisplayValue.NUMBER, false, true, Component.text("Wait duration"), "duration")
         };
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[]{
-            new ActionTag("unit", "Time Unit", WaitTimeUnit.TICKS,
-                new ActionTag.Option(WaitTimeUnit.TICKS, "Ticks", Material.REPEATER),
-                new ActionTag.Option(WaitTimeUnit.SECONDS, "Seconds", Material.CLOCK),
-                new ActionTag.Option(WaitTimeUnit.MINUTES, "Minutes", Material.RED_BED)
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{
+            new BarrelTag("unit", "Time Unit", WaitTimeUnit.TICKS,
+                new BarrelTag.Option(WaitTimeUnit.TICKS, "Ticks", Material.REPEATER),
+                new BarrelTag.Option(WaitTimeUnit.SECONDS, "Seconds", Material.CLOCK),
+                new BarrelTag.Option(WaitTimeUnit.MINUTES, "Minutes", Material.RED_BED)
             )
         };
     }
@@ -72,8 +73,8 @@ public class WaitAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 3, data)
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
             .parameter("duration", 12)
             .tag("unit", 14);
     }

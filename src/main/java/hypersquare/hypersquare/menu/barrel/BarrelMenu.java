@@ -1,15 +1,15 @@
-package hypersquare.hypersquare.menu.action;
+package hypersquare.hypersquare.menu.barrel;
 
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.dev.*;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.CodeFileHelper;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
+import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
-import hypersquare.hypersquare.menu.action.parameter.MenuParameter;
-import hypersquare.hypersquare.menu.action.tag.MenuTag;
 import hypersquare.hypersquare.menu.system.Menu;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import net.kyori.adventure.text.Component;
@@ -23,32 +23,49 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-public class ActionMenu extends Menu {
+public class BarrelMenu extends Menu {
 
-    private final Action action;
     private Location block;
-    private final CodeActionData data;
+    private final BarrelParamSupplier paramSupplier;
+    private final BarrelTagSupplier tagSupplier;
+    private final TagOptionsData tagsData;
+    private final ArgumentsData argsData;
 
-    public ActionMenu(Action action, int rows, CodeActionData data) {
-        super(Component.text(action.getName()), rows);
-        this.action = action;
-        this.data = data;
+    public BarrelMenu(
+        @NotNull Component name, @NotNull BarrelParamSupplier paramSupplier, @NotNull BarrelTagSupplier tagSupplier,
+        int rows, @NotNull TagOptionsData tagsData, @NotNull ArgumentsData argsData
+    ) {
+        super(name, rows);
+        this.paramSupplier = paramSupplier;
+        this.tagSupplier = tagSupplier;
+        this.tagsData = tagsData;
+        this.argsData = argsData;
         for (int i = 0; i < rows * 9; i++) {
             slot(i, new MenuItem(Material.GRAY_STAINED_GLASS_PANE).name(Component.empty()));
         }
     }
 
-    public ActionMenu parameter(String id, int... slots) {
+    public BarrelMenu(@NotNull Action action, int rows, @NotNull CodeActionData data) {
+        this(Component.text(action.getName()), action, action, rows, data, data);
+    }
+
+    public BarrelMenu(@NotNull String name, int rows, @NotNull CodeLineData data) {
+        this(Component.text(name), data, data, rows, data, data);
+    }
+
+    public BarrelMenu parameter(String id, int @NotNull ... slots) {
         int slotId = 0;
         for (int slot : slots) {
-            this.slot(slot, new MenuParameter(action.getParameter(id), slotId, data));
+            BarrelParameter param = paramSupplier.getParameter(id);
+            if (param == null) continue;
+            this.slot(slot, new MenuParameter(param, slotId, argsData));
             slotId++;
         }
         return this;
     }
 
-    public ActionMenu tag(String id, int slot) {
-        this.slot(slot, new MenuTag(action.getTag(id), data));
+    public BarrelMenu tag(String id, int slot) {
+        this.slot(slot, new MenuTag(tagSupplier.getTag(id), tagsData));
         return this;
     }
 
@@ -60,17 +77,17 @@ public class ActionMenu extends Menu {
         CodeData data = file.getCodeData();
         if (menuItem instanceof MenuParameter param) {
             HumanEntity p = event.getWhoClicked();
-            CodeActionData action = CodeFileHelper.getActionAt(block, data);
-            if (action == null) return;
+            ArgumentsData argsData = CodeFileHelper.getArgsDataAt(block, data);
+            if (argsData == null) return;
             ItemStack cursor = p.getItemOnCursor();
-            if (cursor.isEmpty()) p.setItemOnCursor(param.getValue(action, true));
-            else p.setItemOnCursor(param.replaceValue(action, cursor));
-            slot(event.getSlot(), param.updated(action));
+            if (cursor.isEmpty()) p.setItemOnCursor(param.getValue(argsData, true));
+            else p.setItemOnCursor(param.replaceValue(argsData, cursor));
+            slot(event.getSlot(), param.updated(argsData));
         }
         else if (menuItem instanceof MenuTag tag) {
-            CodeActionData action = CodeFileHelper.getActionAt(block, data);
-            if (action == null) return;
-            VariableValue.HSVar varValue = action.tags.getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
+            TagOptionsData tagsData = CodeFileHelper.getTagsDataAt(block, data);
+            if (tagsData == null) return;
+            VariableValue.HSVar varValue = tagsData.getTags().getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
 
             ItemStack clickedItem = event.getWhoClicked().getItemOnCursor();
             JsonObject itemData = CodeValues.getVarItemData(clickedItem);
@@ -86,7 +103,7 @@ public class ActionMenu extends Menu {
 
             int position = -1;
             for (int i = 0; i < tag.tag.options().length; i++) {
-                if (tag.tag.options()[i] == MenuTag.currentOption(tag.tag, action)) {
+                if (tag.tag.options()[i] == MenuTag.currentOption(tag.tag, tagsData)) {
                     position = i;
                     break;
                 }
@@ -95,11 +112,11 @@ public class ActionMenu extends Menu {
             position += direction;
             position = (position + tag.tag.options().length) % tag.tag.options().length;
 
-            action.tags.put(tag.tag.id(), new Pair<>(
+            tagsData.getTags().put(tag.tag.id(), new Pair<>(
                     tag.tag.options()[position].id().name(),
                     varValue
             ));
-            slot(event.getSlot(), new MenuTag(tag.tag, action));
+            slot(event.getSlot(), new MenuTag(tag.tag, tagsData));
             Player player = (Player) event.getWhoClicked();
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1.5f);
         }
@@ -108,7 +125,7 @@ public class ActionMenu extends Menu {
 
     @Override
     public void open(@NotNull Player player) {
-        throw new IllegalStateException("Regular open call on ActionMenu");
+        throw new IllegalStateException("Regular open call on BarrelMenu");
     }
 
     public void open(Player player, Location block) {
@@ -143,13 +160,13 @@ public class ActionMenu extends Menu {
             slot(event.getSlot(), param.updated(action));
             file.setCode(data.toJson().toString());
         } else if (items.get(event.getSlot()) instanceof MenuTag tag) {
-            VariableValue.HSVar varValue = action.tags.getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
+            VariableValue.HSVar varValue = action.getTags().getOrDefault(tag.tag.id(), new Pair<>(null, null)).getB();
             if (varValue == null) return;
 
             p.setItemOnCursor(CodeValues.VARIABLE.getItem(varValue));
 
-            action.tags.put(tag.tag.id(), new Pair<>(
-                    action.tags.getOrDefault(tag.tag.id(), new Pair<>(tag.tag.defaultOption().name(), null)).getA(),
+            action.getTags().put(tag.tag.id(), new Pair<>(
+                action.getTags().getOrDefault(tag.tag.id(), new Pair<>(tag.tag.defaultOption().name(), null)).getA(),
                     null
             ));
             file.setCode(data.toJson().toString());

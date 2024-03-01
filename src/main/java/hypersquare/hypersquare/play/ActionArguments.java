@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.play;
 
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 
@@ -32,8 +33,10 @@ public class ActionArguments {
 
     public <T> List<T> allNullable(String id) {
         List<T> ret = new ArrayList<>();
+        BarrelParameter param = ctx.action().getParameter(id);
+        if (param == null) throw new NullPointerException("Unknown parameter! " + id);
         for (JsonObject o : values.get(id)) {
-            T v = getAs(o, ctx.action().getParameter(id).type().codeVal);
+            T v = getAs(o, param.type().codeVal);
             if (v == null) continue;
             ret.add(v);
         }
@@ -41,8 +44,10 @@ public class ActionArguments {
     }
 
     public <T> T single(String id) {
+        BarrelParameter param = ctx.action().getParameter(id);
+        if (param == null) throw new NullPointerException("Unknown parameter! " + id);
         return values.get(id).getFirst() == null ? null :
-                getAs(values.get(id).getFirst(), ctx.action().getParameter(id).type().codeVal);
+            getAs(values.get(id).getFirst(), param.type().codeVal);
     }
 
     public boolean has(String id) {

@@ -5,22 +5,22 @@ import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.dev.Actions;
-import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.CallbackAfterAction;
 import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.target.TargetPriority;
 import hypersquare.hypersquare.dev.target.TargetSet;
 import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.play.ActionArguments;
-import hypersquare.hypersquare.play.CodeVariableScope;
-import hypersquare.hypersquare.play.error.HSException;
-import hypersquare.hypersquare.play.error.CodeErrorType;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.CodeVariableScope;
+import hypersquare.hypersquare.play.error.CodeErrorType;
+import hypersquare.hypersquare.play.error.HSException;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -142,8 +142,8 @@ public class CodeExecutor {
 
     private @NotNull ExecutionContext getCtx(@NotNull Action action, CodeStacktrace trace, CodeActionData data) {
         HashMap<String, List<JsonObject>> arguments = new HashMap<>();
-        for (Action.ActionParameter param : action.parameters()) {
-            List<JsonObject> args = data.arguments.getOrDefault(param.id(), List.of());
+        for (hypersquare.hypersquare.dev.BarrelParameter param : action.parameters()) {
+            List<JsonObject> args = data.getArguments().getOrDefault(param.id(), List.of());
             if (args.isEmpty() && !param.optional()) throw new HSException(CodeErrorType.MISSING_PARAM, null);
             arguments.put(param.id(), args);
         }
@@ -167,7 +167,7 @@ public class CodeExecutor {
             running.remove(trace.event, this);
         }
     }
-    
+
     private interface RunFunction {
         void invoke(ExecutionContext ctx, CodeSelection targetSel);
     }

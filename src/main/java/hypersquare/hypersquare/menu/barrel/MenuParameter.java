@@ -1,9 +1,10 @@
-package hypersquare.hypersquare.menu.action.parameter;
+package hypersquare.hypersquare.menu.barrel;
 
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.dev.ArgumentsData;
+import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.CodeValues;
-import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import net.kyori.adventure.text.Component;
@@ -26,17 +27,16 @@ public class MenuParameter extends MenuItem {
 
        *Optional
      */
-    private static final Component optionalDesc = Component.text("*Optional")
-                                                    .color(NamedTextColor.GRAY);
+    private static final Component optionalDesc = Component.text("*Optional").color(NamedTextColor.GRAY);
     private final int slotId;
-    private final Action.ActionParameter p;
+    private final BarrelParameter p;
 
-    public MenuParameter(Action.@NotNull ActionParameter p, int slotId, @NotNull CodeActionData action) {
+    public MenuParameter(@NotNull BarrelParameter p, int slotId, @NotNull ArgumentsData argsData) {
         super(DisplayValue.menuPaneColor.get(p.type()));
         this.slotId = slotId;
         this.p = p;
 
-        List<JsonObject> current = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
+        List<JsonObject> current = argsData.getArguments().computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         Component typeName = p.type().getName();
         if (p.plural()) typeName = typeName.append(Component.text("(s)"));
@@ -82,14 +82,14 @@ public class MenuParameter extends MenuItem {
         return p.type().notValid(v, item);
     }
 
-    public ItemStack replaceValue(CodeActionData action, ItemStack newItem) {
-        ItemStack oldItem = getValue(action, true);
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
+    public ItemStack replaceValue(ArgumentsData argsData, ItemStack newItem) {
+        ItemStack oldItem = getValue(argsData, true);
+        List<JsonObject> previous = argsData.getArguments().computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         JsonObject data = CodeValues.getVarItemData(newItem);
         CodeValues v;
         if (data == null) v = CodeValues.ITEM; // has no varitem means it's a regular item
-            else v = CodeValues.getType(data);
+        else v = CodeValues.getType(data);
 
         if (v == null) return oldItem;
         if (p.type().notValid(v, newItem) && p.type().codeVal != null && v != CodeValues.VARIABLE) {
@@ -111,26 +111,25 @@ public class MenuParameter extends MenuItem {
         return oldItem;
     }
 
-    public MenuParameter updated(CodeActionData action) {
-        return new MenuParameter(p, slotId, action);
+    public MenuParameter updated(ArgumentsData argsData) {
+        return new MenuParameter(p, slotId, argsData);
     }
 
-    public boolean isEmpty(CodeActionData action) {
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
+    public boolean isEmpty(@NotNull CodeActionData action) {
+        List<JsonObject> previous = action.getArguments().computeIfAbsent(p.id(), _ -> new ArrayList<>());
 
         return previous.size() <= slotId || !previous.get(slotId).has("type");
     }
 
-    public void reset(List<JsonObject> previous) {
+    public void reset(@NotNull List<JsonObject> previous) {
         previous.set(slotId, new JsonObject());
         while (!previous.isEmpty() && !previous.getLast().has("type")) {
             previous.removeLast();
         }
     }
 
-    public ItemStack getValue(CodeActionData action, boolean reset) {
-        List<JsonObject> previous = action.arguments.computeIfAbsent(p.id(), _ -> new ArrayList<>());
-
+    public ItemStack getValue(@NotNull ArgumentsData argsData, boolean reset) {
+        List<JsonObject> previous = argsData.getArguments().computeIfAbsent(p.id(), _ -> new ArrayList<>());
         if (previous.size() > slotId) {
             JsonObject data = previous.get(slotId);
             if (data != null && data.has("type")) {

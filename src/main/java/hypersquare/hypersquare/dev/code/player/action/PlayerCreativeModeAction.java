@@ -1,12 +1,13 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import hypersquare.hypersquare.util.color.Colors;
@@ -27,13 +28,13 @@ public class PlayerCreativeModeAction implements Action {
     }
 
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[]{};
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{};
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[] {};
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
     }
 
     @Override
@@ -72,7 +73,7 @@ public class PlayerCreativeModeAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 3, data);
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data);
     }
 }

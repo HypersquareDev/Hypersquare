@@ -20,8 +20,8 @@ import hypersquare.hypersquare.dev.value.impl.*;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.menu.ActionTargetsMenu;
 import hypersquare.hypersquare.menu.CodeblockMenu;
-import hypersquare.hypersquare.menu.action.ActionMenu;
-import hypersquare.hypersquare.menu.action.parameter.MenuParameter;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
+import hypersquare.hypersquare.menu.barrel.MenuParameter;
 import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.MoveEntities;
@@ -42,7 +42,6 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -83,18 +82,32 @@ public class DevEvents implements Listener {
     private static void handleBarrelRClick(@NotNull Block clickedBlock, @NotNull PlayerInteractEvent event) {
         event.setCancelled(true);
         CodeData codeData = new CodeFile(event.getPlayer()).getCodeData();
-        CodeActionData actionData = CodeFileHelper.getActionAt(clickedBlock.getLocation().subtract(0, 1, 0), codeData);
-        if (actionData == null) {
-            Utilities.sendRedInfo(event.getPlayer(), Component.text("Couldn't find this action in the plot (corrupted plot?)"));
+        Location blockLoc = clickedBlock.getLocation().subtract(0, 1, 0);
+        CodeLineData lineData = CodeFileHelper.getLineAt(blockLoc, codeData);
+        if (lineData == null) {
+            HSException.sendError(event.getPlayer(), "Couldn't find this line in the plot (corrupted plot?)");
             return;
         }
-        Action action = Actions.getAction(actionData.action, actionData.codeblock);
-        if (action == null) {
-            HSException.sendError(event.getPlayer(), "Couldn't find this action in the registry (corrupted plot?)");
-            throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
+        CodeBlocks lineCodeblock = CodeBlocks.getById(lineData.type);
+        if (lineCodeblock == null) {
+            HSException.sendError(event.getPlayer(), "Couldn't find this codeblock in the plot (corrupted plot?)");
+            return;
+        }
+        CodeActionData actionData = CodeFileHelper.getActionAt(blockLoc, lineData);
+        if (actionData == null && lineCodeblock.hasBarrel) {
+            lineData.menu().open(event.getPlayer(), blockLoc);
+        } else if (actionData == null) {
+            HSException.sendError(event.getPlayer(), "Couldn't find this action in the plot (corrupted plot?)");
+            return;
+        } else {
+            Action action = Actions.getAction(actionData.action, actionData.codeblock);
+            if (action == null) {
+                HSException.sendError(event.getPlayer(), "Couldn't find this action in the registry (outdated plot?)");
+                throw new NullPointerException("Bad CodeFile! (Invalid action ID: " + actionData.action + ")");
+            }
+            action.actionMenu(actionData).open(event.getPlayer(), blockLoc);
         }
         event.getPlayer().playSound(clickedBlock.getLocation(), Sound.BLOCK_BARREL_OPEN, 0.75f, 1);
-        action.actionMenu(actionData).open(event.getPlayer(), clickedBlock.getLocation().subtract(0, 1, 0));
     }
 
     @EventHandler
@@ -135,7 +148,7 @@ public class DevEvents implements Listener {
             if (actionData == null) return;
             Action action = Actions.getByData(actionData);
             if (action == null) return;
-            ActionMenu menu = action.actionMenu(actionData);
+            BarrelMenu menu = action.actionMenu(actionData);
             for (int i = 0; i < menu.getSize(); i++) {
                 if (!menu.items.containsKey(i)) continue;
                 if (menu.items.get(i) instanceof MenuParameter param) {

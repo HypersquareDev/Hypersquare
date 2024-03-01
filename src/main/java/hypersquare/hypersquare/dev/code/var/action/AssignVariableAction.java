@@ -1,13 +1,14 @@
 package hypersquare.hypersquare.dev.code.var.action;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.var.SetVariableItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.CodeVariable;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
@@ -19,10 +20,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class AssignVariableAction implements Action {
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[] {
-                new ActionParameter(DisplayValue.VARIABLE, Component.text("The variable to set"), "variable"),
-                new ActionParameter(DisplayValue.ANY, Component.text("The value to set the variable to."), "value")
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{
+            new BarrelParameter(DisplayValue.VARIABLE, Component.text("The variable to set"), "variable"),
+            new BarrelParameter(DisplayValue.ANY, Component.text("The value to set the variable to."), "value")
         };
     }
 
@@ -52,8 +53,8 @@ public class AssignVariableAction implements Action {
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[] {};
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
     }
 
     @Override
@@ -67,8 +68,8 @@ public class AssignVariableAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 3, data)
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
                 .parameter("variable",12)
                 .parameter("value", 14);
     }

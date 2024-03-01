@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.dev.code.var.repeat;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.RepeatAction;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
@@ -8,7 +9,7 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.repeat.RepeatItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -21,15 +22,15 @@ import java.util.HashMap;
 public class RepeatMultiple implements RepeatAction {
 
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[] {
-                new ActionParameter(DisplayValue.NUMBER, Component.text("Amount to repeat executing code."), "amount")
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{
+            new BarrelParameter(DisplayValue.NUMBER, Component.text("Amount to repeat executing code."), "amount")
         };
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[0];
+    public BarrelTag[] tags() {
+        return new BarrelTag[0];
     }
 
     @Override
@@ -69,8 +70,8 @@ public class RepeatMultiple implements RepeatAction {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 3, data)
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
                 .parameter("amount", 13);
     }
 

@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.play.error;
 
 import hypersquare.hypersquare.util.PlotUtilities;
+import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.component.BasicComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -74,7 +75,7 @@ public class HSException extends RuntimeException {
             }
             msg = msg.hoverEvent(HoverEvent.showText(stackTraceComponent));
             final Component finalMsg = msg;
-            senders.forEach(s -> s.sendMessage(finalMsg));
+            senders.forEach(s -> Utilities.sendRedInfo(s, finalMsg));
             cause = cause.getCause();
             i++;
         }

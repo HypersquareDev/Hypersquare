@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.item.action;
 
 
-import hypersquare.hypersquare.dev.action.Action;
+import hypersquare.hypersquare.dev.BarrelParameter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -20,7 +20,7 @@ public class ActionItem {
     Component name;
     Material material;
     Component[] description;
-    Action.ActionParameter[] params;
+    BarrelParameter[] params;
     int tags;
     List<Component[]> additionalInfo = List.of();
     boolean enchanted;
@@ -41,7 +41,7 @@ public class ActionItem {
         return this;
     }
 
-    public ActionItem setParameters(Action.ActionParameter... params) {
+    public ActionItem setParameters(BarrelParameter... params) {
         this.params = params;
         return this;
     }
@@ -104,7 +104,7 @@ public class ActionItem {
                 .decoration(TextDecoration.ITALIC, false));
         boolean hasOptional = false;
         if (params != null) {
-            for (Action.ActionParameter actionParameter : params) {
+            for (BarrelParameter actionParameter : params) {
                 Component paramComp = actionParameter.type().getName();
                 paramComp = paramComp.append(Component.text(actionParameter.plural() ? "(s)" : ""));
                 if (actionParameter.optional()) {

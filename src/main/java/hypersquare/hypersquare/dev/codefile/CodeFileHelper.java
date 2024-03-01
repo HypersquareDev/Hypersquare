@@ -1,13 +1,14 @@
 package hypersquare.hypersquare.dev.codefile;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.Actions;
+import hypersquare.hypersquare.dev.ArgumentsData;
 import hypersquare.hypersquare.dev.CodeBlocks;
-import hypersquare.hypersquare.dev.target.Target;
+import hypersquare.hypersquare.dev.TagOptionsData;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.codefile.data.CodeData;
 import hypersquare.hypersquare.dev.codefile.data.CodeLineData;
+import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.plot.CodeBlockManagement;
 import org.bukkit.Location;
@@ -18,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class CodeFileHelper {
@@ -26,7 +26,7 @@ public class CodeFileHelper {
         return Math.abs(location.getBlockX() / 3) - 1;
     }
 
-    public static int getCodelineListIndex(Location location, @NotNull CodeData plotCode) {
+    public static int getCodelineListIndex(@NotNull Location location, @NotNull CodeData plotCode) {
         int position = getCodelineWorldIndex(location);
 
         for (CodeLineData element : plotCode.codelines) {
@@ -38,7 +38,7 @@ public class CodeFileHelper {
     /**
      * Set index to -1 for the codeblock to be appended instead of inserted.
      */
-    public static CodeData addCodeblock(Location location, @NotNull CodeBlocks codeblock, @NotNull CodeFile code) {
+    public static CodeData addCodeblock(@NotNull Location location, @NotNull CodeBlocks codeblock, @NotNull CodeFile code) {
         CodeData plotCode = code.getCodeData();
 
         if (codeblock.isThreadStarter) {
@@ -78,7 +78,7 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static CodeData removeCodeBlock(Location location, @NotNull CodeFile code, boolean breakAll) {
+    public static CodeData removeCodeBlock(@NotNull Location location, @NotNull CodeFile code, boolean breakAll) {
         CodeData plotCode = code.getCodeData();
 
         int codelineListIndex = getCodelineListIndex(location, plotCode);
@@ -117,7 +117,7 @@ public class CodeFileHelper {
         return plotCode;
     }
 
-    public static void updateAction(Location location, @NotNull CodeFile code, Action newAction) {
+    public static void updateAction(@NotNull Location location, @NotNull CodeFile code, Action newAction) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -148,12 +148,12 @@ public class CodeFileHelper {
             actionData = actionData.actions.get(positions.get(i));
         }
         actionData.action = newAction.getId();
-        actionData.arguments = new HashMap<>();
+        actionData.getArguments().clear();
 
         code.setCode(plotCode.toJson().toString());
     }
 
-    public static void updateEvent(Location location, @NotNull CodeFile code, Event newEvent) {
+    public static void updateEvent(@NotNull Location location, @NotNull CodeFile code, Event newEvent) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -174,7 +174,7 @@ public class CodeFileHelper {
         code.setCode(plotCode.toJson().toString());
     }
 
-    public static void updateTarget(Location location, @NotNull CodeFile code, Target newTarget) {
+    public static void updateTarget(@NotNull Location location, @NotNull CodeFile code, Target newTarget) {
         CodeData plotCode = code.getCodeData();
         int codelineListIndex = getCodelineListIndex(location, plotCode);
 
@@ -252,10 +252,19 @@ public class CodeFileHelper {
         throw new Exception("Somehow never reached the query location");
     }
 
-    public static @Nullable CodeActionData getActionAt(Location location, CodeData data) {
+    public static @Nullable CodeLineData getLineAt(@NotNull Location location, CodeData data) {
         int codelineIndex = CodeFileHelper.getCodelineListIndex(location, data);
         if (codelineIndex < 0 || codelineIndex >= data.codelines.size()) return null;
-        CodeLineData line = data.codelines.get(codelineIndex);
+        return data.codelines.get(codelineIndex);
+    }
+
+    public static @Nullable CodeActionData getActionAt(@NotNull Location location, CodeData data) {
+        CodeLineData line = getLineAt(location, data);
+        return getActionAt(location, line);
+    }
+
+    public static @Nullable CodeActionData getActionAt(@NotNull Location location, CodeLineData line) {
+        if (line == null) return null;
         try {
             List<Integer> positions = CodeFileHelper.findCodeIndex(location);
 
@@ -273,4 +282,21 @@ public class CodeFileHelper {
         }
     }
 
+    public static @Nullable ArgumentsData getArgsDataAt(@NotNull Location location, CodeData data) {
+        CodeBlocks codeblock = CodeBlocks.getByMaterial(location.getBlock().getType());
+        if (codeblock == null || !codeblock.hasBarrel) return null;
+        CodeLineData line = getLineAt(location, data);
+        CodeActionData action = getActionAt(location, line);
+        return action != null ? action : line;
+    }
+
+    public static @Nullable TagOptionsData getTagsDataAt(@NotNull Location location, CodeData data) {
+        ArgumentsData argsData = getArgsDataAt(location, data);
+        if (argsData == null) return null;
+        try {
+            return (TagOptionsData) argsData;
+        } catch (Exception _) {
+            return null;
+        }
+    }
 }

@@ -11,6 +11,7 @@ import hypersquare.hypersquare.plot.PlotDatabase;
 import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
@@ -96,9 +97,9 @@ public class Utilities {
         return sb.toString();
     }
 
-    public static void sendInfo(@NotNull CommandSender sender, Component message) {
+    public static void sendInfo(@NotNull CommandSender sender, Component message, TextColor color) {
         sender.sendMessage(Component.text("»")
-                .color(NamedTextColor.GREEN)
+            .color(color)
                 .decoration(TextDecoration.BOLD, true)
                 .append(Component.text(" ")
                         .color(NamedTextColor.GRAY)
@@ -107,16 +108,13 @@ public class Utilities {
                 )
         );
     }
-    public static void sendRedInfo(@NotNull Player player, Component message) {
-        player.sendMessage(Component.text("»")
-                .color(NamedTextColor.RED)
-                .decoration(TextDecoration.BOLD, true)
-                .append(Component.text(" ")
-                        .color(NamedTextColor.GRAY)
-                        .decoration(TextDecoration.BOLD, false)
-                        .append(message)
-                )
-        );
+
+    public static void sendInfo(@NotNull CommandSender sender, Component message) {
+        sendInfo(sender, message, NamedTextColor.GREEN);
+    }
+
+    public static void sendRedInfo(@NotNull CommandSender sender, Component message) {
+        sendInfo(sender, message, NamedTextColor.RED);
     }
 
     public static void sendOpenMenuSound(@NotNull Player player) {

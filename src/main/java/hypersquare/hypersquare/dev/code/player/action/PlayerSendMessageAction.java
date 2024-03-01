@@ -1,13 +1,14 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
@@ -45,19 +46,19 @@ public class PlayerSendMessageAction implements Action {
     }
 
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[]{
-                new ActionParameter(DisplayValue.TEXT, true, true, Component.text("The message(s) to send."), "messages")
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{
+            new BarrelParameter(DisplayValue.TEXT, true, true, Component.text("The message(s) to send."), "messages")
         };
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[]{
-            new ActionTag("text_merging", "Text Value Splitting", MergingOptions.SPACES,
-                    new ActionTag.Option(MergingOptions.NO_SPACES, "No spaces", Material.PAPER),
-                    new ActionTag.Option(MergingOptions.SPACES, "Add spaces", Material.MAP),
-                    new ActionTag.Option(MergingOptions.SEPARATE_MESSAGES, "Separate messages", Material.FILLED_MAP)
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{
+            new BarrelTag("text_merging", "Text Value Splitting", MergingOptions.SPACES,
+                new BarrelTag.Option(MergingOptions.NO_SPACES, "No spaces", Material.PAPER),
+                new BarrelTag.Option(MergingOptions.SPACES, "Add spaces", Material.MAP),
+                new BarrelTag.Option(MergingOptions.SEPARATE_MESSAGES, "Separate messages", Material.FILLED_MAP)
                     )
         };
     }
@@ -100,8 +101,8 @@ public class PlayerSendMessageAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 4, data)
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 4, data)
                 .parameter("messages", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
                 .tag("text_merging", 35);
     }

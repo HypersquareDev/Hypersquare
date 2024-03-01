@@ -3,24 +3,30 @@ package hypersquare.hypersquare.dev.codefile.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import hypersquare.hypersquare.dev.ArgumentsData;
+import hypersquare.hypersquare.dev.TagOptionsData;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class CodeActionData {
+public class CodeActionData implements ArgumentsData, TagOptionsData {
     public String action;
     public String target;
     public String codeblock;
     public final List<CodeActionData> actions = new LinkedList<>();
-    public HashMap<String, List<JsonObject>> arguments = new HashMap<>();
-    public final HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
+    private final HashMap<String, List<JsonObject>> arguments = new HashMap<>();
+    private final HashMap<String, Pair<String, VariableValue.HSVar>> tags = new HashMap<>();
 
     public CodeActionData() {
     }
 
-    public CodeActionData(JsonObject data) {
+    public CodeActionData(@NotNull JsonObject data) {
         action = data.get("action").getAsString();
         codeblock = data.get("codeblock").getAsString();
 
@@ -32,26 +38,17 @@ public class CodeActionData {
                 actions.add(new CodeActionData(element.getAsJsonObject()));
             }
         }
-        if (data.has("arguments")) {
-            for (Map.Entry<String, JsonElement> argument : data.get("arguments").getAsJsonObject().entrySet()) {
-                List<JsonObject> values = new ArrayList<>();
-                for (JsonElement value : argument.getValue().getAsJsonArray()) {
-                    values.add(value.getAsJsonObject());
-                }
-                arguments.put(argument.getKey(), values);
-            }
-        }
-        if (data.has("tags")) {
-            for (Map.Entry<String, JsonElement> tag : data.get("tags").getAsJsonObject().entrySet()) {
-                JsonObject obj = tag.getValue().getAsJsonObject();
-                VariableValue.HSVar var = null;
-                if (obj.has("var")) {
-                    var = (VariableValue.HSVar) CodeValues.VARIABLE.fromJson(obj.get("var").getAsJsonObject());
-                }
+        CodeData.parseArgsAndTags(data, arguments, tags);
+    }
 
-                tags.put(tag.getKey(), new Pair<>(obj.get("value").getAsString(), var));
-            }
-        }
+    @Override
+    public HashMap<String, List<JsonObject>> getArguments() {
+        return arguments;
+    }
+
+    @Override
+    public HashMap<String, Pair<String, VariableValue.HSVar>> getTags() {
+        return tags;
     }
 
     public JsonObject toJson() {

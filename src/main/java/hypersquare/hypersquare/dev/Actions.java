@@ -12,11 +12,12 @@ import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public enum Actions implements Action {
         this.a = a;
     }
 
-    public static Actions getAction(String id, String codeblockId) {
+    public static @Nullable Actions getAction(String id, String codeblockId) {
         if (id == null || codeblockId == null || id.equals("empty")) return Actions.EMPTY;
 
         for (Actions action : values()) {
@@ -48,7 +49,7 @@ public enum Actions implements Action {
         return null;
     }
 
-    public static Action getByData(CodeActionData data) {
+    public static @Nullable Action getByData(CodeActionData data) {
         for (Action action : Actions.values()) {
             if (Objects.equals(action.getId(), data.action) && Objects.equals(action.getCodeblockId(), data.codeblock)) return action;
         }
@@ -56,12 +57,12 @@ public enum Actions implements Action {
     }
 
     @Override
-    public ActionParameter[] parameters() {
+    public BarrelParameter[] parameters() {
         return a.parameters();
     }
 
     @Override
-    public ActionTag[] tags() {
+    public BarrelTag[] tags() {
         return a.tags();
     }
 
@@ -96,7 +97,7 @@ public enum Actions implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
+    public BarrelMenu actionMenu(CodeActionData data) {
         return a.actionMenu(data);
     }
 

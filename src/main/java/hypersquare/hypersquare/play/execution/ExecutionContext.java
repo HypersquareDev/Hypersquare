@@ -1,7 +1,7 @@
 package hypersquare.hypersquare.play.execution;
 
 import hypersquare.hypersquare.Hypersquare;
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.CodeValues;
@@ -33,12 +33,14 @@ public record ExecutionContext(
 
     @SuppressWarnings("unchecked")
     public <T> T getTag(String id, Function<String, T> o) {
-        Pair<String, VariableValue.HSVar> tagValue = data.tags.getOrDefault(id, new Pair<>(action.getTag(id).defaultOption().name(), null));
+        BarrelTag tag = action.getTag(id);
+        if (tag == null) throw new NullPointerException("Unknown tag! " + id);
+        Pair<String, VariableValue.HSVar> tagValue = data.getTags().getOrDefault(id, new Pair<>(tag.defaultOption().name(), null));
         if (tagValue.getB() != null) {
             CodeVariable var = (CodeVariable) CodeValues.VARIABLE.realValue(tagValue.getB());
             var.bind(this);
             String query = var.get(CodeValues.STRING);
-            for (ActionTag.Option opt : action.getTag(id).options()) {
+            for (BarrelTag.Option opt : tag.options()) {
                 if (opt.text().equals(query)) return (T) opt.id();
             }
         }

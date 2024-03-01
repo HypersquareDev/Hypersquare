@@ -1,13 +1,12 @@
-package hypersquare.hypersquare.menu.action.tag;
+package hypersquare.hypersquare.menu.barrel;
 
-import hypersquare.hypersquare.dev.ActionTag;
-import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.BarrelTag;
+import hypersquare.hypersquare.dev.TagOptionsData;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -17,12 +16,10 @@ import java.util.List;
 
 public class MenuTag extends MenuItem {
 
-    public final CodeActionData data;
-    public final ActionTag tag;
+    public final BarrelTag tag;
 
-    public MenuTag(ActionTag tag, CodeActionData data) {
+    public MenuTag(BarrelTag tag, TagOptionsData data) {
         super(currentOption(tag, data).icon());
-        this.data = data;
         this.tag = tag;
 
         name(Component.text("Tag: ")
@@ -34,7 +31,7 @@ public class MenuTag extends MenuItem {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
 
-        VariableValue.HSVar var = data.tags.getOrDefault(tag.id(), new Pair<>(null, null)).getB();
+        VariableValue.HSVar var = data.getTags().getOrDefault(tag.id(), new Pair<>(null, null)).getB();
         if (var != null) {
             lore.add(Component.text("[").decoration(TextDecoration.ITALIC, false)
                 .append(Component.text(var.scope().letter))
@@ -53,7 +50,7 @@ public class MenuTag extends MenuItem {
             lore.add(Component.empty());
         }
 
-        for (ActionTag.Option option : tag.options()) {
+        for (BarrelTag.Option option : tag.options()) {
             if (option == currentOption(tag, data)) {
                 lore.add(Component.text("» ")
                         .decoration(TextDecoration.ITALIC, false)
@@ -75,7 +72,7 @@ public class MenuTag extends MenuItem {
         hideAllFlags();
     }
 
-    public static ActionTag.Option currentOption(@NotNull ActionTag tag, @NotNull CodeActionData data) {
-        return tag.getOption(data.tags.getOrDefault(tag.id(), new Pair<>(tag.defaultOption().name(), null)).getA());
+    public static BarrelTag.Option currentOption(@NotNull BarrelTag tag, @NotNull TagOptionsData data) {
+        return tag.getOption(data.getTags().getOrDefault(tag.id(), new Pair<>(tag.defaultOption().name(), null)).getA());
     }
 }

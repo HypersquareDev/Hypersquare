@@ -1,6 +1,7 @@
 package hypersquare.hypersquare.dev.code.player.action;
 
-import hypersquare.hypersquare.dev.ActionTag;
+import hypersquare.hypersquare.dev.BarrelParameter;
+import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.dev.value.type.DecimalNumber;
@@ -8,7 +9,7 @@ import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
-import hypersquare.hypersquare.menu.action.ActionMenu;
+import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
@@ -60,27 +61,25 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     @Override
-    public ActionMenu actionMenu(CodeActionData data) {
-        return new ActionMenu(this, 4, data)
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 4, data)
                 .parameter("items", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
                 .parameter("multiplier", 35);
     }
 
     @Override
-    public ActionParameter[] parameters() {
-        return new ActionParameter[]{
-                new Action.ActionParameter(
-                        DisplayValue.ITEM, true, false, Component.text("Item(s) to give"), "items"
-                ),
-                new Action.ActionParameter(
-                        DisplayValue.NUMBER, false, true, Component.text("Amount to multiply by"), "multiplier"
-                )
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{
+            new BarrelParameter(
+                DisplayValue.ITEM, true, false, Component.text("Item(s) to give"), "items"),
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, true, Component.text("Amount to multiply by"), "multiplier"),
         };
     }
 
     @Override
-    public ActionTag[] tags() {
-        return new ActionTag[] {};
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
     }
 
     public String getId() {

@@ -1,10 +1,11 @@
 package hypersquare.hypersquare.dev;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.Nullable;
 
-public record ActionTag(String id, String name, Enum<?> defaultOption, Option... options) {
+public record BarrelTag(String id, String name, Enum<?> defaultOption, Option... options) {
 
-    public Option getOption(String id) {
+    public @Nullable Option getOption(String id) {
         for (Option o : options) {
             if (o.id.name().equals(id)) return o;
         }

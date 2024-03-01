@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.ArgumentsData;
 import hypersquare.hypersquare.dev.TagOptionsData;
-import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.VariableValue;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -13,7 +12,6 @@ import oshi.util.tuples.Pair;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class CodeActionData implements ArgumentsData, TagOptionsData {
     public String action;
@@ -58,36 +56,10 @@ public class CodeActionData implements ArgumentsData, TagOptionsData {
         data.addProperty("target", target);
         if (!actions.isEmpty()) {
             JsonArray actions = new JsonArray();
-            for (CodeActionData action : this.actions) {
-                actions.add(action.toJson());
-            }
+            for (CodeActionData action : this.actions) actions.add(action.toJson());
             data.add("actions", actions);
         }
-        if (!arguments.isEmpty()) {
-            JsonObject obj = new JsonObject();
-            for (Map.Entry<String, List<JsonObject>> entry : arguments.entrySet()) {
-                JsonArray values = new JsonArray();
-
-                for (JsonObject value : entry.getValue()) {
-                    values.add(value);
-                }
-
-                obj.add(entry.getKey(), values);
-            }
-            data.add("arguments", obj);
-        }
-        if (!tags.isEmpty()) {
-            JsonObject obj = new JsonObject();
-
-            for (Map.Entry<String, Pair<String, VariableValue.HSVar>> entry : tags.entrySet()) {
-                JsonObject tag = new JsonObject();
-                tag.addProperty("value", entry.getValue().getA());
-                if (entry.getValue().getB() != null) tag.add("var", CodeValues.VARIABLE.getVarItemData(entry.getValue().getB()));
-                obj.add(entry.getKey(), tag);
-            }
-
-            data.add("tags", obj);
-        }
+        CodeData.argsAndTagsToJson(data, arguments, tags);
         return data;
     }
 }

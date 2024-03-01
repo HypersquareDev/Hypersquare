@@ -37,16 +37,15 @@ public class CodeLineData implements ArgumentsData, TagOptionsData, BarrelParamS
     }
 
     public JsonElement toJson() {
-        JsonObject out = new JsonObject();
-        out.addProperty("position", position);
-        out.addProperty("type", type);
-        out.addProperty("event", event);
+        JsonObject data = new JsonObject();
+        data.addProperty("position", position);
+        data.addProperty("type", type);
+        data.addProperty("event", event);
         JsonArray actions = new JsonArray();
-        for (CodeActionData action : this.actions) {
-            actions.add(action.toJson());
-        }
-        out.add("actions", actions);
-        return out;
+        for (CodeActionData action : this.actions) actions.add(action.toJson());
+        data.add("actions", actions);
+        CodeData.argsAndTagsToJson(data, arguments, tags);
+        return data;
     }
 
     @Override

@@ -164,10 +164,13 @@ public class CodePlacement implements Listener {
             Sign sign = (Sign) signLocation.getBlock().getState();
             sign.setWaxed(true);
             sign.getSide(Side.FRONT).line(0, Component.text(codeblock.name).color(Colors.YELLOW_LIGHT));
-            if (codeblock.defaultAction != null) {
-                Actions defaultAction = Actions.getAction(codeblock.defaultAction, codeblock.id);
-                if (defaultAction != null) sign.getSide(Side.FRONT).line(1, Component.text(defaultAction.getSignName()).color(Colors.WHITE));
-                else sign.getSide(Side.FRONT).line(1, Component.text("INVALID DEFAULTd").color(Colors.RED));
+            if (!codeblock.defaultAction.isEmpty()) {
+                String defaultAction = codeblock.defaultAction;
+                Actions action = Actions.getAction(defaultAction, codeblock.id);
+                if (action != null && action != Actions.EMPTY) {
+                    sign.getSide(Side.FRONT).line(1, Component.text(action.getSignName()).color(Colors.WHITE));
+                }
+                else sign.getSide(Side.FRONT).line(1, Component.text("INVALID DEFAULT").color(Colors.RED));
             }
             sign.update();
             signLocation.getBlock().setBlockData(blockData);

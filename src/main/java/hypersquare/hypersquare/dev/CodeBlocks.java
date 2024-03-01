@@ -63,7 +63,6 @@ public enum CodeBlocks {
     }
 
     public static @Nullable CodeBlocks getByMaterial(Material material) {
-        System.out.println("Looking for codeblock with material " + material);
         for (CodeBlocks codeBlock : CodeBlocks.values()) {
             if (codeBlock.material == material) return codeBlock;
         }

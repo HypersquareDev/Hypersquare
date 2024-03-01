@@ -114,7 +114,9 @@ public class CodeExecutor {
         try { targetSel = getTargetSel(data.target, action, trace, frame.selection); } catch (Exception e) {
             throw new HSException(CodeErrorType.FAILED_TARGET, e);
         }
-        run.apply(ctx, targetSel);
+        try { run.apply(ctx, targetSel); } catch (Exception e) {
+            throw new HSException(CodeErrorType.INTERNAL_ERROR, e);
+        }
     }
 
     private CodeSelection getTargetSel(String target, Action action, CodeStacktrace trace, CodeSelection selection) {

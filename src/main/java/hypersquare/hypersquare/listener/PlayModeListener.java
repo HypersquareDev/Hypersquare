@@ -80,7 +80,6 @@ public class PlayModeListener implements Listener {
 
     @EventHandler
     public void playerPlaceBlockEvent(BlockPlaceEvent event) {
-        System.out.println("this fires yesy eys yes");
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
         CodeExecutor executor = PlotUtilities.getExecutor(player);

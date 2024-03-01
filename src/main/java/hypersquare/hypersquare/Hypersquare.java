@@ -141,7 +141,6 @@ public final class Hypersquare extends JavaPlugin {
         );
 
         for (Listener l : listeners) pm.registerEvents(l, this);
-        System.out.println(Arrays.toString(BlockPlaceEvent.getHandlerList().getRegisteredListeners()));
 
         loadLastUsedWorldNumber();
         CommandManager.registerCommands();

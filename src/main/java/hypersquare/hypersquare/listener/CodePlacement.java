@@ -47,7 +47,6 @@ import org.jetbrains.annotations.NotNull;
 public class CodePlacement implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA GOD HELP ME");
         Thread.dumpStack();
         String mode = Hypersquare.mode.get(event.getPlayer());
         if (mode.equals("building") || mode.equals("playing")) {
@@ -106,12 +105,10 @@ public class CodePlacement implements Listener {
 
 
     public void processPlace(@NotNull BlockPlaceEvent event) {
-        System.out.println("process place called"); // nvm this shi is not being caled
         Long cooldown = Hypersquare.cooldownMap.get(event.getPlayer().getUniqueId());
         if (cooldown == null) cooldown = 0L;
         event.setCancelled(true);
         if (cooldown <= System.currentTimeMillis()) {
-            System.out.println("playing holding "+event.getItemInHand().getType());
             CodeBlocks codeblock = CodeBlocks.getByMaterial(event.getItemInHand().getType());
             if (codeblock == null) return; // Player placed a block that is not a codeblock
             Hypersquare.cooldownMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis() + 150);
@@ -156,7 +153,6 @@ public class CodePlacement implements Listener {
     }
 
     private static void placeBlock(ItemStack codeblockItem, @NotNull Location location, CodeBlocks codeblock) {
-        System.out.println("placing block at "+location);
         Location signLocation = location.clone().add(-1, 0, 0);
         CodeFile code = new CodeFile(location.getWorld());
         JsonArray codeJson = CodeFileHelper.addCodeblock(location.clone(), codeblock, code).toJson();

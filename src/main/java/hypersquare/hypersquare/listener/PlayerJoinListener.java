@@ -11,12 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static hypersquare.hypersquare.Hypersquare.fullMM;
 
 public class PlayerJoinListener implements Listener {
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Hypersquare.mode.put(player, "at spawn");
         if (!PlayerDatabase.playerExists(player.getUniqueId())) {

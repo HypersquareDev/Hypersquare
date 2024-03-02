@@ -2,6 +2,7 @@ package hypersquare.hypersquare.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.plot.PlayerDatabase;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
@@ -23,12 +24,12 @@ public class GivePlotsCommand implements HyperCommand {
                                 try {
                                     target = EntityArgument.getPlayer(ctx, "player").getBukkitEntity();
                                 } catch (Exception e) {
-                                    Utilities.sendError(ctx.getSource().getBukkitSender(), "That player is not online.");
+                                    HSException.sendError(ctx.getSource().getBukkitSender(), "That player is not online.");
                                     return DONE;
                                 }
 
                                 if (!ctx.getSource().getBukkitSender().hasPermission("hypersquare.giveplots")) {
-                                    Utilities.sendError(ctx.getSource().getBukkitSender(), "");
+                                    HSException.sendError(ctx.getSource().getBukkitSender(), "");
                                     return DONE;
                                 }
 

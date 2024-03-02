@@ -1,8 +1,10 @@
 package hypersquare.hypersquare.util;
 
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -14,16 +16,13 @@ import org.bukkit.Color;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
  * NOTICE: This utility was developer as part of AeolusLib. While you can use it for your own projects, You are NOT allowed to delete or move this header comment.
- *
  * Utility:
  * Chainable {@link ItemStack}s
- *
  * @author MCAeolus, modified by RedVortex_
  * @version 1.1
  */
@@ -101,21 +100,6 @@ public class ItemBuilder {
      * Changes the {@link ItemStack}s display name.
      *
      * @param name
-     *          the new String for the ItemStack's display name to be set to.
-     *
-     * @return the current instance for chainable application.
-     * @since 1.0
-     */
-    public ItemBuilder name(final String name){
-        meta().setDisplayName(name);
-        build().setItemMeta(meta());
-        return this;
-    }
-
-    /**
-     * Changes the {@link ItemStack}s display name.
-     *
-     * @param name
      *          the new Component for the ItemStack's display name to be set to.
      *
      * @return the current instance for chainable application.
@@ -181,20 +165,16 @@ public class ItemBuilder {
     }
 
     /**
-     * Clears the {@link ItemStack}s lore and replaces it with the defined String array.
+     * Clears the {@link ItemStack}s lore and replaces it with the defined Component list.
      *
      * @param lores
-     *            String array you want to set the ItemStack's lore to.
+     *            Component list to set the ItemStack's lore to.
      *
      * @return the current instance for chainable application.
-     * @since 1.0
+     * @since 1.1
      */
-    public ItemBuilder lores(final String[] lores){
-        List<String> loresList = meta().getLore();
-        if(loresList == null){loresList = new ArrayList<>();}
-        else{loresList.clear();}
-        Collections.addAll(loresList, lores);
-        meta().setLore(loresList);
+    public ItemBuilder lores(final List<Component> lores){
+        meta().lore(lores);
         return this;
     }
 
@@ -202,7 +182,6 @@ public class ItemBuilder {
      * Sets a custom String tag to the {@link ItemStack}
      * @param key The namespaced key to set the value to
      * @param value The value to set the key to
-     * @return
      */
     public ItemBuilder setCustomTag(NamespacedKey key, String value) {
         meta().getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
@@ -223,7 +202,7 @@ public class ItemBuilder {
      * @since 1.0
      */
     public ItemBuilder durability(final int durability){
-        build().setDurability((short) durability);
+        ((Damageable) build()).setDamage((short) durability);
         return this;
     }
 
@@ -243,7 +222,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Adds and UnsafeEnchantment to the {@link ItemStack} with a defined level int value.
+     * Adds an UnsafeEnchantment to the {@link ItemStack} with a defined level int value.
      *
      * @param enchantment
      *              the {@link Enchantment} to add to the ItemStack.
@@ -260,7 +239,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Adds and UnsafeEnchantment to the {@Link} with a level int value of 1.
+     * Adds an UnsafeEnchantment to the {@link ItemStack} with a level int value of 1.
      *
      * @param enchantment
      *              the {@link Enchantment} to add to the ItemStack.
@@ -279,7 +258,7 @@ public class ItemBuilder {
         meta().addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta().addItemFlags(ItemFlag.HIDE_DYE);
         meta().addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        meta().addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta().addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
         meta().addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta().addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
         return this;
@@ -373,28 +352,29 @@ public class ItemBuilder {
     }
 
     /**
-     * Clears the defined {@link String} of lore from the {@link ItemStack}
+     * Clears the defined {@link Component} of lore from the {@link ItemStack}
      *
      * @param lore
      *          the String to be removed from the ItemStack.
      *
      * @return the current instance for chainable application.
-     * @since 1.0
+     * @since 1.1
      */
-    public ItemBuilder clearLore(final String lore){
-        meta().getLore().remove(lore);
+    public ItemBuilder clearLore(final Component lore){
+        if (!meta().lore().contains(lore)) return this;
+        meta().lore().remove(lore);
         build().setItemMeta(meta());
         return this;
     }
 
     /**
-     * Clears all lore {@link String}s from the {@link ItemStack}
+     * Clears all lore {@link Component}s from the {@link ItemStack}
      *
      * @return the current instance for chainable application.
-     * @since 1.0
+     * @since 1.1
      */
     public ItemBuilder clearLores(){
-        meta().getLore().clear();
+        meta().lore().clear();
         build().setItemMeta(meta());
         return this;
     }
@@ -448,9 +428,9 @@ public class ItemBuilder {
      * @since 1.0
      */
     public ItemBuilder skullOwner(final String name){
-        if(build().getType() == Material.PLAYER_HEAD && build().getDurability() == (byte) 3){
+        if(build().getType() == Material.PLAYER_HEAD){
             SkullMeta skullMeta = (SkullMeta) meta();
-            skullMeta.setOwner(name);
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
             build().setItemMeta(meta());
         }
         return this;
@@ -471,7 +451,7 @@ public class ItemBuilder {
      * @return the ItemStack of the ItemBuilder instance.
      */
     public ItemStack build(){
-        meta().setDisplayName(ChatColor.RESET + meta().getDisplayName());
+        meta().displayName(Component.empty().color(Colors.WHITE).decoration(TextDecoration.ITALIC, false).append(meta().displayName()));
         item.setItemMeta(meta());
         return item;
     }

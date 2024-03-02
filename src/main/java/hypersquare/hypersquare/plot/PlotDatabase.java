@@ -43,6 +43,9 @@ import java.util.zip.ZipInputStream;
 
 import static hypersquare.hypersquare.Hypersquare.*;
 
+// bro istfg chicken needs to be locked up for writing the plot related classes
+// this is hard to read and unnecessarily long ;-;
+
 public class PlotDatabase {
     private static MongoDatabase database;
     private static MongoCollection<Document> plotsCollection;
@@ -65,11 +68,10 @@ public class PlotDatabase {
     public static void createTemplates(String worldName, String schematicName) {
         Document templateDoc = new Document(worldName, schematicName);
         SlimeWorld world = slimePlugin.getWorld(worldName);
-
         if (world == null) {
-
             String schematicsPath = "plugins/FastAsyncWorldEdit/schematics/";
-            if (!Files.exists(Path.of(schematicsPath + schematicName))) {
+            Path schemPath = Path.of(schematicsPath + schematicName);
+            if (!Files.exists(schemPath)) {
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder(new URI("https://dl.dropboxusercontent.com/scl/fi/va3kne1vo7x1nc5qi2jd4/schematics.zip?rlkey=s2ze6j7jf1y9h8ofafakhmffm&dl=1")).build();
@@ -77,15 +79,15 @@ public class PlotDatabase {
                     ByteArrayInputStream byteStream = new ByteArrayInputStream(schematics);
                     ZipInputStream zipStream = new ZipInputStream(byteStream);
                     ZipEntry zipEntry = zipStream.getNextEntry();
-                    Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
+                    boolean mkdirsSuccess = Path.of("plugins/FastAsyncWorldEdit/schematics").toFile().mkdirs();
+                    if (!mkdirsSuccess) Hypersquare.logger().warning("Couldn't create directory 'plugins/FastAsyncWorldEdit/schematics'!");
                     while (zipEntry != null) {
-                        System.out.println(zipEntry.getName());
                         Files.copy(zipStream, Path.of(schematicsPath + zipEntry.getName()));
                         zipEntry = zipStream.getNextEntry();
                     }
                     zipStream.close();
                 } catch (Exception err) {
-                    Bukkit.getLogger().warning(err.toString());
+                    Hypersquare.logger().warning(err.toString());
                 }
             }
 
@@ -101,7 +103,7 @@ public class PlotDatabase {
                 Hypersquare.slimePlugin.loadWorld(world);
                 Clipboard clipboard;
 
-                File schematic = Path.of(schematicsPath + schematicName).toFile();
+                File schematic = schemPath.toFile();
 
                 ClipboardFormat format = ClipboardFormats.findByFile(schematic);
                 try (ClipboardReader reader = format.getReader(new FileInputStream(schematic))) {
@@ -116,7 +118,7 @@ public class PlotDatabase {
                     Operations.complete(operation);
                 }
 
-                Bukkit.getWorld(world.getName()).save();
+                Objects.requireNonNull(Bukkit.getWorld(world.getName())).save();
             } catch (Exception e) {
                 return;
             }
@@ -256,10 +258,8 @@ public class PlotDatabase {
     public static Integer getPlotVersion(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
-        if (result != null) {
-            return result.getInteger("version");
-        }
-        return null;
+        if (result != null) return result.getInteger("version");
+        return 0;
     }
 
     public static int getPlotNode(int plotID) {
@@ -274,11 +274,7 @@ public class PlotDatabase {
     public static String getPlotIcon(int plotID) {
         Document query = new Document("plotID", plotID);
         Document result = plotsCollection.find(query).first();
-
-        if (result != null) {
-            return result.getString("icon");
-        }
-
+        if (result != null) return result.getString("icon");
         return null;
     }
 
@@ -321,6 +317,19 @@ public class PlotDatabase {
 
         // Use Filters.eq to find documents with the matching ownerUUID
         FindIterable<Document> plotDocuments = plotsCollection.find(Filters.eq("owner", ownerUUID));
+
+        for (Document plotDocument : plotDocuments) {
+            plots.add(plotDocument);
+        }
+
+        return plots;
+    }
+
+    public static List<Document> getAllPlots() {
+        List<Document> plots = new ArrayList<>();
+        MongoCollection<Document> plotsCollection = database.getCollection("plots");
+
+        FindIterable<Document> plotDocuments = plotsCollection.find();
 
         for (Document plotDocument : plotDocuments) {
             plots.add(plotDocument);
@@ -401,26 +410,32 @@ public class PlotDatabase {
             String currentBuilders = result.getString("builders");
 
             // Split the currentDevs string into an array of player IDs
-            String[] devsArray = currentBuilders.split(",");
-
-            // Create a StringBuilder to construct the newDevs string
-            StringBuilder newBuildersBuilder = new StringBuilder();
-
-            for (String dev : devsArray) {
-                if (!dev.equals(playerID.toString())) {
-                    if (!newBuildersBuilder.isEmpty()) {
-                        newBuildersBuilder.append(",");
-                    }
-                    newBuildersBuilder.append(dev);
-                }
-            }
-
-            String newBuilders = newBuildersBuilder.toString();
+            String newBuilders = playerListToUUIDArray(playerID, currentBuilders);
 
             // Update the document with the newDevs string
             Document update = new Document("$set", new Document("builders", newBuilders));
             plotsCollection.updateOne(query, update);
         }
+    }
+
+    @NotNull
+    private static String playerListToUUIDArray(UUID playerID, String currentBuilders) {
+        String[] devsArray = currentBuilders.split(",");
+
+        // Create a StringBuilder to construct the newDevs string
+        StringBuilder newBuildersBuilder = new StringBuilder();
+
+        for (String dev : devsArray) {
+            if (!dev.equals(playerID.toString())) {
+                if (!newBuildersBuilder.isEmpty()) {
+                    newBuildersBuilder.append(",");
+                }
+                newBuildersBuilder.append(dev);
+            }
+        }
+
+        String newBuilders = newBuildersBuilder.toString();
+        return newBuilders;
     }
 
     public static void removeDev(int plotID, UUID playerID) {
@@ -431,21 +446,7 @@ public class PlotDatabase {
             String currentDevs = result.getString("devs");
 
             // Split the currentDevs string into an array of player IDs
-            String[] devsArray = currentDevs.split(",");
-
-            // Create a StringBuilder to construct the newDevs string
-            StringBuilder newDevsBuilder = new StringBuilder();
-
-            for (String dev : devsArray) {
-                if (!dev.equals(playerID.toString())) {
-                    if (!newDevsBuilder.isEmpty()) {
-                        newDevsBuilder.append(",");
-                    }
-                    newDevsBuilder.append(dev);
-                }
-            }
-
-            String newDevs = newDevsBuilder.toString();
+            String newDevs = playerListToUUIDArray(playerID, currentDevs);
 
             // Update the document with the newDevs string
             Document update = new Document("$set", new Document("devs", newDevs));
@@ -506,10 +507,6 @@ public class PlotDatabase {
         return uniqueEvents;
     }
 
-
-    public static void updateEventsCache(int plotID) {
-        eventCache.put(plotID, PlotDatabase.getAllUniqueEventsInPlot(plotID));
-    }
 
     public static void removeEventByKey(int plotID, String eventKeyToRemove) {
         Document filter = new Document("plotID", plotID);

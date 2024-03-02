@@ -23,6 +23,7 @@ public class CodeItems {
     public static ItemStack SELECT_OBJECT_ITEM;
     public static ItemStack REPEAT_ITEM;
     public static ItemStack ELSE_ITEM;
+    public static ItemStack DEV_ITEM;
     public static ItemStack BLOCKS_SHORTCUT;
     public static ItemStack VALUES_INGOT;
 
@@ -228,6 +229,13 @@ public class CodeItems {
                         "was not met. Else must be placed directly",
                         "after any If block's closing bracket.")
                 .build();
+
+        DEV_ITEM = new CodeItem(Material.DIORITE)
+            .name("<#FF7FAA>Dev Action")
+            .description("Used for debugging and development.",
+                         "These actions are not intended for",
+                         "use in normal code.")
+            .build();
 
         BLOCKS_SHORTCUT = new CodeItem(Material.DIAMOND)
                 .name("<aqua>Code Blocks")

@@ -46,7 +46,7 @@ public class CodeStacktrace {
     public static class Frame {
         public final List<CodeActionData> actions;
         public final HashMap<String, Object> tempData = new HashMap<>();
-        public CodeSelection selection;
+        public final CodeSelection selection;
         public int position = 0;
 
         public Frame(List<CodeActionData> actions, CodeSelection selection) {

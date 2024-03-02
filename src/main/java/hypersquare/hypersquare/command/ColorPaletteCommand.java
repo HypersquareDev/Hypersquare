@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColorPaletteCommand implements HyperCommand {
-    String square = "█";
+    final String square = "█";
 
     @NotNull
     private static List<String> getColorGroups(Field[] fields) {

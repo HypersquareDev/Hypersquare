@@ -95,8 +95,4 @@ public class CreatePlotsMenu {
 
         menu.open(player);
     }
-
-    private void create() {
-
-    }
 }

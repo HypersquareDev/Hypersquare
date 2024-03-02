@@ -33,7 +33,7 @@ public class CodeExecutor {
     public final static int RUNNING_LIMIT = 100;
 
     public final int plotId;
-    public SetMultimap<Event, EventRunnable> running = MultimapBuilder.hashKeys().hashSetValues().build();
+    public final SetMultimap<Event, EventRunnable> running = MultimapBuilder.hashKeys().hashSetValues().build();
     public final CodeVariableScope globalScope = new CodeVariableScope();
 
     public CodeExecutor(int plotId) {

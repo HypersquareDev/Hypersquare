@@ -37,7 +37,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -273,7 +272,7 @@ public class CodePlacement implements Listener {
                 Location barrelLoc = blockLoc.clone().add(0, 1, 0);
                 Location stoneLoc = blockLoc.clone().add(0, 0, 1);
 
-                Location bracketLoc = CodeBlockManagement.findCorrespBracket(blockLoc.clone());
+                Location bracketLoc = CodeBlockManagement.findCorrespondingBracket(blockLoc.clone());
                 signBlock.setType(Material.AIR);
                 block.setType(Material.AIR);
                 if (stoneLoc.getBlock().getType() == Material.PISTON || stoneLoc.getBlock().getType() == Material.STICKY_PISTON) {

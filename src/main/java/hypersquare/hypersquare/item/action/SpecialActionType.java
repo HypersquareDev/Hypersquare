@@ -9,8 +9,8 @@ public enum SpecialActionType {
     ADVANCED(Colors.ORANGE_LIGHT, "Advanced"),
     DEV(Colors.ROSE, "Dev");
 
-    TextColor color;
-    String name;
+    final TextColor color;
+    final String name;
     SpecialActionType(TextColor color, String name) {
         this.color = color;
         this.name = name;

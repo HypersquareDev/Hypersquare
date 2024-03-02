@@ -410,26 +410,32 @@ public class PlotDatabase {
             String currentBuilders = result.getString("builders");
 
             // Split the currentDevs string into an array of player IDs
-            String[] devsArray = currentBuilders.split(",");
-
-            // Create a StringBuilder to construct the newDevs string
-            StringBuilder newBuildersBuilder = new StringBuilder();
-
-            for (String dev : devsArray) {
-                if (!dev.equals(playerID.toString())) {
-                    if (!newBuildersBuilder.isEmpty()) {
-                        newBuildersBuilder.append(",");
-                    }
-                    newBuildersBuilder.append(dev);
-                }
-            }
-
-            String newBuilders = newBuildersBuilder.toString();
+            String newBuilders = playerListToUUIDArray(playerID, currentBuilders);
 
             // Update the document with the newDevs string
             Document update = new Document("$set", new Document("builders", newBuilders));
             plotsCollection.updateOne(query, update);
         }
+    }
+
+    @NotNull
+    private static String playerListToUUIDArray(UUID playerID, String currentBuilders) {
+        String[] devsArray = currentBuilders.split(",");
+
+        // Create a StringBuilder to construct the newDevs string
+        StringBuilder newBuildersBuilder = new StringBuilder();
+
+        for (String dev : devsArray) {
+            if (!dev.equals(playerID.toString())) {
+                if (!newBuildersBuilder.isEmpty()) {
+                    newBuildersBuilder.append(",");
+                }
+                newBuildersBuilder.append(dev);
+            }
+        }
+
+        String newBuilders = newBuildersBuilder.toString();
+        return newBuilders;
     }
 
     public static void removeDev(int plotID, UUID playerID) {
@@ -440,21 +446,7 @@ public class PlotDatabase {
             String currentDevs = result.getString("devs");
 
             // Split the currentDevs string into an array of player IDs
-            String[] devsArray = currentDevs.split(",");
-
-            // Create a StringBuilder to construct the newDevs string
-            StringBuilder newDevsBuilder = new StringBuilder();
-
-            for (String dev : devsArray) {
-                if (!dev.equals(playerID.toString())) {
-                    if (!newDevsBuilder.isEmpty()) {
-                        newDevsBuilder.append(",");
-                    }
-                    newDevsBuilder.append(dev);
-                }
-            }
-
-            String newDevs = newDevsBuilder.toString();
+            String newDevs = playerListToUUIDArray(playerID, currentDevs);
 
             // Update the document with the newDevs string
             Document update = new Document("$set", new Document("devs", newDevs));

@@ -13,7 +13,7 @@ public class ClickTexts {
             .append(Component.text("⏵").color(rightColor));
     }
 
-    public static Component LEFT_CLICK = createClickComponent(Colors.LIME, Colors.GRAY_DARK, Colors.GRAY);
+    public static final Component LEFT_CLICK = createClickComponent(Colors.LIME, Colors.GRAY_DARK, Colors.GRAY);
     public static Component RIGHT_CLICK = createClickComponent(Colors.GRAY, Colors.GRAY_DARK, Colors.LIME);
     public static Component MIDDLE_CLICK = createClickComponent(Colors.GRAY, Colors.LIME, Colors.GRAY);
 }

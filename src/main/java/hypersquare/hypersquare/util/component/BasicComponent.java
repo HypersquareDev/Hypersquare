@@ -6,7 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
 /**
- * Class to create Components that come unitalicized out of the box
+ * Class to create Components that come un-italicized out of the box
  */
 public class BasicComponent {
     /**

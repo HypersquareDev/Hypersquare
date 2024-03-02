@@ -11,6 +11,7 @@ import hypersquare.hypersquare.dev.codefile.CodeFile;
 import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.WorldUtilities;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -74,10 +75,11 @@ public class Plot {
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
-        meta.setDisplayName(ChatColor.RESET + meta.getDisplayName());
+        meta.displayName(Component.empty().color(Colors.WHITE).decoration(TextDecoration.ITALIC, false)
+            .append(meta.displayName()));
         plotItem.setItemMeta(meta);
         return plotItem;
     }
@@ -154,6 +156,7 @@ public class Plot {
                                     plugin.loadWorld(world);
                                 } catch (Exception e) {
                                     if (e instanceof UnknownWorldException) HSException.sendError(player, "That plot is vacant.");
+                                    if (e instanceof NullPointerException) HSException.sendError(player, "Cannot find the world.");
                                 }
                                 Utilities.getWorldDataFromSlimeWorlds(player.getWorld());
                             }

@@ -4,7 +4,7 @@ import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -16,7 +16,6 @@ import org.bukkit.Color;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -203,7 +202,7 @@ public class ItemBuilder {
      * @since 1.0
      */
     public ItemBuilder durability(final int durability){
-        build().setDurability((short) durability);
+        ((Damageable) build()).setDamage((short) durability);
         return this;
     }
 
@@ -223,7 +222,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Adds and UnsafeEnchantment to the {@link ItemStack} with a defined level int value.
+     * Adds an UnsafeEnchantment to the {@link ItemStack} with a defined level int value.
      *
      * @param enchantment
      *              the {@link Enchantment} to add to the ItemStack.
@@ -240,7 +239,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Adds and UnsafeEnchantment to the {@Link} with a level int value of 1.
+     * Adds an UnsafeEnchantment to the {@link ItemStack} with a level int value of 1.
      *
      * @param enchantment
      *              the {@link Enchantment} to add to the ItemStack.
@@ -429,9 +428,9 @@ public class ItemBuilder {
      * @since 1.0
      */
     public ItemBuilder skullOwner(final String name){
-        if(build().getType() == Material.PLAYER_HEAD && build().getDurability() == (byte) 3){
+        if(build().getType() == Material.PLAYER_HEAD){
             SkullMeta skullMeta = (SkullMeta) meta();
-            skullMeta.setOwner(name);
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
             build().setItemMeta(meta());
         }
         return this;

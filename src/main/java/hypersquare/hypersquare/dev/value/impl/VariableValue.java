@@ -86,7 +86,6 @@ public class VariableValue implements CodeValue<VariableValue.HSVar, CodeVariabl
         );
     }
 
-    // there's literally not gonna be any other cases for onRightClick other than this and the param value
     public void onRightClick(Player player, HSVar var) {
         Menu scopeSwitcher = new Menu(Component.text("Scope Switcher"), 1);
 

@@ -74,9 +74,10 @@ public class ChangeGameMode {
     public static void playMode(Player player, int plotID) {
         String worldName = "hs." + plotID;
         Plot.loadPlot(plotID, player, () -> {
-            PlotManager.loadPlot(plotID);
             int oldPlotID = PlotUtilities.getPlotId(player.getWorld());
             String oldMode = Hypersquare.mode.get(player);
+
+            PlotManager.loadPlot(plotID);
             CodeExecutor executor = codeExecMap.get(plotID);
             PlayerQuitEvent leaveEvent = quitEvent(player);
             if (oldMode.equals("playing")) executor.trigger(Events.PLAYER_LEAVE_EVENT, leaveEvent, new CodeSelection(player));
@@ -93,7 +94,7 @@ public class ChangeGameMode {
 
             String ownerName;
             try { // Edge case where the owner of the plot is not in the database
-                ownerName = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
+                ownerName = Bukkit.getOfflinePlayer(Objects.requireNonNull(PlotManager.getPlotOwner(plotID))).getName();
             } catch (NullPointerException e) {
                 ownerName = "Unknown"; // This should never happen!
             }

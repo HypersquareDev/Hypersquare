@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class UnloadPlotsSchedule {
@@ -53,9 +54,12 @@ public class UnloadPlotsSchedule {
     }
 
     private static void gameUnload(int plotId, @NotNull World buildWorld) {
-        Hypersquare.gameUnloadTimestamp.put(plotId, System.currentTimeMillis());
-        buildWorld.getEntities().listIterator().forEachRemaining(Entity::remove);
-        CodeExecutor executor = Hypersquare.codeExecMap.get(plotId);
-        if (executor != null) executor.halt();
+        Bukkit.getScheduler().runTaskLater(Hypersquare.instance, () -> {
+                Hypersquare.gameUnloadTimestamp.put(plotId, System.currentTimeMillis());
+                buildWorld.getEntities().listIterator().forEachRemaining(Entity::remove);
+                CodeExecutor executor = Hypersquare.codeExecMap.get(plotId);
+                if (executor != null) executor.halt();
+            },
+        1);
     }
 }

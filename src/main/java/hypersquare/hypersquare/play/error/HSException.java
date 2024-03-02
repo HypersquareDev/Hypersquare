@@ -51,7 +51,7 @@ public class HSException extends RuntimeException {
         String[] split = s.toString().split("\n");
         List<Component> components = new ArrayList<>(List.of());
         for (String line : split) {
-            components.add(BasicComponent.gray(line));
+            components.add(BasicComponent.gray(line.replaceAll("[\r\t]", "")));
         }
         return components;
     }
@@ -63,15 +63,15 @@ public class HSException extends RuntimeException {
         int i = 0;
         Throwable cause = this;
         while (cause != null) {
-            String margin = " ".repeat(i);
             String errMsg = (cause instanceof HSException hsCause) ? hsCause.msg : CodeErrorType.INTERNAL_ERROR.message;
+            errMsg = errMsg.replaceAll("[\r\t]", "");
             Component msg;
-            if (i == 0) msg = cleanMM.deserialize(margin + "<red>Error: <gray>" + errMsg);
-            else msg = cleanMM.deserialize(margin + "<red>Caused by: <gray>" + errMsg);
+            if (i == 0) msg = cleanMM.deserialize(" <red>Error: <gray>" + errMsg);
+            else msg = cleanMM.deserialize(" <red>Caused by: <gray>" + errMsg);
             List<Component> stackTrace = getStackTrace(cause);
             Component stackTraceComponent = BasicComponent.gray("Stack Trace:");
             for (Component line : stackTrace) {
-                stackTraceComponent = stackTraceComponent.append(line).appendNewline();
+                stackTraceComponent = stackTraceComponent.appendNewline().append(line);
             }
             msg = msg.hoverEvent(HoverEvent.showText(stackTraceComponent));
             final Component finalMsg = msg;

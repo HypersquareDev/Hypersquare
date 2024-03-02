@@ -20,8 +20,8 @@ public class PlayerQuitListener implements Listener {
 
         // Trigger leave and possibly game unload
         if (Hypersquare.mode.get(player).equals("playing")) {
-            UnloadPlotsSchedule.tryGameUnload(player.getWorld());
             PlotUtilities.getExecutor(player).trigger(Events.PLAYER_LEAVE_EVENT, event, new CodeSelection(player));
+            UnloadPlotsSchedule.tryGameUnload(player.getWorld());
         }
 
         // Remove player from the hashmaps

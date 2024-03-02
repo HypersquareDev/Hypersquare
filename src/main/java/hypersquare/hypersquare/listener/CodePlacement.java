@@ -176,42 +176,40 @@ public class CodePlacement implements Listener {
             signLocation.getBlock().setBlockData(blockData);
         }
 
-        Bukkit.getScheduler().runTaskLater(Hypersquare.instance, () -> {
-            Location codeblockLocation = location.clone();
-            codeblockLocation.getBlock().setType(codeblockItem.getType());
+        Location codeblockLocation = location.clone();
+        codeblockLocation.getBlock().setType(codeblockItem.getType());
 
-            Location stoneLocation = location.clone().add(0, 0, 1);
-            Location closeBracketLocation = location.clone().add(0, 0, 3);
-            Location barrelLocation = location.add(0, 1, 0);
-            Location openBracketLocation = location.clone().add(0, -1, 1);
+        Location stoneLocation = location.clone().add(0, 0, 1);
+        Location closeBracketLocation = location.clone().add(0, 0, 3);
+        Location barrelLocation = location.add(0, 1, 0);
+        Location openBracketLocation = location.clone().add(0, -1, 1);
 
-            if (codeblock.hasBrackets) {
-                // Open Bracket
-                openBracketLocation.getBlock().setType(Material.PISTON);
-                BlockData pistonData = openBracketLocation.getBlock().getBlockData();
-                ((Directional) pistonData).setFacing(BlockFace.SOUTH);
-                openBracketLocation.getBlock().setBlockData(pistonData);
+        if (codeblock.hasBrackets) {
+            // Open Bracket
+            openBracketLocation.getBlock().setType(Material.PISTON);
+            BlockData pistonData = openBracketLocation.getBlock().getBlockData();
+            ((Directional) pistonData).setFacing(BlockFace.SOUTH);
+            openBracketLocation.getBlock().setBlockData(pistonData);
 
-                // Close bracket
-                CodeBlockManagement.moveCodeLine(closeBracketLocation, 1);
-                closeBracketLocation.getBlock().setType(Material.PISTON);
-                pistonData = closeBracketLocation.getBlock().getBlockData();
-                ((Directional) pistonData).setFacing(BlockFace.NORTH);
-                closeBracketLocation.getBlock().setBlockData(pistonData);
-            } else {
-                // Stone Separator, skip if empty codeblock
-                if (!codeblock.id.equals("empty")) stoneLocation.getBlock().setType(Material.STONE);
-                if (stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.PISTON || stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.STICKY_PISTON) {
-                    CodeBlockManagement.moveCodeLine(stoneLocation.clone().add(0, 0, 1), 1);
-                }
+            // Close bracket
+            CodeBlockManagement.moveCodeLine(closeBracketLocation, 1);
+            closeBracketLocation.getBlock().setType(Material.PISTON);
+            pistonData = closeBracketLocation.getBlock().getBlockData();
+            ((Directional) pistonData).setFacing(BlockFace.NORTH);
+            closeBracketLocation.getBlock().setBlockData(pistonData);
+        } else {
+            // Stone Separator, skip if empty codeblock
+            if (!codeblock.id.equals("empty")) stoneLocation.getBlock().setType(Material.STONE);
+            if (stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.PISTON || stoneLocation.clone().add(0, 0, 1).getBlock().getType() == Material.STICKY_PISTON) {
+                CodeBlockManagement.moveCodeLine(stoneLocation.clone().add(0, 0, 1), 1);
             }
-            if (codeblock.hasBarrel) {
-                barrelLocation.getBlock().setType(Material.BARREL);
-                BlockData barrelBlockData = barrelLocation.getBlock().getBlockData();
-                ((Directional) barrelBlockData).setFacing(BlockFace.UP);
-                barrelLocation.getBlock().setBlockData(barrelBlockData);
-            }
-        }, 1);
+        }
+        if (codeblock.hasBarrel) {
+            barrelLocation.getBlock().setType(Material.BARREL);
+            BlockData barrelBlockData = barrelLocation.getBlock().getBlockData();
+            ((Directional) barrelBlockData).setFacing(BlockFace.UP);
+            barrelLocation.getBlock().setBlockData(barrelBlockData);
+        }
     }
 
     @EventHandler

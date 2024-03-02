@@ -17,6 +17,7 @@ import hypersquare.hypersquare.menu.system.MenuItem;
 import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,7 +85,13 @@ public class CodeblockMenu {
         MenuItem actionItem = new MenuItem(action.item()).onClick(() -> {
             Utilities.sendSuccessClickMenuSound(player);
             Utilities.setAction(targetLocation.getBlock(), action.getSignName(), player);
-            CodeFileHelper.updateAction(targetLocation.clone().add(1, 0, 0), new CodeFile(player.getWorld()), action);
+            Location codeblockLoc = targetLocation.clone();
+            // If the player clicked the sign we need to add 1 to the x coordinate
+            CodeFileHelper.updateAction(
+                codeblockLoc.getBlock().getType() == Material.OAK_WALL_SIGN ?
+                    targetLocation.add(1, 0, 0) : targetLocation,
+                new CodeFile(player.getWorld()), action
+            );
         });
         menu.addItem(actionItem);
     }

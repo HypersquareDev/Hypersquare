@@ -26,7 +26,9 @@ public enum Events implements Event {
     PLAYER_TAME_MOB_EVENT(new PlayerTameMobEvent()),
     // Movement Events
     PLAYER_WALK_EVENT(new PlayerWalkEvent()),
+    PLAYER_MOVE_EVENT(new PlayerMoveEvent()),
     PLAYER_JUMP_EVENT(new PlayerJumpEvent()),
+    PLAYER_VELOCITY_EVENT(new PlayerVelocityEvent()),
     PLAYER_SNEAK_EVENT(new PlayerSneakEvent()),
     PLAYER_UNSNEAK_EVENT(new PlayerUnsneakEvent()),
     PLAYER_START_SPRINT_EVENT(new PlayerStartSprintEvent()),
@@ -36,10 +38,14 @@ public enum Events implements Event {
     PLAYER_RIPTIDE_EVENT(new PlayerRiptideEvent()),
     PLAYER_DISMOUNT_EVENT(new PlayerDismountEvent()),
     PLAYER_HORSE_JUMP_EVENT(new PlayerHorseJumpEvent()),
+    PLAYER_TELEPORT_EVENT(new PlayerTeleportEvent()),
     // Item Events
     PLAYER_CLICK_MENU_SLOT_EVENT(new PlayerClickMenuSlotEvent()),
     PLAYER_CLICK_INV_SLOT_EVENT(new PlayerClickInvSlotEvent()),
     PLAYER_DROP_ITEM_EVENT(new PlayerDropItemEvent()),
+    PLAYER_BREAK_ITEM_EVENT(new PlayerBreakItemEvent()),
+    PLAYER_DAMAGE_ITEM_EVENT(new PlayerItemDamageEvent()),
+    PLAYER_MEND_ITEM_EVENT(new PlayerMendItemEvent())
 
     ;
 

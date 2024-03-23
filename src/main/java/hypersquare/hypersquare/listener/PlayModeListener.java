@@ -37,6 +37,8 @@ public class PlayModeListener implements Listener {
         executor.trigger(Events.PLAYER_CHAT_EVENT, event, new CodeSelection(player));
     }
 
+
+
     /* TODO: Uncomment once resource pack action is implemented
     @EventHandler
     public void playerPackLoadEvent(PlayerResourcePackStatusEvent event) {
@@ -124,8 +126,9 @@ public class PlayModeListener implements Listener {
     public void playerWalkEvent(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (cannotExecute(player)) return;
+        CodeExecutor executor = PlotUtilities.getExecutor(player);
+        executor.trigger(Events.PLAYER_MOVE_EVENT, event, new CodeSelection(player));
         if (event.getFrom().getBlock() != event.getTo().getBlock() && !player.isSprinting() && !player.isFlying() && !player.isSwimming()) {
-            CodeExecutor executor = PlotUtilities.getExecutor(player);
             executor.trigger(Events.PLAYER_WALK_EVENT, event, new CodeSelection(player));
         }
     }
@@ -138,6 +141,14 @@ public class PlayModeListener implements Listener {
             CodeExecutor executor = PlotUtilities.getExecutor(player);
             executor.trigger(Events.PLAYER_JUMP_EVENT, event, new CodeSelection(player));
         }
+    }
+
+    @EventHandler
+    public void playerVelocityEvent(@NotNull PlayerVelocityEvent event) {
+        Player player = event.getPlayer();
+        if (cannotExecute(player)) return;
+        CodeExecutor executor = PlotUtilities.getExecutor(player);
+        executor.trigger(Events.PLAYER_VELOCITY_EVENT, event, new CodeSelection(player));
     }
 
     @EventHandler
@@ -196,6 +207,14 @@ public class PlayModeListener implements Listener {
 
     // TODO: Vehicle Jump
 
+    @EventHandler
+    public void playerTeleportEvent(@NotNull PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        if (cannotExecute(player)) return;
+        CodeExecutor executor = PlotUtilities.getExecutor(player);
+        executor.trigger(Events.PLAYER_TELEPORT_EVENT, event, new CodeSelection(player));
+    }
+
     /* ITEM EVENTS */
 
     @EventHandler
@@ -219,7 +238,24 @@ public class PlayModeListener implements Listener {
     }
 
     // TODO: Consume Item
-    // TODO: Break Item
+    @EventHandler
+    public void playerBreakItemEvent(@NotNull PlayerItemBreakEvent event) {
+        Player p = event.getPlayer();
+        if (cannotExecute(p)) return;
+        PlotUtilities.getExecutor(p).trigger(Events.PLAYER_BREAK_ITEM_EVENT, event, new CodeSelection(p));
+    }
+    @EventHandler
+    public void playerDamageItemEvent(@NotNull PlayerItemDamageEvent event) {
+        Player p = event.getPlayer();
+        if (cannotExecute(p)) return;
+        PlotUtilities.getExecutor(p).trigger(Events.PLAYER_DAMAGE_ITEM_EVENT, event, new CodeSelection(p));
+    }
+    @EventHandler
+    public void playerMendItemEvent(@NotNull PlayerItemMendEvent event) {
+        Player p = event.getPlayer();
+        if (cannotExecute(p)) return;
+        PlotUtilities.getExecutor(p).trigger(Events.PLAYER_MEND_ITEM_EVENT, event, new CodeSelection(p));
+    }
     // TODO: Close Inventory
     // TODO: Fish Event
 

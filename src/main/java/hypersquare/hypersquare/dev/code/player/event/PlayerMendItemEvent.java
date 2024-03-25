@@ -45,6 +45,6 @@ public class PlayerMendItemEvent implements Event {
 
     @Override
     public Target[] compatibleTargets() {
-        return new Target[]{Target.DEFAULT_PLAYER, Target.DEFAULT_ENTITY};
+        return new Target[]{Target.DEFAULT_PLAYER};
     }
 }

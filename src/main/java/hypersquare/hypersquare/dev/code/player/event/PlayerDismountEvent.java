@@ -46,6 +46,6 @@ public class PlayerDismountEvent implements Event, CancellableEvent {
 
     @Override
     public Target[] compatibleTargets() {
-        return new Target[]{Target.DEFAULT_PLAYER};
+        return new Target[]{Target.DEFAULT_PLAYER,Target.DEFAULT_ENTITY};
     }
 }
